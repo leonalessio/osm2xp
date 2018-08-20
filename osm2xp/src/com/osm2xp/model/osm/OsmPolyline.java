@@ -10,7 +10,7 @@ import math.geom2d.polygon.Polyline2D;
 
 public class OsmPolyline {
 
-	protected Long id;
+	protected long id;
 	protected List<Tag> tags;
 	protected List<Node> nodes;
 	protected Integer height;
@@ -83,11 +83,11 @@ public class OsmPolyline {
 
 	
 
-	public Long getId() {
+	public long getId() {
 		return id;
 	}
 
-	public void setId(Long id) {
+	public void setId(long id) {
 		this.id = id;
 	}
 

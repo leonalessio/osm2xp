@@ -48,9 +48,10 @@ public abstract class TranslatingParserImpl extends AbstractTranslatingParserImp
 			}                                                                                                 
 		} else {
 			fixed = CoordinateNodeIdPreserver.preserveNodeIds(Collections.singletonList(geometry), fixed);
+			boolean multiPoly = fixed.size() > 1;
 			fixed.stream()
 			.map(poly -> OsmPolylineFactory.createPolylinesFromJTSGeometry(way.getId(), way.getTag(),
-					poly))
+					poly, multiPoly))
 			.filter(list -> list != null).flatMap(list -> list.stream()).forEach(polyline -> {
 				try {
 					translator.processPolyline(polyline);
@@ -65,7 +66,7 @@ public abstract class TranslatingParserImpl extends AbstractTranslatingParserImp
 	protected void translatePolys(long id, List<Tag> tagsModel, List<Polygon> cleanedPolys) {
 		cleanedPolys.stream()
 		.map(poly -> OsmPolylineFactory.createPolylinesFromJTSGeometry(id, tagsModel,
-				poly))
+				poly, cleanedPolys.size() > 1))
 		.filter(list -> list != null).flatMap(list -> list.stream()).forEach(polyline -> {
 			try {
 				translator.processPolyline(polyline);

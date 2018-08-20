@@ -149,7 +149,8 @@ public class XPlaneTranslatorImpl implements ITranslator{
 
 	protected void saveStats() {
 		if (!StatsHelper.isTileEmpty(stats)) {
-			Osm2xpLogger.info("stats : " + stats.getBuildingsNumber()
+			Osm2xpLogger.info("stats for tile " + (int) currentTile.y + "/"
+					+ (int) currentTile.x + " : " + stats.getBuildingsNumber()
 					+ " buildings, " + stats.getForestsNumber() + " forests, "
 					+ stats.getStreetlightsNumber() + " street lights, "
 					+ stats.getObjectsNumber() + " objects. (generation took "

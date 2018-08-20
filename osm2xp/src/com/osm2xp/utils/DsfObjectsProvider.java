@@ -56,6 +56,9 @@ public class DsfObjectsProvider {
 	private FacadeSetManager facadeSetManager;
 	private Box2D exclusionBox;
 	private String targetFolderPath;
+	
+	private long lastPolyId = -1;
+	private int lastFacade = -1;
 
 	/**
 	 * @param facadeSet
@@ -87,6 +90,9 @@ public class DsfObjectsProvider {
 	 */
 	public Integer computeFacadeDsfIndex(Boolean simpleBuilding,
 			BuildingType buildingType, Boolean slopedRoof, OsmPolygon osmPolygon) {
+		if (osmPolygon.getId() == lastPolyId && lastFacade >= 0) {
+			return lastFacade;
+		}
 		Color roofColor = osmPolygon.getRoofColor();
 		Double minVector = osmPolygon.getMinVectorSize();
 		Integer height = osmPolygon.getHeight();
@@ -98,13 +104,22 @@ public class DsfObjectsProvider {
 			resFacade = facadeSetManager.getRandomFacade(buildingType,height,simpleBuilding);
 		}
 		
-		return polygonsList.indexOf(resFacade.getFile());
+		int idx = polygonsList.indexOf(resFacade.getFile());
+		lastPolyId = osmPolygon.getId();
+		lastFacade = idx;
+		return idx;
 	}
 	
-	public Integer computeSpecialFacadeDsfIndex(SpecialFacadeType specialFacadeType, OsmPolyline polygon) {
-		Facade randomBarrierFacade = facadeSetManager.getRandomSpecialFacade(specialFacadeType);
-		if (randomBarrierFacade != null) {
-			return polygonsList.indexOf(randomBarrierFacade.getFile());
+	public Integer computeSpecialFacadeDsfIndex(SpecialFacadeType specialFacadeType, OsmPolyline polyline) {
+		if (polyline.getId() == lastPolyId && lastFacade >= 0) {
+			return lastFacade;
+		}
+		Facade randomSpecialFacade = facadeSetManager.getRandomSpecialFacade(specialFacadeType);
+		if (randomSpecialFacade != null) {
+			int idx = polygonsList.indexOf(randomSpecialFacade.getFile());
+			lastPolyId = polyline.getId();
+			lastFacade = idx;
+			return idx;
 		}
 		return -1;
 	}
@@ -233,16 +248,6 @@ public class DsfObjectsProvider {
 		for (File file : objFiles) {
 			objectsList.add(targetSubfolder + "/" + file.getName());
 		}
-	}
-
-	/**
-	 * @param facadeTagRule
-	 * @return
-	 */
-	public Integer getRandomSingleFacade(FacadeTagRule facadeTagRule) {
-		Collections.shuffle(singlesFacadesList);
-		String randomSingleFacade = singlesFacadesList.get(0);
-		return polygonsList.indexOf(randomSingleFacade);
 	}
 
 	/**
