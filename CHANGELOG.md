@@ -6,6 +6,13 @@ and this project adheres to [Semantic Versioning](http://semver.org/spec/v2.0.0.
 
 ## [Unreleased]
 
+## [3.3.0]
+
+### Changed
+- Polygon/tile clipping logics. Now pbf file is parsed only once and then special translator from OSM 2 XP handles polygon, if it (or it'part)
+belongs to current tile, clips to match current tile it and fixes geometry problems
+- Polygon cutting logics - polygons having holes are cutted to have no holes for building polys and at most 254 holes for forest polys 
+
 ## [3.2.0]
 
 ### Added

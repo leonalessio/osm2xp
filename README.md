@@ -25,7 +25,7 @@ Since initial task is generating X-Plane 10 scenery, most fixes I've done and al
 * Improved facade set editor - added facade preview, ability to delete facade and specify facades for fence or wall 
 * Generating smaller area, then 1 tile - just as much as OSM PBF file defines. OSM PBF file can be obtained e.g. using [bbbike.org](https://extract.bbbike.org/ "bbbike.org")
 * Migration to Java 8, using some newer libraries and some UI fixes
-* Basic OSM multipolygon support
+* OSM multipolygon support - polygons with multiple rings and holes, cutting building polygons when necessary and clipping polygon to particular tile
 
 ## Installation
 You need at least Java 8 JRE or JDK to be installed
@@ -38,6 +38,12 @@ For now program is available for Windows only. If you need it for other OS, plea
 
 Please refer [Quick Start Guide](https://github.com/32kda/osm2xp/wiki/Quick-Start "Guide") 
 
+### Advanced usage info
+
+[OSM2XP Directory Structure](https://github.com/32kda/osm2xp/wiki/OSM2XP-directory-structure)
+
+[Using Facade Set Editor](https://github.com/32kda/osm2xp/wiki/Facade-Set-editor)
+
 ## Samples of generated scenarios
 
 ![Screenshot 1](https://32kda.github.io/osm2xp/screenshots/CH750_4.png "Screenshot 1")
@@ -49,6 +55,5 @@ You can help with coding, if you know Java/Eclipse, with creating better default
 
 ## Nearest plans
 
-* Multipolygon (e.g. poly with holes) support for forests & buildings - partially done, but dont support cutting multipolys and complex cases
 * More options in the GUI
 * Better default facade set
