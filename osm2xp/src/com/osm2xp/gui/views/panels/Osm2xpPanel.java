@@ -39,14 +39,9 @@ public abstract class Osm2xpPanel extends Composite {
 		if (component instanceof Spinner || component instanceof Button) {
 			bindingContext.bindValue(WidgetProperties.selection().observe(component),		
 					PojoProperties.value(property).observe(bean));
-//			bindingContext.bindValue(
-//					SWTObservables.observeSelection(component),
-//					PojoObservables.observeValue(bean, property));
 		} else if (component instanceof Combo) {
 			bindingContext.bindValue(WidgetProperties.text().observe(component),		
 					PojoProperties.value(property).observe(bean));
-//			bindingContext.bindValue(SWTObservables.observeText(component),
-//					PojoObservables.observeValue(bean, property));
 		}
 	}
 
