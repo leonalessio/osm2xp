@@ -14,6 +14,7 @@ public class XPRoadTranslator extends XPPathTranslator {
 	private static final String[] WIDE_ROAD_TYPES = {"motorway", "trunk", "primary", "secondary"}; 
 	private static final String HIGHWAY_TAG = "highway";
 	private String[] allowedHighwayTypes = GuiOptionsHelper.getAllowedHighwayTypes();
+	private String[] allowedHighwayLinkTypes = GuiOptionsHelper.getAllowedHighwayLinkTypes();
 	private String[] allowedHighwaySurfaceTypes = GuiOptionsHelper.getAllowedHighwaySurfaceTypes();
 	public XPRoadTranslator(IWriter writer, XPOutputFormat outputFormat, IDRenumbererService idProvider) {
 		super(writer, outputFormat, idProvider);
@@ -24,8 +25,9 @@ public class XPRoadTranslator extends XPPathTranslator {
 		if (!XplaneOptionsHelper.getOptions().isGenerateRoads()) {
 			return false;
 		}
-		if (ArrayUtils.contains(allowedHighwayTypes, poly.getTagValue(HIGHWAY_TAG))) {
-			String surface = poly.getTagValue("surface"); //Generate if surface type is either missing or among allowe values
+		String highwayValue = poly.getTagValue(HIGHWAY_TAG);
+		if (ArrayUtils.contains(allowedHighwayTypes, highwayValue) || ArrayUtils.contains(allowedHighwayLinkTypes, highwayValue) ) {
+			String surface = poly.getTagValue("surface"); //Generate if surface type is either missing or among allowed values
 			if (StringUtils.stripToEmpty(surface).trim().isEmpty() || ArrayUtils.contains(allowedHighwaySurfaceTypes, surface)) {
 				addSegmentsFrom(poly);
 				return true;

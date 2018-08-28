@@ -1,5 +1,6 @@
 package com.osm2xp.gui.views.panels.xplane;
 
+import org.eclipse.jface.layout.GridDataFactory;
 import org.eclipse.swt.SWT;
 import org.eclipse.swt.layout.GridData;
 import org.eclipse.swt.layout.GridLayout;
@@ -25,6 +26,7 @@ public class BuildingsHeightPanel extends Osm2xpPanel {
 	private Spinner spinBldMin;
 	private Spinner spinBldMax;
 	private Group grpBuildings;
+	private Spinner spinLevelHeight;
 
 	public BuildingsHeightPanel(final Composite parent, final int style) {
 		super(parent, style);
@@ -55,11 +57,14 @@ public class BuildingsHeightPanel extends Osm2xpPanel {
 
 	@Override
 	protected void initComponents() {
-//		Group grpCommon = new Group(this, SWT.NONE); //TODO finish this
-//		grpCommon.setText("Common");
-//		GridDataFactory.fillDefaults().span(2,1).applyTo(grpCommon);
-//		Label levelHeightLbl = new Label(grpCommon, SWT.NONE);
-//		levelHeightLbl.setText("Building Level heght, m:");
+		Group grpCommon = new Group(this, SWT.NONE); 
+		grpCommon.setText("Common");
+		grpCommon.setLayout(new GridLayout(2, false));
+		GridDataFactory.fillDefaults().span(2,1).applyTo(grpCommon);
+		Label levelHeightLbl = new Label(grpCommon, SWT.NONE);
+		levelHeightLbl.setText("Building Level height, m:");
+		spinLevelHeight = new Spinner(grpCommon, SWT.BORDER);
+		spinLevelHeight.setDigits(1);
 		
 		grpRes = new Group(this, SWT.NONE);
 		grpRes.setText("Residential height (meters)");
@@ -91,6 +96,8 @@ public class BuildingsHeightPanel extends Osm2xpPanel {
 				"buildingMax");
 		bindComponent(spinResMax, XplaneOptionsHelper.getOptions(),
 				"residentialMax");
+		bindSpinnerToDouble(spinLevelHeight, XplaneOptionsHelper.getOptions(),
+				"levelHeight",1);
 
 	}
 

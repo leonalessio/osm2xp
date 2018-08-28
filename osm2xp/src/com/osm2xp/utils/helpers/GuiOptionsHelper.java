@@ -36,6 +36,7 @@ public class GuiOptionsHelper {
 	public static final String USE_EXCLUSIONS_FROM_PBF = "useExclusionsFromPBF";
 	
 	public static final String ALLOWED_HIGHWAY_TYPES = "allowedHighwayTypes";
+	public static final String ALLOWED_HIGHWAY_LINK_TYPES = "allowedHighwayLinkTypes";
 	public static final String ALLOWED_HIGHWAY_SURFACE_TYPES = "allowedHighwaySurfaceTypes";
 	
 	private static Tag shapefileTag;
@@ -219,6 +220,15 @@ public class GuiOptionsHelper {
 	
 	public static void setAllowedHighwayTypes(String[] types) {
 		putProperty(ALLOWED_HIGHWAY_TYPES, Arrays.asList(types).stream().collect(Collectors.joining(";")));
+	}
+	
+	public static String[] getAllowedHighwayLinkTypes() {
+		String str = getStringProperty(ALLOWED_HIGHWAY_LINK_TYPES, "motorway_link;trunk_link;primary_link;secondary_link;tertiary_link");
+		return str.split(";");
+	}
+	
+	public static void setAllowedHighwayLinkTypes(String[] types) {
+		putProperty(ALLOWED_HIGHWAY_LINK_TYPES, Arrays.asList(types).stream().collect(Collectors.joining(";")));
 	}
 	
 	public static String[] getAllowedHighwaySurfaceTypes() {

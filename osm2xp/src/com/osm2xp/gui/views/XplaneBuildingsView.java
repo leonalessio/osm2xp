@@ -1,11 +1,8 @@
 package com.osm2xp.gui.views;
 
-import java.io.File;
-
 import org.eclipse.help.HelpSystem;
 import org.eclipse.help.IContext;
 import org.eclipse.help.IContextProvider;
-import org.eclipse.jface.dialogs.IMessageProvider;
 import org.eclipse.swt.SWT;
 import org.eclipse.swt.layout.FillLayout;
 import org.eclipse.swt.widgets.Composite;
@@ -19,7 +16,6 @@ import org.eclipse.ui.part.ViewPart;
 import org.eclipse.wb.swt.ResourceManager;
 import org.eclipse.wb.swt.SWTResourceManager;
 
-import com.osm2xp.constants.Osm2xpConstants;
 import com.osm2xp.gui.views.panels.xplane.BuildingsHeightPanel;
 import com.osm2xp.gui.views.panels.xplane.FacadeSetPanel;
 import com.osm2xp.gui.views.panels.xplane.FacadesExclusionsPanel;
@@ -92,7 +88,7 @@ public class XplaneBuildingsView extends ViewPart implements IContextProvider {
 		sectionBuildingHeight.setLayoutData(new TableWrapData(
 				TableWrapData.FILL, TableWrapData.TOP, 1, 1));
 
-		sectionBuildingHeight.setText("Buildings min/max height");
+		sectionBuildingHeight.setText("Buildings height settings");
 		BuildingsHeightPanel buildingsHeightPanel3 = new BuildingsHeightPanel(
 				sectionBuildingHeight, SWT.BORDER);
 		toolkit.adapt(buildingsHeightPanel3, true, true);
