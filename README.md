@@ -44,6 +44,8 @@ Please refer [Quick Start Guide](https://github.com/32kda/osm2xp/wiki/Quick-Star
 
 [Using Facade Set Editor](https://github.com/32kda/osm2xp/wiki/Facade-Set-editor)
 
+[Basic troubleshooting information](https://github.com/32kda/osm2xp/wiki/Troubleshooting)
+
 ## Samples of generated scenarios
 
 ![Screenshot 1](https://32kda.github.io/osm2xp/screenshots/CH750_4.png "Screenshot 1")
