@@ -54,7 +54,7 @@ public class PbfRelationsLister extends BinaryParser implements RelationsLister 
 						member.setRole("inner");
 						break;
 					case 2:
-						member.setRole("outter");
+						member.setRole("outer");
 						break;
 					default:
 						break;

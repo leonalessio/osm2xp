@@ -15,11 +15,10 @@ public abstract class GenerateJob extends Job {
 	protected transient List<Relation> relationsList;
 	
 	public GenerateJob(String name, File currentFile, 
-			String folderPath, List<Relation> relationsList, String family) {
+			String folderPath, String family) {
 		super(name);
 		this.currentFile = currentFile;
 		this.folderPath = folderPath;
-		this.relationsList = relationsList;
 		this.family = family;
 	}
 

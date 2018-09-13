@@ -9,6 +9,8 @@ import javax.xml.bind.annotation.XmlAttribute;
 import javax.xml.bind.annotation.XmlRootElement;
 import javax.xml.bind.annotation.XmlType;
 
+import org.apache.commons.lang.ArrayUtils;
+
 /**
  * Way.
  * 
@@ -99,6 +101,10 @@ public class Way {
 			nd = new ArrayList<Nd>();
 		}
 		return this.nd;
+	}
+	
+	public long[] getNodesArray() {
+		return ArrayUtils.toPrimitive(getNd().stream().map(nd -> nd.getRef()).toArray(Long[]::new));
 	}
 
 	/**

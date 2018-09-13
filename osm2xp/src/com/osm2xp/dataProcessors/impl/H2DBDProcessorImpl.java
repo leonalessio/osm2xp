@@ -11,7 +11,6 @@ import org.h2.tools.Server;
 
 import com.osm2xp.exceptions.DataSinkException;
 import com.osm2xp.model.osm.Node;
-import com.osm2xp.model.osm.Way;
 import com.osm2xp.utils.logging.Osm2xpLogger;
 
 /**
@@ -101,14 +100,26 @@ public class H2DBDProcessorImpl extends AbstractDataProcessor {
 	}
 	
 	@Override
-	public void storeWay(Way way) {
+	public void storeWayPoints(long wayId, long[] pointIds) {
 		// TODO Not supported yet
 	}
 
 	@Override
-	public Way getWay(long wayId) {
+	public long[] getWayPoints(long wayId) {
 		//TODO not supported yet
 		return null;
+	}
+	
+	@Override
+	public void clearNodes() {
+		//TODO not supported yet
+		
+	}
+
+	@Override
+	public void clearWays() {
+		//TODO not supported yet
+		
 	}
 
 }

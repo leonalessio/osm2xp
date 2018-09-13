@@ -56,7 +56,8 @@ Bundle-ClassPath: .,
  lib/gt-api-19.2.jar,
  lib/gt-main-19.2.jar,
  lib/gt-opengis-19.2.jar,
- lib/gt-referencing-19.2.jar
+ lib/gt-referencing-19.2.jar,
+ lib/hppc-0.8.1.jar
 Bundle-Activator: com.osm2xp.gui.Activator
 Require-Bundle: org.eclipse.ui,
  org.eclipse.core.runtime,

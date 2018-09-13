@@ -8,18 +8,15 @@ import java.io.IOException;
 import java.io.InputStream;
 import java.util.ArrayList;
 import java.util.Collections;
-import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 import java.util.stream.Collectors;
 
-import org.eclipse.core.runtime.Status;
+import org.eclipse.core.runtime.IStatus;
 import org.openstreetmap.osmosis.osmbinary.Osmformat;
-import org.openstreetmap.osmosis.osmbinary.Osmformat.DenseInfo;
 import org.openstreetmap.osmosis.osmbinary.Osmformat.DenseNodes;
 import org.openstreetmap.osmosis.osmbinary.Osmformat.HeaderBlock;
 import org.openstreetmap.osmosis.osmbinary.Osmformat.Node;
-import org.openstreetmap.osmosis.osmbinary.Osmformat.Relation;
 import org.openstreetmap.osmosis.osmbinary.Osmformat.Way;
 import org.openstreetmap.osmosis.osmbinary.file.BlockInputStream;
 
@@ -46,6 +43,7 @@ public class MultiTileParserImpl extends AbstractTranslatingParserImpl implement
 
 	private File binaryFile;
 	private List<TileTranslationAdapter> translationAdapters;
+//	private long nodeCnt = 0;
 	
 	public MultiTileParserImpl(File binaryFile, List<TileTranslationAdapter> traanslationAdapters, Map<Long, Color> roofsColorMap, IDataSink processor) {
 		super(roofsColorMap, processor);
@@ -57,6 +55,7 @@ public class MultiTileParserImpl extends AbstractTranslatingParserImpl implement
 	 * 
 	 */
 	public void complete() {
+//		System.out.println("MultiTileParserImpl.complete() " + nodeCnt);
 		for (TileTranslationAdapter tileTranslationAdapter : translationAdapters) {
 			tileTranslationAdapter.complete();
 		}
@@ -69,10 +68,6 @@ public class MultiTileParserImpl extends AbstractTranslatingParserImpl implement
 
 		long lastId = 0, lastLat = 0, lastLon = 0;
 		int j = 0;
-		DenseInfo di = null;
-		if (nodes.hasDenseinfo()) {
-			di = nodes.getDenseinfo();
-		}
 		for (int i = 0; i < nodes.getIdCount(); i++) {
 			List<Tag> tags = new ArrayList<Tag>();
 			long lat = nodes.getLat(i) + lastLat;
@@ -108,10 +103,13 @@ public class MultiTileParserImpl extends AbstractTranslatingParserImpl implement
 
 				if (mustStoreNode(node)) {
 					processor.storeNode(node);
+//					nodeCnt++;
 				}
-			} catch (DataSinkException e) {
+			} 
+			catch (DataSinkException e) {
 				Osm2xpLogger.error("Error processing node.", e);
-			} catch (Osm2xpBusinessException e) {
+			} 
+			catch (Osm2xpBusinessException e) {
 				Osm2xpLogger.error("Node translation error.", e);
 			}
 		}
@@ -132,7 +130,6 @@ public class MultiTileParserImpl extends AbstractTranslatingParserImpl implement
 
 	@Override
 	protected void parseWays(List<Way> ways) {
-
 		for (Osmformat.Way curWay : ways) {
 			processWay(curWay);
 		}
@@ -178,56 +175,7 @@ public class MultiTileParserImpl extends AbstractTranslatingParserImpl implement
 		}
 
 	}
-	
-	@Override
-	protected void parseRelations(List<Relation> rels) {
-		for (Relation pbfRelation : rels) {
-			Map<String, String> tags = new HashMap<String, String>();
-			for (int j = 0; j < pbfRelation.getKeysCount(); j++) {
-				tags.put(getStringById(pbfRelation.getKeys(j)), getStringById(pbfRelation.getVals(j)));
-			}
-			long lastMemberId = 0;
-			List<Tag> tagsModel = tags.keySet().stream().map(key -> new Tag(key, tags.get(key)))
-					.collect(Collectors.toList());
-			if ("multipolygon".equals(tags.get("type")) && mustProcessPolyline(tagsModel)) {
-				List<com.osm2xp.model.osm.Way> outerWays = new ArrayList<>();
-				List<com.osm2xp.model.osm.Way> innerWays = new ArrayList<>();
-				for (int j = 0; j < pbfRelation.getMemidsCount(); j++) {
-					long memberId = lastMemberId + pbfRelation.getMemids(j);
-					lastMemberId = memberId;
-					String role = getStringById(pbfRelation.getRolesSid(j));
-					if ("outer".equals(role)) {
-						com.osm2xp.model.osm.Way way = processor.getWay(memberId);
-						if (way != null) {
-							outerWays.add(way);
-						} else {
-							Activator.log(Status.ERROR, "Invalid way id: " + memberId);
-						}
-					}
-					if ("inner".equals(role)) {
-						com.osm2xp.model.osm.Way way = processor.getWay(memberId);
-						if (way != null) {
-							innerWays.add(way);
-						} else {
-							Activator.log(Status.ERROR, "Invalid way id: " + memberId);
-						}
-					}
-				}
-				List<List<Long>> collected = outerWays.stream()
-						.map(way -> way.getNd().stream().map(nd -> nd.getRef()).collect(Collectors.toList()))
-						.collect(Collectors.toList());
-				List<List<Long>> collectedInner = innerWays.stream()
-						.map(way -> way.getNd().stream().map(nd -> nd.getRef()).collect(Collectors.toList()))
-						.collect(Collectors.toList());
-
-				List<List<Long>> polygons = getPolygonsFrom(collected);
-				List<List<Long>> innerPolygons = getPolygonsFrom(collectedInner);
-				List<Polygon> cleanedPolys = doCleanup(polygons, innerPolygons);
-				translatePolys(pbfRelation.getId(), tagsModel, cleanedPolys);
-			}
-		}
-	}
-	
+		
 	@Override
 	protected List<Polygon> doCleanup(List<List<Long>> outer, List<List<Long>> inner) {
 		List<Polygon> cleaned = super.doCleanup(outer, inner);
@@ -250,6 +198,9 @@ public class MultiTileParserImpl extends AbstractTranslatingParserImpl implement
 
 	@Override
 	protected void translatePolys(long id, List<Tag> tagsModel, List<Polygon> cleanedPolys) {
+		if (cleanedPolys.isEmpty()) {
+			Activator.log(IStatus.WARNING, "Way/Polygon with id " + id + " is invalid, unable to fix it automatically. Possible reasons - self-intersection or partial node information.");
+		}
 		for (TileTranslationAdapter adapter : translationAdapters) {
 			adapter.processWays(id, tagsModel, null, cleanedPolys);
 		}

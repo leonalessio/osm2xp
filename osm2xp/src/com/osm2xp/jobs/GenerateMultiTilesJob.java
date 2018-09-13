@@ -9,7 +9,6 @@ import org.eclipse.core.runtime.Status;
 
 import com.osm2xp.exceptions.DataSinkException;
 import com.osm2xp.exceptions.OsmParsingException;
-import com.osm2xp.model.osm.Relation;
 import com.osm2xp.parsers.IBasicParser;
 import com.osm2xp.parsers.ParserBuilder;
 import com.osm2xp.utils.helpers.Osm2xpProjectHelper;
@@ -27,8 +26,8 @@ public class GenerateMultiTilesJob extends GenerateJob {
 	protected List<Point2D> tiles;
 
 	public GenerateMultiTilesJob(String name, File currentFile, List<Point2D> tiles,
-			String folderPath, List<Relation> relationsList, String family) {
-		super(name, currentFile, folderPath, relationsList, family);
+			String folderPath, String family) {
+		super(name, currentFile, folderPath, family);
 		this.tiles = tiles;
 		Osm2xpLogger.info("Starting  generation of " + tiles.size() + " tiles, target folder " + folderPath);
 	}
@@ -38,7 +37,7 @@ public class GenerateMultiTilesJob extends GenerateJob {
 		IBasicParser parser;
 		try {
 			parser = ParserBuilder.getMultiTileParser(tiles, currentFile,
-					folderPath, relationsList);
+					folderPath);
 			parser.process();
 			Osm2xpProjectHelper.removeTiles(tiles);
 			Osm2xpLogger.info("Finished generation of " +  tiles.size() + " tiles, target folder " + folderPath);

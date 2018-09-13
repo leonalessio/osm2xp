@@ -69,4 +69,9 @@ public class OsmPolygon extends OsmPolyline {
 	
 		return result;
 	}
+	
+	@Override
+	public String toString() {
+		return "OsmPolygon [id=" + id + ", tag=" + tags + "]";
+	}
 }

@@ -8,7 +8,6 @@ import java.util.concurrent.ConcurrentMap;
 import com.osm2xp.constants.Osm2xpConstants;
 import com.osm2xp.exceptions.DataSinkException;
 import com.osm2xp.model.osm.Node;
-import com.osm2xp.model.osm.Way;
 import com.osm2xp.utils.FilesUtils;
 
 import net.kotek.jdbm.DB;
@@ -105,14 +104,26 @@ public class Jdbm3ProcessorImpl extends AbstractDataProcessor {
 	}
 
 	@Override
-	public void storeWay(Way way) {
+	public void storeWayPoints(long wayId, long[] pointIds) {
 		// TODO Not supported yet
 	}
 
 	@Override
-	public Way getWay(long wayId) {
+	public long[] getWayPoints(long wayId) {
 		//TODO not supported yet
 		return null;
+	}
+
+	@Override
+	public void clearNodes() {
+		//TODO not supported yet
+		
+	}
+
+	@Override
+	public void clearWays() {
+		//TODO not supported yet
+		
 	}
 
 

@@ -54,10 +54,10 @@ public interface IDataSink {
 
 	/**
 	 * Store a way in the storage implementation.
-	 * 
-	 * @param way way to store
+	 * @param wayId TODO
+	 * @param pointIds way to store
 	 */
-	void storeWay(Way way);
+	void storeWayPoints(long wayId, long[] pointIds);
 	
 	/**
 	 * Find a way in the storage implementation.
@@ -65,5 +65,15 @@ public interface IDataSink {
 	 * @param wayId
 	 * @return corresponding {@link Way} or <code>null</code>
 	 */
-	Way getWay(long wayId);
+	long[] getWayPoints(long wayId);
+	
+	/**
+	 * Drop nodes map
+	 */
+	void clearNodes();
+	
+	/**
+	 * Drop ways map
+	 */
+	void clearWays();
 }

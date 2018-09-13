@@ -24,8 +24,10 @@ import com.vividsolutions.jts.geom.MultiPolygon;
 import com.vividsolutions.jts.geom.Point;
 import com.vividsolutions.jts.geom.Polygon;
 import com.vividsolutions.jts.geom.PrecisionModel;
+import com.vividsolutions.jts.geom.TopologyException;
 import com.vividsolutions.jts.geom.impl.CoordinateArraySequenceFactory;
 import com.vividsolutions.jts.geom.util.LineStringExtracter;
+import com.vividsolutions.jts.operation.buffer.BufferOp;
 import com.vividsolutions.jts.operation.polygonize.Polygonizer;
 
 import math.geom2d.Angle2D;
@@ -872,27 +874,39 @@ public class GeomUtils {
 	 * @return a geometry 
 	 */
 	public static Geometry fix(Geometry geom){
-	    if(geom instanceof Polygon){
-	        if(geom.isValid()){
-//	            geom.normalize(); // validate does not pick up rings in the wrong order - this will fix that //TODO not sure it's needed for our task
-	            return geom; // If the polygon is valid just return it
-	        }
-	        Polygonizer polygonizer = new Polygonizer();
-	        addPolygon((Polygon)geom, polygonizer);
-	        return toPolygonGeometry(polygonizer.getPolygons(), geom.getFactory());
-	    }else if(geom instanceof MultiPolygon){
-	        if(geom.isValid()){
-	            geom.normalize(); // validate does not pick up rings in the wrong order - this will fix that
-	            return geom; // If the multipolygon is valid just return it
-	        }
-	        Polygonizer polygonizer = new Polygonizer();
-	        for(int n = geom.getNumGeometries(); n-- > 0;){
-	            addPolygon((Polygon)geom.getGeometryN(n), polygonizer);
-	        }
-	        return toPolygonGeometry(polygonizer.getPolygons(), geom.getFactory());
-	    }else{
-	        return geom; // In my case, I only care about polygon / multipolygon geometries
-	    }
+		try {
+		    if(geom instanceof Polygon){
+		        if(geom.isValid()){
+	//	            geom.normalize(); // validate does not pick up rings in the wrong order - this will fix that //TODO not sure it's needed for our task
+		            return geom; // If the polygon is valid just return it
+		        }
+		        Polygonizer polygonizer = new Polygonizer();
+		        addPolygon((Polygon)geom, polygonizer);
+		        return toPolygonGeometry(polygonizer.getPolygons(), geom.getFactory());
+		    }else if(geom instanceof MultiPolygon){
+		        if(geom.isValid()){
+		            geom.normalize(); // validate does not pick up rings in the wrong order - this will fix that
+		            return geom; // If the multipolygon is valid just return it
+		        }
+		        Polygonizer polygonizer = new Polygonizer();
+		        for(int n = geom.getNumGeometries(); n-- > 0;){
+		            addPolygon((Polygon)geom.getGeometryN(n), polygonizer);
+		        }
+		        return toPolygonGeometry(polygonizer.getPolygons(), geom.getFactory());
+		    }else{
+		        return geom; // In my case, I only care about polygon / multipolygon geometries
+		    }
+		} catch (TopologyException e) {
+			try {
+				Geometry newGeom = BufferOp.bufferOp(geom,0);
+				if (newGeom != geom && (geom instanceof Polygon || geom instanceof MultiPolygon)) {
+					return fix(newGeom);
+				}
+			} catch (TopologyException  e1) {
+				return null;
+			}
+		}
+		return null;
 	}
 
 	/**
@@ -946,18 +960,40 @@ public class GeomUtils {
 	            Iterator<Polygon> iter = polygons.iterator();
 	            Geometry ret = iter.next();
 	            while(iter.hasNext()){
-	            	if (ret instanceof GeometryCollection) {
-	            		List<Polygon> polys = flatMapToPoly(ret);
-	            		if (!polys.isEmpty()) {
-	            			ret = polys.get(0);
-	            		} else {
+            		ret = getFirst(ret);
+            		if (ret == null) {
+						return null;
+					}
+	            	Polygon next = iter.next();
+	            	try {
+						ret = ret.symDifference(next);
+	            	} catch (TopologyException e) {
+	            		ret = BufferOp.bufferOp(ret, 0);
+	            		ret = getFirst(ret);
+	            		if (ret == null) {
+							return null;
+						}
+	            		try {
+	            			ret = ret.symDifference(next);
+	            		} catch (TopologyException e1) {
 	            			return null;
-	            		}
+						}
 	            	}
-	                ret = ret.symDifference(iter.next());
 	            }
 	            return ret;
 	    }
+	}
+
+	protected static Geometry getFirst(Geometry ret) {
+		if (ret instanceof Polygon) {
+			return ret;
+		}
+		List<Polygon> polys = flatMapToPoly(ret);
+		if (!polys.isEmpty()) {
+			return polys.get(0);
+		} else {
+			return null;
+		}
 	}
 	
 	public static List<Geometry> flatMap(Geometry  geometry) {
@@ -1010,6 +1046,9 @@ public class GeomUtils {
 				}
 			}
 			return resList;
+		}
+		if (fixed == null) {
+			return Collections.emptyList();
 		}
 		return Collections.singletonList(polygon);
 	}

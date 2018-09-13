@@ -2,6 +2,7 @@ package com.osm2xp.parsers.impl;
 
 import java.awt.Color;
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.Collections;
 import java.util.HashMap;
 import java.util.Iterator;
@@ -132,52 +133,46 @@ public abstract class AbstractTranslatingParserImpl extends BinaryParser {
 
 	@Override
 	protected void parseRelations(List<Relation> rels) {
-			for (Relation pbfRelation : rels) {
-				Map<String, String> tags = new HashMap<String, String>();
-				for (int j = 0; j < pbfRelation.getKeysCount(); j++) {
-					tags.put(getStringById(pbfRelation.getKeys(j)), getStringById(pbfRelation.getVals(j)));
-				}
-				long lastMemberId = 0;
-				List<Tag> tagsModel = tags.keySet().stream().map(key -> new Tag(key, tags.get(key)))
-						.collect(Collectors.toList());
-				if ("multipolygon".equals(tags.get("type")) && mustProcessPolyline(tagsModel)) {
-					List<com.osm2xp.model.osm.Way> outerWays = new ArrayList<>();
-					List<com.osm2xp.model.osm.Way> innerWays = new ArrayList<>();
-					for (int j = 0; j < pbfRelation.getMemidsCount(); j++) {
-						long memberId = lastMemberId + pbfRelation.getMemids(j);
-						lastMemberId = memberId;
-						String role = getStringById(pbfRelation.getRolesSid(j));
-						if ("outer".equals(role)) {
-							com.osm2xp.model.osm.Way way = processor.getWay(memberId);
-							if (way != null) {
-								outerWays.add(way);
-							} else {
-								Activator.log(Status.ERROR, "Invalid way id: " + memberId);
-							}
-						}
-						if ("inner".equals(role)) {
-							com.osm2xp.model.osm.Way way = processor.getWay(memberId);
-							if (way != null) {
-								innerWays.add(way);
-							} else {
-								Activator.log(Status.ERROR, "Invalid way id: " + memberId);
-							}
+		for (Relation pbfRelation : rels) {
+			Map<String, String> tags = new HashMap<String, String>();
+			for (int j = 0; j < pbfRelation.getKeysCount(); j++) {
+				tags.put(getStringById(pbfRelation.getKeys(j)), getStringById(pbfRelation.getVals(j)));
+			}
+			long lastMemberId = 0;
+			List<Tag> tagsModel = tags.keySet().stream().map(key -> new Tag(key, tags.get(key)))
+					.collect(Collectors.toList());
+			if ("multipolygon".equals(tags.get("type")) && mustProcessPolyline(tagsModel)) {
+				List<List<Long>> outer = new ArrayList<>();
+				List<List<Long>> inner = new ArrayList<>();
+				for (int j = 0; j < pbfRelation.getMemidsCount(); j++) {
+					long memberId = lastMemberId + pbfRelation.getMemids(j);
+					lastMemberId = memberId;
+					String role = getStringById(pbfRelation.getRolesSid(j));
+					if ("outer".equals(role)) {
+						long[] wayPoints = processor.getWayPoints(memberId);
+						if (wayPoints != null) {
+							outer.add(Arrays.stream(wayPoints).boxed().collect(Collectors.toList()));
+						} else {
+							Activator.log(Status.ERROR, "Invalid way id: " + memberId);
 						}
 					}
-					List<List<Long>> collected = outerWays.stream()
-							.map(way -> way.getNd().stream().map(nd -> nd.getRef()).collect(Collectors.toList()))
-							.collect(Collectors.toList());
-					List<List<Long>> collectedInner = innerWays.stream()
-							.map(way -> way.getNd().stream().map(nd -> nd.getRef()).collect(Collectors.toList()))
-							.collect(Collectors.toList());
-	
-					List<List<Long>> polygons = getPolygonsFrom(collected);
-					List<List<Long>> innerPolygons = getPolygonsFrom(collectedInner);
-					List<Polygon> cleanedPolys = doCleanup(polygons, innerPolygons);
-					translatePolys(pbfRelation.getId(), tagsModel, cleanedPolys);
+					if ("inner".equals(role)) {
+						long[] wayPoints = processor.getWayPoints(memberId);
+						if (wayPoints != null) {
+							inner.add(Arrays.stream(wayPoints).boxed().collect(Collectors.toList()));
+						} else {
+							Activator.log(Status.ERROR, "Invalid way id: " + memberId);
+						}
+					}
 				}
+	
+				List<List<Long>> polygons = getPolygonsFrom(outer);
+				List<List<Long>> innerPolygons = getPolygonsFrom(inner);
+				List<Polygon> cleanedPolys = doCleanup(polygons, innerPolygons);
+				translatePolys(pbfRelation.getId(), tagsModel, cleanedPolys);
 			}
 		}
+	}
 
 	protected abstract boolean mustProcessPolyline(List<Tag> tagsModel);
 
@@ -227,7 +222,7 @@ public abstract class AbstractTranslatingParserImpl extends BinaryParser {
 
 	protected Polygon getPolygon(List<Long> polyNodeIds) {
 		Coordinate[] points = getCoords(polyNodeIds);
-		if (points != null && points.length >= 4) {
+		if (points != null && points.length >= 4 && points.length == polyNodeIds.size()) {
 			GeometryFactory factory = new GeometryFactory(GeomUtils.getDefaultPrecisionModel());
 			return factory.createPolygon(points);
 		}
@@ -245,6 +240,9 @@ public abstract class AbstractTranslatingParserImpl extends BinaryParser {
 
 	protected Coordinate[] getCoords(List<Long> nodeIds) {
 		List<com.osm2xp.model.osm.Node> nodes = getNodes(nodeIds);
+		if (nodes == null) {
+			return null;
+		}
 		NodeCoordinate[] points = nodes.stream().map(node -> new NodeCoordinate(node.getLon(), node.getLat(), node.getId()))
 				.toArray(NodeCoordinate[]::new);
 		if (points.length < 1) {
@@ -263,7 +261,7 @@ public abstract class AbstractTranslatingParserImpl extends BinaryParser {
 			way.getTag().add(roofColorTag);
 		}
 	
-		processor.storeWay(way);
+		processor.storeWayPoints(way.getId(), way.getNodesArray());
 		
 		if (!mustProcessPolyline(way.getTag())) {
 			return;

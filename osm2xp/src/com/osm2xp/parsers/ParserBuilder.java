@@ -6,13 +6,10 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
 
-import math.geom2d.Point2D;
-
 import com.osm2xp.dataProcessors.DataSinkFactory;
 import com.osm2xp.dataProcessors.IDataSink;
 import com.osm2xp.exceptions.DataSinkException;
 import com.osm2xp.exceptions.Osm2xpBusinessException;
-import com.osm2xp.model.osm.Relation;
 import com.osm2xp.parsers.impl.MultiTileParserImpl;
 import com.osm2xp.parsers.impl.PbfSingleTileParserImpl;
 import com.osm2xp.parsers.impl.PbfWholeFileParserImpl;
@@ -23,6 +20,8 @@ import com.osm2xp.translators.ITranslator;
 import com.osm2xp.translators.TranslatorBuilder;
 import com.osm2xp.utils.FilesUtils;
 import com.osm2xp.utils.helpers.GuiOptionsHelper;
+
+import math.geom2d.Point2D;
 
 /**
  * ParserBuilder.
@@ -35,10 +34,8 @@ public class ParserBuilder {
 	/**
 	 * Build the parser implementation for the type of file
 	 * 
+	 * @param currentTile tile to create parser for
 	 * @param folderPath
-	 * @param relationsList
-	 * 
-	 * @param tuile
 	 * @return
 	 * @throws Osm2xpBusinessException
 	 * @throws DataSinkException
@@ -46,11 +43,11 @@ public class ParserBuilder {
 	 * @throws Exception
 	 */
 	public static IParser getParser(Point2D currentTile, File currentFile,
-			String folderPath, List<Relation> relationsList)
+			String folderPath)
 			throws DataSinkException {
 		IParser parser = null;
 		ITranslator translator = TranslatorBuilder.getTranslator(currentFile,
-				currentTile, folderPath, relationsList);
+				currentTile, folderPath);
 		// if a roof color file is available, load it into a map and give it to
 		// the parser
 		Map<Long, Color> roofsColorMap = null;
@@ -99,13 +96,13 @@ public class ParserBuilder {
 	 * @throws Exception
 	 */
 	public static IBasicParser getMultiTileParser(List<Point2D> tiles, File currentFile,
-			String folderPath, List<Relation> relationsList)
+			String folderPath)
 			throws DataSinkException {
 		IDataSink processor = DataSinkFactory.getProcessor();
 		List<TileTranslationAdapter> translationAdapters = new ArrayList<TileTranslationAdapter>();
 		for (Point2D tile : tiles) {
 			ITranslator translator = TranslatorBuilder.getTranslator(currentFile,
-					tile, folderPath, relationsList);
+					tile, folderPath);
 			translationAdapters.add(new TileTranslationAdapter(tile, processor, translator));
 			
 		}

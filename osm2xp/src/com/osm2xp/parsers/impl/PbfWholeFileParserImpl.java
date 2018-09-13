@@ -150,7 +150,9 @@ public class PbfWholeFileParserImpl extends TranslatingParserImpl implements IPa
 		for (Osmformat.Way curWay : ways) {
 			com.osm2xp.model.osm.Way way = createWayFromParsed(curWay);
 			
-			processor.storeWay(way);
+			if (way.getTag().size() == 0) { //XXX consider this a part of the relation only if it has no tags, not always true!
+				processor.storeWayPoints(way.getId(), way.getNodesArray());
+			}
 			
 			try {
 				List<Long> ids = new ArrayList<Long>();

@@ -160,7 +160,7 @@ public class OsmPolyline {
 
 	@Override
 	public String toString() {
-		return "OsmPolygon [id=" + id + ", tag=" + tags + "]";
+		return "OsmPolyline [id=" + id + ", tag=" + tags + "]";
 	}
 
 	public boolean isValid() {

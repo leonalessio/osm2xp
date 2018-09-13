@@ -32,7 +32,7 @@ public class GenerateTileJob extends GenerateJob {
 
 	public GenerateTileJob(String name, File currentFile, Point2D coordinates,
 			String folderPath, List<Relation> relationsList, String family) {
-		super(name, currentFile, folderPath, relationsList, family);
+		super(name, currentFile, folderPath, family);
 		Osm2xpLogger.info("Starting  generation of " + getCoordinatesStr(coordinates) + ", target folder " + folderPath);
 		this.coordinates = coordinates;
 	}
@@ -42,7 +42,7 @@ public class GenerateTileJob extends GenerateJob {
 		IParser parser;
 		try {
 			parser = ParserBuilder.getParser(coordinates, currentFile,
-					folderPath, relationsList);
+					folderPath);
 			parser.process();
 			Osm2xpProjectHelper.removeTile(coordinates);
 			Osm2xpLogger.info("Finished generation of " + getCoordinatesStr(coordinates) + ", target folder " + folderPath);

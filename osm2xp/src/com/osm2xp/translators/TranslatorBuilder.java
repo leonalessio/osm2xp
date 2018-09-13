@@ -1,20 +1,17 @@
 package com.osm2xp.translators;
 
 import java.io.File;
-import java.util.List;
 
 import org.eclipse.core.runtime.preferences.InstanceScope;
-
-import math.geom2d.Point2D;
 
 import com.osm2xp.constants.Perspectives;
 import com.osm2xp.exceptions.Osm2xpBusinessException;
 import com.osm2xp.gui.Activator;
 import com.osm2xp.model.facades.FacadeSetManager;
-import com.osm2xp.model.osm.Relation;
 import com.osm2xp.model.stats.GenerationStats;
 import com.osm2xp.translators.impl.ConsoleTranslatorImpl;
 import com.osm2xp.translators.impl.FlightGearTranslatorImpl;
+import com.osm2xp.translators.impl.FlyLegacyTranslatorImpl;
 import com.osm2xp.translators.impl.FsxBgTranslatorImpl;
 import com.osm2xp.translators.impl.G2xplTranslatorImpl;
 import com.osm2xp.translators.impl.ImageDebugTranslationListener;
@@ -22,7 +19,6 @@ import com.osm2xp.translators.impl.OsmTranslatorImpl;
 import com.osm2xp.translators.impl.WavefrontTranslatorImpl;
 import com.osm2xp.translators.impl.Xplane10TranslatorImpl;
 import com.osm2xp.translators.impl.Xplane9TranslatorImpl;
-import com.osm2xp.translators.impl.FlyLegacyTranslatorImpl;
 import com.osm2xp.utils.DsfObjectsProvider;
 import com.osm2xp.utils.helpers.FacadeSetHelper;
 import com.osm2xp.utils.helpers.GuiOptionsHelper;
@@ -34,6 +30,8 @@ import com.osm2xp.writers.impl.BglWriterImpl;
 import com.osm2xp.writers.impl.DsfWriterImpl;
 import com.osm2xp.writers.impl.OsmWriterImpl;
 
+import math.geom2d.Point2D;
+
 /**
  * TranslatorBuilder.
  * 
@@ -43,13 +41,13 @@ import com.osm2xp.writers.impl.OsmWriterImpl;
 public class TranslatorBuilder {
 
 	public static ITranslator getTranslator(File currentFile,
-			Point2D currentTile, String folderPath, List<Relation> relationsList) {
+			Point2D currentTile, String folderPath) {
 		ITranslator result = null;
 		// XPLANE 9 DSF implementation
 		if (GuiOptionsHelper.getOptions().getOutputFormat()
 				.equals(Perspectives.PERSPECTIVE_XPLANE9)) {
 			result = buildXplane9Translator(currentFile, currentTile,
-					folderPath, relationsList);
+					folderPath);
 		}
 		// XPLANE 10 DSF implementation
 		else if (GuiOptionsHelper.getOptions().getOutputFormat()
@@ -208,12 +206,11 @@ public class TranslatorBuilder {
 	 * @param currentTile
 	 * @param folderPath
 	 * @param processor
-	 * @param relationsList
 	 * @return
 	 * @throws Osm2xpBusinessException
 	 */
 	private static ITranslator buildXplane9Translator(File currentFile,
-			Point2D currentTile, String folderPath, List<Relation> relationsList) {
+			Point2D currentTile, String folderPath) {
 
 		GenerationStats stats = StatsHelper.initStats(currentFile, currentTile);
 		String facadeSetsStr = InstanceScope.INSTANCE.getNode(Activator.PLUGIN_ID).get(FacadeSetManager.FACADE_SETS_PROP,FacadeSetHelper.getDefaultFacadePath());

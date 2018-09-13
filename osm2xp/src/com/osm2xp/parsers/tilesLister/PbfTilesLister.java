@@ -51,16 +51,9 @@ public class PbfTilesLister extends BinaryParser implements TilesLister {
 	protected void parseDense(DenseNodes nodes) {
 		long lastId = 0, lastLat = 0, lastLon = 0;
 
-		int j = 0; // Index into the keysvals array.
-
 		// Stuff for dense info
-		DenseInfo di = null;
-		if (nodes.hasDenseinfo()) {
-			di = nodes.getDenseinfo();
-		}
 		for (int i = 0; i < nodes.getIdCount(); i++) {
 
-			List<Tag> tags = new ArrayList<Tag>(0);
 			long lat = nodes.getLat(i) + lastLat;
 			lastLat = lat;
 			long lon = nodes.getLon(i) + lastLon;
@@ -68,34 +61,16 @@ public class PbfTilesLister extends BinaryParser implements TilesLister {
 			long id = nodes.getId(i) + lastId;
 			lastId = id;
 			double latf = parseLat(lat), lonf = parseLon(lon);
-			// If empty, assume that nothing here has keys or vals.
-			if (nodes.getKeysValsCount() > 0) {
-				while (nodes.getKeysVals(j) != 0) {
-					int keyid = nodes.getKeysVals(j++);
-					int valid = nodes.getKeysVals(j++);
-					Tag Tag = new Tag();
-					Tag.setKey(getStringById(keyid));
-					Tag.setValue(getStringById(valid));
-					tags.add(Tag);
-				}
-				j++; // Skip over the '0' delimiter.
-			}
-			// Handle dense info.
-//			if (di != null) {
-				Point2D loc = new Point2D(lonf, latf);
-				int longi = (int) Math.floor(loc.x);
-				int lati = (int) Math.floor(loc.y);
-				Point2D cleanedLoc = new Point2D(longi, lati);
-				tilesList.add(cleanedLoc);
 
-//			}
+			Point2D cleanedLoc = new Point2D((int) Math.floor(lonf), (int) Math.floor(latf));
+			tilesList.add(cleanedLoc);
 		}
 
 	}
 
 	@Override
 	protected void parseNodes(List<Node> nodes) {
-		for (Node node : nodes) {
+		if (nodes.size() > 0) {
 			System.out.println("PbfTilesLister.parseNodes()");
 		}
 	}

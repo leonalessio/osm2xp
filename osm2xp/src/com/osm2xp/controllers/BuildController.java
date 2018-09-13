@@ -25,10 +25,7 @@ import com.osm2xp.jobs.GenerateMultiTilesJob;
 import com.osm2xp.jobs.GenerateTileJob;
 import com.osm2xp.jobs.MutexRule;
 import com.osm2xp.model.facades.FacadeSetManager;
-import com.osm2xp.model.osm.Relation;
 import com.osm2xp.model.project.Coordinates;
-import com.osm2xp.parsers.relationsLister.RelationsLister;
-import com.osm2xp.parsers.relationsLister.RelationsListerFactory;
 import com.osm2xp.parsers.tilesLister.TilesLister;
 import com.osm2xp.parsers.tilesLister.TilesListerFactory;
 import com.osm2xp.utils.FilesUtils;
@@ -111,7 +108,7 @@ public class BuildController {
 			Point2D tuile = new Point2D(coordinates.getLongitude(),
 					coordinates.getLatitude());
 			try {
-				generateSingleTile(currentFile, tuile, folderPath, null);
+				generateSingleTile(currentFile, tuile, folderPath);
 			} catch (Osm2xpBusinessException e) {
 				Osm2xpLogger.error("Error generating tile", e);
 			}
@@ -138,12 +135,12 @@ public class BuildController {
 		FacadeSetManager.clearCache();
 		if (coordinates == null) {
 			if (GuiOptionsHelper.getOptions().isSinglePass()) {
-				generateWholeFileOnASinglePass(currentFile, folderPath, null);
+				generateWholeFileOnASinglePass(currentFile, folderPath);
 			} else {
 				generateWholeFile(currentFile, folderPath);
 			}
 		} else {
-			generateSingleTile(currentFile, coordinates, folderPath, null);
+			generateSingleTile(currentFile, coordinates, folderPath);
 		}
 
 //		new ParsingExperimentJob(currentFile).schedule(); //Experimental to check new osmosis API
@@ -157,7 +154,7 @@ public class BuildController {
 	 * @throws Osm2xpBusinessException
 	 */
 	private void generateWholeFileOnASinglePass(File currentFile,
-			final String folderPath, List<Relation> relationsList)
+			final String folderPath)
 			throws Osm2xpBusinessException {
 		String jobTitle = "Generate " + currentFile.getName();
 		final GenerateTileJob job = new GenerateTileJob(jobTitle, currentFile,
@@ -207,11 +204,11 @@ public class BuildController {
 	 * @throws Osm2xpBusinessException
 	 */
 	private void generateSingleTile(File currentFile, Point2D coordinates,
-			final String folderPath, List<Relation> relationsList)
+			final String folderPath)
 			throws Osm2xpBusinessException {
 		String jobTitle = "Generate tile " + +(int) coordinates.y + " / "
 				+ (int) coordinates.x + " of file " + currentFile.getName();
-		final GenerateMultiTilesJob job = new GenerateMultiTilesJob(jobTitle, currentFile, Collections.singletonList(coordinates), folderPath, relationsList, "todoJob");
+		final GenerateMultiTilesJob job = new GenerateMultiTilesJob(jobTitle, currentFile, Collections.singletonList(coordinates), folderPath, "todoJob");
 //		final GenerateTileJob job = new GenerateTileJob(jobTitle, currentFile,
 //				coordinates, folderPath, relationsList, "todoJob");
 		job.setRule(new MutexRule());
@@ -261,16 +258,7 @@ public class BuildController {
 			protected IStatus run(IProgressMonitor monitor) {
 				final TilesLister tilesLister = TilesListerFactory
 						.getTilesLister(currentFile);
-				final RelationsLister relationsLister = RelationsListerFactory
-						.getRelationsLister(currentFile);
 				Osm2xpLogger.info("Listing relations in file " + currentFile.getName());
-				try {
-					relationsLister.process();
-					Osm2xpLogger.info(relationsLister.getRelationsList().size()
-							+ " relations found.");
-				} catch (Osm2xpBusinessException e) {
-					Osm2xpLogger.error(e.getMessage());
-				}
 				Osm2xpLogger.info("Listing tiles in file " + currentFile.getName());
 				try {
 					tilesLister.process();
@@ -302,7 +290,7 @@ public class BuildController {
 						Osm2xpLogger.error("Error creating project file", e1);
 					}
 				}
-				GenerateMultiTilesJob tilesJob = new GenerateMultiTilesJob("Generate several tiles", currentFile, tilesList, folderPath, relationsLister.getRelationsList(), "todoJob");
+				GenerateMultiTilesJob tilesJob = new GenerateMultiTilesJob("Generate several tiles", currentFile, tilesList, folderPath, "todoJob");
 				tilesJob.setRule(new MutexRule());
 				tilesJob.addJobChangeListener(new JobChangeAdapter() {
 
@@ -340,7 +328,7 @@ public class BuildController {
 				if (tilesList.isEmpty()) {
 					try {
 						GuiOptionsHelper.getOptions().setSinglePass(true);
-						generateWholeFileOnASinglePass(currentFile, folderPath, relationsLister.getRelationsList());
+						generateWholeFileOnASinglePass(currentFile, folderPath);
 					} catch (Osm2xpBusinessException e) {
 						Osm2xpLogger.error("Error generating tile", e);
 						return new Status(IStatus.ERROR, Activator.PLUGIN_ID, e.getMessage(), e);

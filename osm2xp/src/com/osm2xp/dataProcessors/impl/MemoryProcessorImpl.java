@@ -3,9 +3,9 @@ package com.osm2xp.dataProcessors.impl;
 import java.util.HashMap;
 import java.util.Map;
 
+import com.carrotsearch.hppc.LongObjectHashMap;
 import com.osm2xp.exceptions.DataSinkException;
 import com.osm2xp.model.osm.Node;
-import com.osm2xp.model.osm.Way;
 
 /**
  * Memory data sink implementation
@@ -16,7 +16,7 @@ import com.osm2xp.model.osm.Way;
 public class MemoryProcessorImpl extends AbstractDataProcessor {
 
 	private Map<Long, double[]> nodeMap = new HashMap<Long, double[]>();
-	private Map<Long, Way> wayMap = new HashMap<>();
+	private LongObjectHashMap<long[]> wayMap = new LongObjectHashMap<long[]>();
 
 	@Override
 	public void storeNode(final Node node) throws DataSinkException {
@@ -48,13 +48,23 @@ public class MemoryProcessorImpl extends AbstractDataProcessor {
 	}
 
 	@Override
-	public void storeWay(Way way) {
-		wayMap.put(way.getId(), way);
+	public void storeWayPoints(long wayId, long[] pointIds) {
+		wayMap.put(wayId, pointIds);
 	}
 
 	@Override
-	public Way getWay(long wayId) {
-		return wayMap.get(wayId);
+	public long[] getWayPoints(long wayId) {
+		return (long[]) wayMap.get(wayId);
+	}
+
+	@Override
+	public void clearNodes() {
+		nodeMap.clear();
+	}
+
+	@Override
+	public void clearWays() {
+		wayMap.clear();
 	}
 
 }
