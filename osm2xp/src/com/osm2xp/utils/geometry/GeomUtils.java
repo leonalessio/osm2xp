@@ -1117,6 +1117,10 @@ public class GeomUtils {
 					});
 		}
 		List<Geometry> cutResult = GeomUtils.flatMap(GeomUtils.splitPolygon(geometry, cuttingLine));
+		if (cutResult.size() > 0 && cutResult.get(0).equals(geometry)) { //If we got stucked and can get infinite recursion here - possibly inner ring is too small and too close to border. Just ignore inner ring.
+			//TODO if we have more than one inner ring - try to cut on bigger one and maybe just ignore too small ones
+			return Collections.singletonList(geometryFactory.createPolygon((CoordinateSequence) poly.getExteriorRing()));
+		}
 		List<Geometry> resultList = new ArrayList<Geometry>();
 		for (Geometry curGeom : cutResult) {
 			resultList.addAll(cutHoles(curGeom, maxHoleCount));

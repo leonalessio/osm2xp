@@ -35,8 +35,8 @@
 	<classpathentry kind="lib" path="lib/SGImplify.jar"/>
 	<classpathentry kind="lib" path="lib/Tuple.jar"/>
 	<classpathentry kind="con" path="org.eclipse.pde.core.requiredPlugins"/>
-	<classpathentry kind="lib" path="lib/osmosis-osm-binary-0.46.jar" sourcepath="C:/Users/Sviridov/AppData/Local/Temp/.org.sf.feeling.decompiler1536823159521/source/osmosis-osm-binary-0.46-sources-1536839592776.jar"/>
+	<classpathentry kind="lib" path="lib/osmosis-osm-binary-0.46.jar" sourcepath="C:/Users/Sviridov/AppData/Local/Temp/.org.sf.feeling.decompiler1537167634833/source/osmosis-osm-binary-0.46-sources-1537189257480.jar"/>
 	<classpathentry kind="lib" path="lib/protobuf-java-3.4.0.jar" sourcepath="C:/Users/Sviridov/AppData/Local/Temp/.org.sf.feeling.decompiler1536128619517/source/protobuf-java-3.4.0-sources-1536143202405.jar"/>
-	<classpathentry kind="lib" path="lib/jts-1.13.jar" sourcepath="C:/Users/Sviridov/AppData/Local/Temp/.org.sf.feeling.decompiler1536823159521/source/jts-1.13-sources-1536837126540.jar"/>
+	<classpathentry kind="lib" path="lib/jts-1.13.jar" sourcepath="C:/Users/Sviridov/AppData/Local/Temp/.org.sf.feeling.decompiler1537167634833/source/jts-1.13-sources-1537192820998.jar"/>
 	<classpathentry kind="output" path="bin"/>
 </classpath>

@@ -22,6 +22,7 @@ import com.osm2xp.gui.Activator;
 import com.osm2xp.model.osm.Nd;
 import com.osm2xp.model.osm.Tag;
 import com.osm2xp.model.osm.Way;
+import com.osm2xp.utils.OsmUtils;
 import com.osm2xp.utils.geometry.GeomUtils;
 import com.osm2xp.utils.geometry.NodeCoordinate;
 import com.osm2xp.utils.logging.Osm2xpLogger;
@@ -52,7 +53,8 @@ public abstract class AbstractTranslatingParserImpl extends BinaryParser {
 		return false;
 	}
 
-	protected List<List<Long>> getPolygonsFrom(List<List<Long>> curves) {
+	protected List<List<Long>> getPolygonsFrom(List<List<Long>> input) {
+		List<List<Long>> curves = new ArrayList<>(input);
 		List<List<Long>> result = new ArrayList<List<Long>>();
 		for (Iterator<List<Long>> iterator = curves.iterator(); iterator.hasNext();) {
 			List<Long> curList = (List<Long>) iterator.next();
@@ -133,7 +135,7 @@ public abstract class AbstractTranslatingParserImpl extends BinaryParser {
 
 	@Override
 	protected void parseRelations(List<Relation> rels) {
-		for (Relation pbfRelation : rels) {
+		for (Relation pbfRelation : rels) {	
 			Map<String, String> tags = new HashMap<String, String>();
 			for (int j = 0; j < pbfRelation.getKeysCount(); j++) {
 				tags.put(getStringById(pbfRelation.getKeys(j)), getStringById(pbfRelation.getVals(j)));
@@ -142,34 +144,42 @@ public abstract class AbstractTranslatingParserImpl extends BinaryParser {
 			List<Tag> tagsModel = tags.keySet().stream().map(key -> new Tag(key, tags.get(key)))
 					.collect(Collectors.toList());
 			if ("multipolygon".equals(tags.get("type")) && mustProcessPolyline(tagsModel)) {
-				List<List<Long>> outer = new ArrayList<>();
-				List<List<Long>> inner = new ArrayList<>();
-				for (int j = 0; j < pbfRelation.getMemidsCount(); j++) {
-					long memberId = lastMemberId + pbfRelation.getMemids(j);
-					lastMemberId = memberId;
-					String role = getStringById(pbfRelation.getRolesSid(j));
-					if ("outer".equals(role)) {
-						long[] wayPoints = processor.getWayPoints(memberId);
-						if (wayPoints != null) {
-							outer.add(Arrays.stream(wayPoints).boxed().collect(Collectors.toList()));
-						} else {
-							Activator.log(Status.ERROR, "Invalid way id: " + memberId);
+				try {
+					List<List<Long>> outer = new ArrayList<>();
+					List<List<Long>> inner = new ArrayList<>();
+					for (int j = 0; j < pbfRelation.getMemidsCount(); j++) {
+						long memberId = lastMemberId + pbfRelation.getMemids(j);
+						lastMemberId = memberId;
+						String role = getStringById(pbfRelation.getRolesSid(j));
+						if ("outer".equals(role)) {
+							long[] wayPoints = processor.getWayPoints(memberId);
+							if (wayPoints != null) {
+								outer.add(Arrays.stream(wayPoints).boxed().collect(Collectors.toList()));
+							} else {
+								Activator.log(Status.ERROR, "Invalid way id: " + memberId);
+							}
+						}
+						if ("inner".equals(role)) {
+							long[] wayPoints = processor.getWayPoints(memberId);
+							if (wayPoints != null) {
+								inner.add(Arrays.stream(wayPoints).boxed().collect(Collectors.toList()));
+							} else {
+								Activator.log(Status.ERROR, "Invalid way id: " + memberId);
+							}
 						}
 					}
-					if ("inner".equals(role)) {
-						long[] wayPoints = processor.getWayPoints(memberId);
-						if (wayPoints != null) {
-							inner.add(Arrays.stream(wayPoints).boxed().collect(Collectors.toList()));
-						} else {
-							Activator.log(Status.ERROR, "Invalid way id: " + memberId);
-						}
+				
+					List<List<Long>> polygons = getPolygonsFrom(outer);
+					if (!polygons.isEmpty()) {
+						List<List<Long>> innerPolygons = getPolygonsFrom(inner);
+						List<Polygon> cleanedPolys = doCleanup(polygons, innerPolygons);
+						translatePolys(pbfRelation.getId(), tagsModel, cleanedPolys);
+					} else {
+						Osm2xpLogger.error("Problem processing " + OsmUtils.getReadableType(tagsModel) + " relation, id=" + pbfRelation.getId() + ": Outer ring is invalid, possibly not closed");						
 					}
+				} catch (Exception e) {
+					Osm2xpLogger.error("Error processing " + OsmUtils.getReadableType(tagsModel) + " relation, id=" + pbfRelation.getId(), e);
 				}
-	
-				List<List<Long>> polygons = getPolygonsFrom(outer);
-				List<List<Long>> innerPolygons = getPolygonsFrom(inner);
-				List<Polygon> cleanedPolys = doCleanup(polygons, innerPolygons);
-				translatePolys(pbfRelation.getId(), tagsModel, cleanedPolys);
 			}
 		}
 	}
@@ -261,22 +271,22 @@ public abstract class AbstractTranslatingParserImpl extends BinaryParser {
 			way.getTag().add(roofColorTag);
 		}
 	
-		processor.storeWayPoints(way.getId(), way.getNodesArray());
-		
-		if (!mustProcessPolyline(way.getTag())) {
-			return;
-		}
-	
 		try {
+			processor.storeWayPoints(way.getId(), way.getNodesArray());
+			
+			if (!mustProcessPolyline(way.getTag())) {
+				return;
+			}
+		
 			List<Long> ids = new ArrayList<Long>();
 			for (Nd nd : way.getNd()) {
 				ids.add(nd.getRef());
 			}
 			
 			translateWay(way, ids);
-	
-		} catch (Osm2xpBusinessException e) {
-			Osm2xpLogger.error("Error processing way.", e);
+		
+		} catch (Exception e) {			
+			Osm2xpLogger.error("Error processing " + OsmUtils.getReadableType(way.getTag()) + " way, id=" + way.getId(), e);
 		}
 	}
 

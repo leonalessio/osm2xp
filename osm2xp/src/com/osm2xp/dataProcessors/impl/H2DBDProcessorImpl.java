@@ -110,16 +110,4 @@ public class H2DBDProcessorImpl extends AbstractDataProcessor {
 		return null;
 	}
 	
-	@Override
-	public void clearNodes() {
-		//TODO not supported yet
-		
-	}
-
-	@Override
-	public void clearWays() {
-		//TODO not supported yet
-		
-	}
-
 }

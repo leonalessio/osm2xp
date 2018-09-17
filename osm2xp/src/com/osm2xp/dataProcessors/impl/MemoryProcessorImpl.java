@@ -40,6 +40,7 @@ public class MemoryProcessorImpl extends AbstractDataProcessor {
 	@Override
 	public void complete() {
 		nodeMap = null;
+		wayMap = null;
 	}
 
 	@Override
@@ -55,16 +56,6 @@ public class MemoryProcessorImpl extends AbstractDataProcessor {
 	@Override
 	public long[] getWayPoints(long wayId) {
 		return (long[]) wayMap.get(wayId);
-	}
-
-	@Override
-	public void clearNodes() {
-		nodeMap.clear();
-	}
-
-	@Override
-	public void clearWays() {
-		wayMap.clear();
 	}
 
 }

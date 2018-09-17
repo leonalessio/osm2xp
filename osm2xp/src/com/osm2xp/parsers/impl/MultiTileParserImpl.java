@@ -27,6 +27,7 @@ import com.osm2xp.exceptions.OsmParsingException;
 import com.osm2xp.gui.Activator;
 import com.osm2xp.model.osm.Tag;
 import com.osm2xp.parsers.IBasicParser;
+import com.osm2xp.utils.OsmUtils;
 import com.osm2xp.utils.geometry.GeomUtils;
 import com.osm2xp.utils.logging.Osm2xpLogger;
 import com.vividsolutions.jts.geom.Geometry;
@@ -179,7 +180,7 @@ public class MultiTileParserImpl extends AbstractTranslatingParserImpl implement
 	@Override
 	protected List<Polygon> doCleanup(List<List<Long>> outer, List<List<Long>> inner) {
 		List<Polygon> cleaned = super.doCleanup(outer, inner);
-		return fix(cleaned).stream().filter(geom -> geom instanceof Polygon).map(geom -> (Polygon)geom).collect(Collectors.toList());
+		return fix(cleaned).stream().flatMap(geom -> GeomUtils.flatMapToPoly(geom).stream()).collect(Collectors.toList());
 	}
 	
 	protected List<Geometry> fix(List<? extends Geometry> geometries) {
@@ -199,7 +200,8 @@ public class MultiTileParserImpl extends AbstractTranslatingParserImpl implement
 	@Override
 	protected void translatePolys(long id, List<Tag> tagsModel, List<Polygon> cleanedPolys) {
 		if (cleanedPolys.isEmpty()) {
-			Activator.log(IStatus.WARNING, "Way/Polygon with id " + id + " is invalid, unable to fix it automatically. Possible reasons - self-intersection or partial node information.");
+			String type = OsmUtils.getReadableType(tagsModel);
+			Activator.log(IStatus.WARNING, "Way/Polygon of type " + type + " with id " + id + " is invalid, unable to fix it automatically. Possible reasons - self-intersection or partial node information.");
 		}
 		for (TileTranslationAdapter adapter : translationAdapters) {
 			adapter.processWays(id, tagsModel, null, cleanedPolys);

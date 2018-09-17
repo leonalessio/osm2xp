@@ -67,13 +67,4 @@ public interface IDataSink {
 	 */
 	long[] getWayPoints(long wayId);
 	
-	/**
-	 * Drop nodes map
-	 */
-	void clearNodes();
-	
-	/**
-	 * Drop ways map
-	 */
-	void clearWays();
 }

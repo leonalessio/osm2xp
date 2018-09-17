@@ -1,7 +1,9 @@
 package com.osm2xp.dataProcessors;
 
+import com.osm2xp.dataProcessors.impl.Jdbm2ProcessorImpl;
 import com.osm2xp.dataProcessors.impl.MemoryCriticalProcessorImpl;
 import com.osm2xp.exceptions.DataSinkException;
+import com.osm2xp.utils.helpers.GuiOptionsHelper;
 
 /**
  * Data Sink Factory.
@@ -12,12 +14,12 @@ import com.osm2xp.exceptions.DataSinkException;
 public class DataSinkFactory {
 
 	public static IDataSink getProcessor() throws DataSinkException {
-		return new MemoryCriticalProcessorImpl();
-//		if (GuiOptionsHelper.getOptions().isDatabaseMode()) { //XXX debug
-//			return new Jdbm2ProcessorImpl();
-//		} else {
-//			return new MemoryProcessorImpl();
-//		}
+		if (GuiOptionsHelper.getOptions().isDatabaseMode()) { 
+			return new Jdbm2ProcessorImpl();
+		} else {
+			//return new MemoryProcessorImpl();
+			return new MemoryCriticalProcessorImpl();
+		}
 
 	}
 }

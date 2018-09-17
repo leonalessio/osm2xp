@@ -392,6 +392,31 @@ public class OsmUtils {
 		}
 		return null;
 	}
+	
+	public static String getReadableType(List<Tag> tags) {
+		if (isBuilding(tags)) {
+			return "building";
+		}
+		if (isForest(tags) || isOsmForest(tags)) {
+			return "forest";
+		}
+		if (isFence(tags)) {
+			return "fence";
+		}
+		if (isObject(tags)) {
+			return "object";
+		}
+		if (isPowerline(tags)) {
+			return "powerline";
+		}
+		if (isRailway(tags)) {
+			return "railway";
+		}
+		if (isRoad(tags)) {
+			return "road";
+		}
+		return "unknown";
+	}
 
 	public static String CreateTempFile(String folderPath,
 			List<OsmPolygon> wayList, String fileName) throws IOException {
