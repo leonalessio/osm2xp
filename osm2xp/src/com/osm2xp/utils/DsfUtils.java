@@ -188,13 +188,8 @@ public class DsfUtils {
 	 */
 	public static void writeLibraryFile(String sceneFolder,
 			DsfObjectsProvider dsfObjectsProvider) {
-		BufferedWriter outputlibrary = null;
-		try {
-
-			FileWriter writerLibrary = new FileWriter(sceneFolder
-					+ File.separatorChar + "library.txt", false);
-			outputlibrary = new BufferedWriter(writerLibrary);
-
+		try (BufferedWriter outputlibrary = new BufferedWriter(new FileWriter(sceneFolder
+				+ File.separatorChar + "library.txt", false))) {
 			outputlibrary.write("I" + "\n");
 			outputlibrary.write("800" + "\n");
 			outputlibrary.write("LIBRARY" + "\n");

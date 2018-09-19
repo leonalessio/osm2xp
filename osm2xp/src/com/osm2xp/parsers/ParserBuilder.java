@@ -2,8 +2,6 @@ package com.osm2xp.parsers;
 
 import java.awt.Color;
 import java.io.File;
-import java.util.ArrayList;
-import java.util.List;
 import java.util.Map;
 
 import com.osm2xp.dataProcessors.DataSinkFactory;
@@ -15,7 +13,6 @@ import com.osm2xp.parsers.impl.PbfSingleTileParserImpl;
 import com.osm2xp.parsers.impl.PbfWholeFileParserImpl;
 import com.osm2xp.parsers.impl.SaxParserImpl;
 import com.osm2xp.parsers.impl.ShapefileParserImpl;
-import com.osm2xp.parsers.impl.TileTranslationAdapter;
 import com.osm2xp.translators.ITranslator;
 import com.osm2xp.translators.TranslatorBuilder;
 import com.osm2xp.utils.FilesUtils;
@@ -95,17 +92,10 @@ public class ParserBuilder {
 	 * @throws NumberFormatException
 	 * @throws Exception
 	 */
-	public static IBasicParser getMultiTileParser(List<Point2D> tiles, File currentFile,
+	public static IMultiTilesParser getMultiTileParser(File currentFile,
 			String folderPath)
 			throws DataSinkException {
 		IDataSink processor = DataSinkFactory.getProcessor();
-		List<TileTranslationAdapter> translationAdapters = new ArrayList<TileTranslationAdapter>();
-		for (Point2D tile : tiles) {
-			ITranslator translator = TranslatorBuilder.getTranslator(currentFile,
-					tile, folderPath);
-			translationAdapters.add(new TileTranslationAdapter(tile, processor, translator));
-			
-		}
 		// if a roof color file is available, load it into a map and give it to
 		// the parser
 		Map<Long, Color> roofsColorMap = null;
@@ -116,8 +106,7 @@ public class ParserBuilder {
 		//TODO supported only for pbf yet 
 		if (GuiOptionsHelper.getOptions().getCurrentFilePath().toLowerCase()
 				.contains(".pbf")) {
-			return new MultiTileParserImpl(currentFile,translationAdapters, roofsColorMap,processor);
-
+			return new MultiTileParserImpl(currentFile,folderPath, roofsColorMap,processor);
 		}
 		return null;
 	}

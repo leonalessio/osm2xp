@@ -1,11 +1,11 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <?pde version="3.5"?>
 
-<product name="Osm2XP" uid="com.osm2xp.product" id="com.osm2xp.osm2xp" application="com.osm2xp.application" version="3.3.0" useFeatures="false" includeLaunchers="true">
+<product name="Osm2XP" uid="com.osm2xp.product" id="com.osm2xp.osm2xp" application="com.osm2xp.application" version="3.4.0" useFeatures="false" includeLaunchers="true">
 
    <aboutInfo>
       <text>
-         Osm2xp 3.3.0, OpenStreetMap scenery generator for flight Simulators.
+         Osm2xp 3.4.0, OpenStreetMap scenery generator for flight Simulators.
 
 Copyright (C) 2010-2013  Benjamin Blanchet for Javee software solutions.
 Copyright (C) 2018  Dmitry Karpenko, OnPositive
@@ -39,6 +39,8 @@ Icons by Open Icon Library http://http://openiconlibrary.sourceforge.net/
 
    <launcherArgs>
       <vmArgs>-Dosgi.requiredJavaVersion=1.8
+-Xms40m 
+-Xmx4096m
       </vmArgs>
       <vmArgsMac>-XstartOnFirstThread -Dorg.eclipse.swt.internal.carbon.smallFonts
       </vmArgsMac>
@@ -54,7 +56,6 @@ Icons by Open Icon Library http://http://openiconlibrary.sourceforge.net/
       </win>
    </launcher>
 
-
    <vm>
       <windows include="true">org.eclipse.jdt.launching.JRE_CONTAINER/org.eclipse.jdt.internal.debug.ui.launcher.StandardVMType/JavaSE-1.8</windows>
    </vm>
@@ -62,7 +63,7 @@ Icons by Open Icon Library http://http://openiconlibrary.sourceforge.net/
    <license>
         <url>http://osm2xp.com</url>
         <text>
-   OSM2XP 3.3.0
+   OSM2XP 3.4.0
    Copyright (C) 2010-2013  Benjamin Blanchet for Javee software solutions.
    Copyright (C) 2018  Dmitry Karpenko, OnPositive
 

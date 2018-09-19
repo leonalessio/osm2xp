@@ -1,7 +1,6 @@
 package com.osm2xp.jobs;
 
 import java.io.File;
-import java.util.List;
 
 import org.eclipse.core.runtime.IProgressMonitor;
 import org.eclipse.core.runtime.IStatus;
@@ -9,12 +8,9 @@ import org.eclipse.core.runtime.Status;
 
 import com.osm2xp.exceptions.DataSinkException;
 import com.osm2xp.exceptions.OsmParsingException;
-import com.osm2xp.parsers.IBasicParser;
+import com.osm2xp.parsers.IMultiTilesParser;
 import com.osm2xp.parsers.ParserBuilder;
-import com.osm2xp.utils.helpers.Osm2xpProjectHelper;
 import com.osm2xp.utils.logging.Osm2xpLogger;
-
-import math.geom2d.Point2D;
 
 /**
  * Job for generating scenario for multiple tiles 
@@ -23,24 +19,21 @@ import math.geom2d.Point2D;
  * 
  */
 public class GenerateMultiTilesJob extends GenerateJob {
-	protected List<Point2D> tiles;
 
-	public GenerateMultiTilesJob(String name, File currentFile, List<Point2D> tiles,
-			String folderPath, String family) {
+	public GenerateMultiTilesJob(String name, File currentFile, String folderPath,
+			String family) {
 		super(name, currentFile, folderPath, family);
-		this.tiles = tiles;
-		Osm2xpLogger.info("Starting  generation of " + tiles.size() + " tiles, target folder " + folderPath);
+		Osm2xpLogger.info("Starting  generation of several tiles, target folder " + folderPath);
 	}
 
 	@Override
 	protected IStatus run(IProgressMonitor monitor) {
-		IBasicParser parser;
+		IMultiTilesParser parser;
 		try {
-			parser = ParserBuilder.getMultiTileParser(tiles, currentFile,
+			parser = ParserBuilder.getMultiTileParser(currentFile,
 					folderPath);
 			parser.process();
-			Osm2xpProjectHelper.removeTiles(tiles);
-			Osm2xpLogger.info("Finished generation of " +  tiles.size() + " tiles, target folder " + folderPath);
+			Osm2xpLogger.info("Finished generation of " +  parser.getTilesCount() + " tiles, target folder " + folderPath);
 		} catch (DataSinkException e) {
 			Osm2xpLogger.error("Data sink exception : ", e);
 		} catch (OsmParsingException e) {

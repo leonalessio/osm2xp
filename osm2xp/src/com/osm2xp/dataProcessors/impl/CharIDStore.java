@@ -1,15 +1,18 @@
 package com.osm2xp.dataProcessors.impl;
 
-public class IntIDStore implements IIDStore{
+public class CharIDStore implements IIDStore{
 	
 	private long baseId;
-	private int[] coded;
+	/**
+	 * Java doesn't have unsigned short, 'char' is bit hacky replacement for it
+	 */
+	private char[] coded;
 
-	public IntIDStore(long[] data, long baseId) {
+	public CharIDStore(long[] data, long baseId) {
 		this.baseId = baseId;
-		coded = new int[data.length];
+		coded = new char[data.length];
 		for (int i = 0; i < coded.length; i++) {
-			coded[i] = (int) (data[i] - baseId);
+			coded[i] = (char) (data[i] - baseId);
 		}
 	}
 

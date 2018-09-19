@@ -67,20 +67,11 @@ public class Osm2xpProjectHelper {
 	}
 
 	/**
-	 * @param tilesList
 	 * @throws Osm2xpBusinessException
 	 */
-	public static void initProject(List<Point2D> tilesList, String folderPath,
-			String osmFilePath) throws Osm2xpBusinessException {
+	public static void initProject(String folderPath, String osmFilePath) throws Osm2xpBusinessException {
 		osm2XpProject = new Osm2XpProject();
 		osm2XpProject.setCoordinatesList(new CoordinatesList());
-		for (Point2D coords : tilesList) {
-			Coordinates coordinates = new Coordinates();
-			coordinates.setLatitude((int) coords.y);
-			coordinates.setLongitude((int) coords.x);
-			osm2XpProject.getCoordinatesList().getCoordinates()
-					.add(coordinates);
-		}
 		new File(folderPath).mkdirs();
 		projectFile = new File(folderPath + File.separator + "osm2xp.project");
 		osm2XpProject.setFile(osmFilePath);

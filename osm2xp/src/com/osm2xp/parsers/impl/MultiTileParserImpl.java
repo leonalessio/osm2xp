@@ -8,8 +8,10 @@ import java.io.IOException;
 import java.io.InputStream;
 import java.util.ArrayList;
 import java.util.Collections;
+import java.util.HashSet;
 import java.util.List;
 import java.util.Map;
+import java.util.Set;
 import java.util.stream.Collectors;
 
 import org.eclipse.core.runtime.IStatus;
@@ -17,6 +19,7 @@ import org.openstreetmap.osmosis.osmbinary.Osmformat;
 import org.openstreetmap.osmosis.osmbinary.Osmformat.DenseNodes;
 import org.openstreetmap.osmosis.osmbinary.Osmformat.HeaderBlock;
 import org.openstreetmap.osmosis.osmbinary.Osmformat.Node;
+import org.openstreetmap.osmosis.osmbinary.Osmformat.Relation;
 import org.openstreetmap.osmosis.osmbinary.Osmformat.Way;
 import org.openstreetmap.osmosis.osmbinary.file.BlockInputStream;
 
@@ -26,37 +29,44 @@ import com.osm2xp.exceptions.Osm2xpBusinessException;
 import com.osm2xp.exceptions.OsmParsingException;
 import com.osm2xp.gui.Activator;
 import com.osm2xp.model.osm.Tag;
-import com.osm2xp.parsers.IBasicParser;
+import com.osm2xp.parsers.IMultiTilesParser;
+import com.osm2xp.translators.TranslatorBuilder;
 import com.osm2xp.utils.OsmUtils;
 import com.osm2xp.utils.geometry.GeomUtils;
 import com.osm2xp.utils.logging.Osm2xpLogger;
 import com.vividsolutions.jts.geom.Geometry;
 import com.vividsolutions.jts.geom.Polygon;
 
+import math.geom2d.Point2D;
+
+
 
 /**
- * PBF parser with ability to split parsed data around several polygons using JTS to clip, cut, simplify and fix OSM polygons 
+ * PBF parser with ability to automatically detect tiles and split parsed data around several polygons 
+ * using JTS library to clip, cut, simplify and fix OSM polygons 
  * 
  * @author Dmitry Karpenko, OnPositive
  * 
  */
-public class MultiTileParserImpl extends AbstractTranslatingParserImpl implements IBasicParser {
+public class MultiTileParserImpl extends AbstractTranslatingParserImpl implements IMultiTilesParser {
 
 	private File binaryFile;
-	private List<TileTranslationAdapter> translationAdapters;
-//	private long nodeCnt = 0;
+	private List<TileTranslationAdapter> translationAdapters = new ArrayList<>();
+	Set<Point2D> tiles = new HashSet<Point2D>();
+	private long nodeCnt = 0;
+	private long wayCnt = 0;
+	private String folderPath;
 	
-	public MultiTileParserImpl(File binaryFile, List<TileTranslationAdapter> traanslationAdapters, Map<Long, Color> roofsColorMap, IDataSink processor) {
+	public MultiTileParserImpl(File binaryFile, String folderPath, Map<Long, Color> roofsColorMap, IDataSink processor) {
 		super(roofsColorMap, processor);
 		this.binaryFile = binaryFile;
-		this.translationAdapters = traanslationAdapters;
+		this.folderPath = folderPath;
 	}
 
 	/**
 	 * 
 	 */
 	public void complete() {
-//		System.out.println("MultiTileParserImpl.complete() " + nodeCnt);
 		for (TileTranslationAdapter tileTranslationAdapter : translationAdapters) {
 			tileTranslationAdapter.complete();
 		}
@@ -78,6 +88,7 @@ public class MultiTileParserImpl extends AbstractTranslatingParserImpl implement
 			long id = nodes.getId(i) + lastId;
 			lastId = id;
 			double latf = parseLat(lat), lonf = parseLon(lon);
+			pointParsed(lonf, latf);
 			if (nodes.getKeysValsCount() > 0) {
 				while (nodes.getKeysVals(j) != 0) {
 					int keyid = nodes.getKeysVals(j++);
@@ -104,7 +115,10 @@ public class MultiTileParserImpl extends AbstractTranslatingParserImpl implement
 
 				if (mustStoreNode(node)) {
 					processor.storeNode(node);
-//					nodeCnt++;
+					nodeCnt++;
+					if (nodeCnt % 1000000 == 0) {
+						Osm2xpLogger.info(nodeCnt + " nodes processed");		
+					}
 				}
 			} 
 			catch (DataSinkException e) {
@@ -113,6 +127,17 @@ public class MultiTileParserImpl extends AbstractTranslatingParserImpl implement
 			catch (Osm2xpBusinessException e) {
 				Osm2xpLogger.error("Node translation error.", e);
 			}
+		}
+	}
+	
+	public void pointParsed(double lonf, double latf) {
+		Point2D cleanedLoc = new Point2D((int) Math.floor(lonf), (int) Math.floor(latf));
+		if (!tiles.contains(cleanedLoc)) {
+			Osm2xpLogger.info("Detected tile (" + cleanedLoc.x + ", " + cleanedLoc.y + ")");
+			TileTranslationAdapter adapter = new TileTranslationAdapter(cleanedLoc, processor, TranslatorBuilder.getTranslator(binaryFile, cleanedLoc, folderPath));
+			adapter.init();
+			translationAdapters.add(adapter);
+			tiles.add(cleanedLoc);
 		}
 	}
 
@@ -133,8 +158,17 @@ public class MultiTileParserImpl extends AbstractTranslatingParserImpl implement
 	protected void parseWays(List<Way> ways) {
 		for (Osmformat.Way curWay : ways) {
 			processWay(curWay);
+			wayCnt++;
+			if (wayCnt % 100000 == 0) {
+				Osm2xpLogger.info(wayCnt + " ways processed");		
+			}
 		}
 
+	}
+	
+	@Override
+	protected void parseRelations(List<Relation> rels) {
+		super.parseRelations(rels);
 	}
 	
 	protected void translateWay(com.osm2xp.model.osm.Way way, List<Long> ids) throws Osm2xpBusinessException {
@@ -161,9 +195,6 @@ public class MultiTileParserImpl extends AbstractTranslatingParserImpl implement
 	public void process() throws OsmParsingException {
 
 		try {
-			for (TileTranslationAdapter tileTranslationAdapter : translationAdapters) {
-				tileTranslationAdapter.init();
-			}
 			InputStream input;
 			input = new FileInputStream(this.binaryFile);
 			BlockInputStream bm = new BlockInputStream(input, this);
@@ -201,11 +232,16 @@ public class MultiTileParserImpl extends AbstractTranslatingParserImpl implement
 	protected void translatePolys(long id, List<Tag> tagsModel, List<Polygon> cleanedPolys) {
 		if (cleanedPolys.isEmpty()) {
 			String type = OsmUtils.getReadableType(tagsModel);
-			Activator.log(IStatus.WARNING, "Way/Polygon of type " + type + " with id " + id + " is invalid, unable to fix it automatically. Possible reasons - self-intersection or partial node information.");
+			Activator.log(IStatus.WARNING, "Way/Relation of type " + type + " with id " + id + " is invalid, unable to fix it automatically. Possible reasons - self-intersection or partial node information.");
 		}
 		for (TileTranslationAdapter adapter : translationAdapters) {
 			adapter.processWays(id, tagsModel, null, cleanedPolys);
 		}
+	}
+
+	@Override
+	public int getTilesCount() {
+		return translationAdapters.size();
 	}
 
 }

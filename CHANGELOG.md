@@ -6,6 +6,12 @@ and this project adheres to [Semantic Versioning](http://semver.org/spec/v2.0.0.
 
 ## [Unreleased]
 
+## [3.4.0]
+
+### Fixed
+- [Critical] Different kinds of Out Of Memory issues, like "GC Overhead exceeds limit". Storage for Nodes and Ways was fully rewritten to ake much less RAM, for now generation of 500MB file needs ~4GB RAM, in previous implementation even 8 GB wasn't enough
+- [Critical] Much more failproof in case of "broken" polygons having self-intersections or partial node information. Added more logics to fix them, if it fails - generation just continues, without failing whole generation process   
+
 ## [3.3.0]
 
 ### Changed

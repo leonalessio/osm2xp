@@ -1,9 +1,6 @@
 package com.osm2xp.controllers;
 
 import java.io.File;
-import java.util.ArrayList;
-import java.util.Collections;
-import java.util.List;
 
 import org.apache.commons.lang.StringUtils;
 import org.eclipse.core.runtime.IProgressMonitor;
@@ -26,8 +23,6 @@ import com.osm2xp.jobs.GenerateTileJob;
 import com.osm2xp.jobs.MutexRule;
 import com.osm2xp.model.facades.FacadeSetManager;
 import com.osm2xp.model.project.Coordinates;
-import com.osm2xp.parsers.tilesLister.TilesLister;
-import com.osm2xp.parsers.tilesLister.TilesListerFactory;
 import com.osm2xp.utils.FilesUtils;
 import com.osm2xp.utils.MiscUtils;
 import com.osm2xp.utils.helpers.GuiOptionsHelper;
@@ -208,7 +203,7 @@ public class BuildController {
 			throws Osm2xpBusinessException {
 		String jobTitle = "Generate tile " + +(int) coordinates.y + " / "
 				+ (int) coordinates.x + " of file " + currentFile.getName();
-		final GenerateMultiTilesJob job = new GenerateMultiTilesJob(jobTitle, currentFile, Collections.singletonList(coordinates), folderPath, "todoJob");
+		final GenerateMultiTilesJob job = new GenerateMultiTilesJob(jobTitle, currentFile, folderPath, "todoJob");
 //		final GenerateTileJob job = new GenerateTileJob(jobTitle, currentFile,
 //				coordinates, folderPath, relationsList, "todoJob");
 		job.setRule(new MutexRule());
@@ -256,41 +251,40 @@ public class BuildController {
 		Job tilesJob = new Job("Listing tiles ") {
 			@Override
 			protected IStatus run(IProgressMonitor monitor) {
-				final TilesLister tilesLister = TilesListerFactory
-						.getTilesLister(currentFile);
-				Osm2xpLogger.info("Listing relations in file " + currentFile.getName());
-				Osm2xpLogger.info("Listing tiles in file " + currentFile.getName());
-				try {
-					tilesLister.process();
-				} catch (Osm2xpBusinessException e) {
-					Osm2xpLogger.error(
-							"Error listing tiles :\n" + e.getMessage(), e);
-				}
-
-				// If you want to update the UI
-				Display.getDefault().asyncExec(new Runnable() {
-					@Override
-					public void run() {
-					}
-				});
+//				final TilesLister tilesLister = TilesListerFactory
+//						.getTilesLister(currentFile);
+//				Osm2xpLogger.info("Listing relations in file " + currentFile.getName());
+//				Osm2xpLogger.info("Listing tiles in file " + currentFile.getName());
+//				try {
+//					tilesLister.process();
+//				} catch (Osm2xpBusinessException e) {
+//					Osm2xpLogger.error(
+//							"Error listing tiles :\n" + e.getMessage(), e);
+//				}
+//
+//				// If you want to update the UI
+//				Display.getDefault().asyncExec(new Runnable() {
+//					@Override
+//					public void run() {
+//					}
+//				});
 
 				// get tiles list
-				List<Point2D> tilesList = new ArrayList<Point2D>(
-						tilesLister.getTilesList());
-				Osm2xpLogger.info("listing of tiles complete");
-				Osm2xpLogger.info(tilesList.size() + " tile(s) found");
+//				List<Point2D> tilesList = new ArrayList<Point2D>(
+//						tilesLister.getTilesList());
+//				Osm2xpLogger.info("listing of tiles complete");
+//				Osm2xpLogger.info(tilesList.size() + " tile(s) found");
 				// init the current project, only if the output mode will
 				// generate files
 				if (GuiOptionsHelper.isOutputFormatAFileGenerator()) {
 					try {
-						Osm2xpProjectHelper.initProject(tilesList, folderPath,
-								GuiOptionsHelper.getOptions()
-										.getCurrentFilePath());
+						Osm2xpProjectHelper.initProject(folderPath, GuiOptionsHelper.getOptions()
+								.getCurrentFilePath());
 					} catch (Osm2xpBusinessException e1) {
 						Osm2xpLogger.error("Error creating project file", e1);
 					}
 				}
-				GenerateMultiTilesJob tilesJob = new GenerateMultiTilesJob("Generate several tiles", currentFile, tilesList, folderPath, "todoJob");
+				GenerateMultiTilesJob tilesJob = new GenerateMultiTilesJob("Generate several tiles", currentFile, folderPath, "todoJob");
 				tilesJob.setRule(new MutexRule());
 				tilesJob.addJobChangeListener(new JobChangeAdapter() {
 
@@ -325,15 +319,15 @@ public class BuildController {
 				tilesJob.setRule(rule);
 				tilesJob.schedule();
 				
-				if (tilesList.isEmpty()) {
-					try {
-						GuiOptionsHelper.getOptions().setSinglePass(true);
-						generateWholeFileOnASinglePass(currentFile, folderPath);
-					} catch (Osm2xpBusinessException e) {
-						Osm2xpLogger.error("Error generating tile", e);
-						return new Status(IStatus.ERROR, Activator.PLUGIN_ID, e.getMessage(), e);
-					}
-				}
+//				if (tilesList.isEmpty()) {
+//					try {
+//						GuiOptionsHelper.getOptions().setSinglePass(true);
+//						generateWholeFileOnASinglePass(currentFile, folderPath);
+//					} catch (Osm2xpBusinessException e) {
+//						Osm2xpLogger.error("Error generating tile", e);
+//						return new Status(IStatus.ERROR, Activator.PLUGIN_ID, e.getMessage(), e);
+//					}
+//				}
 				return Status.OK_STATUS;
 
 			}

@@ -17,7 +17,6 @@ public class DataSinkFactory {
 		if (GuiOptionsHelper.getOptions().isDatabaseMode()) { 
 			return new Jdbm2ProcessorImpl();
 		} else {
-			//return new MemoryProcessorImpl();
 			return new MemoryCriticalProcessorImpl();
 		}
 

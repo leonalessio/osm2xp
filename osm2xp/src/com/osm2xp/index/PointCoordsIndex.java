@@ -24,7 +24,11 @@ public class PointCoordsIndex implements IIdIndex<double[]>{
      * The capacity of the ArrayList is the length of this array buffer. Any
      * empty ArrayList with elementData == DEFAULTCAPACITY_EMPTY_ELEMENTDATA
      * will be expanded to DEFAULT_CAPACITY when the first element is added.
-     */
+     * 
+     * 	
+	 * Java doesn't have unsigned short, 'char' is bit hacky replacement for it
+	 */
+  
     transient char[] idArray; 
     transient int[] latArray; 
     transient int[] lonArray; 

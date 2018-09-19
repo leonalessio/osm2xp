@@ -3,20 +3,23 @@ package com.osm2xp.dataProcessors.impl;
 import java.util.HashMap;
 import java.util.Map;
 
-import com.carrotsearch.hppc.LongObjectHashMap;
 import com.osm2xp.exceptions.DataSinkException;
 import com.osm2xp.model.osm.Node;
 
 /**
- * Memory data sink implementation
+ * Memory data sink implementation <br>
  * 
- * @author Benjamin Blanchet
+ * @author Benjamin Blanchet <br>
  * 
+ * <b>Deprecated</b> This Memory Processor stucks in case of processing large PBF files (~500 mb), e.g. describing one European country
+ * It was replaced with linear array indexes implemented in {@link MemoryCriticalProcessorImpl}, please use it instead.
+ * Even on small files {@link MemoryCriticalProcessorImpl} is not slower, or only a bit slower, but these 1-2 secs usually doesn't matter.
  */
+@Deprecated
 public class MemoryProcessorImpl extends AbstractDataProcessor {
 
-	private Map<Long, double[]> nodeMap = new HashMap<Long, double[]>();
-	private LongObjectHashMap<long[]> wayMap = new LongObjectHashMap<long[]>();
+	private Map<Long, double[]> nodeMap = new HashMap<>();
+	private Map<Long, long[]> wayMap = new HashMap<>();
 
 	@Override
 	public void storeNode(final Node node) throws DataSinkException {
