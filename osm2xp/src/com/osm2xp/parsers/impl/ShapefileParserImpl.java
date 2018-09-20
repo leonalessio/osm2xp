@@ -7,8 +7,6 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
 
-import org.openstreetmap.osmosis.osmbinary.Osmformat.Relation;
-
 import com.bbn.openmap.layer.shape.ESRIPoly.ESRIFloatPoly;
 import com.bbn.openmap.layer.shape.ESRIPolygonRecord;
 import com.bbn.openmap.layer.shape.ShapeFile;
