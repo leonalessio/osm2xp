@@ -44,7 +44,7 @@ Please refer [Quick Start Guide](https://github.com/32kda/osm2xp/wiki/Quick-Star
 
 [Using Facade Set Editor](https://github.com/32kda/osm2xp/wiki/Facade-Set-editor)
 
-[Basic troubleshooting information](https://github.com/32kda/osm2xp/wiki/Troubleshooting)
+Faced a problem? Please look at [basic troubleshooting information](https://github.com/32kda/osm2xp/wiki/Troubleshooting), maybe there's a solution. If not - feel free to open an issue here or report it in [this](https://forums.x-plane.org/index.php?/forums/topic/151582-osm2xp-30/) forum thread.
 
 ## Samples of generated scenarios
 
