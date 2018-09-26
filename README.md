@@ -53,7 +53,7 @@ Faced a problem? Please look at [basic troubleshooting information](https://gith
 ![Screenshot 2](https://32kda.github.io/osm2xp/screenshots/CH750_2.png "Screenshot 2")
 
 ## Participate
-You can help with coding, if you know Java/Eclipse, with creating better default facade set (current one has a lot of problems) or just filing issues and posting improvement suggestions. Any help is welcome. 
+You can help with coding, if you know Java/Eclipse, with creating better default facade set (current one has a lot of problems), default models (cranes, chimneys, communication towers...) or just filing issues and posting improvement suggestions. Any help is welcome. 
 
 ## Nearest plans
 
