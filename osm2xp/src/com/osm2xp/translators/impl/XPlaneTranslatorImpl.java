@@ -325,8 +325,8 @@ public class XPlaneTranslatorImpl implements ITranslator{
 		// or if surface of the polygon is under the max surface for a
 		// residential house
 		// and height is under max residential height
-		if (OsmUtils.isValueinTags("residential", polygon.getTags())
-				|| OsmUtils.isValueinTags("house", polygon.getTags())) {
+		if (OsmUtils.isValueInTags("residential", polygon.getTags())
+				|| OsmUtils.isValueInTags("house", polygon.getTags())) {
 			return BuildingType.RESIDENTIAL;
 		}
 		if (!StringUtils.stripToEmpty(polygon.getTagValue("shop")).isEmpty()) {
@@ -342,8 +342,8 @@ public class XPlaneTranslatorImpl implements ITranslator{
 		// or if surface of the polygon is above the max surface for a
 		// residential house
 		// and height is above max residential height
-		if (OsmUtils.isValueinTags("industrial", polygon.getTags())
-				|| OsmUtils.isValueinTags("Commercial", polygon.getTags())
+		if (OsmUtils.isValueInTags("industrial", polygon.getTags())
+				|| OsmUtils.isValueInTags("Commercial", polygon.getTags())
 				|| polygon.getArea() * 10000000 > ASSERTION_RESIDENTIAL_MAX_AREA
 				|| polygon.getHeight() > XplaneOptionsHelper.getOptions()
 						.getResidentialMax()) {

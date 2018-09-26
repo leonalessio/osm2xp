@@ -428,6 +428,50 @@ public class GeomUtils {
 		return result;
 
 	}
+	
+	private static Point2D[] getMedianPoints(Point2D[] points, int pointCount) {
+		Point2D[] result = new Point2D[pointCount];
+		int next = 0;
+		for (int i = 0; i < result.length && next < points.length; i++) {
+			Point2D startPt = points[next];
+			Point2D closestPoint = null;
+			double closestDist = Double.MAX_VALUE;
+			for (int j = i+1; j < points.length - 1; j++) { //ignore last point, since it equals first one
+				double dist = startPt.distance(points[j]);
+				if (dist < closestDist) {
+					closestDist = dist;
+					closestPoint = points[j];
+				}
+			}
+			next++;
+			if (closestPoint == points[i+1]) {
+				next++;
+			}
+			result[i] = new Point2D((startPt.x + closestPoint.x) / 2, (startPt.y + closestPoint.y) / 2);
+		}
+		return result;
+	}
+	
+	public static Line2D getCenterline(Polyline2D sourceFootprint) {
+		int vertexNumber = sourceFootprint.getVertexNumber();
+		if (vertexNumber < 2 && sourceFootprint.isClosed() && vertexNumber < 3) {
+			return null;
+		}
+		if (!sourceFootprint.isClosed()) {
+			return new Line2D(sourceFootprint.getFirstPoint(), sourceFootprint.getLastPoint()); 
+		}
+		if (vertexNumber > 5) { //Try to make square shape. 5 instead of 4 here because for closed line, last vertex matches first one
+			// we create a jts polygon from the linear ring
+			Polygon sourcePoly = linearRing2DToPolygon((LinearRing2D) sourceFootprint);
+			// we create a simplified polygon
+			Geometry cleanPoly = LatLonShortEdgesDeletion.get(sourcePoly, 10000); //Min side 10 km - should make any poly four-sided
+			// we create a linearRing2D from the modified polygon
+			LinearRing2D result = polygonToLinearRing2D(cleanPoly);
+		}
+		Point2D[] points = sourceFootprint.getPointArray();
+		Point2D[] endPoints = getMedianPoints(points, 2);
+		return new Line2D(endPoints[0], endPoints[1]);
+	}
 
 	/**
 	 * remove some vertex to simplify polygon
@@ -442,7 +486,6 @@ public class GeomUtils {
 			Polygon sourcePoly = linearRing2DToPolygon(sourceFootprint);
 
 			// we create a simplified polygon
-//			Geometry cleanPoly = LatLonShortEdgesDeletion.get(sourcePoly, 5);
 			Geometry cleanPoly = LatLonShortEdgesDeletion.get(sourcePoly, 5.0); //Min side 5 meters
 
 			// we create a linearRing2D from the modified polygon

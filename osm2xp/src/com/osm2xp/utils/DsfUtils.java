@@ -10,6 +10,7 @@ import java.text.DecimalFormat;
 import java.util.GregorianCalendar;
 import java.util.Locale;
 
+import org.eclipse.core.runtime.jobs.Job;
 import org.eclipse.core.runtime.preferences.InstanceScope;
 
 import com.osm2xp.constants.Osm2xpConstants;
@@ -23,7 +24,6 @@ import com.osm2xp.model.xplane.XplaneDsfObject;
 import com.osm2xp.utils.geometry.GeomUtils;
 import com.osm2xp.utils.helpers.GuiOptionsHelper;
 import com.osm2xp.utils.helpers.XplaneOptionsHelper;
-import com.osm2xp.utils.logging.Osm2xpLogger;
 import com.osm2xp.writers.impl.OsmWriterImpl;
 
 import math.geom2d.Box2D;
@@ -244,12 +244,9 @@ public class DsfUtils {
 	 * @param dsfFile
 	 */
 	public static void textToDsf(File textFile, File dsfFile) {
-		try {
-			Runtime runtime = Runtime.getRuntime();
-			runtime.exec(new String[] { getDsfToolPath(), "--text2dsf",
-					textFile.getPath(), dsfFile.getPath() });
-		} catch (IOException e) {
-			Osm2xpLogger.error("Error on .dsf conversion.", e);
+		if (new File(getDsfToolPath()).isFile()) {
+			Job job = new DsfConversionJob(textFile, dsfFile);
+			job.schedule();
 		}
 	}
 

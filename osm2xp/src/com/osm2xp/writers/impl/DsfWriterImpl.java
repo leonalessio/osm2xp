@@ -21,7 +21,7 @@ import math.geom2d.Point2D;
 /**
  * Dsf Writer implementation.
  * 
- * @author Benjamin Blanchet
+ * @author Benjamin Blanchet, Dmitry Karpenko
  * 
  */
 public class DsfWriterImpl implements IWriter {
@@ -36,8 +36,6 @@ public class DsfWriterImpl implements IWriter {
 		this.dsfObjectsProvider = dsfObjectsProvider;
 
 		dsfFile = DsfUtils.computeXPlaneDsfFilePath(sceneFolder, tile);
-		// if file doesn't exists
-		// if (!dsfFile.exists()) {
 		// create the parent folder file
 		File parentFolder = new File(dsfFile.getParent());
 		parentFolder.mkdirs();
@@ -51,11 +49,8 @@ public class DsfWriterImpl implements IWriter {
 			String dsfHeader = DsfUtils.getDsfHeader(tile, this.dsfObjectsProvider);
 			writer.write(dsfHeader);
 		} catch (IOException e) {
-			// TODO Auto-generated catch block
-			e.printStackTrace();
+			Osm2xpLogger.error("Error writing " + dsfFile.getAbsolutePath(), e);
 		}		
-		// delete on exist
-		dsfFile.deleteOnExit();
 	}
 
 	public void write(Object data) {

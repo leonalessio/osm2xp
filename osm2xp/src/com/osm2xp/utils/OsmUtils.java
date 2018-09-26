@@ -236,11 +236,18 @@ public class OsmUtils {
 
 	}
 
-	public static boolean isValueinTags(String value, List<Tag> tags) {
+	public static boolean isValueInTags(String value, List<Tag> tags) {
 		for (Tag tag : tags) {
-			if (tag.getValue().equalsIgnoreCase(value)) {
+			if (value.equalsIgnoreCase(tag.getValue())) {
 				return true;
-
+			}
+		}
+		return false;
+	}
+	public static boolean isKeyInTags(String key, List<Tag> tags) {
+		for (Tag tag : tags) {
+			if (key.equalsIgnoreCase(tag.getKey())) {
+				return true;
 			}
 		}
 		return false;
@@ -328,6 +335,10 @@ public class OsmUtils {
 	
 	public static boolean isFence(List<Tag> tags) {
 		return isStringInTags("barrier", tags);
+	}
+	
+	public static boolean isAeroway(List<Tag> tags) {
+		return isKeyInTags("aeroway", tags);
 	}
 
 	public static boolean isBuilding(List<Tag> tags) {
