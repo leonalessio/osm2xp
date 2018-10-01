@@ -7,7 +7,6 @@ import java.io.IOException;
 import java.io.PrintWriter;
 import java.util.List;
 
-import com.osm2xp.model.osm.OsmPolyline;
 import com.osm2xp.utils.logging.Osm2xpLogger;
 
 /**
@@ -48,11 +47,55 @@ public class XPAirfieldOutput {
 	}
 
 	private String getRunwayStr(RunwayData runway) {
-		// TODO Auto-generated method stub
+		StringBuilder builder = new StringBuilder("100 ");
+		builder.append(String.format("%1.2f", runway.getWidth()));
+		builder.append(' ');
+		builder.append(getSurfaceCode(runway));
+		builder.append(' ');
+		builder.append(getSurfaceShoulderCode(runway));
+		builder.append(' ');
+		builder.append(getRoughness(runway));
+		builder.append(' ');
+		builder.append(getCenterLights(runway));
+		builder.append(' ');
+		builder.append(getEdgeLights(runway));
+		builder.append(' ');
+		builder.append(getDistSigns(runway));
 		return null;
 	}
 	
-	int getSurfaceCode(String osmSurfaceType) {
+	private int getDistSigns(RunwayData runway) {
+		return runway.isHard() ? 1 : 0;
+	}
+
+	private int getCenterLights(RunwayData runway) {
+		return runway.isHard() ? 1 : 0;
+	}
+	
+	private int getEdgeLights(RunwayData runway) {
+		return runway.isHard() ? 2 : 0;
+	}
+
+	private String getRoughness(RunwayData runway) {
+		if (runway.isHard()) {
+			return "0.15";
+		}
+		return "0.25";
+	}
+
+	private int getSurfaceShoulderCode(RunwayData runwayData) {
+		if (!runwayData.isHard())
+			return 0;
+		String osmSurfaceType = runwayData.getSurface();
+		if ("asphalt".equals(osmSurfaceType))
+			return 1;
+		if ("concrete".equals(osmSurfaceType) || "paved".equals(osmSurfaceType))
+			return 2;
+		return 0;
+	}
+
+	private int getSurfaceCode(RunwayData runwayData) {
+		String osmSurfaceType = runwayData.getSurface();
 		if ("asphalt".equals(osmSurfaceType))
 			return 1;
 		if ("concrete".equals(osmSurfaceType) || "paved".equals(osmSurfaceType))
