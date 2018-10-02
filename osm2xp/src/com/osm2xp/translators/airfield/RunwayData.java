@@ -16,6 +16,7 @@ public class RunwayData {
 	private boolean hard = false;
 	private double course1, course2;
 	private String marking1, marking2;
+	private String name;
 
 	public double getCourse1() {
 		return course1;
@@ -58,6 +59,16 @@ public class RunwayData {
 					marking2 = startMarking;
 				}
 			}
+		}
+		name = polyline.getTagValue("name:en");
+		if (StringUtils.isEmpty(name)) {
+			name = polyline.getTagValue("name");
+		}
+		if (StringUtils.isEmpty(name)) {
+			name = ref;
+		}
+		if (StringUtils.isEmpty(name)) {
+			name = getMarking1() + "/" + getMarking2();
 		}
 	}
 	
@@ -105,5 +116,11 @@ public class RunwayData {
 		return marking2;
 	}
 	
-
+	@Override
+	public String toString() {
+		if (name == null) {
+			return super.toString();
+		}
+		return name;
+	}
 }

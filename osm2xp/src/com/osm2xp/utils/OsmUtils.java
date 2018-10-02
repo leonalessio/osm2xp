@@ -426,6 +426,9 @@ public class OsmUtils {
 		if (isRoad(tags)) {
 			return "road";
 		}
+		if (isAeroway(tags)) {
+			return "aeroway";
+		}
 		return "unknown";
 	}
 

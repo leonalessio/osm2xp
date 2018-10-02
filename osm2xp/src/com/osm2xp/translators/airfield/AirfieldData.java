@@ -10,7 +10,6 @@ import com.osm2xp.model.osm.OsmPolyline;
 import math.geom2d.Box2D;
 
 public class AirfieldData {
-	private OsmPolyline osmPolyline;
 	private Box2D boundingBox;
 	private List<RunwayData> runways = new ArrayList<>();
 	private int elevation;
@@ -19,10 +18,12 @@ public class AirfieldData {
 	private String name;
 
 	public AirfieldData(OsmPolyline osmPolyline) {
-		this.osmPolyline = osmPolyline;
 		boundingBox = osmPolyline.getPolyline().getBoundingBox();
 		icao = osmPolyline.getTagValue("icao");
-		name = osmPolyline.getTagValue("name");
+		name = osmPolyline.getTagValue("name:en");
+		if (name == null) {
+			name = osmPolyline.getTagValue("name");
+		}
 		id = icao;
 		if (StringUtils.isEmpty(id)) {
 			id = osmPolyline.getTagValue("iata");
@@ -93,5 +94,10 @@ public class AirfieldData {
 
 	public List<RunwayData> getRunways() {
 		return runways;
+	}
+	
+	@Override
+	public String toString() {
+		return id;
 	}
 }
