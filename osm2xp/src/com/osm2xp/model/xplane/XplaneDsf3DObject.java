@@ -1,13 +1,13 @@
 package com.osm2xp.model.xplane;
 
-import math.geom2d.Point2D;
-import math.geom2d.polygon.LinearRing2D;
-
 import com.osm2xp.exceptions.Osm2xpBusinessException;
 import com.osm2xp.model.options.XplaneObjectTagRule;
 import com.osm2xp.model.osm.OsmPolygon;
 import com.osm2xp.utils.MiscUtils;
 import com.osm2xp.utils.geometry.GeomUtils;
+
+import math.geom2d.Point2D;
+import math.geom2d.polygon.LinearRing2D;
 
 /**
  * XplaneDsfObject.
@@ -68,7 +68,7 @@ public class XplaneDsf3DObject extends XplaneDsfObject {
 				if (dimensionsCheck) {
 					result = new XplaneObjGeoRef();
 					result.origin = ptOrigin;
-					result.angle = GeomUtils.getBearing(ptOrigin.y, ptOrigin.x, ptY.y, ptY.x);
+					result.angle = GeomUtils.getTrueBearing(ptOrigin, ptY);
 				}
 
 				if (result != null)

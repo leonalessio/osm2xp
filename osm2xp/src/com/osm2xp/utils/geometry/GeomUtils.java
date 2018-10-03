@@ -49,21 +49,6 @@ public class GeomUtils {
 	
 	public static final double E = 0.000001;
 
-	public static double bearing(double lat1, double Lng1, double lat2,
-			double Lng2) {
-		double deltaLong = Math.toRadians(Lng2 - Lng1);
-
-		double latitude1 = Math.toRadians(lat1);
-		double latitude2 = Math.toRadians(lat2);
-
-		double y = Math.sin(deltaLong) * Math.cos(lat2);
-		double x = Math.cos(latitude1) * Math.sin(latitude2)
-				- Math.sin(latitude1) * Math.cos(latitude2)
-				* Math.cos(deltaLong);
-		double result = Math.toDegrees(Math.atan2(y, x));
-		return (result + 360.0) % 360.0;
-	}
-
 	/**
 	 * compute distance beetween two lat/long points
 	 * 
@@ -766,35 +751,6 @@ public class GeomUtils {
 		return result;
 	}
 
-	public static double RadToDeg(double radians) {
-		return radians * (180 / Math.PI);
-	}
-
-	public static double DegToRad(double degrees) {
-		return degrees * (Math.PI / 180);
-	}
-
-	public static double getBearing(double lat1, double long1, double lat2,
-			double long2) {
-		// Convert input values to radians
-		lat1 = DegToRad(lat1);
-		long1 = DegToRad(long1);
-		lat2 = DegToRad(lat2);
-		long2 = DegToRad(long2);
-
-		double deltaLong = long2 - long1;
-
-		double x = Math.sin(deltaLong) * Math.cos(lat2);
-		double y = Math.cos(lat1) * Math.sin(lat2) - Math.sin(lat1)
-				* Math.cos(lat2) * Math.cos(deltaLong);
-		double bearing = Math.atan2(x, y);
-		return convertToBearing(RadToDeg(bearing));
-	}
-
-	public static double convertToBearing(double deg) {
-		return (deg + 360) % 360;
-	}
-
 	/**
 	 * lod13 algo by Jeema
 	 * 
@@ -1171,48 +1127,24 @@ public class GeomUtils {
 		return resultList;
 	}
 	
-	/**
-	 * Calculates heading angle from centerPt to targetPt in degrees.
-	 * The return should range from [0,360), rotating CLOCKWISE, 
-	 * 0 and 360 degrees represents NORTH,
-	 * 90 degrees represents EAST, etc...
-	 *
-	 * Assumes all points are in the same coordinate space.  If they are not, 
-	 * you will need to call SwingUtilities.convertPointToScreen or equivalent 
-	 * on all arguments before passing them  to this function.
-	 *
-	 * @param centerPt   Point we are rotating around.
-	 * @param targetPt   Point we want to calcuate the angle to.  
-	 * @return angle in degrees.  This is the angle from centerPt to targetPt.
-	 */
-	public static double calcHeadingAngleInDegrees(Point2D centerPt, Point2D targetPt)
-	{
-	    // calculate the angle theta from the deltaY and deltaX values
-	    // (atan2 returns radians values from [-PI,PI])
-	    // 0 currently points EAST.  
-	    // NOTE: By preserving Y and X param order to atan2,  we are expecting 
-	    // a CLOCKWISE angle direction.  
-	    double theta = Math.atan2(targetPt.y - centerPt.y, targetPt.x - centerPt.x);
-
-	    // rotate the theta angle clockwise by 90 degrees 
-	    // (this makes 0 point NORTH)
-	    // NOTE: adding to an angle rotates it clockwise.  
-	    // subtracting would rotate it counter-clockwise
-	    theta += Math.PI/2.0;
-
-	    // convert from radians to degrees
-	    // this will give you an angle from [0->270],[-180,0]
-	    double angle = Math.toDegrees(theta);
-
-	    // convert to positive range [0-360)
-	    // since we want to prevent negative angles, adjust them now.
-	    // we can assume that atan2 will not return a negative value
-	    // greater than one partial rotation
-	    if (angle < 0) {
-	        angle = (angle + 360) % 360;
-	    }
-
-	    return angle;
+	public static double getMagneticBearing(Point2D p1, Point2D p2){
+		return getTrueBearing(p1,p2) - new Geomagnetism(p1.x,p1.y).getDeclination() ;
 	}
+	
+	public static double getTrueBearing(Point2D p1, Point2D p2){
+		return getTrueBearing(p1.y,p1.x,p2.y,p2.x);
+	}
+	
+	protected static double getTrueBearing(double lat1, double lon1, double lat2, double lon2){
+		  double longitude1 = lon1;
+		  double longitude2 = lon2;
+		  double latitude1 = Math.toRadians(lat1);
+		  double latitude2 = Math.toRadians(lat2);
+		  double longDiff= Math.toRadians(longitude2-longitude1);
+		  double y= Math.sin(longDiff)*Math.cos(latitude2);
+		  double x=Math.cos(latitude1)*Math.sin(latitude2)-Math.sin(latitude1)*Math.cos(latitude2)*Math.cos(longDiff);
+
+		  return (Math.toDegrees(Math.atan2(y, x))+360)%360;
+		}
 
 }

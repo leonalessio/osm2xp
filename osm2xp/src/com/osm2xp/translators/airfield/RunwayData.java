@@ -4,7 +4,6 @@ import org.apache.commons.lang.StringUtils;
 
 import com.osm2xp.model.osm.OsmPolyline;
 import com.osm2xp.utils.geometry.GeomUtils;
-import com.osm2xp.utils.geometry.Geomagnetism;
 
 import math.geom2d.line.Line2D;
 
@@ -37,9 +36,7 @@ public class RunwayData {
 			}
 		}
 		surface = polyline.getTagValue("surface");
-		double trueCourse = GeomUtils.calcHeadingAngleInDegrees(runwayLine.p1, runwayLine.p2);
-		Geomagnetism geomagnetism = new Geomagnetism(runwayLine.p1.x, runwayLine.p1.y);
-		double magneticCourse = (trueCourse + geomagnetism.getDeclination()) % 360;
+		double magneticCourse = GeomUtils.getMagneticBearing(runwayLine.p1, runwayLine.p2);
 		course1 = magneticCourse;
 		course2 = (magneticCourse + 180) % 360;
 		hard = ("asphalt".equals(surface) || "concrete".equals(surface) || "paved".equals(surface));
