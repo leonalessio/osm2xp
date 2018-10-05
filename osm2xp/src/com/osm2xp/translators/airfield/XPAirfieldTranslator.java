@@ -10,8 +10,8 @@ import com.osm2xp.translators.IPolyHandler;
 
 public class XPAirfieldTranslator implements IPolyHandler {
 	
-	List<AirfieldData> airfieldList = new ArrayList<AirfieldData>();
-	List<OsmPolyline> runwayList = new ArrayList<>();
+	private List<AirfieldData> airfieldList = new ArrayList<AirfieldData>();
+	private List<OsmPolyline> runwayList = new ArrayList<>();
 	private File workFolder;
 
 	public XPAirfieldTranslator(String outputFolder) {
@@ -32,7 +32,6 @@ public class XPAirfieldTranslator implements IPolyHandler {
 
 	@Override
 	public void translationComplete() {
-		XPAirfieldOutput airfieldOutput = new XPAirfieldOutput(workFolder);
 		for (Iterator<OsmPolyline> iterator = runwayList.iterator(); iterator.hasNext();) { //Check runways matching airports
 			OsmPolyline runway = (OsmPolyline) iterator.next();
 			for (AirfieldData airfieldData : airfieldList) {
@@ -43,8 +42,13 @@ public class XPAirfieldTranslator implements IPolyHandler {
 				}
 			}
 		}
+		boolean writeAsMainAirfield = (airfieldList.size() + runwayList.size() == 1); //If we have only one airport/only one runway - write it as main airfield of scenario
+		XPAirfieldOutput airfieldOutput = new XPAirfieldOutput(workFolder, writeAsMainAirfield);
 		for (AirfieldData airfieldData : airfieldList) {
 			airfieldOutput.writeAirfield(airfieldData);
+		}
+		for (OsmPolyline runway : runwayList) {
+			airfieldOutput.writeSingleRunway(new RunwayData(runway));
 		}
 	}
 

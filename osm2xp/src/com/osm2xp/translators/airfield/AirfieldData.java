@@ -9,24 +9,19 @@ import com.osm2xp.model.osm.OsmPolyline;
 
 import math.geom2d.Box2D;
 
-public class AirfieldData {
+public class AirfieldData extends AerowayData {
 	private Box2D boundingBox;
 	private List<RunwayData> runways = new ArrayList<>();
-	private int elevation;
-	private String id;
+	int elevation;
 	private String icao;
-	private String name;
-
+	
 	public AirfieldData(OsmPolyline osmPolyline) {
+		super(osmPolyline);
 		boundingBox = osmPolyline.getPolyline().getBoundingBox();
 		icao = osmPolyline.getTagValue("icao");
-		name = osmPolyline.getTagValue("name:en");
-		if (name == null) {
-			name = osmPolyline.getTagValue("name");
-		}
-		id = icao;
+		id = toId(icao);
 		if (StringUtils.isEmpty(id)) {
-			id = osmPolyline.getTagValue("iata");
+			id = toId(osmPolyline.getTagValue("iata"));
 		}
 		if (StringUtils.isEmpty(id)) {
 			id = toId(name);
@@ -36,31 +31,8 @@ public class AirfieldData {
 			double lon = (boundingBox.getMaxX() + boundingBox.getMinX()) / 2;
 			id = String.format("%1.9f_%2.9f", lat, lon);
 		}
-		String elevStr = osmPolyline.getTagValue("ele");
-		if (!StringUtils.isEmpty(elevStr)) {
-			try {
-				elevation = Integer.parseInt(elevStr); 
-			} catch (Exception e) {
-				// Ignore
-			}
-		}
 	}
 	
-	private String toId(String tagValue) {
-		if (StringUtils.isEmpty(tagValue)) {
-			return null;
-		}
-		tagValue = tagValue.replaceAll(" ", "_");
-		StringBuilder builder = new StringBuilder(tagValue.length());
-		for (int i = 0; i < tagValue.length(); i++) {
-			char c = tagValue.charAt(i);
-			if (Character.isJavaIdentifierPart(c)) {
-				builder.append(c);
-			}
-		}
-		return builder.toString();
-	}
-
 	public boolean containsPolyline(OsmPolyline polyline) { //Simplified check for now
 		Box2D bBox = polyline.getPolyline().getBoundingBox();
 		return boundingBox.contains(bBox.getMinX(), bBox.getMinY());
@@ -68,10 +40,6 @@ public class AirfieldData {
 	
 	public void addRunway(OsmPolyline runway) {
 		runways.add(new RunwayData(runway));
-	}
-
-	public String getId() {
-		return id;
 	}
 
 	public String getICAO() {
@@ -86,10 +54,6 @@ public class AirfieldData {
 			return id;
 		}
 		return name;
-	}
-
-	public int getElevation() {
-		return elevation;
 	}
 
 	public List<RunwayData> getRunways() {

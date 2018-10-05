@@ -7,7 +7,7 @@ import com.osm2xp.utils.geometry.GeomUtils;
 
 import math.geom2d.line.Line2D;
 
-public class RunwayData {
+public class RunwayData extends AerowayData {
 	
 	private Line2D runwayLine;
 	private double width = 60;
@@ -15,17 +15,9 @@ public class RunwayData {
 	private boolean hard = false;
 	private double course1, course2;
 	private String marking1, marking2;
-	private String name;
-
-	public double getCourse1() {
-		return course1;
-	}
-
-	public double getCourse2() {
-		return course2;
-	}
 
 	public RunwayData(OsmPolyline polyline) {
+		super(polyline);
 		runwayLine = GeomUtils.getCenterline(polyline.getPolyline());
 		String widthStr = polyline.getTagValue("width");
 		if (widthStr != null) {
@@ -57,18 +49,23 @@ public class RunwayData {
 				}
 			}
 		}
-		name = polyline.getTagValue("name:en");
-		if (StringUtils.isEmpty(name)) {
-			name = polyline.getTagValue("name");
-		}
 		if (StringUtils.isEmpty(name)) {
 			name = ref;
 		}
 		if (StringUtils.isEmpty(name)) {
 			name = getMarking1() + "/" + getMarking2();
 		}
+		id = toId(name);
 	}
 	
+	public double getCourse1() {
+		return course1;
+	}
+
+	public double getCourse2() {
+		return course2;
+	}
+
 	public int getMarkingHeading(String ref) {
 		int idx = 0;
 		while(idx < ref.length() && Character.isDigit(ref.charAt(idx))) {
