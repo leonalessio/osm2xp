@@ -8,10 +8,14 @@ import java.io.PrintWriter;
 import java.util.ArrayList;
 import java.util.List;
 
+import org.apache.commons.lang.StringUtils;
+
 import com.osm2xp.constants.Osm2xpConstants;
+import com.osm2xp.utils.OsmUtils;
 import com.osm2xp.utils.logging.Osm2xpLogger;
 
 import math.geom2d.Point2D;
+import math.geom2d.polygon.Polyline2D;
 
 /**
  * Airport data writer for X-Plane
@@ -26,9 +30,10 @@ public class XPAirfieldOutput {
 	private static final double METER_TO_FEET_COEF = 3.28084;
 	private File baseFolder;
 	private boolean writeMainAirfield;
+	private int fakeICAOIdx = 0;
 
 	public XPAirfieldOutput(File baseFolder, boolean writeMainAirfield) {
-		this.baseFolder = baseFolder;
+		this.baseFolder = writeMainAirfield ? baseFolder : new File(baseFolder, "airports");;
 		this.writeMainAirfield = writeMainAirfield;
 		baseFolder.mkdirs();
 	}
@@ -48,18 +53,59 @@ public class XPAirfieldOutput {
 		}
 		List<String> defsList = new ArrayList<String>();
 		defsList.addAll(getAptHeaderString());
-		defsList.add(String.format("1 %d 0 0 %s %s",  (int) Math.round(airfieldData.getElevation() * METER_TO_FEET_COEF), airfieldData.getICAO(), airfieldData.getName()));
+		String icao = checkGetICAO(airfieldData);
+		defsList.add(String.format("1 %d 0 0 %s %s",  (int) Math.round(airfieldData.getElevation() * METER_TO_FEET_COEF), icao, airfieldData.getName()));
 		for (RunwayData runway : runways) {
 			defsList.add(getRunwayStr(runway));
+		}
+		Polyline2D polygon = airfieldData.getPolygon();
+		if (polygon != null && polygon.getVertexNumber() > 3) {
+			defsList.addAll(getAptAreaString(icao, polygon));		
 		}
 		defsList.add("99");
 		writeAptData(airfieldData.getId(), defsList.toArray(new String[0]));
 	}
 
+	private List<String> getAptAreaString(String icao, Polyline2D polygon) {
+		List<String> resList = new ArrayList<String>();
+		resList.add("1302 flatten 1");
+		resList.add("130 " + icao);
+		List<Point2D> vertices = new ArrayList<>(polygon.getVertices());
+		for (int i = 0; i < vertices.size() - 1; i++) {
+			Point2D coords = vertices.get(i);
+			if (i < vertices.size() - 2) {
+				resList.add(String.format("111 %1.8f %2.8f 0", coords.y, coords.x));
+			} else {
+				resList.add(String.format("113 %1.8f %2.8f 0", coords.y, coords.x));
+			}
+		}
+		return resList;
+	}
+
+	protected String checkGetICAO(AirfieldData airfieldData) {
+		String icao = airfieldData.getICAO();
+		if (icao == null) {
+			icao = "xx" + StringUtils.leftPad(""+ getNextICAOIdx(), 2, '0');
+		}
+		return icao;
+	}
+	
+	protected String checkGetICAO(RunwayData runwayData) {
+		String name = runwayData.getName();
+		if (OsmUtils.isValidICAO(name)) {
+			return name.toUpperCase().trim();
+		}
+		return "xx" + StringUtils.leftPad(""+ getNextICAOIdx(), 2, '0');
+	}
+
+	private int getNextICAOIdx() {
+		return fakeICAOIdx++;
+	}
+
 	public void writeSingleRunway(RunwayData runwayData) {
 		List<String> defsList = new ArrayList<String>();
 		defsList.addAll(getAptHeaderString());
-		defsList.add(String.format("1 %d 0 0 %s %s",  (int) Math.round(runwayData.getElevation() * METER_TO_FEET_COEF), "xxxx", runwayData.getName()));
+		defsList.add(String.format("1 %d 0 0 %s %s",  (int) Math.round(runwayData.getElevation() * METER_TO_FEET_COEF), checkGetICAO(runwayData), runwayData.getName()));
 		defsList.add(getRunwayStr(runwayData));
 		defsList.add("99");
 		writeAptData(runwayData.getId(), defsList.toArray(new String[0]));
@@ -71,13 +117,13 @@ public class XPAirfieldOutput {
 		}
 		File dataFolder;
 		if (writeMainAirfield) {
+			dataFolder = new File(baseFolder, NAV_DATA_FOLDER_NAME);
+		} else {
 			File airfieldFolder = new File(baseFolder, OSM2XP_AIRFIELD_PREFFIX + aptId);
 			for (int i = 0; airfieldFolder.exists() && i < Integer.MAX_VALUE; i++) {
 				airfieldFolder = new File(baseFolder, OSM2XP_AIRFIELD_PREFFIX + aptId + i);
 			}
 			dataFolder = new File(airfieldFolder, NAV_DATA_FOLDER_NAME);
-		} else {
-			dataFolder = new File(baseFolder, NAV_DATA_FOLDER_NAME);
 		}
 		dataFolder.mkdirs();
 		try (PrintWriter writer = new PrintWriter(new BufferedWriter(new FileWriter(new File(dataFolder, "apt.dat"))))) {

@@ -514,4 +514,18 @@ public class OsmUtils {
 		new File(filePath).deleteOnExit();
 		return filePath;
 	}
+	
+	public static boolean isValidICAO(String name) {
+		name = name.toUpperCase().trim();
+		if (name.length() == 4) {
+			for (int i = 0; i < name.length(); i++) {
+				char c = name.charAt(i);
+				if (c < 'A' || c > 'Z') {
+					return false;
+				}
+			}
+			return true;
+		}
+		return false;
+	}
 }

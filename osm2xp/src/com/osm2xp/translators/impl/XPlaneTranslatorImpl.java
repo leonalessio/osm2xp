@@ -26,7 +26,6 @@ import com.osm2xp.translators.BuildingType;
 import com.osm2xp.translators.IPolyHandler;
 import com.osm2xp.translators.ITranslationListener;
 import com.osm2xp.translators.ITranslator;
-import com.osm2xp.translators.airfield.XPAirfieldTranslator;
 import com.osm2xp.translators.xplane.IDRenumbererService;
 import com.osm2xp.translators.xplane.XPBarrierTranslator;
 import com.osm2xp.translators.xplane.XPChimneyTranslator;
@@ -128,7 +127,6 @@ public class XPlaneTranslatorImpl implements ITranslator{
 		polyHandlers.add(new XPPowerlineTranslator(writer, outputFormat, idProvider));
 		polyHandlers.add(new XPCoolingTowerTranslator(writer, dsfObjectsProvider));
 		polyHandlers.add(new XPChimneyTranslator(writer, dsfObjectsProvider));
-		polyHandlers.add(new XPAirfieldTranslator(folderPath));
 		forestTranslator = new XPForestTranslator(writer, dsfObjectsProvider, outputFormat, stats);
 		
 	}
@@ -471,7 +469,6 @@ public class XPlaneTranslatorImpl implements ITranslator{
 
 	@Override
 	public void processPolyline(OsmPolyline osmPolyline) throws Osm2xpBusinessException {
-	
 		// polygon is null or empty don't process it
 		if (osmPolyline.getNodes() != null && !osmPolyline.getNodes().isEmpty()) {
 			List<OsmPolyline> polylines = preprocess(osmPolyline);

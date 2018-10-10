@@ -8,6 +8,7 @@ import java.util.Map;
 
 import com.osm2xp.dataProcessors.IDataSink;
 import com.osm2xp.translators.TranslatorBuilder;
+import com.osm2xp.translators.impl.TileTranslationAdapter;
 import com.osm2xp.utils.logging.Osm2xpLogger;
 
 import math.geom2d.Point2D;

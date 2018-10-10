@@ -5,20 +5,32 @@ import java.util.List;
 
 import org.apache.commons.lang.StringUtils;
 
+import com.osm2xp.model.osm.OsmPolygon;
 import com.osm2xp.model.osm.OsmPolyline;
+import com.osm2xp.utils.OsmUtils;
+import com.osm2xp.utils.geometry.GeomUtils;
 
 import math.geom2d.Box2D;
+import math.geom2d.polygon.LinearRing2D;
+import math.geom2d.polygon.Polyline2D;
 
 public class AirfieldData extends AerowayData {
 	private Box2D boundingBox;
 	private List<RunwayData> runways = new ArrayList<>();
-	int elevation;
+	private List<OsmPolygon> apronAreas = new ArrayList<>();
 	private String icao;
+	private Polyline2D polygon;
 	
 	public AirfieldData(OsmPolyline osmPolyline) {
 		super(osmPolyline);
+		if (osmPolyline.getPolyline().isClosed() && osmPolyline.getPolyline() instanceof LinearRing2D) {
+			polygon = GeomUtils.forceCCW((LinearRing2D) osmPolyline.getPolyline());
+		}
 		boundingBox = osmPolyline.getPolyline().getBoundingBox();
 		icao = osmPolyline.getTagValue("icao");
+		if (StringUtils.isEmpty(icao) && OsmUtils.isValidICAO(name)) {
+			icao = name.toUpperCase().trim();
+		}
 		id = toId(icao);
 		if (StringUtils.isEmpty(id)) {
 			id = toId(osmPolyline.getTagValue("iata"));
@@ -42,10 +54,7 @@ public class AirfieldData extends AerowayData {
 		runways.add(new RunwayData(runway));
 	}
 
-	public String getICAO() {
-		if (StringUtils.isEmpty(icao)) {
-			return "xxxx";
-		}
+	public String getICAO() {		
 		return icao;
 	}
 
@@ -60,8 +69,29 @@ public class AirfieldData extends AerowayData {
 		return runways;
 	}
 	
+	public boolean isHard() {
+		for (RunwayData runway : runways) {
+			if (runway.isHard()) {
+				return true;
+			}
+		}
+		return false;
+	}
+	
 	@Override
 	public String toString() {
 		return id;
+	}
+
+	public void addApronArea(OsmPolyline area) {
+		apronAreas.add((OsmPolygon) area);
+	}
+
+	public List<OsmPolygon> getApronAreas() {
+		return apronAreas;
+	}
+
+	public Polyline2D getPolygon() {
+		return polygon;
 	}
 }

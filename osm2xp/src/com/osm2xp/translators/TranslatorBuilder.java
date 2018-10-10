@@ -1,6 +1,8 @@
 package com.osm2xp.translators;
 
 import java.io.File;
+import java.util.Collection;
+import java.util.Collections;
 
 import org.eclipse.core.runtime.preferences.InstanceScope;
 
@@ -9,6 +11,7 @@ import com.osm2xp.exceptions.Osm2xpBusinessException;
 import com.osm2xp.gui.Activator;
 import com.osm2xp.model.facades.FacadeSetManager;
 import com.osm2xp.model.stats.GenerationStats;
+import com.osm2xp.translators.airfield.XPAirfieldTranslationAdapter;
 import com.osm2xp.translators.impl.ConsoleTranslatorImpl;
 import com.osm2xp.translators.impl.FlightGearTranslatorImpl;
 import com.osm2xp.translators.impl.FlyLegacyTranslatorImpl;
@@ -222,5 +225,13 @@ public class TranslatorBuilder {
 			xplane9TranslatorImpl.setTranslationListener(new ImageDebugTranslationListener());
 		}
 		return xplane9TranslatorImpl;
+	}
+
+	public static Collection<ITranslationAdapter> createAdditinalAdapters(String folderPath) {
+		if (GuiOptionsHelper.getOptions().getOutputFormat()
+				.equals(Perspectives.PERSPECTIVE_XPLANE10)) {
+			return Collections.singletonList(new XPAirfieldTranslationAdapter(folderPath));
+		}
+		return Collections.emptyList();
 	}
 }

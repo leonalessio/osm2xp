@@ -30,7 +30,9 @@ import com.osm2xp.exceptions.OsmParsingException;
 import com.osm2xp.gui.Activator;
 import com.osm2xp.model.osm.Tag;
 import com.osm2xp.parsers.IMultiTilesParser;
+import com.osm2xp.translators.ITranslationAdapter;
 import com.osm2xp.translators.TranslatorBuilder;
+import com.osm2xp.translators.impl.TileTranslationAdapter;
 import com.osm2xp.utils.OsmUtils;
 import com.osm2xp.utils.geometry.GeomUtils;
 import com.osm2xp.utils.logging.Osm2xpLogger;
@@ -51,7 +53,7 @@ import math.geom2d.Point2D;
 public class MultiTileParserImpl extends AbstractTranslatingParserImpl implements IMultiTilesParser {
 
 	private File binaryFile;
-	private List<TileTranslationAdapter> translationAdapters = new ArrayList<>();
+	private List<ITranslationAdapter> translationAdapters = new ArrayList<>();
 	Set<Point2D> tiles = new HashSet<Point2D>();
 	private long nodeCnt = 0;
 	private long wayCnt = 0;
@@ -61,13 +63,14 @@ public class MultiTileParserImpl extends AbstractTranslatingParserImpl implement
 		super(roofsColorMap, processor);
 		this.binaryFile = binaryFile;
 		this.folderPath = folderPath;
+		translationAdapters.addAll(TranslatorBuilder.createAdditinalAdapters(folderPath));
 	}
 
 	/**
 	 * 
 	 */
 	public void complete() {
-		for (TileTranslationAdapter tileTranslationAdapter : translationAdapters) {
+		for (ITranslationAdapter tileTranslationAdapter : translationAdapters) {
 			tileTranslationAdapter.complete();
 		}
 	}
@@ -107,7 +110,7 @@ public class MultiTileParserImpl extends AbstractTranslatingParserImpl implement
 			node.getTag().addAll(tags);
 			try {
 				// give the node to the translator for processing
-				for (TileTranslationAdapter adapter : translationAdapters) {
+				for (ITranslationAdapter adapter : translationAdapters) {
 					adapter.processNode(node);
 				}
 				// ask translator if we have to store this node if we
@@ -142,7 +145,7 @@ public class MultiTileParserImpl extends AbstractTranslatingParserImpl implement
 	}
 
 	private boolean mustStoreNode(com.osm2xp.model.osm.Node node) {
-		for (TileTranslationAdapter tileTranslationAdapter : translationAdapters) {
+		for (ITranslationAdapter tileTranslationAdapter : translationAdapters) {
 			if (tileTranslationAdapter.mustStoreNode(node)) {
 				return true;		
 			}
@@ -177,7 +180,7 @@ public class MultiTileParserImpl extends AbstractTranslatingParserImpl implement
 			return;
 		}
 		List<Geometry> fixed = fix(Collections.singletonList(geometry));
-		for (TileTranslationAdapter adapter : translationAdapters) {
+		for (ITranslationAdapter adapter : translationAdapters) {
 			adapter.processWays(way.getId(), way.getTag(), geometry, fixed);
 		}
 		if (fixed.isEmpty()) {
@@ -187,7 +190,7 @@ public class MultiTileParserImpl extends AbstractTranslatingParserImpl implement
 	
 	@Override
 	protected void parse(HeaderBlock header) {
-		for (TileTranslationAdapter tileTranslationAdapter : translationAdapters) {
+		for (ITranslationAdapter tileTranslationAdapter : translationAdapters) {
 			tileTranslationAdapter.processBoundingBox(header.getBbox());
 		}
 	}
@@ -220,7 +223,7 @@ public class MultiTileParserImpl extends AbstractTranslatingParserImpl implement
 
 	@Override
 	protected boolean mustProcessPolyline(List<Tag> tagsModel) {
-		for (TileTranslationAdapter adapter : translationAdapters) {
+		for (ITranslationAdapter adapter : translationAdapters) {
 			if (adapter.mustProcessPolyline(tagsModel)) {
 				return true;
 			}
@@ -234,7 +237,7 @@ public class MultiTileParserImpl extends AbstractTranslatingParserImpl implement
 			String type = OsmUtils.getReadableType(tagsModel);
 			Activator.log(IStatus.WARNING, "Way/Relation of type " + type + " with id " + id + " is invalid, unable to fix it automatically. Possible reasons - self-intersection or partial node information.");
 		}
-		for (TileTranslationAdapter adapter : translationAdapters) {
+		for (ITranslationAdapter adapter : translationAdapters) {
 			adapter.processWays(id, tagsModel, null, cleanedPolys);
 		}
 	}

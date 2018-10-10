@@ -143,7 +143,7 @@ public class GuiOptionsHelper {
 			lastFiles = new ArrayList<>();
 			String filesStr = getStringProperty(USED_FILES);
 			if (filesStr.length() > 0) {
-				lastFiles.addAll(Arrays.asList(filesStr.split(File.pathSeparator)));
+				lastFiles.addAll(Arrays.asList(filesStr.split(File.pathSeparator)).stream().filter(str -> new File(str).isFile()).collect(Collectors.toList()));
 			}
 		}
 	}

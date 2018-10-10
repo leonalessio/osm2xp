@@ -1,4 +1,4 @@
-package com.osm2xp.parsers.impl;
+package com.osm2xp.translators.impl;
 
 import java.util.ArrayList;
 import java.util.Collections;
@@ -16,6 +16,7 @@ import com.osm2xp.model.osm.Node;
 import com.osm2xp.model.osm.OsmPolyline;
 import com.osm2xp.model.osm.OsmPolylineFactory;
 import com.osm2xp.model.osm.Tag;
+import com.osm2xp.translators.ITranslationAdapter;
 import com.osm2xp.translators.ITranslator;
 import com.osm2xp.utils.geometry.CoordinateNodeIdPreserver;
 import com.osm2xp.utils.geometry.GeomUtils;
@@ -29,7 +30,7 @@ import com.vividsolutions.jts.geom.Polygon;
 
 import math.geom2d.Point2D;
 
-public class TileTranslationAdapter {
+public class TileTranslationAdapter implements ITranslationAdapter{
 
 	private GeometryClipper tileClipper;
 	private Envelope bounds;
@@ -135,32 +136,39 @@ public class TileTranslationAdapter {
 	}
 
 	
+	@Override
 	public void complete() {
 		translator.complete();
 	}
 
+	@Override
 	public void init() {
 		translator.init();
 	}
 
+	@Override
 	public Boolean mustStoreNode(Node node) {
 		return translator.mustStoreNode(node);
 	}
 
+	@Override
 	public Boolean mustProcessPolyline(List<Tag> tags) {
 		return translator.mustProcessPolyline(tags);
 	}
 
+	@Override
 	public void processBoundingBox(HeaderBBox bbox) {
 		translator.processBoundingBox(bbox);
 	}
 
+	@Override
 	public void processNode(Node node) throws Osm2xpBusinessException {
 		if (bounds.contains(node.getLon(), node.getLat())) {
 			translator.processNode(node);
 		}
 	}
 
+	@Override
 	public void processWays(long wayId, List<Tag> tags, Geometry originalGeometry, List<? extends Geometry> fixedGeometries) {
 		fixedGeometries = preprocess(fixedGeometries, tags);
 		if (fixedGeometries.isEmpty()) {
