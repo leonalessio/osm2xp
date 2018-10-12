@@ -7,13 +7,22 @@ import java.io.IOException;
 import java.io.PrintWriter;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.stream.Collectors;
 
 import org.apache.commons.lang.StringUtils;
 
 import com.osm2xp.constants.Osm2xpConstants;
+import com.osm2xp.model.osm.OsmPolygon;
+import com.osm2xp.model.osm.OsmPolyline;
 import com.osm2xp.utils.OsmUtils;
+import com.osm2xp.utils.geometry.GeomUtils;
 import com.osm2xp.utils.logging.Osm2xpLogger;
+import com.vividsolutions.jts.geom.Geometry;
+import com.vividsolutions.jts.operation.buffer.BufferOp;
+import com.vividsolutions.jts.operation.buffer.BufferParameters;
+import com.vividsolutions.jts.operation.overlay.OverlayOp;
 
+import math.geom2d.Box2D;
 import math.geom2d.Point2D;
 import math.geom2d.polygon.Polyline2D;
 
@@ -62,8 +71,34 @@ public class XPAirfieldOutput {
 		if (polygon != null && polygon.getVertexNumber() > 3) {
 			defsList.addAll(getAptAreaString(icao, polygon));		
 		}
+		defsList.addAll(getApronDefs(airfieldData));
 		defsList.add("99");
 		writeAptData(airfieldData.getId(), defsList.toArray(new String[0]));
+	}
+
+	private List<? extends String> getApronDefs(AirfieldData airfieldData) {
+		List<String> list = new ArrayList<String>();
+		Box2D bbox = airfieldData.getPolygon().getBoundingBox();
+		Point2D centerPoint = new Point2D(bbox.getMinX(), bbox.getMinY());
+		List<OsmPolygon> apronAreas = airfieldData.getApronAreas();
+		List<OsmPolyline> taxiLanes = airfieldData.getTaxiLanes();
+		List<Geometry> convertedAreas = apronAreas.stream().
+				map(polyline -> GeomUtils.geom2dToJtsLocal(polyline.getPolyline(), centerPoint)).collect(Collectors.toList());
+		List<Geometry> convertedLanes = taxiLanes.stream().
+				map(polyline -> GeomUtils.geom2dToJtsLocal(polyline.getPolyline(), centerPoint)).collect(Collectors.toList());
+		double dist = 20.0 / 111000000;
+		BufferParameters bufferParameters = new BufferParameters(4, BufferParameters.CAP_SQUARE);
+		List<Geometry> bufferedLanes = convertedLanes.stream().map(lane -> BufferOp.bufferOp(lane, dist, bufferParameters)).collect(Collectors.toList());
+		List<Geometry> toJoin = new ArrayList<Geometry>(convertedAreas);
+		toJoin.addAll(bufferedLanes);
+		if (toJoin.size() > 0) {
+			Geometry joinResult = toJoin.get(0);
+			for (int i = 0; i < toJoin.size(); i++) {
+				joinResult = OverlayOp.overlayOp(joinResult, toJoin.get(i), OverlayOp.UNION);
+			}
+			System.out.println("XPAirfieldOutput.getApronDefs()");
+		}
+		return list;
 	}
 
 	private List<String> getAptAreaString(String icao, Polyline2D polygon) {

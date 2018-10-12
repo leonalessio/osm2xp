@@ -21,6 +21,7 @@ public class XPAirfieldTranslationAdapter implements ITranslationAdapter {
 	private List<AirfieldData> airfieldList = new ArrayList<AirfieldData>();
 	private List<OsmPolyline> runwayList = new ArrayList<>();
 	private List<OsmPolyline> apronAreasList = new ArrayList<>();
+	private List<OsmPolyline> taxiLanesList = new ArrayList<>();
 	private File workFolder;
 
 	public XPAirfieldTranslationAdapter(String outputFolder) {
@@ -34,9 +35,12 @@ public class XPAirfieldTranslationAdapter implements ITranslationAdapter {
 			return true;
 		} else if ("runway".equalsIgnoreCase(wayType)) {
 			runwayList.add(osmPolyline);
-		} else if (osmPolyline.getPolyline().isClosed() &&
-				("apron".equalsIgnoreCase(wayType) || "taxiway".equalsIgnoreCase(wayType) || "taxilane".equalsIgnoreCase(wayType))) {
-			apronAreasList.add(osmPolyline);
+		} else if ("apron".equalsIgnoreCase(wayType) || "taxiway".equalsIgnoreCase(wayType) || "taxilane".equalsIgnoreCase(wayType)) {
+			if (osmPolyline.getPolyline().isClosed()) {
+				apronAreasList.add(osmPolyline);
+			} else {
+				taxiLanesList.add(osmPolyline);
+			}
 		}
 		return false;
 	}
@@ -71,12 +75,20 @@ public class XPAirfieldTranslationAdapter implements ITranslationAdapter {
 				}
 			}
 		}
-		for (Iterator<OsmPolyline> iterator = apronAreasList.iterator(); iterator.hasNext();) { //Check runways matching airports
+		for (Iterator<OsmPolyline> iterator = apronAreasList.iterator(); iterator.hasNext();) { //Check apron areas matching airports
 			OsmPolyline area = (OsmPolyline) iterator.next();
 			for (AirfieldData airfieldData : airfieldList) {
 				if (airfieldData.containsPolyline(area)) {
 					airfieldData.addApronArea(area);
-					iterator.remove();
+					break;
+				}
+			}
+		}
+		for (Iterator<OsmPolyline> iterator = taxiLanesList.iterator(); iterator.hasNext();) { //Check apron areas matching airports
+			OsmPolyline lane = (OsmPolyline) iterator.next();
+			for (AirfieldData airfieldData : airfieldList) {
+				if (airfieldData.containsPolyline(lane)) {
+					airfieldData.addTaxiLane(lane);
 					break;
 				}
 			}

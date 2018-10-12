@@ -50,28 +50,6 @@ public class GeomUtils {
 	public static final double E = 0.000001;
 
 	/**
-	 * compute distance beetween two lat/long points
-	 * 
-	 * @param lat1
-	 * @param lon1
-	 * @param lat2
-	 * @param lon2
-	 * @return
-	 */
-//	private static double latLongDistanceOld(double lat1, double lon1,
-//			double lat2, double lon2) {
-//		double theta = lon1 - lon2;
-//		double dist = Math.sin(deg2rad(lat1)) * Math.sin(deg2rad(lat2))
-//				+ Math.cos(deg2rad(lat1)) * Math.cos(deg2rad(lat2))
-//				* Math.cos(deg2rad(theta));
-//		dist = Math.acos(dist);
-//		dist = rad2deg(dist);
-//		dist = dist * 60 * 1.1515;
-//		dist = dist * 1.609344;
-//		return dist * 1000;
-//	}
-
-	/**
 	 * Check if the object fits the polygon.
 	 * 
 	 * @param xMaxLength
@@ -117,6 +95,47 @@ public class GeomUtils {
 				.toArray(new Coordinate[coords.size()]);
 		GeometryFactory geometryFactory = new GeometryFactory();
 		return geometryFactory.createLineString(points);
+	}
+	
+	public static Geometry geom2dToJtsLocal(Polyline2D line, Point2D centerpoint) {
+		List<Coordinate> coords = new ArrayList<Coordinate>();
+		double factor = Math.cos(centerpoint.y);
+		for (Point2D point : line.getVertices()) {
+			double x = (point.x - centerpoint.x) * factor;
+			double y = point.y - centerpoint.y;
+			coords.add(new Coordinate(x,y));
+		}
+		if (line.isClosed() && coords.size() > 1 && !coords.get(coords.size() - 1).equals(coords.get(0))) {
+			coords.add(coords.get(0));
+		}
+		Coordinate[] points = (Coordinate[]) coords
+				.toArray(new Coordinate[coords.size()]);
+		CoordinateSequence coordSeq = CoordinateArraySequenceFactory.instance()
+				.create(points);
+		GeometryFactory geometryFactory = new GeometryFactory(getDefaultPrecisionModel());
+		if (line.isClosed()) {
+			LinearRing linearRing = geometryFactory.createLinearRing(coordSeq);
+			Polygon jtsPolygon = geometryFactory.createPolygon(linearRing, null);
+			return jtsPolygon;
+		} else {
+			return geometryFactory.createLineString(coordSeq);
+		}
+	}
+	
+	public static Polyline2D jtsToGeom2dLocal(LineString lineString, Point2D centerpoint) {
+		Coordinate[] coordinates = lineString.getCoordinates();
+		Point2D[] newPoints = new Point2D[coordinates.length];
+		double factor = Math.cos(centerpoint.y);
+		for (int i = 0; i < newPoints.length; i++) {
+			double x = coordinates[i].x / factor + centerpoint.x;
+			double y = coordinates[i].y + centerpoint.y;
+			newPoints[i] = new Point2D(x, y);
+		}
+		if (lineString.isClosed()) {
+			return new LinearRing2D(newPoints);
+		} else {
+			return new Polyline2D(newPoints);
+		}
 	}
 
 	public static Polygon linearRing2DToJtsPolygon(LinearRing2D ring2d) {
@@ -445,13 +464,13 @@ public class GeomUtils {
 		if (!sourceFootprint.isClosed()) {
 			return new Line2D(sourceFootprint.getFirstPoint(), sourceFootprint.getLastPoint()); 
 		}
-		if (vertexNumber > 5) { //Try to make square shape. 5 instead of 4 here because for closed line, last vertex matches first one
+		if (vertexNumber > 5) { //Try to make square shape. 5 instead of 4 here because for closed line, last vertex matches first one ///XXX this doesn't work as expected
 			// we create a jts polygon from the linear ring
 			Polygon sourcePoly = linearRing2DToPolygon((LinearRing2D) sourceFootprint);
 			// we create a simplified polygon
 			Geometry cleanPoly = LatLonShortEdgesDeletion.get(sourcePoly, 10000); //Min side 10 km - should make any poly four-sided
 			// we create a linearRing2D from the modified polygon
-			LinearRing2D result = polygonToLinearRing2D(cleanPoly);
+			sourceFootprint = polygonToLinearRing2D(cleanPoly);
 		}
 		Point2D[] points = sourceFootprint.getPointArray();
 		Point2D[] endPoints = getMedianPoints(points, 2);

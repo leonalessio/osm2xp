@@ -18,6 +18,7 @@ public class AirfieldData extends AerowayData {
 	private Box2D boundingBox;
 	private List<RunwayData> runways = new ArrayList<>();
 	private List<OsmPolygon> apronAreas = new ArrayList<>();
+	private List<OsmPolyline> taxiLanes = new ArrayList<>();
 	private String icao;
 	private Polyline2D polygon;
 	
@@ -93,5 +94,13 @@ public class AirfieldData extends AerowayData {
 
 	public Polyline2D getPolygon() {
 		return polygon;
+	}
+
+	public void addTaxiLane(OsmPolyline lane) {
+		taxiLanes.add(lane);
+	}
+
+	public List<OsmPolyline> getTaxiLanes() {
+		return taxiLanes;
 	}
 }
