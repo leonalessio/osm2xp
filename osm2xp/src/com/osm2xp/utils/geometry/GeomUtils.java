@@ -1,8 +1,10 @@
 package com.osm2xp.utils.geometry;
 
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.Collection;
 import java.util.Collections;
+import java.util.Comparator;
 import java.util.Iterator;
 import java.util.List;
 import java.util.stream.Collectors;
@@ -12,6 +14,7 @@ import com.osm2xp.model.osm.Node;
 import com.vividsolutions.jts.algorithm.CGAlgorithms;
 import com.vividsolutions.jts.algorithm.CentroidArea;
 import com.vividsolutions.jts.geom.Coordinate;
+import com.vividsolutions.jts.geom.CoordinateArrays;
 import com.vividsolutions.jts.geom.CoordinateSequence;
 import com.vividsolutions.jts.geom.Envelope;
 import com.vividsolutions.jts.geom.Geometry;
@@ -29,6 +32,8 @@ import com.vividsolutions.jts.geom.impl.CoordinateArraySequenceFactory;
 import com.vividsolutions.jts.geom.util.LineStringExtracter;
 import com.vividsolutions.jts.operation.buffer.BufferOp;
 import com.vividsolutions.jts.operation.polygonize.Polygonizer;
+import com.vividsolutions.jts.operation.valid.IsValidOp;
+import com.vividsolutions.jts.operation.valid.TopologyValidationError;
 
 import math.geom2d.Angle2D;
 import math.geom2d.Box2D;
@@ -42,10 +47,25 @@ import math.geom2d.polygon.Rectangle2D;
 /**
  * GeomUtils.
  * 
- * @author Benjamin Blanchet
+ * @author Benjamin Blanchet, Dmitry Karpenko
  * 
  */
 public class GeomUtils {
+	
+	/** */
+    private static final Comparator<Polygon> POLYGON_AREA_COMPARATOR = new Comparator<Polygon>() {
+            public int compare (Polygon p1, Polygon p2) {
+                double a1 = p1.getArea();
+                double a2 = p2.getArea();
+                if (a1 < a2) {
+                    return(1);
+                } else if (a1 > a2) {
+                    return(-1);
+                } else {
+                    return(0);
+                }
+            }
+        };
 	
 	public static final double E = 0.000001;
 
@@ -692,7 +712,7 @@ public class GeomUtils {
 	
 	/**
 	 * Check if a linear ring is clockwise and reverse direction in case it's not CW
-	 * X-Plane facades inner ring needs to be clockwise
+	 * X-Plane multipoly inner ring needs to be clockwise
 	 * @param ring2d {@link LinearRing2D} to check
 	 * @return ring2d itself if it's CW, reversed direction ring otherwise
 	 */
@@ -714,6 +734,36 @@ public class GeomUtils {
 		} 
 		
 		return ring2d;
+	}
+	
+	/**
+	 * Check if a {@link LineString} is counter-clockwise and reverse direction in case it's not CCW
+	 * X-Plane facades outer ring needs to be <b>CCW</b> (see https://developer.x-plane.com/2010/07/facade-tuning-and-tips/)
+	 * @param lineString {@link LineString} to check
+	 * @return lineString itself if it's CCW, reversed direction ring otherwise
+	 */
+	public static LineString forceCCW(LineString lineString) {
+		return forceDirection(lineString, true);
+	}
+	
+	/**
+	 * Check if a {@link LineString} is clockwise and reverse direction in case it's not CW
+	 * X-Plane multipoly inner ring needs to be clockwise
+	 * @param lineString {@link LineString} to check
+	 * @return lineString itself if it's CCW, reversed direction ring otherwise
+	 */
+	public static LineString forceCW(LineString lineString) {
+		return forceDirection(lineString, false);
+	}
+	
+	private static LineString forceDirection(LineString lineString, boolean ccw) {
+		if (!lineString.isClosed()) {
+			return lineString;
+		}
+		if (CGAlgorithms.isCCW(lineString.getCoordinates()) != ccw) {
+			return (LineString) lineString.reverse();
+		}
+		return lineString;
 	}
 
 	/**
@@ -920,6 +970,10 @@ public class GeomUtils {
 				if (newGeom != geom && (geom instanceof Polygon || geom instanceof MultiPolygon)) {
 					return fix(newGeom);
 				}
+				newGeom = repair(newGeom);
+				if (newGeom != geom && (geom instanceof Polygon || geom instanceof MultiPolygon) && !geom.isEmpty()) {
+					return newGeom;
+				}
 			} catch (TopologyException  e1) {
 				return null;
 			}
@@ -1052,7 +1106,8 @@ public class GeomUtils {
 	 * @return
 	 */
 	public static List<LinearRing2D> fix(LinearRing2D polygon) {
-		Geometry fixed = fix(linearRing2DToJtsPolygon(polygon));
+//		Geometry fixed = fix(linearRing2DToJtsPolygon(polygon)); TODO check whether repair() works better
+		Geometry fixed = repair(linearRing2DToJtsPolygon(polygon));
 		if (fixed instanceof Polygon) {
 			return Collections.singletonList(polygonToLinearRing2D(fixed));
 		} else if (fixed instanceof MultiPolygon) {
@@ -1154,16 +1209,103 @@ public class GeomUtils {
 		return getTrueBearing(p1.y,p1.x,p2.y,p2.x);
 	}
 	
-	protected static double getTrueBearing(double lat1, double lon1, double lat2, double lon2){
-		  double longitude1 = lon1;
-		  double longitude2 = lon2;
-		  double latitude1 = Math.toRadians(lat1);
-		  double latitude2 = Math.toRadians(lat2);
-		  double longDiff= Math.toRadians(longitude2-longitude1);
-		  double y= Math.sin(longDiff)*Math.cos(latitude2);
-		  double x=Math.cos(latitude1)*Math.sin(latitude2)-Math.sin(latitude1)*Math.cos(latitude2)*Math.cos(longDiff);
+	protected static double getTrueBearing(double lat1, double lon1, double lat2, double lon2) {
+		double longitude1 = lon1;
+		double longitude2 = lon2;
+		double latitude1 = Math.toRadians(lat1);
+		double latitude2 = Math.toRadians(lat2);
+		double longDiff = Math.toRadians(longitude2 - longitude1);
+		double y = Math.sin(longDiff) * Math.cos(latitude2);
+		double x = Math.cos(latitude1) * Math.sin(latitude2)
+				- Math.sin(latitude1) * Math.cos(latitude2) * Math.cos(longDiff);
 
-		  return (Math.toDegrees(Math.atan2(y, x))+360)%360;
+		return (Math.toDegrees(Math.atan2(y, x)) + 360) % 360;
+	}
+
+	/**
+	 *
+	 * @param geom
+	 * @return
+	 */
+	public static Geometry repair(Geometry geom) {
+		GeometryFactory factory = geom.getFactory();
+		if (geom instanceof MultiPolygon) {
+			MultiPolygon mp = (MultiPolygon) geom;
+			Polygon[] polys = new Polygon[mp.getNumGeometries()];
+			for (int i = 0; i < mp.getNumGeometries(); i += 1) {
+				polys[i] = repair((Polygon) mp.getGeometryN(i));
+			}
+			return factory.createMultiPolygon(polys);
+		} else if (geom instanceof Polygon) {
+			return repair((Polygon) geom);
+		} else if (geom.getGeometryType().equals("GeometryCollection")) {
+			GeometryCollection gc = (GeometryCollection) geom;
+			Geometry[] geoms = new Geometry[gc.getNumGeometries()];
+			for (int i = 0; i < gc.getNumGeometries(); i += 1) {
+				geoms[i] = repair(gc.getGeometryN(i));
+			}
+			Thread.dumpStack();
+			return factory.createGeometryCollection(geoms);
+		} else {
+			return (geom);
 		}
+	}
+
+	/**
+	 *
+	 * @param p
+	 * @return
+	 */
+	@SuppressWarnings("unchecked")
+	public static Polygon repair(Polygon p) {
+		GeometryFactory factory = p.getFactory();
+		IsValidOp isValidOp = new IsValidOp(p);
+		TopologyValidationError err = isValidOp.getValidationError();
+		while (err != null) {
+			if ((err.getErrorType() == TopologyValidationError.SELF_INTERSECTION)
+					|| (err.getErrorType() == TopologyValidationError.RING_SELF_INTERSECTION)
+					|| (err.getErrorType() == TopologyValidationError.DISCONNECTED_INTERIOR)) {
+				Geometry boundary = p.getBoundary();
+				// calling union will re-node the boundary curve to eliminate self-intersections
+				// see
+				// http://lists.jump-project.org/pipermail/jts-devel/2006-November/001815.html
+				boundary = boundary.union(boundary);
+				Polygonizer polygonizer = new Polygonizer();
+				polygonizer.add(boundary);
+				Collection<Polygon> c = polygonizer.getPolygons();
+				if (c.size() > 0) {
+					Polygon[] polys = (Polygon[]) c.toArray(new Polygon[c.size()]);
+					Arrays.sort(polys, POLYGON_AREA_COMPARATOR);
+					p = polys[0];
+				} else {
+					System.err.println("unable to fix polygon: " + err);
+					p = factory.createPolygon(null, null);
+				}
+			} else if (err.getErrorType() == TopologyValidationError.TOO_FEW_POINTS) {
+				LinearRing exterior = (LinearRing) p.getExteriorRing();
+				Coordinate[] coords = CoordinateArrays.removeRepeatedPoints(exterior.getCoordinates());
+				if (coords.length < 4) {
+					p = factory.createPolygon(null, null);
+				} else {
+					exterior = factory.createLinearRing(coords);
+					List<LinearRing> validInteriorRings = new ArrayList<LinearRing>(p.getNumInteriorRing());
+					for (int i = 0; i < p.getNumInteriorRing(); i += 1) {
+						LinearRing s = (LinearRing) p.getInteriorRingN(i);
+						coords = CoordinateArrays.removeRepeatedPoints(s.getCoordinates());
+						if (coords.length >= 4) {
+							validInteriorRings.add(factory.createLinearRing(coords));
+						}
+					}
+					p = factory.createPolygon(exterior, GeometryFactory.toLinearRingArray(validInteriorRings));
+				}
+			} else {
+				System.err.println(err);
+				p = factory.createPolygon(null, null);
+			}
+			isValidOp = new IsValidOp(p);
+			err = isValidOp.getValidationError();
+		}
+		return (p);
+	}
 
 }

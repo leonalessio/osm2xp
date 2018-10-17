@@ -6,6 +6,7 @@ import java.io.FileWriter;
 import java.io.IOException;
 import java.io.PrintWriter;
 import java.util.ArrayList;
+import java.util.Collections;
 import java.util.List;
 import java.util.stream.Collectors;
 
@@ -18,6 +19,7 @@ import com.osm2xp.utils.OsmUtils;
 import com.osm2xp.utils.geometry.GeomUtils;
 import com.osm2xp.utils.logging.Osm2xpLogger;
 import com.vividsolutions.jts.geom.Geometry;
+import com.vividsolutions.jts.geom.Polygon;
 import com.vividsolutions.jts.operation.buffer.BufferOp;
 import com.vividsolutions.jts.operation.buffer.BufferParameters;
 import com.vividsolutions.jts.operation.overlay.OverlayOp;
@@ -69,7 +71,7 @@ public class XPAirfieldOutput {
 		}
 		Polyline2D polygon = airfieldData.getPolygon();
 		if (polygon != null && polygon.getVertexNumber() > 3) {
-			defsList.addAll(getAptAreaString(icao, polygon));		
+			defsList.addAll(getAptAreaDef(icao, polygon));		
 		}
 		defsList.addAll(getApronDefs(airfieldData));
 		defsList.add("99");
@@ -78,37 +80,85 @@ public class XPAirfieldOutput {
 
 	private List<? extends String> getApronDefs(AirfieldData airfieldData) {
 		List<String> list = new ArrayList<String>();
-		Box2D bbox = airfieldData.getPolygon().getBoundingBox();
-		Point2D centerPoint = new Point2D(bbox.getMinX(), bbox.getMinY());
-		List<OsmPolygon> apronAreas = airfieldData.getApronAreas();
-		List<OsmPolyline> taxiLanes = airfieldData.getTaxiLanes();
-		List<Geometry> convertedAreas = apronAreas.stream().
-				map(polyline -> GeomUtils.geom2dToJtsLocal(polyline.getPolyline(), centerPoint)).collect(Collectors.toList());
-		List<Geometry> convertedLanes = taxiLanes.stream().
-				map(polyline -> GeomUtils.geom2dToJtsLocal(polyline.getPolyline(), centerPoint)).collect(Collectors.toList());
-		double dist = 20.0 / 111000000;
-		BufferParameters bufferParameters = new BufferParameters(4, BufferParameters.CAP_SQUARE);
-		List<Geometry> bufferedLanes = convertedLanes.stream().map(lane -> BufferOp.bufferOp(lane, dist, bufferParameters)).collect(Collectors.toList());
-		List<Geometry> toJoin = new ArrayList<Geometry>(convertedAreas);
-		toJoin.addAll(bufferedLanes);
-		if (toJoin.size() > 0) {
-			Geometry joinResult = toJoin.get(0);
-			for (int i = 0; i < toJoin.size(); i++) {
-				joinResult = OverlayOp.overlayOp(joinResult, toJoin.get(i), OverlayOp.UNION);
+		try {
+			Box2D bbox = airfieldData.getPolygon().getBoundingBox();
+			Point2D centerPoint = new Point2D(bbox.getMinX(), bbox.getMinY());
+			List<OsmPolygon> apronAreas = airfieldData.getApronAreas();
+			List<OsmPolyline> taxiLanes = airfieldData.getTaxiLanes();
+			List<Geometry> convertedAreas = apronAreas.stream().
+					map(polyline -> GeomUtils.geom2dToJtsLocal(polyline.getPolyline(), centerPoint)).collect(Collectors.toList());
+			List<Geometry> convertedLanes = taxiLanes.stream().
+					map(polyline -> GeomUtils.geom2dToJtsLocal(polyline.getPolyline(), centerPoint)).collect(Collectors.toList());
+			double dist = 20.0 / 111000;
+			BufferParameters bufferParameters = new BufferParameters(4, BufferParameters.CAP_ROUND);
+			List<Geometry> bufferedLanes = convertedLanes.stream().map(lane -> buildBufferedLine(dist, bufferParameters, lane)).collect(Collectors.toList());
+			List<Geometry> toJoin = new ArrayList<Geometry>(convertedAreas);
+			toJoin.addAll(bufferedLanes);
+			if (toJoin.size() > 0) {
+				Geometry joinResult = toJoin.get(0);
+				joinResult = GeomUtils.fix(joinResult);
+				for (int i = 1; i < toJoin.size(); i++) {
+					Geometry current = toJoin.get(i);
+					current = GeomUtils.fix(current);
+					joinResult = OverlayOp.overlayOp(joinResult, current, OverlayOp.UNION);
+				}
+				List<Polygon> apronPolys = GeomUtils.flatMapToPoly(joinResult);
+				for (Polygon polygon : apronPolys) {
+					list.addAll(getApronDef(airfieldData, polygon, centerPoint));
+				}
 			}
-			System.out.println("XPAirfieldOutput.getApronDefs()");
+		} catch (Exception e) {
+			Osm2xpLogger.error("Error creating apron area for " + airfieldData.getId() + " airfield");
 		}
 		return list;
 	}
 
-	private List<String> getAptAreaString(String icao, Polyline2D polygon) {
+	protected Geometry buildBufferedLine(double dist, BufferParameters bufferParameters, Geometry lane) {
+		Geometry buffered = BufferOp.bufferOp(lane, dist, bufferParameters);
+		return buffered;
+	}
+
+	private List<String> getAptAreaDef(String icao, Polyline2D polygon) {
 		List<String> resList = new ArrayList<String>();
 		resList.add("1302 flatten 1");
 		resList.add("130 " + icao);
-		List<Point2D> vertices = new ArrayList<>(polygon.getVertices());
-		for (int i = 0; i < vertices.size() - 1; i++) {
-			Point2D coords = vertices.get(i);
-			if (i < vertices.size() - 2) {
+		resList.addAll(getAreaString(polygon));
+//		List<Point2D> vertices = new ArrayList<>(polygon.getVertices());
+//		for (int i = 0; i < vertices.size() - 1; i++) {
+//			Point2D coords = vertices.get(i);
+//			if (i < vertices.size() - 2) {
+//				resList.add(String.format("111 %1.8f %2.8f 0", coords.y, coords.x));
+//			} else {
+//				resList.add(String.format("113 %1.8f %2.8f 0", coords.y, coords.x));
+//			}
+//		}
+		return resList;
+	}
+	
+	private List<String> getApronDef(AirfieldData airfieldData, Polygon polygon, Point2D centerPoint) {
+		List<String> resList = new ArrayList<String>();
+		String surface = airfieldData.isHard()? "2" : "3";
+		String roughness = airfieldData.isHard()? "0.2" : "0.3";
+		resList.add("110 " + surface + " " + roughness + " 90 Sample" );
+		resList.addAll(getAreaString(GeomUtils.jtsToGeom2dLocal(GeomUtils.forceCCW(polygon.getExteriorRing()),centerPoint)));
+		for (int i = 0; i < polygon.getNumInteriorRing(); i++) {
+			resList.addAll(getAreaString(GeomUtils.jtsToGeom2dLocal(GeomUtils.forceCW(polygon.getInteriorRingN(i)), centerPoint)));	
+		}
+		return resList;
+	}
+	
+	private List<String> getAreaString(Polyline2D polyline2d) {
+		List<String> resList = new ArrayList<String>();
+		int n = polyline2d.getVertexNumber();
+		if (n < 3) {
+			return Collections.emptyList();
+		}
+		if (polyline2d.getVertex(0).equals(polyline2d.getVertex(n - 1))) {
+			n--;
+		}
+		for (int i = 0; i < n; i++) {
+			Point2D coords = polyline2d.getVertex(i);
+			if (i < n - 1) {
 				resList.add(String.format("111 %1.8f %2.8f 0", coords.y, coords.x));
 			} else {
 				resList.add(String.format("113 %1.8f %2.8f 0", coords.y, coords.x));
