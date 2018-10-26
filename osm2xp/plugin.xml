@@ -102,6 +102,13 @@
             icon="images/viewIcons/objects-16.png">
       </view>
       <view
+            class="com.osm2xp.gui.views.XPlaneAirfieldsView"
+            id="com.osm2xp.viewAirfieldsTab"
+            name="Airfields"
+            restorable="true"
+            icon="images/viewIcons/airfield-16.png">
+      </view>
+      <view
             class="com.osm2xp.gui.views.LastFilesView"
             id="com.osm2xp.viewLastFiles"
             name="last files"
@@ -381,6 +388,12 @@
          </view>
          <view
                id="com.osm2xp.viewObjectsTab"
+               minimized="false"
+               relationship="stack"
+               relative="com.osm2xp.viewSceneryTab">
+         </view>
+          <view
+               id="com.osm2xp.viewAirfieldsTab"
                minimized="false"
                relationship="stack"
                relative="com.osm2xp.viewSceneryTab">

@@ -14,6 +14,7 @@ import com.osm2xp.model.osm.OsmPolylineFactory;
 import com.osm2xp.model.osm.Tag;
 import com.osm2xp.translators.ITranslationAdapter;
 import com.osm2xp.utils.OsmUtils;
+import com.osm2xp.utils.helpers.XplaneOptionsHelper;
 import com.vividsolutions.jts.geom.Geometry;
 
 public class XPAirfieldTranslationAdapter implements ITranslationAdapter {
@@ -29,6 +30,9 @@ public class XPAirfieldTranslationAdapter implements ITranslationAdapter {
 	}
 	
 	public boolean handlePoly(OsmPolyline osmPolyline) {
+		if (!XplaneOptionsHelper.getOptions().isGenerateAirfields()) {
+			return false;
+		}
 		String wayType = osmPolyline.getTagValue("aeroway");
 		if ("aerodrome".equalsIgnoreCase(wayType)) {
 			airfieldList.add(new AirfieldData(osmPolyline));

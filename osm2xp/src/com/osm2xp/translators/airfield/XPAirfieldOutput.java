@@ -70,10 +70,10 @@ public class XPAirfieldOutput {
 			defsList.add(getRunwayStr(runway));
 		}
 		Polyline2D polygon = airfieldData.getPolygon();
+		defsList.addAll(getApronDefs(airfieldData));
 		if (polygon != null && polygon.getVertexNumber() > 3) {
 			defsList.addAll(getAptAreaDef(icao, polygon));		
 		}
-		defsList.addAll(getApronDefs(airfieldData));
 		defsList.add("99");
 		writeAptData(airfieldData.getId(), defsList.toArray(new String[0]));
 	}
@@ -139,7 +139,7 @@ public class XPAirfieldOutput {
 		List<String> resList = new ArrayList<String>();
 		String surface = airfieldData.isHard()? "2" : "3";
 		String roughness = airfieldData.isHard()? "0.2" : "0.3";
-		resList.add("110 " + surface + " " + roughness + " 90 Sample" );
+		resList.add("110 " + surface + " " + roughness + " 0.00 Sample" );
 		resList.addAll(getAreaString(GeomUtils.jtsToGeom2dLocal(GeomUtils.forceCCW(polygon.getExteriorRing()),centerPoint)));
 		for (int i = 0; i < polygon.getNumInteriorRing(); i++) {
 			resList.addAll(getAreaString(GeomUtils.jtsToGeom2dLocal(GeomUtils.forceCW(polygon.getInteriorRingN(i)), centerPoint)));	
@@ -159,9 +159,9 @@ public class XPAirfieldOutput {
 		for (int i = 0; i < n; i++) {
 			Point2D coords = polyline2d.getVertex(i);
 			if (i < n - 1) {
-				resList.add(String.format("111 %1.8f %2.8f 0", coords.y, coords.x));
+				resList.add(String.format("111 %1.8f %2.8f", coords.y, coords.x));
 			} else {
-				resList.add(String.format("113 %1.8f %2.8f 0", coords.y, coords.x));
+				resList.add(String.format("113 %1.8f %2.8f", coords.y, coords.x));
 			}
 		}
 		return resList;

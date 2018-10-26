@@ -175,6 +175,15 @@ public class GeomUtils {
 		Polygon jtsPolygon = geometryFactory.createPolygon(linearRing, null);
 		return jtsPolygon;
 	}
+	
+	public static LineString lineToLineString(Line2D line) {
+		List<Coordinate> coords = new ArrayList<Coordinate>();
+		for (Point2D point : line.getVertices()) {
+			coords.add(new Coordinate(point.x, point.y));
+		}
+		GeometryFactory geometryFactory = new GeometryFactory(getDefaultPrecisionModel());
+		return geometryFactory.createLineString(coords.toArray(new Coordinate[0]));
+	}
 
 	public static Double latLongDistance(double lat1, double lon1, double lat2,
 			double lon2) {
@@ -484,13 +493,9 @@ public class GeomUtils {
 		if (!sourceFootprint.isClosed()) {
 			return new Line2D(sourceFootprint.getFirstPoint(), sourceFootprint.getLastPoint()); 
 		}
-		if (vertexNumber > 5) { //Try to make square shape. 5 instead of 4 here because for closed line, last vertex matches first one ///XXX this doesn't work as expected
-			// we create a jts polygon from the linear ring
-			Polygon sourcePoly = linearRing2DToPolygon((LinearRing2D) sourceFootprint);
-			// we create a simplified polygon
-			Geometry cleanPoly = LatLonShortEdgesDeletion.get(sourcePoly, 10000); //Min side 10 km - should make any poly four-sided
-			// we create a linearRing2D from the modified polygon
-			sourceFootprint = polygonToLinearRing2D(cleanPoly);
+		if (vertexNumber > 5) { 
+			Point2D[] points = sourceFootprint.getPointArray();
+			return PolygonUtil.getMedianLine(points);
 		}
 		Point2D[] points = sourceFootprint.getPointArray();
 		Point2D[] endPoints = getMedianPoints(points, 2);
