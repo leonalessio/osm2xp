@@ -9,12 +9,14 @@ public class AerowayData {
 	protected String id;
 	protected String name;
 	protected int elevation = 0;
+	protected boolean actualElevation = false;
 
 	public AerowayData(OsmPolyline osmPolyline) {
 		String elevStr = osmPolyline.getTagValue("ele");
 		if (!StringUtils.isEmpty(elevStr)) {
 			try {
-				elevation = Integer.parseInt(elevStr); 
+				elevation = Integer.parseInt(elevStr);
+				actualElevation = true;
 			} catch (Exception e) {
 				// Ignore
 			}
@@ -55,6 +57,10 @@ public class AerowayData {
 
 	public int getElevation() {
 		return elevation;
+	}
+
+	public boolean hasActualElevation() {
+		return actualElevation;
 	}
 
 }

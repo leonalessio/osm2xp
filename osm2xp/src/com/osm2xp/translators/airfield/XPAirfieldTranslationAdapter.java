@@ -4,6 +4,7 @@ import java.io.File;
 import java.util.ArrayList;
 import java.util.Iterator;
 import java.util.List;
+import java.util.stream.Collectors;
 
 import org.openstreetmap.osmosis.osmbinary.Osmformat.HeaderBBox;
 
@@ -14,8 +15,11 @@ import com.osm2xp.model.osm.OsmPolylineFactory;
 import com.osm2xp.model.osm.Tag;
 import com.osm2xp.translators.ITranslationAdapter;
 import com.osm2xp.utils.OsmUtils;
+import com.osm2xp.utils.geometry.GeomUtils;
 import com.osm2xp.utils.helpers.XplaneOptionsHelper;
 import com.vividsolutions.jts.geom.Geometry;
+
+import math.geom2d.Point2D;
 
 public class XPAirfieldTranslationAdapter implements ITranslationAdapter {
 	
@@ -30,7 +34,7 @@ public class XPAirfieldTranslationAdapter implements ITranslationAdapter {
 	}
 	
 	public boolean handlePoly(OsmPolyline osmPolyline) {
-		if (!XplaneOptionsHelper.getOptions().isGenerateAirfields()) {
+		if (!XplaneOptionsHelper.getOptions().getAirfieldOptions().isGenerateAirfields()) {
 			return false;
 		}
 		String wayType = osmPolyline.getTagValue("aeroway");
@@ -97,7 +101,12 @@ public class XPAirfieldTranslationAdapter implements ITranslationAdapter {
 				}
 			}
 		}
-		boolean writeAsMainAirfield = (airfieldList.size() + runwayList.size() == 1); //If we have only one airport/only one runway - write it as main airfield of scenario
+		
+		List<Point2D> havingNoEle = airfieldList.stream().filter(data -> !data.hasActualElevation()).map(data -> GeomUtils.getPolylineCenter(data.getPolygon())).collect(Collectors.toList());
+		GetElevationJob job = new GetElevationJob(havingNoEle);
+		job.schedule();
+		
+		boolean writeAsMainAirfield = XplaneOptionsHelper.getOptions().getAirfieldOptions().isUseSingleAptAsMain() && (airfieldList.size() + runwayList.size() == 1); //If we have only one airport/only one runway - write it as main airfield of scenario
 		XPAirfieldOutput airfieldOutput = new XPAirfieldOutput(workFolder, writeAsMainAirfield);
 		for (AirfieldData airfieldData : airfieldList) {
 			airfieldOutput.writeAirfield(airfieldData);

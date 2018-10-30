@@ -19,14 +19,12 @@ import javax.xml.bind.annotation.XmlType;
 		"residentialMin", "residentialMax", "buildingMin", "buildingMax",
 		"minHouseSegment", "maxHouseSegment", "minHouseArea", "generateObj",
 		"generateFor", "generateBuildings","generatePowerlines","generateRailways","generateRoads","generateFence",
-		"generateTanks","generateChimneys","generateCoolingTowers","generateBridges","generateSlopedRoofs", 
-		"generateAirfields", "generateStreetLights", 
+		"generateTanks","generateChimneys","generateCoolingTowers","generateBridges","generateSlopedRoofs", "generateStreetLights", 
 		"lightsDensity", "packageFacades","hardBuildings", "lightObject", "facadeLod", 
-		"generateXmlStats", "generatePdfStats", "generateDebugImg", "generateComments", "levelHeight",
-		"defaultRunwayWidth", "defaultTaxiwayWidth",
+		"generateXmlStats", "generatePdfStats", "generateDebugImg", "generateComments", "levelHeight",		
 		"roadBridgeRampLen","railBridgeRampLen","buildingsExclusions",
 		"forestsRules", "objectsRules", "lightsRules", "facadesRules",
-		"streetLightObjects" })
+		"streetLightObjects", "airfieldOptions" })
 @XmlRootElement(name = "XplaneOptions")
 public class XplaneOptions {
 
@@ -59,7 +57,6 @@ public class XplaneOptions {
 	protected boolean generateChimneys = true;
 	protected boolean generateCoolingTowers= true;
 	protected boolean generateBridges = true;
-	protected boolean generateAirfields = false;
 	protected boolean generateStreetLights;
 	protected boolean generateSlopedRoofs;
 	protected int lightsDensity;
@@ -68,7 +65,7 @@ public class XplaneOptions {
 	@XmlElement(required = true)
 	protected String lightObject;
 	protected int facadeLod;
-	@XmlElement(required = true)
+//	@XmlElement(required = true)
 //	protected String facadeSet;
 	protected boolean generateXmlStats;
 	protected boolean generatePdfStats;
@@ -77,8 +74,6 @@ public class XplaneOptions {
 	protected double levelHeight = 3;
 	protected int roadBridgeRampLen = 100;
 	protected int railBridgeRampLen = 200;
-	protected int defaultRunwayWidth = 60;
-	protected int defaultTaxiwayWidth = 40;
 	@XmlElement(name = "BuildingsExclusions", required = true)
 	protected BuildingsExclusionsList buildingsExclusions;
 	@XmlElement(name = "ForestsRules", required = true)
@@ -91,7 +86,8 @@ public class XplaneOptions {
 	protected FacadesRulesList facadesRules;
 	@XmlElement(name = "StreetLightObjects", required = true)
 	protected ObjectsList streetLightObjects;
-
+	@XmlElement(name="AirfieldOptions", required=true) 
+	protected XplaneAirfieldOptions airfieldOptions;
 	/**
 	 * Default no-arg constructor
 	 * 
@@ -825,14 +821,6 @@ public class XplaneOptions {
 		this.generateBridges= generateBridges;
 	}
 
-	public boolean isGenerateAirfields() {
-		return generateAirfields;
-	}
-
-	public void setGenerateAirfields(boolean generateAirfields) {
-		this.generateAirfields = generateAirfields;
-	}
-
 	public boolean isGenerateComments() {
 		return generateComments;
 	}
@@ -883,20 +871,15 @@ public class XplaneOptions {
 		this.generateCoolingTowers = generateCoolingTowers;
 	}
 
-	public int getDefaultRunwayWidth() {
-		return defaultRunwayWidth;
+	public XplaneAirfieldOptions getAirfieldOptions() {
+		if (airfieldOptions == null) {
+			airfieldOptions = new XplaneAirfieldOptions();
+		}
+		return airfieldOptions;
 	}
 
-	public void setDefaultRunwayWidth(int defaultRunwayWidth) {
-		this.defaultRunwayWidth = defaultRunwayWidth;
-	}
-
-	public int getDefaultTaxiwayWidth() {
-		return defaultTaxiwayWidth;
-	}
-
-	public void setDefaultTaxiwayWidth(int defaultTaxiwayWidth) {
-		this.defaultTaxiwayWidth = defaultTaxiwayWidth;
+	public void setAirfieldOptions(XplaneAirfieldOptions airfieldOptions) {
+		this.airfieldOptions = airfieldOptions;
 	}
 
 }

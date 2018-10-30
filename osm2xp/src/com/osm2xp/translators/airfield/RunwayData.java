@@ -4,13 +4,14 @@ import org.apache.commons.lang.StringUtils;
 
 import com.osm2xp.model.osm.OsmPolyline;
 import com.osm2xp.utils.geometry.GeomUtils;
+import com.osm2xp.utils.helpers.XplaneOptionsHelper;
 
 import math.geom2d.line.Line2D;
 
 public class RunwayData extends AerowayData {
 	
 	private Line2D runwayLine;
-	private double width = 60;
+	private double width = XplaneOptionsHelper.getOptions().getAirfieldOptions().getDefaultRunwayWidth();
 	private String surface;
 	private boolean hard = false;
 	private double course1, course2;

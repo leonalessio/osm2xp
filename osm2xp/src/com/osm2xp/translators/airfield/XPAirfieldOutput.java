@@ -17,6 +17,7 @@ import com.osm2xp.model.osm.OsmPolygon;
 import com.osm2xp.model.osm.OsmPolyline;
 import com.osm2xp.utils.OsmUtils;
 import com.osm2xp.utils.geometry.GeomUtils;
+import com.osm2xp.utils.helpers.XplaneOptionsHelper;
 import com.osm2xp.utils.logging.Osm2xpLogger;
 import com.vividsolutions.jts.geom.Geometry;
 import com.vividsolutions.jts.geom.Polygon;
@@ -72,7 +73,7 @@ public class XPAirfieldOutput {
 		Polyline2D polygon = airfieldData.getPolygon();
 		defsList.addAll(getApronDefs(airfieldData));
 		if (polygon != null && polygon.getVertexNumber() > 3) {
-			defsList.addAll(getAptAreaDef(icao, polygon));		
+			defsList.addAll(getAptAreaDef(icao, airfieldData));		
 		}
 		defsList.add("99");
 		writeAptData(airfieldData.getId(), defsList.toArray(new String[0]));
@@ -89,7 +90,7 @@ public class XPAirfieldOutput {
 					map(polyline -> GeomUtils.geom2dToJtsLocal(polyline.getPolyline(), centerPoint)).collect(Collectors.toList());
 			List<Geometry> convertedLanes = taxiLanes.stream().
 					map(polyline -> GeomUtils.geom2dToJtsLocal(polyline.getPolyline(), centerPoint)).collect(Collectors.toList());
-			double dist = 20.0 / 111000;
+			double dist = XplaneOptionsHelper.getOptions().getAirfieldOptions().getDefaultTaxiwayWidth() / 2.0 / 111000;
 			BufferParameters bufferParameters = new BufferParameters(4, BufferParameters.CAP_ROUND);
 			List<Geometry> bufferedLanes = convertedLanes.stream().map(lane -> buildBufferedLine(dist, bufferParameters, lane)).collect(Collectors.toList());
 			List<Geometry> toJoin = new ArrayList<Geometry>(convertedAreas);
@@ -118,21 +119,20 @@ public class XPAirfieldOutput {
 		return buffered;
 	}
 
-	private List<String> getAptAreaDef(String icao, Polyline2D polygon) {
+	private List<String> getAptAreaDef(String icao, AirfieldData airfieldData) {
 		List<String> resList = new ArrayList<String>();
-		resList.add("1302 flatten 1");
+		if (shouldFlatten(airfieldData)) {
+			resList.add("1302 flatten 1"); //If we have no actual elevation - flattening would goof up airfield, 
+										   // making it a giant pit with bottom plateu having elevation 0m
+										   //TODO obtain necessary elevation using some REST service in future
+		}
 		resList.add("130 " + icao);
-		resList.addAll(getAreaString(polygon));
-//		List<Point2D> vertices = new ArrayList<>(polygon.getVertices());
-//		for (int i = 0; i < vertices.size() - 1; i++) {
-//			Point2D coords = vertices.get(i);
-//			if (i < vertices.size() - 2) {
-//				resList.add(String.format("111 %1.8f %2.8f 0", coords.y, coords.x));
-//			} else {
-//				resList.add(String.format("113 %1.8f %2.8f 0", coords.y, coords.x));
-//			}
-//		}
+		resList.addAll(getAreaString(airfieldData.getPolygon()));
 		return resList;
+	}
+
+	protected boolean shouldFlatten(AirfieldData airfieldData) {
+		return XplaneOptionsHelper.getOptions().getAirfieldOptions().isFlatten() && airfieldData.hasActualElevation();
 	}
 	
 	private List<String> getApronDef(AirfieldData airfieldData, Polygon polygon, Point2D centerPoint) {
