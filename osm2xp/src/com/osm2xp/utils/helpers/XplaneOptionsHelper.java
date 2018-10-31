@@ -234,7 +234,6 @@ public class XplaneOptionsHelper extends OptionsHelper {
 	/**
 	 * @return
 	 */
-	@SuppressWarnings("serial")
 	private static LightsRulesList createNewLightsRules() {
 		List<XplaneLightTagRule> lightsRules = new ArrayList<XplaneLightTagRule>();
 		LightsRulesList result = new LightsRulesList(lightsRules);

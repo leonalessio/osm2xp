@@ -59,6 +59,11 @@ public class AerowayData {
 		return elevation;
 	}
 
+	public void setElevation(int elevation) {
+		this.elevation = elevation;
+		actualElevation = true;
+	}
+
 	public boolean hasActualElevation() {
 		return actualElevation;
 	}

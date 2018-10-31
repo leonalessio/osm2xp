@@ -65,6 +65,9 @@ public class XPAirfieldOutput {
 		}
 		List<String> defsList = new ArrayList<String>();
 		defsList.addAll(getAptHeaderString());
+		if (shouldFlatten(airfieldData)) {
+			defsList.add("1302 flatten 1"); 
+		}
 		String icao = checkGetICAO(airfieldData);
 		defsList.add(String.format("1 %d 0 0 %s %s",  (int) Math.round(airfieldData.getElevation() * METER_TO_FEET_COEF), icao, airfieldData.getName()));
 		for (RunwayData runway : runways) {
@@ -121,17 +124,15 @@ public class XPAirfieldOutput {
 
 	private List<String> getAptAreaDef(String icao, AirfieldData airfieldData) {
 		List<String> resList = new ArrayList<String>();
-		if (shouldFlatten(airfieldData)) {
-			resList.add("1302 flatten 1"); //If we have no actual elevation - flattening would goof up airfield, 
-										   // making it a giant pit with bottom plateu having elevation 0m
-										   //TODO obtain necessary elevation using some REST service in future
-		}
 		resList.add("130 " + icao);
 		resList.addAll(getAreaString(airfieldData.getPolygon()));
 		return resList;
 	}
 
 	protected boolean shouldFlatten(AirfieldData airfieldData) {
+		//If we have no actual elevation - flattening would goof up airfield, 
+		// making it a giant pit with bottom plateu having elevation 0m
+		//TODO obtain necessary elevation using some REST service in future
 		return XplaneOptionsHelper.getOptions().getAirfieldOptions().isFlatten() && airfieldData.hasActualElevation();
 	}
 	

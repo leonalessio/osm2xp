@@ -11,6 +11,7 @@ import com.osm2xp.utils.OsmUtils;
 import com.osm2xp.utils.geometry.GeomUtils;
 
 import math.geom2d.Box2D;
+import math.geom2d.Point2D;
 import math.geom2d.polygon.LinearRing2D;
 import math.geom2d.polygon.Polyline2D;
 
@@ -102,5 +103,9 @@ public class AirfieldData extends AerowayData {
 
 	public List<OsmPolyline> getTaxiLanes() {
 		return taxiLanes;
+	}
+
+	public Point2D getAreaCenter() {
+		return Point2D.centroid(polygon.getPointArray());
 	}
 }

@@ -4,7 +4,6 @@ import java.io.File;
 import java.util.ArrayList;
 import java.util.Iterator;
 import java.util.List;
-import java.util.stream.Collectors;
 
 import org.openstreetmap.osmosis.osmbinary.Osmformat.HeaderBBox;
 
@@ -15,7 +14,6 @@ import com.osm2xp.model.osm.OsmPolylineFactory;
 import com.osm2xp.model.osm.Tag;
 import com.osm2xp.translators.ITranslationAdapter;
 import com.osm2xp.utils.OsmUtils;
-import com.osm2xp.utils.geometry.GeomUtils;
 import com.osm2xp.utils.helpers.XplaneOptionsHelper;
 import com.vividsolutions.jts.geom.Geometry;
 
@@ -39,7 +37,7 @@ public class XPAirfieldTranslationAdapter implements ITranslationAdapter {
 		}
 		String wayType = osmPolyline.getTagValue("aeroway");
 		if ("aerodrome".equalsIgnoreCase(wayType)) {
-			airfieldList.add(new AirfieldData(osmPolyline));
+			addAirfiled(osmPolyline);
 			return true;
 		} else if ("runway".equalsIgnoreCase(wayType)) {
 			runwayList.add(osmPolyline);
@@ -51,6 +49,18 @@ public class XPAirfieldTranslationAdapter implements ITranslationAdapter {
 			}
 		}
 		return false;
+	}
+
+	protected boolean addAirfiled(OsmPolyline osmPolyline) {
+		AirfieldData data = new AirfieldData(osmPolyline);
+		if (!data.hasActualElevation()) {
+			Point2D areaCenter = data.getAreaCenter();
+			Double elevation = ElevationProvidingService.getInstance().getElevation(areaCenter, true);
+			if (elevation != null) {
+				data.setElevation((int) Math.round(elevation));
+			}
+		}
+		return airfieldList.add(data);
 	}
 
 	@Override
@@ -101,10 +111,13 @@ public class XPAirfieldTranslationAdapter implements ITranslationAdapter {
 				}
 			}
 		}
-		
-		List<Point2D> havingNoEle = airfieldList.stream().filter(data -> !data.hasActualElevation()).map(data -> GeomUtils.getPolylineCenter(data.getPolygon())).collect(Collectors.toList());
-		GetElevationJob job = new GetElevationJob(havingNoEle);
-		job.schedule();
+		ElevationProvidingService.getInstance().finish();
+		airfieldList.stream().filter(data -> !data.hasActualElevation()).forEach(data -> {
+			Double elevation = ElevationProvidingService.getInstance().getElevation(data.getAreaCenter(), false);
+			if (elevation != null) {
+				data.setElevation((int) Math.round(elevation));
+			}
+		});
 		
 		boolean writeAsMainAirfield = XplaneOptionsHelper.getOptions().getAirfieldOptions().isUseSingleAptAsMain() && (airfieldList.size() + runwayList.size() == 1); //If we have only one airport/only one runway - write it as main airfield of scenario
 		XPAirfieldOutput airfieldOutput = new XPAirfieldOutput(workFolder, writeAsMainAirfield);

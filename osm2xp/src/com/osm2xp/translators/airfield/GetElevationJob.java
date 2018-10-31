@@ -5,8 +5,9 @@ import java.io.IOException;
 import java.io.InputStreamReader;
 import java.net.HttpURLConnection;
 import java.net.URL;
-import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 import java.util.stream.Collectors;
 
 import org.eclipse.core.runtime.IProgressMonitor;
@@ -24,17 +25,16 @@ import math.geom2d.Point2D;
 public class GetElevationJob extends Job {
 
 	private List<Point2D> points;
-	private List<Double> result;
+	private Map<Point2D, Double> elevMap = new HashMap<Point2D, Double>();
 
 	public GetElevationJob(List<Point2D> points) {
 		super("Getting elevation - " + points.size() + " points");
 		this.points = points;
-		result = new ArrayList<>(points.size());
 	}
 
 	@Override
 	protected IStatus run(IProgressMonitor monitor) {
-		// https://elevation-api.io/api/elevation?points=(39.90974,-106.17188),(62.52417,10.02487)
+		//sample query -  https://elevation-api.io/api/elevation?points=(39.90974,-106.17188),(62.52417,10.02487)
 		try {
 			String pointsStr = points.stream().map(point -> getPointStr(point)).collect(Collectors.joining(","));
 			URL obj = new URL("https://elevation-api.io/api/elevation?points=" + pointsStr);
@@ -59,9 +59,14 @@ public class GetElevationJob extends Job {
 				JSONParser parser = new JSONParser();
 				JSONObject root = (JSONObject) parser.parse(response.toString());
 				JSONArray array = (JSONArray) root.get("elevations");
-				for (int i = 0; i < array.size(); i++) {
-					JSONObject current = (JSONObject) array.get(i);
-					Double ele = (Double) current.get("elevation");
+				if (array.size() == points.size()) {
+					for (int i = 0; i < array.size(); i++) {
+						JSONObject current = (JSONObject) array.get(i);
+						Double ele = (Double) current.get("elevation");
+						if (ele > -9999) {
+							elevMap.put(points.get(i), ele);
+						}
+					}
 				}
 			} catch (IOException e) {
 				Activator.log(e);
@@ -81,9 +86,8 @@ public class GetElevationJob extends Job {
 		return points;
 	}
 
-	public List<Double> getElevations() {
-		return result;
+	public Map<Point2D, Double> getElevMap() {
+		return elevMap;
 	}
-
 
 }
