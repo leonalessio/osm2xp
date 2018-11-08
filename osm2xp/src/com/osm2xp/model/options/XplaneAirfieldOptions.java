@@ -1,12 +1,15 @@
 package com.osm2xp.model.options;
 
+import java.util.ArrayList;
+import java.util.List;
+
 import javax.xml.bind.annotation.XmlAccessType;
 import javax.xml.bind.annotation.XmlAccessorType;
 import javax.xml.bind.annotation.XmlType;
 
 @XmlAccessorType(XmlAccessType.FIELD)
 @XmlType(name="XplaneAirfieldOptions", propOrder = {"generateAirfields","useSingleAptAsMain","generateApron","flatten",
-		"tryGetElev","defaultRunwayWidth","defaultTaxiwayWidth"})
+		"tryGetElev","defaultRunwayWidth","defaultTaxiwayWidth", "ignoredAirfields"})
 public class XplaneAirfieldOptions {
 	protected boolean generateAirfields = false;
 	protected boolean useSingleAptAsMain = true;
@@ -15,6 +18,7 @@ public class XplaneAirfieldOptions {
 	protected boolean tryGetElev = true;
 	protected int defaultRunwayWidth = 60;
 	protected int defaultTaxiwayWidth = 40;
+	protected List<String> ignoredAirfields;
 	
 	public boolean isGenerateAirfields() {
 		return generateAirfields;
@@ -57,6 +61,15 @@ public class XplaneAirfieldOptions {
 	}
 	public void setGenerateApron(boolean generateApron) {
 		this.generateApron = generateApron;
+	}
+	public List<String> getIgnoredAirfields() {
+		if (ignoredAirfields == null) {
+			ignoredAirfields = new ArrayList<>();
+		}
+		return ignoredAirfields;
+	}
+	public void setIgnoredAirfields(List<String> ignoredAirfields) {
+		this.ignoredAirfields = ignoredAirfields;
 	}
 
 }

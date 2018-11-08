@@ -51,16 +51,19 @@ public class XPAirfieldTranslationAdapter implements ITranslationAdapter {
 		return false;
 	}
 
-	protected boolean addAirfiled(OsmPolyline osmPolyline) {
+	protected void addAirfiled(OsmPolyline osmPolyline) {
 		AirfieldData data = new AirfieldData(osmPolyline);
-		if (!data.hasActualElevation()) {
+		if (XplaneOptionsHelper.getOptions().getAirfieldOptions().getIgnoredAirfields().contains(data.getICAO().toUpperCase())) {
+			return;
+		}
+		if (!data.hasActualElevation() &&  XplaneOptionsHelper.getOptions().getAirfieldOptions().isTryGetElev()) {
 			Point2D areaCenter = data.getAreaCenter();
 			Double elevation = ElevationProvidingService.getInstance().getElevation(areaCenter, true);
 			if (elevation != null) {
 				data.setElevation((int) Math.round(elevation));
 			}
 		}
-		return airfieldList.add(data);
+		airfieldList.add(data);
 	}
 
 	@Override
@@ -111,13 +114,15 @@ public class XPAirfieldTranslationAdapter implements ITranslationAdapter {
 				}
 			}
 		}
-		ElevationProvidingService.getInstance().finish();
-		airfieldList.stream().filter(data -> !data.hasActualElevation()).forEach(data -> {
-			Double elevation = ElevationProvidingService.getInstance().getElevation(data.getAreaCenter(), false);
-			if (elevation != null) {
-				data.setElevation((int) Math.round(elevation));
-			}
-		});
+		if (XplaneOptionsHelper.getOptions().getAirfieldOptions().isTryGetElev()) {		
+			ElevationProvidingService.getInstance().finish();
+			airfieldList.stream().filter(data -> !data.hasActualElevation()).forEach(data -> {
+				Double elevation = ElevationProvidingService.getInstance().getElevation(data.getAreaCenter(), false);
+				if (elevation != null) {
+					data.setElevation((int) Math.round(elevation));
+				}
+			});
+		}
 		
 		boolean writeAsMainAirfield = XplaneOptionsHelper.getOptions().getAirfieldOptions().isUseSingleAptAsMain() && (airfieldList.size() + runwayList.size() == 1); //If we have only one airport/only one runway - write it as main airfield of scenario
 		XPAirfieldOutput airfieldOutput = new XPAirfieldOutput(workFolder, writeAsMainAirfield);
