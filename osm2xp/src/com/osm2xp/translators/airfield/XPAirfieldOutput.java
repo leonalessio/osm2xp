@@ -27,6 +27,7 @@ import com.vividsolutions.jts.operation.overlay.OverlayOp;
 
 import math.geom2d.Box2D;
 import math.geom2d.Point2D;
+import math.geom2d.polygon.LinearRing2D;
 import math.geom2d.polygon.Polyline2D;
 
 /**
@@ -64,12 +65,12 @@ public class XPAirfieldOutput {
 			return; //Do nothing, if no runways assigned for airport
 		}
 		List<String> defsList = new ArrayList<String>();
-		defsList.addAll(getAptHeaderString());
+		defsList.addAll(getAptHeaderString());		
+		String icao = checkGetICAO(airfieldData);
+		defsList.add(String.format("1 %d 0 0 %s %s",  (int) Math.round(airfieldData.getElevation() * METER_TO_FEET_COEF), icao, airfieldData.getName()));
 		if (shouldFlatten(airfieldData)) {
 			defsList.add("1302 flatten 1"); 
 		}
-		String icao = checkGetICAO(airfieldData);
-		defsList.add(String.format("1 %d 0 0 %s %s",  (int) Math.round(airfieldData.getElevation() * METER_TO_FEET_COEF), icao, airfieldData.getName()));
 		for (RunwayData runway : runways) {
 			defsList.add(getRunwayStr(runway));
 		}
@@ -141,9 +142,9 @@ public class XPAirfieldOutput {
 		String surface = airfieldData.isHard()? "2" : "3";
 		String roughness = airfieldData.isHard()? "0.2" : "0.3";
 		resList.add("110 " + surface + " " + roughness + " 0.00 Sample" );
-		resList.addAll(getAreaString(GeomUtils.jtsToGeom2dLocal(GeomUtils.forceCCW(polygon.getExteriorRing()),centerPoint)));
+		resList.addAll(getAreaString(GeomUtils.setCCW((LinearRing2D) GeomUtils.jtsToGeom2dLocal(polygon.getExteriorRing(),centerPoint)))); //TODO check we have LianearRing2D here always 
 		for (int i = 0; i < polygon.getNumInteriorRing(); i++) {
-			resList.addAll(getAreaString(GeomUtils.jtsToGeom2dLocal(GeomUtils.forceCW(polygon.getInteriorRingN(i)), centerPoint)));	
+			resList.addAll(getAreaString(GeomUtils.setClockwise((LinearRing2D) GeomUtils.jtsToGeom2dLocal(polygon.getInteriorRingN(i), centerPoint))));	
 		}
 		return resList;
 	}

@@ -32,6 +32,12 @@ public class RunwayData extends AerowayData {
 		double magneticCourse = GeomUtils.getMagneticBearing(runwayLine.p1, runwayLine.p2);
 		course1 = magneticCourse;
 		course2 = (magneticCourse + 180) % 360;
+		if (course2 < course1) { //course1 should be always smaller, than course2
+			double tmp = course2;
+			course2 = course1;
+			course1 = tmp;
+			runwayLine = runwayLine.getReverseCurve();
+		}
 		hard = ("asphalt".equals(surface) || "concrete".equals(surface) || "paved".equals(surface));
 		String ref = polyline.getTagValue("ref");
 		if (!StringUtils.isEmpty(ref) && ref.indexOf('/') > 0) {

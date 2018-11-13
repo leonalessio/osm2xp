@@ -53,7 +53,7 @@ public class XPAirfieldTranslationAdapter implements ITranslationAdapter {
 
 	protected void addAirfiled(OsmPolyline osmPolyline) {
 		AirfieldData data = new AirfieldData(osmPolyline);
-		if (XplaneOptionsHelper.getOptions().getAirfieldOptions().getIgnoredAirfields().contains(data.getICAO().toUpperCase())) {
+		if (XplaneOptionsHelper.getOptions().getAirfieldOptions().getIgnoredAirfields().contains(data.getICAO())) {
 			return;
 		}
 		if (!data.hasActualElevation() &&  XplaneOptionsHelper.getOptions().getAirfieldOptions().isTryGetElev()) {
@@ -72,9 +72,11 @@ public class XPAirfieldTranslationAdapter implements ITranslationAdapter {
 		if (!OsmUtils.isAeroway(tags)) {
 			return;
 		}
-		List<OsmPolyline> polylines = OsmPolylineFactory.createPolylinesFromJTSGeometry(wayId, tags, originalGeometry, false);
-		for (OsmPolyline osmPolyline : polylines) {
-			handlePoly(osmPolyline);
+		for (Geometry geometry : fixedGeometries) {
+			List<OsmPolyline> polylines = OsmPolylineFactory.createPolylinesFromJTSGeometry(wayId, tags, geometry, false);
+			for (OsmPolyline osmPolyline : polylines) {
+				handlePoly(osmPolyline);
+			}
 		}
 	}
 

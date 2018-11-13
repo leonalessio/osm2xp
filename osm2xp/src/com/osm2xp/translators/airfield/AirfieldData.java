@@ -33,6 +33,9 @@ public class AirfieldData extends AerowayData {
 		if (StringUtils.isEmpty(icao) && OsmUtils.isValidICAO(name)) {
 			icao = name.toUpperCase().trim();
 		}
+		if (icao != null) {
+			icao = icao.toUpperCase();
+		}
 		id = toId(icao);
 		if (StringUtils.isEmpty(id)) {
 			id = toId(osmPolyline.getTagValue("iata"));
