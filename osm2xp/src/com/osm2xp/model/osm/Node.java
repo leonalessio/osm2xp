@@ -20,7 +20,7 @@ import javax.xml.bind.annotation.XmlType;
 @XmlRootElement(name = "node")
 public class Node {
 
-	protected List<Tag> tag;
+	protected List<Tag> tags;
 	@XmlAttribute(name = "lat", required = true)
 	protected double lat;
 	@XmlAttribute(name = "lon", required = true)
@@ -42,7 +42,7 @@ public class Node {
 	 */
 	public Node(final List<Tag> tag, final double lat, final double lon,
 			final long id) {
-		this.tag = tag;
+		this.tags = tag;
 		this.lat = lat;
 		this.lon = lon;
 		this.id = id;
@@ -70,11 +70,11 @@ public class Node {
 	 * 
 	 * 
 	 */
-	public List<Tag> getTag() {
-		if (tag == null) {
-			tag = new ArrayList<Tag>();
+	public List<Tag> getTags() {
+		if (tags == null) {
+			tags = new ArrayList<Tag>();
 		}
-		return this.tag;
+		return this.tags;
 	}
 
 	/**
@@ -128,6 +128,15 @@ public class Node {
 	@Override
 	public String toString() {
 		return "Node " + id + "[lat=" + lat + ", lon=" + lon + "]";
+	}
+
+	public String getTagValue(String key) {
+		for (Tag tag : tags) {
+			if (key.equals(tag.getKey())) {
+				return tag.getValue();
+			}
+		}
+		return null;
 	}
 
 }

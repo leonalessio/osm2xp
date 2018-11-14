@@ -13,6 +13,7 @@ import java.util.stream.Collectors;
 import org.apache.commons.lang.StringUtils;
 
 import com.osm2xp.constants.Osm2xpConstants;
+import com.osm2xp.model.osm.Node;
 import com.osm2xp.model.osm.OsmPolygon;
 import com.osm2xp.model.osm.OsmPolyline;
 import com.osm2xp.utils.OsmUtils;
@@ -61,7 +62,8 @@ public class XPAirfieldOutput {
 	
 	public void writeAirfield(AirfieldData airfieldData) {
 		List<RunwayData> runways = airfieldData.getRunways();
-		if (runways.isEmpty()) {
+		List<Node> helipads = airfieldData.getHelipads();
+		if (runways.isEmpty() && helipads.isEmpty()) {
 			return; //Do nothing, if no runways assigned for airport
 		}
 		List<String> defsList = new ArrayList<String>();
@@ -74,6 +76,9 @@ public class XPAirfieldOutput {
 		for (RunwayData runway : runways) {
 			defsList.add(getRunwayStr(runway));
 		}
+		for (int i = 0; i < helipads.size(); i++) {
+			defsList.add(getHelipadStr(helipads.get(i), i, airfieldData));
+		}
 		Polyline2D polygon = airfieldData.getPolygon();
 		defsList.addAll(getApronDefs(airfieldData));
 		if (polygon != null && polygon.getVertexNumber() > 3) {
@@ -81,6 +86,25 @@ public class XPAirfieldOutput {
 		}
 		defsList.add("99");
 		writeAptData(airfieldData.getId(), defsList.toArray(new String[0]));
+	}
+
+	private String getHelipadStr(Node helipad, int idx, AirfieldData airfieldData) {
+		StringBuilder builder = new StringBuilder("102 ");
+		builder.append("H");
+		builder.append(idx + 1);
+		builder.append(String.format(" %1.8f %2.8f ", helipad.getLat(), helipad.getLon()));
+		builder.append(getOrientation(airfieldData));
+		builder.append(" ");
+		builder.append(XplaneOptionsHelper.getOptions().getAirfieldOptions().getDefaultHelipadSize());
+		builder.append(" ");
+		builder.append(XplaneOptionsHelper.getOptions().getAirfieldOptions().getDefaultHelipadSize());
+		builder.append(" ");
+		builder.append(airfieldData.isHard() ? "1" : "3");
+		builder.append(" 0 0 ");
+		builder.append(airfieldData.isHard() ? "0.2" : "0.3");
+		builder.append(" ");
+		builder.append(airfieldData.isHard() ? "1" : "0");
+		return builder.toString();
 	}
 
 	private List<? extends String> getApronDefs(AirfieldData airfieldData) {
@@ -112,6 +136,11 @@ public class XPAirfieldOutput {
 					list.addAll(getApronDef(airfieldData, polygon, centerPoint));
 				}
 			}
+			if (airfieldData.isHard()) {
+				for (int j = 0; j < taxiLanes.size(); j++) {
+					list.addAll(getTaxilaneDef(taxiLanes.get(j), j));
+				}
+			}
 		} catch (Exception e) {
 			Osm2xpLogger.error("Error creating apron area for " + airfieldData.getId() + " airfield");
 		}
@@ -132,23 +161,53 @@ public class XPAirfieldOutput {
 
 	protected boolean shouldFlatten(AirfieldData airfieldData) {
 		//If we have no actual elevation - flattening would goof up airfield, 
-		// making it a giant pit with bottom plateu having elevation 0m
-		//TODO obtain necessary elevation using some REST service in future
+		//making it a giant pit with bottom plateu having elevation 0m
+		//Elevation will be taken from 'ele' tag in OSM if present. 
+		//If not, we'll try to obtain it via REST call, if it's allowed and we are online. 
 		return XplaneOptionsHelper.getOptions().getAirfieldOptions().isFlatten() && airfieldData.hasActualElevation();
+	}
+	
+	private List<String> getTaxilaneDef(OsmPolyline polyline, int index) {
+		List<String> resList = new ArrayList<String>();
+		resList.add("120 Taxiway " + index);
+		Point2D[] points = polyline.getPolyline().getPointArray();
+		for (int i = 0; i < points.length; i++) {
+			if (i < points.length - 1) {
+				resList.add(String.format("111 %1.8f %2.8f 1", points[i].y, points[i].x));
+			} else {
+				resList.add(String.format("115 %1.8f %2.8f", points[i].y, points[i].x));
+			}
+		}
+		return resList;
 	}
 	
 	private List<String> getApronDef(AirfieldData airfieldData, Polygon polygon, Point2D centerPoint) {
 		List<String> resList = new ArrayList<String>();
 		String surface = airfieldData.isHard()? "2" : "3";
 		String roughness = airfieldData.isHard()? "0.2" : "0.3";
-		resList.add("110 " + surface + " " + roughness + " 0.00 Sample" );
-		resList.addAll(getAreaString(GeomUtils.setCCW((LinearRing2D) GeomUtils.jtsToGeom2dLocal(polygon.getExteriorRing(),centerPoint)))); //TODO check we have LianearRing2D here always 
+		resList.add("110 " + surface + " " + roughness + " " + getOrientation(airfieldData) + " Sample" );
+		resList.addAll(getAreaString(GeomUtils.setCCW(getRing(GeomUtils.jtsToGeom2dLocal(polygon.getExteriorRing(),centerPoint)))));  
 		for (int i = 0; i < polygon.getNumInteriorRing(); i++) {
-			resList.addAll(getAreaString(GeomUtils.setClockwise((LinearRing2D) GeomUtils.jtsToGeom2dLocal(polygon.getInteriorRingN(i), centerPoint))));	
+			resList.addAll(getAreaString(GeomUtils.setClockwise(getRing(GeomUtils.jtsToGeom2dLocal(polygon.getInteriorRingN(i), centerPoint)))));	
 		}
 		return resList;
 	}
 	
+	private LinearRing2D getRing(Polyline2D line) {
+		if (line instanceof LinearRing2D) {
+			return (LinearRing2D) line;
+		}
+		return new LinearRing2D(line.getPointArray());
+	}
+
+	private String getOrientation(AirfieldData airfieldData) {
+		List<RunwayData> runways = airfieldData.getRunways();
+		if (runways.size() > 0) {
+			return String.format("%1.2f", runways.get(0).getCourse1());
+		}
+		return "0.00";
+	}
+
 	private List<String> getAreaString(Polyline2D polyline2d) {
 		List<String> resList = new ArrayList<String>();
 		int n = polyline2d.getVertexNumber();

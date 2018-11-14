@@ -5,6 +5,7 @@ import java.util.List;
 
 import org.apache.commons.lang.StringUtils;
 
+import com.osm2xp.model.osm.Node;
 import com.osm2xp.model.osm.OsmPolygon;
 import com.osm2xp.model.osm.OsmPolyline;
 import com.osm2xp.utils.OsmUtils;
@@ -20,6 +21,7 @@ public class AirfieldData extends AerowayData {
 	private List<RunwayData> runways = new ArrayList<>();
 	private List<OsmPolygon> apronAreas = new ArrayList<>();
 	private List<OsmPolyline> taxiLanes = new ArrayList<>();
+	private List<Node> helipads = new ArrayList<>();
 	private String icao;
 	private Polyline2D polygon;
 	
@@ -110,5 +112,24 @@ public class AirfieldData extends AerowayData {
 
 	public Point2D getAreaCenter() {
 		return Point2D.centroid(polygon.getPointArray());
+	}
+
+	public boolean contains(double lon, double lat) {
+		return polygon.contains(lon, lat);
+	}
+
+	public void addHelipad(Node helipad) {
+		helipads.add(helipad);
+	}
+
+	public List<Node> getHelipads() {
+		return helipads;
+	}
+
+	public void addHeliArea(OsmPolygon area) {
+		Point2D center = area.getCenter();
+		Node heliNode = new Node(area.getTags(), center.y, center.x, -1);
+		addHelipad(heliNode);
+		addApronArea(area);
 	}
 }

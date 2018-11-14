@@ -9,7 +9,7 @@ import javax.xml.bind.annotation.XmlType;
 
 @XmlAccessorType(XmlAccessType.FIELD)
 @XmlType(name="XplaneAirfieldOptions", propOrder = {"generateAirfields","useSingleAptAsMain","generateApron","flatten",
-		"tryGetElev","defaultRunwayWidth","defaultTaxiwayWidth", "ignoredAirfields"})
+		"tryGetElev","defaultRunwayWidth","defaultTaxiwayWidth", "defaultHelipadSize", "ignoredAirfields"})
 public class XplaneAirfieldOptions {
 	protected boolean generateAirfields = false;
 	protected boolean useSingleAptAsMain = true;
@@ -18,6 +18,7 @@ public class XplaneAirfieldOptions {
 	protected boolean tryGetElev = true;
 	protected int defaultRunwayWidth = 60;
 	protected int defaultTaxiwayWidth = 40;
+	protected int defaultHelipadSize= 10;
 	protected List<String> ignoredAirfields;
 	
 	public boolean isGenerateAirfields() {
@@ -70,6 +71,12 @@ public class XplaneAirfieldOptions {
 	}
 	public void setIgnoredAirfields(List<String> ignoredAirfields) {
 		this.ignoredAirfields = ignoredAirfields;
+	}
+	public int getDefaultHelipadSize() {
+		return defaultHelipadSize;
+	}
+	public void setDefaultHelipadSize(int defaultHelipadSize) {
+		this.defaultHelipadSize = defaultHelipadSize;
 	}
 
 }

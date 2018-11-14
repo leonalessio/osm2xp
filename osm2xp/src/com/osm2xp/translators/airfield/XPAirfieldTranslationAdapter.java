@@ -9,6 +9,7 @@ import org.openstreetmap.osmosis.osmbinary.Osmformat.HeaderBBox;
 
 import com.osm2xp.exceptions.Osm2xpBusinessException;
 import com.osm2xp.model.osm.Node;
+import com.osm2xp.model.osm.OsmPolygon;
 import com.osm2xp.model.osm.OsmPolyline;
 import com.osm2xp.model.osm.OsmPolylineFactory;
 import com.osm2xp.model.osm.Tag;
@@ -25,6 +26,8 @@ public class XPAirfieldTranslationAdapter implements ITranslationAdapter {
 	private List<OsmPolyline> runwayList = new ArrayList<>();
 	private List<OsmPolyline> apronAreasList = new ArrayList<>();
 	private List<OsmPolyline> taxiLanesList = new ArrayList<>();
+	private List<OsmPolygon> heliAreasList = new ArrayList<>();
+	private List<Node> helipadsList = new ArrayList<>();
 	private File workFolder;
 
 	public XPAirfieldTranslationAdapter(String outputFolder) {
@@ -36,7 +39,7 @@ public class XPAirfieldTranslationAdapter implements ITranslationAdapter {
 			return false;
 		}
 		String wayType = osmPolyline.getTagValue("aeroway");
-		if ("aerodrome".equalsIgnoreCase(wayType)) {
+		if ("aerodrome".equalsIgnoreCase(wayType) || "heliport".equalsIgnoreCase(wayType)) {
 			addAirfiled(osmPolyline);
 			return true;
 		} else if ("runway".equalsIgnoreCase(wayType)) {
@@ -46,6 +49,10 @@ public class XPAirfieldTranslationAdapter implements ITranslationAdapter {
 				apronAreasList.add(osmPolyline);
 			} else {
 				taxiLanesList.add(osmPolyline);
+			}
+		} else if ("helipad".equalsIgnoreCase(wayType)) {
+			if (osmPolyline instanceof OsmPolygon) {
+				heliAreasList.add((OsmPolygon) osmPolyline);
 			}
 		}
 		return false;
@@ -116,6 +123,24 @@ public class XPAirfieldTranslationAdapter implements ITranslationAdapter {
 				}
 			}
 		}
+		for (Iterator<OsmPolygon> iterator = heliAreasList.iterator(); iterator.hasNext();) { //Check apron areas matching airports
+			OsmPolygon lane = (OsmPolygon) iterator.next();
+			for (AirfieldData airfieldData : airfieldList) {
+				if (airfieldData.containsPolyline(lane)) {
+					airfieldData.addHeliArea(lane);
+					break;
+				}
+			}
+		}
+		for (Iterator<Node> iterator = helipadsList.iterator(); iterator.hasNext();) { //Check apron areas matching airports
+			Node helipad = (Node) iterator.next();
+			for (AirfieldData airfieldData : airfieldList) {
+				if (airfieldData.contains(helipad.getLon(), helipad.getLat())) {
+					airfieldData.addHelipad(helipad);
+					break;
+				}
+			}
+		}
 		if (XplaneOptionsHelper.getOptions().getAirfieldOptions().isTryGetElev()) {		
 			ElevationProvidingService.getInstance().finish();
 			airfieldList.stream().filter(data -> !data.hasActualElevation()).forEach(data -> {
@@ -138,8 +163,12 @@ public class XPAirfieldTranslationAdapter implements ITranslationAdapter {
 
 	@Override
 	public void processNode(Node node) throws Osm2xpBusinessException {
-		// Do nothing
+		String type = node.getTagValue("aeroway");
+		if ("helipad".equals(type)) {
+			helipadsList.add(node);
+		}
 	}
+	
 
 	@Override
 	public void processBoundingBox(HeaderBBox bbox) {
