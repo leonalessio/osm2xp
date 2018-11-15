@@ -222,7 +222,7 @@ public class SaxParserImpl implements ContentHandler, IParser {
 					.getValue(XML_ATTRIBUTE_LATITUDE)));
 			node.setLon(Double.parseDouble(currentAttributes
 					.getValue(XML_ATTRIBUTE_LONGITUDE)));
-			node.getTag().addAll(tagList);
+			node.getTags().addAll(tagList);
 			try {
 				translator.processNode(node);
 				if (translator.mustStoreNode(node)) {

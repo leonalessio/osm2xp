@@ -516,6 +516,9 @@ public class OsmUtils {
 	}
 	
 	public static boolean isValidICAO(String name) {
+		if (name == null) {
+			return false;
+		}
 		name = name.toUpperCase().trim();
 		if (name.length() == 4) {
 			for (int i = 0; i < name.length(); i++) {

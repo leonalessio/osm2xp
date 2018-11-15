@@ -18,7 +18,7 @@ import javax.xml.bind.annotation.XmlType;
 @XmlAccessorType(XmlAccessType.FIELD)
 @XmlType(name = "", propOrder = { "tag" })
 @XmlRootElement(name = "node")
-public class Node {
+public class Node implements IHasTags {
 
 	protected List<Tag> tags;
 	@XmlAttribute(name = "lat", required = true)

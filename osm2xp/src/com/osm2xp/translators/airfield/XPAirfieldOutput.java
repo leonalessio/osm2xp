@@ -79,10 +79,12 @@ public class XPAirfieldOutput {
 		for (int i = 0; i < helipads.size(); i++) {
 			defsList.add(getHelipadStr(helipads.get(i), i, airfieldData));
 		}
-		Polyline2D polygon = airfieldData.getPolygon();
 		defsList.addAll(getApronDefs(airfieldData));
-		if (polygon != null && polygon.getVertexNumber() > 3) {
-			defsList.addAll(getAptAreaDef(icao, airfieldData));		
+		if (airfieldData instanceof PolyAirfieldData) {
+			Polyline2D polygon = ((PolyAirfieldData) airfieldData).getPolygon();
+			if (polygon != null && polygon.getVertexNumber() > 3) {
+				defsList.addAll(getAptAreaDef(icao, airfieldData));		
+			}
 		}
 		defsList.add("99");
 		writeAptData(airfieldData.getId(), defsList.toArray(new String[0]));
@@ -110,8 +112,7 @@ public class XPAirfieldOutput {
 	private List<? extends String> getApronDefs(AirfieldData airfieldData) {
 		List<String> list = new ArrayList<String>();
 		try {
-			Box2D bbox = airfieldData.getPolygon().getBoundingBox();
-			Point2D centerPoint = new Point2D(bbox.getMinX(), bbox.getMinY());
+			Point2D centerPoint = airfieldData.getAreaCenter();
 			List<OsmPolygon> apronAreas = airfieldData.getApronAreas();
 			List<OsmPolyline> taxiLanes = airfieldData.getTaxiLanes();
 			List<Geometry> convertedAreas = apronAreas.stream().
@@ -155,7 +156,7 @@ public class XPAirfieldOutput {
 	private List<String> getAptAreaDef(String icao, AirfieldData airfieldData) {
 		List<String> resList = new ArrayList<String>();
 		resList.add("130 " + icao);
-		resList.addAll(getAreaString(airfieldData.getPolygon()));
+		resList.addAll(getAreaString(((PolyAirfieldData) airfieldData).getPolygon()));
 		return resList;
 	}
 

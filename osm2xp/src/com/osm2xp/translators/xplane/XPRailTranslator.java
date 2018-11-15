@@ -1,5 +1,6 @@
 package com.osm2xp.translators.xplane;
 
+import com.osm2xp.model.osm.IHasTags;
 import com.osm2xp.model.osm.OsmPolyline;
 import com.osm2xp.translators.impl.XPOutputFormat;
 import com.osm2xp.utils.helpers.XplaneOptionsHelper;
@@ -24,12 +25,12 @@ public class XPRailTranslator extends XPPathTranslator {
 	}
 
 	@Override
-	protected int getPathType(OsmPolyline polygon) {
+	protected int getPathType(IHasTags polygon) {
 		return 151; //TODO using only one type for now
 	}
 	
 	@Override
-	protected String getComment(OsmPolyline poly) {
+	protected String getComment(IHasTags poly) {
 		return "railway";
 	}
 

@@ -72,7 +72,7 @@ public class FsxBgTranslatorImpl implements ITranslator {
 			// write a 3D object in the bgl file if this node is in an object
 			// rule
 			String guid = BglUtils
-					.getRandomBglGuid(node.getTag(), node.getId());
+					.getRandomBglGuid(node.getTags(), node.getId());
 			if (guid != null) {
 				write3dObjectToBgl(new Point2D(node.getLon(), node.getLat()),
 						guid);

@@ -454,13 +454,13 @@ public class XPlaneTranslatorImpl implements ITranslator{
 				// object
 				// rule
 				XplaneDsf3DObject object = dsfObjectsProvider
-						.getRandomDsfObjectIndexAndAngle(node.getTag(),
+						.getRandomDsfObjectIndexAndAngle(node.getTags(),
 								node.getId());
 				if (object != null) {
 					List<Node> nodes = new ArrayList<Node>();
 					nodes.add(node);
 					object.setPolygon(new OsmPolygon(node.getId(), node
-							.getTag(), nodes, false));
+							.getTags(), nodes, false));
 					writeObjectToDsf(object);
 				}
 			}

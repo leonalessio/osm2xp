@@ -1,5 +1,6 @@
 package com.osm2xp.translators.xplane;
 
+import com.osm2xp.model.osm.IHasTags;
 import com.osm2xp.model.osm.OsmPolyline;
 import com.osm2xp.translators.impl.XPOutputFormat;
 import com.osm2xp.utils.helpers.XplaneOptionsHelper;
@@ -24,17 +25,17 @@ public class XPPowerlineTranslator extends XPPathTranslator {
 	}
 
 	@Override
-	protected int getPathType(OsmPolyline polygon) {
+	protected int getPathType(IHasTags polygon) {
 		return 220; //TODO using only one type for now
 	}
 	
 	@Override
-	protected String getComment(OsmPolyline poly) {
+	protected String getComment(IHasTags poly) {
 		return "power line";
 	}
 
 	@Override
-	protected boolean isBridge(OsmPolyline poly) {
+	protected boolean isBridge(IHasTags poly) {
 		return false; //Not supported for power lines
 	}
 	

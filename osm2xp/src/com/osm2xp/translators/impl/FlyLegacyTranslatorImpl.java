@@ -92,7 +92,7 @@ public class FlyLegacyTranslatorImpl implements ITranslator {
 	public void processNode(Node node) throws Osm2xpBusinessException {
 		LinearRing2D polygon = new LinearRing2D();
 		//dummy polygon as tags placeholder
-		OsmPolyline osmPolygon =new OsmPolygon(node.getId(), node.getTag(), null, false);
+		OsmPolyline osmPolygon =new OsmPolygon(node.getId(), node.getTags(), null, false);
 		// get list of watched tags that are also in the osm polygon
 		List<Tag> matchingTags = OsmUtils.getMatchingTags(
 				FlyLegacyOptionsHelper.getOptions().getWatchedTagsList()

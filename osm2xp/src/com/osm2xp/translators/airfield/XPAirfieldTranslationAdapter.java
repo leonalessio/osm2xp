@@ -4,10 +4,12 @@ import java.io.File;
 import java.util.ArrayList;
 import java.util.Iterator;
 import java.util.List;
+import java.util.stream.Collectors;
 
 import org.openstreetmap.osmosis.osmbinary.Osmformat.HeaderBBox;
 
 import com.osm2xp.exceptions.Osm2xpBusinessException;
+import com.osm2xp.model.osm.IHasTags;
 import com.osm2xp.model.osm.Node;
 import com.osm2xp.model.osm.OsmPolygon;
 import com.osm2xp.model.osm.OsmPolyline;
@@ -58,8 +60,13 @@ public class XPAirfieldTranslationAdapter implements ITranslationAdapter {
 		return false;
 	}
 
-	protected void addAirfiled(OsmPolyline osmPolyline) {
-		AirfieldData data = new AirfieldData(osmPolyline);
+	protected void addAirfiled(IHasTags osmEntity) {
+		AirfieldData data;
+		if (osmEntity instanceof OsmPolyline) {
+			data = new PolyAirfieldData((OsmPolyline) osmEntity);
+		} else {
+			data = new PointAirfieldData((Node) osmEntity);
+		}
 		if (XplaneOptionsHelper.getOptions().getAirfieldOptions().getIgnoredAirfields().contains(data.getICAO())) {
 			return;
 		}
@@ -89,58 +96,13 @@ public class XPAirfieldTranslationAdapter implements ITranslationAdapter {
 
 	@Override
 	public void init() {
-		// TODO Auto-generated method stub
-		
+		// Do nothing
 	}
 
 	@Override
 	public void complete() {
-		for (Iterator<OsmPolyline> iterator = runwayList.iterator(); iterator.hasNext();) { //Check runways matching airports
-			OsmPolyline runway = (OsmPolyline) iterator.next();
-			for (AirfieldData airfieldData : airfieldList) {
-				if (airfieldData.containsPolyline(runway)) {
-					airfieldData.addRunway(runway);
-					iterator.remove();
-					break;
-				}
-			}
-		}
-		for (Iterator<OsmPolyline> iterator = apronAreasList.iterator(); iterator.hasNext();) { //Check apron areas matching airports
-			OsmPolyline area = (OsmPolyline) iterator.next();
-			for (AirfieldData airfieldData : airfieldList) {
-				if (airfieldData.containsPolyline(area)) {
-					airfieldData.addApronArea(area);
-					break;
-				}
-			}
-		}
-		for (Iterator<OsmPolyline> iterator = taxiLanesList.iterator(); iterator.hasNext();) { //Check apron areas matching airports
-			OsmPolyline lane = (OsmPolyline) iterator.next();
-			for (AirfieldData airfieldData : airfieldList) {
-				if (airfieldData.containsPolyline(lane)) {
-					airfieldData.addTaxiLane(lane);
-					break;
-				}
-			}
-		}
-		for (Iterator<OsmPolygon> iterator = heliAreasList.iterator(); iterator.hasNext();) { //Check apron areas matching airports
-			OsmPolygon lane = (OsmPolygon) iterator.next();
-			for (AirfieldData airfieldData : airfieldList) {
-				if (airfieldData.containsPolyline(lane)) {
-					airfieldData.addHeliArea(lane);
-					break;
-				}
-			}
-		}
-		for (Iterator<Node> iterator = helipadsList.iterator(); iterator.hasNext();) { //Check apron areas matching airports
-			Node helipad = (Node) iterator.next();
-			for (AirfieldData airfieldData : airfieldList) {
-				if (airfieldData.contains(helipad.getLon(), helipad.getLat())) {
-					airfieldData.addHelipad(helipad);
-					break;
-				}
-			}
-		}
+		bindAirways(airfieldList.stream().filter(data -> data instanceof PolyAirfieldData).collect(Collectors.toList())); //Poly-based airfileds should be processed first - they are more precise, than point-based ones
+		bindAirways(airfieldList.stream().filter(data -> data instanceof PointAirfieldData).collect(Collectors.toList()));
 		if (XplaneOptionsHelper.getOptions().getAirfieldOptions().isTryGetElev()) {		
 			ElevationProvidingService.getInstance().finish();
 			airfieldList.stream().filter(data -> !data.hasActualElevation()).forEach(data -> {
@@ -161,11 +123,68 @@ public class XPAirfieldTranslationAdapter implements ITranslationAdapter {
 		}
 	}
 
+	protected void bindAirways(List<AirfieldData> airfieldList) {
+		//First, try getting registered airfield areafor this
+		for (Iterator<OsmPolyline> iterator = runwayList.iterator(); iterator.hasNext();) { //Check runways matching airports
+			OsmPolyline runway = (OsmPolyline) iterator.next();
+			for (AirfieldData airfieldData : airfieldList) {
+				if (airfieldData.containsPolyline(runway)) {
+					airfieldData.addRunway(runway);
+					iterator.remove();
+					break;
+				}
+			}
+		}
+		for (Iterator<OsmPolyline> iterator = apronAreasList.iterator(); iterator.hasNext();) { //Check apron areas matching airports
+			OsmPolyline area = (OsmPolyline) iterator.next();
+			for (AirfieldData airfieldData : airfieldList) {
+				if (airfieldData.containsPolyline(area)) {
+					airfieldData.addApronArea(area);
+					iterator.remove();
+					break;
+				}
+			}
+		}
+		for (Iterator<OsmPolyline> iterator = taxiLanesList.iterator(); iterator.hasNext();) { //Check apron areas matching airports
+			OsmPolyline lane = (OsmPolyline) iterator.next();
+			for (AirfieldData airfieldData : airfieldList) {
+				if (airfieldData.containsPolyline(lane)) {
+					airfieldData.addTaxiLane(lane);
+					iterator.remove();
+					break;
+				}
+			}
+		}
+		for (Iterator<OsmPolygon> iterator = heliAreasList.iterator(); iterator.hasNext();) { //Check apron areas matching airports
+			OsmPolygon lane = (OsmPolygon) iterator.next();
+			for (AirfieldData airfieldData : airfieldList) {
+				if (airfieldData.containsPolyline(lane)) {
+					airfieldData.addHeliArea(lane);
+					iterator.remove();
+					break;
+				}
+			}
+		}
+		for (Iterator<Node> iterator = helipadsList.iterator(); iterator.hasNext();) { //Check apron areas matching airports
+			Node helipad = (Node) iterator.next();
+			for (AirfieldData airfieldData : airfieldList) {
+				if (airfieldData.contains(helipad.getLon(), helipad.getLat())) {
+					airfieldData.addHelipad(helipad);
+					iterator.remove();
+					break;
+				}
+			}
+		}
+	}
+
 	@Override
 	public void processNode(Node node) throws Osm2xpBusinessException {
 		String type = node.getTagValue("aeroway");
 		if ("helipad".equals(type)) {
 			helipadsList.add(node);
+		}
+		if ("aerodrome".equalsIgnoreCase(type)) {
+			addAirfiled(node);
 		}
 	}
 	

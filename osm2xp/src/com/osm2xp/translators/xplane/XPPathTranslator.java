@@ -11,6 +11,7 @@ import java.util.Set;
 import org.apache.commons.lang.ArrayUtils;
 import org.apache.commons.lang.StringUtils;
 
+import com.osm2xp.model.osm.IHasTags;
 import com.osm2xp.model.osm.Node;
 import com.osm2xp.model.osm.OsmPolyline;
 import com.osm2xp.translators.impl.XPOutputFormat;
@@ -190,7 +191,7 @@ public abstract class XPPathTranslator extends XPWritingTranslator {
 		return result;
 	}
 
-	protected boolean isBridge(OsmPolyline poly) {
+	protected boolean isBridge(IHasTags poly) {
 		return XplaneOptionsHelper.getOptions().isGenerateBridges() && !StringUtils.isEmpty(poly.getTagValue("bridge"));
 	}
 
@@ -205,10 +206,10 @@ public abstract class XPPathTranslator extends XPWritingTranslator {
 	 * @param poly
 	 * @return comment string, without "#' mark before. <code>null</code> by default, override if necessary
 	 */
-	protected String getComment(OsmPolyline poly) {
+	protected String getComment(IHasTags poly) {
 		return null;
 	}
 
-	protected abstract int getPathType(OsmPolyline polygon); 
+	protected abstract int getPathType(IHasTags polygon); 
 
 }

@@ -3,6 +3,7 @@ package com.osm2xp.translators.xplane;
 import org.apache.commons.lang.ArrayUtils;
 import org.apache.commons.lang.StringUtils;
 
+import com.osm2xp.model.osm.IHasTags;
 import com.osm2xp.model.osm.OsmPolyline;
 import com.osm2xp.translators.impl.XPOutputFormat;
 import com.osm2xp.utils.helpers.GuiOptionsHelper;
@@ -44,7 +45,7 @@ public class XPRoadTranslator extends XPPathTranslator {
 	 * 2 lanes - type 40
 	 * 1 lane - type 50
 	 */
-	protected int getPathType(OsmPolyline poly) {
+	protected int getPathType(IHasTags poly) {
 		String val = poly.getTagValue("lanes"); //Try to get lane count directly first
 		if (val != null) {
 			try {
@@ -71,7 +72,7 @@ public class XPRoadTranslator extends XPPathTranslator {
 	}
 	
 	@Override
-	protected String getComment(OsmPolyline poly) {
+	protected String getComment(IHasTags poly) {
 		return "road";
 	}
 

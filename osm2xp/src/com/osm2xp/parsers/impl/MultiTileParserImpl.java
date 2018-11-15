@@ -107,7 +107,7 @@ public class MultiTileParserImpl extends AbstractTranslatingParserImpl implement
 			node.setId(id);
 			node.setLat(latf);
 			node.setLon(lonf);
-			node.getTag().addAll(tags);
+			node.getTags().addAll(tags);
 			try {
 				// give the node to the translator for processing
 				for (ITranslationAdapter adapter : translationAdapters) {

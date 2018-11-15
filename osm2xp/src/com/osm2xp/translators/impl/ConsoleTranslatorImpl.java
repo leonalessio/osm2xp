@@ -57,7 +57,7 @@ public class ConsoleTranslatorImpl implements ITranslator {
 	public void processNode(Node node) throws Osm2xpBusinessException {
 		if (GeomUtils.compareCoordinates(currentTile, node)) {
 
-			List<Tag> tagsOfInterest = OsmUtils.removeCommonTags(node.getTag());
+			List<Tag> tagsOfInterest = OsmUtils.removeCommonTags(node.getTags());
 
 			if (tagsOfInterest != null && !tagsOfInterest.isEmpty()) {
 				StringBuilder nodeDetail = new StringBuilder();

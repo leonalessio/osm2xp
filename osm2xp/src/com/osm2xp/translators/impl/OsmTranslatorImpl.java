@@ -67,7 +67,7 @@ public class OsmTranslatorImpl implements ITranslator {
 	 */
 	private void writeNode(Node node) {
 
-		if (node.getTag().isEmpty()) {
+		if (node.getTags().isEmpty()) {
 			writer.write("<node id=\"" + node.getId() + "\" lat=\""
 					+ node.getLat() + "\" lon=\"" + node.getLon()
 					+ "\" version=\"1\" />\n");
@@ -75,7 +75,7 @@ public class OsmTranslatorImpl implements ITranslator {
 			writer.write("<node id=\"" + node.getId() + "\" lat=\""
 					+ node.getLat() + "\" lon=\"" + node.getLon()
 					+ "\" version=\"1\" >\n");
-			for (Tag tag : node.getTag()) {
+			for (Tag tag : node.getTags()) {
 				String normalizedTag = OsmUtils.getNormalizedTagText(tag);
 				if (normalizedTag != null) {
 					writer.write(normalizedTag);

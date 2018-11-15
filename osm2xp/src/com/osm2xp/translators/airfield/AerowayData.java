@@ -2,7 +2,7 @@ package com.osm2xp.translators.airfield;
 
 import org.apache.commons.lang.StringUtils;
 
-import com.osm2xp.model.osm.OsmPolyline;
+import com.osm2xp.model.osm.IHasTags;
 
 public class AerowayData {
 
@@ -11,8 +11,8 @@ public class AerowayData {
 	protected int elevation = 0;
 	protected boolean actualElevation = false;
 
-	public AerowayData(OsmPolyline osmPolyline) {
-		String elevStr = osmPolyline.getTagValue("ele");
+	public AerowayData(IHasTags osmEntity) {
+		String elevStr = osmEntity.getTagValue("ele");
 		if (!StringUtils.isEmpty(elevStr)) {
 			try {
 				elevation = Integer.parseInt(elevStr);
@@ -21,9 +21,9 @@ public class AerowayData {
 				// Ignore
 			}
 		}
-		name = osmPolyline.getTagValue("name:en");
+		name = osmEntity.getTagValue("name:en");
 		if (name == null) {
-			name = osmPolyline.getTagValue("name");
+			name = osmEntity.getTagValue("name");
 		}
 	}
 
@@ -66,6 +66,10 @@ public class AerowayData {
 
 	public boolean hasActualElevation() {
 		return actualElevation;
+	}
+
+	public void setName(String name) {
+		this.name = name;
 	}
 
 }

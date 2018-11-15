@@ -8,7 +8,7 @@ import com.osm2xp.utils.geometry.GeomUtils;
 import math.geom2d.Point2D;
 import math.geom2d.polygon.Polyline2D;
 
-public class OsmPolyline {
+public class OsmPolyline implements IHasTags{
 
 	protected long id;
 	protected List<Tag> tags;
@@ -91,6 +91,7 @@ public class OsmPolyline {
 		this.id = id;
 	}
 
+	@Override
 	public List<Tag> getTags() {
 		return tags;
 	}
@@ -100,6 +101,7 @@ public class OsmPolyline {
 	 * @param tagKey tag key
 	 * @return value for given key, of present, <code>null</code> otherwise
 	 */
+	@Override
 	public String getTagValue(String tagKey) {
 		Optional<Tag> first = tags.stream().filter(tag -> tagKey.equals(tag.key)).findFirst();
 		return first.isPresent() ? first.get().getValue() : null;
