@@ -8,14 +8,16 @@ import javax.xml.bind.annotation.XmlAccessorType;
 import javax.xml.bind.annotation.XmlType;
 
 @XmlAccessorType(XmlAccessType.FIELD)
-@XmlType(name="XplaneAirfieldOptions", propOrder = {"generateAirfields","useSingleAptAsMain","generateApron","flatten",
-		"tryGetElev","defaultRunwayWidth","defaultTaxiwayWidth", "defaultHelipadSize", "ignoredAirfields"})
+@XmlType(name="XplaneAirfieldOptions", propOrder = {"generateAirfields","useSingleAptAsMain","generateApron","generateMarks","flatten",
+		"tryGetElev","tryGetName","defaultRunwayWidth","defaultTaxiwayWidth", "defaultHelipadSize", "ignoredAirfields"})
 public class XplaneAirfieldOptions {
 	protected boolean generateAirfields = false;
 	protected boolean useSingleAptAsMain = true;
 	protected boolean generateApron = true;
+	protected boolean generateMarks = true;
 	protected boolean flatten = true;
 	protected boolean tryGetElev = true;
+	protected boolean tryGetName = true;
 	protected int defaultRunwayWidth = 60;
 	protected int defaultTaxiwayWidth = 40;
 	protected int defaultHelipadSize= 10;
@@ -77,6 +79,18 @@ public class XplaneAirfieldOptions {
 	}
 	public void setDefaultHelipadSize(int defaultHelipadSize) {
 		this.defaultHelipadSize = defaultHelipadSize;
+	}
+	public boolean isTryGetName() {
+		return tryGetName;
+	}
+	public void setTryGetName(boolean tryGetName) {
+		this.tryGetName = tryGetName;
+	}
+	public boolean isGenerateMarks() {
+		return generateMarks;
+	}
+	public void setGenerateMarks(boolean generateMarks) {
+		this.generateMarks = generateMarks;
 	}
 
 }

@@ -56,13 +56,15 @@ public class RunwayData extends AerowayData {
 				}
 			}
 		}
-		if (StringUtils.isEmpty(name)) {
-			name = ref;
+		if (!StringUtils.isEmpty(name)) {
+			id = toId(name);
 		}
-		if (StringUtils.isEmpty(name)) {
-			name = getMarking1() + "/" + getMarking2();
+		if (!StringUtils.isEmpty(ref)) {
+			id = toId(ref);
 		}
-		id = toId(name);
+		if (id == null) {
+			id = getMarking1() + "/" + getMarking2();
+		}
 	}
 	
 	public double getCourse1() {
@@ -71,6 +73,10 @@ public class RunwayData extends AerowayData {
 
 	public double getCourse2() {
 		return course2;
+	}
+	
+	public double getTrueCourse() {
+		return GeomUtils.getTrueBearing(runwayLine.p1, runwayLine.p2);
 	}
 
 	public int getMarkingHeading(String ref) {

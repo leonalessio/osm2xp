@@ -37,4 +37,12 @@ public class PointAirfieldData extends AirfieldData {
 		return GeomUtils.latLongDistance(center.y, center.x, lat, lon) <= maxRadius;
 	}
 
+	public int getMaxRadius() {
+		return maxRadius;
+	}
+
+	public void setMaxRadius(int maxRadius) {
+		this.maxRadius = maxRadius;
+	}
+
 }

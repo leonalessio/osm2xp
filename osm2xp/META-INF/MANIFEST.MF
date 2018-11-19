@@ -57,7 +57,9 @@ Bundle-ClassPath: .,
  lib/gt-main-19.2.jar,
  lib/gt-opengis-19.2.jar,
  lib/gt-referencing-19.2.jar,
- lib/json-simple-1.1.1.jar
+ lib/json-simple-1.1.1.jar,
+ lib/geonames-1.1.14.jar,
+ lib/jdom-1.0.jar
 Bundle-Activator: com.osm2xp.gui.Activator
 Require-Bundle: org.eclipse.ui,
  org.eclipse.core.runtime,

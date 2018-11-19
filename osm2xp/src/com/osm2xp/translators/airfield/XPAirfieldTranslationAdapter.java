@@ -21,9 +21,14 @@ import com.osm2xp.utils.helpers.XplaneOptionsHelper;
 import com.vividsolutions.jts.geom.Geometry;
 
 import math.geom2d.Point2D;
+import math.geom2d.line.Line2D;
 
 public class XPAirfieldTranslationAdapter implements ITranslationAdapter {
 	
+	private static final String RUNWAY_TAG = "runway";
+	private static final String HELIPAD_TAG = "helipad";
+	private static final String AERODROME_TAG = "aerodrome";
+	private static final String HELIPORT_TAG = "heliport";
 	private List<AirfieldData> airfieldList = new ArrayList<AirfieldData>();
 	private List<OsmPolyline> runwayList = new ArrayList<>();
 	private List<OsmPolyline> apronAreasList = new ArrayList<>();
@@ -41,10 +46,10 @@ public class XPAirfieldTranslationAdapter implements ITranslationAdapter {
 			return false;
 		}
 		String wayType = osmPolyline.getTagValue("aeroway");
-		if ("aerodrome".equalsIgnoreCase(wayType) || "heliport".equalsIgnoreCase(wayType)) {
+		if (AERODROME_TAG.equalsIgnoreCase(wayType) || HELIPORT_TAG.equalsIgnoreCase(wayType)) {
 			addAirfiled(osmPolyline);
 			return true;
-		} else if ("runway".equalsIgnoreCase(wayType)) {
+		} else if (RUNWAY_TAG.equalsIgnoreCase(wayType)) {
 			runwayList.add(osmPolyline);
 		} else if ("apron".equalsIgnoreCase(wayType) || "taxiway".equalsIgnoreCase(wayType) || "taxilane".equalsIgnoreCase(wayType)) {
 			if (osmPolyline.getPolyline().isClosed()) {
@@ -52,7 +57,7 @@ public class XPAirfieldTranslationAdapter implements ITranslationAdapter {
 			} else {
 				taxiLanesList.add(osmPolyline);
 			}
-		} else if ("helipad".equalsIgnoreCase(wayType)) {
+		} else if (HELIPAD_TAG.equalsIgnoreCase(wayType)) {
 			if (osmPolyline instanceof OsmPolygon) {
 				heliAreasList.add((OsmPolygon) osmPolyline);
 			}
@@ -66,15 +71,21 @@ public class XPAirfieldTranslationAdapter implements ITranslationAdapter {
 			data = new PolyAirfieldData((OsmPolyline) osmEntity);
 		} else {
 			data = new PointAirfieldData((Node) osmEntity);
+			if (HELIPORT_TAG.equalsIgnoreCase(osmEntity.getTagValue("type"))) {
+				((PointAirfieldData) data).setMaxRadius(500);
+			}
 		}
-		if (XplaneOptionsHelper.getOptions().getAirfieldOptions().getIgnoredAirfields().contains(data.getICAO())) {
-			return;
-		}
+		Point2D areaCenter = data.getAreaCenter();
 		if (!data.hasActualElevation() &&  XplaneOptionsHelper.getOptions().getAirfieldOptions().isTryGetElev()) {
-			Point2D areaCenter = data.getAreaCenter();
 			Double elevation = ElevationProvidingService.getInstance().getElevation(areaCenter, true);
 			if (elevation != null) {
 				data.setElevation((int) Math.round(elevation));
+			}
+		}
+		if (data.getName() == null && data.getICAO() == null && XplaneOptionsHelper.getOptions().getAirfieldOptions().isTryGetName()) {
+			String name = GeonameProvidingService.getInstance().getMeta(areaCenter, true);
+			if (name != null) {
+				data.setName(name);
 			}
 		}
 		airfieldList.add(data);
@@ -112,14 +123,33 @@ public class XPAirfieldTranslationAdapter implements ITranslationAdapter {
 				}
 			});
 		}
-		
+		if (XplaneOptionsHelper.getOptions().getAirfieldOptions().isTryGetName()) {
+			GeonameProvidingService.getInstance().finish();
+			airfieldList.stream().filter(data -> data.getName() == null && data.getICAO() == null).forEach(data -> {
+				String name = GeonameProvidingService.getInstance().getMeta(data.getAreaCenter(), false);
+				if (name != null) {
+					data.setName(name);
+				}
+			});
+		}
 		boolean writeAsMainAirfield = XplaneOptionsHelper.getOptions().getAirfieldOptions().isUseSingleAptAsMain() && (airfieldList.size() + runwayList.size() == 1); //If we have only one airport/only one runway - write it as main airfield of scenario
 		XPAirfieldOutput airfieldOutput = new XPAirfieldOutput(workFolder, writeAsMainAirfield);
 		for (AirfieldData airfieldData : airfieldList) {
+			if (XplaneOptionsHelper.getOptions().getAirfieldOptions().getIgnoredAirfields().contains(airfieldData.getICAO())) { //We can't check this at earlier stage since we need to ignore associated runways and other stuff as well
+				continue;
+			}
 			airfieldOutput.writeAirfield(airfieldData);
 		}
 		for (OsmPolyline runway : runwayList) {
-			airfieldOutput.writeSingleRunway(new RunwayData(runway));
+			RunwayData data = new RunwayData(runway);
+			if (data.getName() == null && XplaneOptionsHelper.getOptions().getAirfieldOptions().isTryGetName()) {
+				Line2D line = data.getRunwayLine();
+				String name = GeonameProvidingService.getInstance().getValueSync(Point2D.centroid(new Point2D[] {line.p1, line.p2}));
+				if (name != null) {
+					data.setName(name);
+				}
+			}
+			airfieldOutput.writeSingleRunway(data);
 		}
 	}
 
@@ -180,10 +210,10 @@ public class XPAirfieldTranslationAdapter implements ITranslationAdapter {
 	@Override
 	public void processNode(Node node) throws Osm2xpBusinessException {
 		String type = node.getTagValue("aeroway");
-		if ("helipad".equals(type)) {
+		if (HELIPAD_TAG.equals(type)) {
 			helipadsList.add(node);
 		}
-		if ("aerodrome".equalsIgnoreCase(type)) {
+		if (AERODROME_TAG.equalsIgnoreCase(type) || HELIPORT_TAG.equalsIgnoreCase(type)) {
 			addAirfiled(node);
 		}
 	}

@@ -26,7 +26,6 @@ import com.vividsolutions.jts.operation.buffer.BufferOp;
 import com.vividsolutions.jts.operation.buffer.BufferParameters;
 import com.vividsolutions.jts.operation.overlay.OverlayOp;
 
-import math.geom2d.Box2D;
 import math.geom2d.Point2D;
 import math.geom2d.polygon.LinearRing2D;
 import math.geom2d.polygon.Polyline2D;
@@ -69,7 +68,7 @@ public class XPAirfieldOutput {
 		List<String> defsList = new ArrayList<String>();
 		defsList.addAll(getAptHeaderString());		
 		String icao = checkGetICAO(airfieldData);
-		defsList.add(String.format("1 %d 0 0 %s %s",  (int) Math.round(airfieldData.getElevation() * METER_TO_FEET_COEF), icao, airfieldData.getName()));
+		defsList.add(String.format("1 %d 0 0 %s %s",  (int) Math.round(airfieldData.getElevation() * METER_TO_FEET_COEF), icao, airfieldData.getLabel()));
 		if (shouldFlatten(airfieldData)) {
 			defsList.add("1302 flatten 1"); 
 		}
@@ -137,7 +136,7 @@ public class XPAirfieldOutput {
 					list.addAll(getApronDef(airfieldData, polygon, centerPoint));
 				}
 			}
-			if (airfieldData.isHard()) {
+			if (airfieldData.isHard() && XplaneOptionsHelper.getOptions().getAirfieldOptions().isGenerateMarks()) {
 				for (int j = 0; j < taxiLanes.size(); j++) {
 					list.addAll(getTaxilaneDef(taxiLanes.get(j), j));
 				}
@@ -204,7 +203,7 @@ public class XPAirfieldOutput {
 	private String getOrientation(AirfieldData airfieldData) {
 		List<RunwayData> runways = airfieldData.getRunways();
 		if (runways.size() > 0) {
-			return String.format("%1.2f", runways.get(0).getCourse1());
+			return String.format("%1.2f", runways.get(0).getTrueCourse());
 		}
 		return "0.00";
 	}
@@ -252,7 +251,7 @@ public class XPAirfieldOutput {
 	public void writeSingleRunway(RunwayData runwayData) {
 		List<String> defsList = new ArrayList<String>();
 		defsList.addAll(getAptHeaderString());
-		defsList.add(String.format("1 %d 0 0 %s %s",  (int) Math.round(runwayData.getElevation() * METER_TO_FEET_COEF), checkGetICAO(runwayData), runwayData.getName()));
+		defsList.add(String.format("1 %d 0 0 %s %s",  (int) Math.round(runwayData.getElevation() * METER_TO_FEET_COEF), checkGetICAO(runwayData), runwayData.getLabel()));
 		defsList.add(getRunwayStr(runwayData));
 		defsList.add("99");
 		writeAptData(runwayData.getId(), defsList.toArray(new String[0]));

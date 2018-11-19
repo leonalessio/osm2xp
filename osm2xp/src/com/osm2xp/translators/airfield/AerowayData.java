@@ -45,6 +45,10 @@ public class AerowayData {
 	}
 	
 	public String getName() {
+		return name;
+	}
+	
+	public String getLabel() {
 		if (StringUtils.isEmpty(name)) {
 			return id;
 		}
@@ -70,6 +74,9 @@ public class AerowayData {
 
 	public void setName(String name) {
 		this.name = name;
+		if (name != null && (id.indexOf('/') >= 0 || id.indexOf('_') >= 0)) {
+			id = name + "_" + id.replace('/','_');
+		}
 	}
 
 }

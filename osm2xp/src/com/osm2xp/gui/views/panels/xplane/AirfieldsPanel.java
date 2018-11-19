@@ -62,6 +62,16 @@ public class AirfieldsPanel extends Osm2xpPanel {
 		Button apronCheck = toolkit.createButton(leftComposite, "Generate apron && taxiways", SWT.CHECK);
 		GridDataFactory.swtDefaults().span(2,1).applyTo(apronCheck);
 		bindComponent(apronCheck, options, "generateApron");
+		Button marksCheck = toolkit.createButton(leftComposite, "Generate apron && taxiway marks", SWT.CHECK);
+		marksCheck.setToolTipText("Generate yellow centerline mark where possible");
+		GridDataFactory.swtDefaults().span(2,1).applyTo(marksCheck);
+		apronCheck.addSelectionListener(new SelectionAdapter() {
+			@Override
+			public void widgetSelected(SelectionEvent e) {
+				marksCheck.setEnabled(apronCheck.getSelection());
+			}
+		});
+		bindComponent(marksCheck, options, "generateApron");
 		Button flattenCheck = toolkit.createButton(leftComposite, "Flatten airfield when possible", SWT.CHECK);
 		flattenCheck.setToolTipText("Flatten is possible when airfield area and elevation are specified in OSM. "
 				+ "Without elevation ('ele' property) flattening would cause airfield look like a giant pit");
@@ -72,6 +82,10 @@ public class AirfieldsPanel extends Osm2xpPanel {
 				+ "This data is required e.g. for airfield area flattening. Internet connection is required for this to work.");
 		GridDataFactory.swtDefaults().span(2,1).applyTo(getElevCheck);
 		bindComponent(getElevCheck, options, "tryGetElev");
+		Button getNameCheck = toolkit.createButton(leftComposite, "Try to get Airfield name online, if not specified", SWT.CHECK);
+		getNameCheck.setToolTipText("Try to substitute airfield name online, if this information is missing in tags. Usually it's a name of nearest village/town.");
+		GridDataFactory.swtDefaults().span(2,1).applyTo(getNameCheck);
+		bindComponent(getNameCheck, options, "tryGetElev");
 		toolkit.createLabel(leftComposite,"Ruway default width").setLayoutData(GridDataFactory.swtDefaults().create());
 		Spinner rwyWidthSpinner = new Spinner(leftComposite, SWT.BORDER);
 		rwyWidthSpinner.setMinimum(1);

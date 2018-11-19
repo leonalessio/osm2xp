@@ -10,11 +10,8 @@ import com.osm2xp.model.osm.Node;
 import com.osm2xp.model.osm.OsmPolygon;
 import com.osm2xp.model.osm.OsmPolyline;
 import com.osm2xp.utils.OsmUtils;
-import com.osm2xp.utils.geometry.GeomUtils;
 
-import math.geom2d.Box2D;
 import math.geom2d.Point2D;
-import math.geom2d.polygon.LinearRing2D;
 
 public abstract class AirfieldData extends AerowayData {
 	private List<RunwayData> runways = new ArrayList<>();
@@ -52,13 +49,13 @@ public abstract class AirfieldData extends AerowayData {
 		return icao;
 	}
 
-	public String getName() {
+	public String getLabel() {
 		if (StringUtils.isEmpty(name)) {
 			return id;
 		}
 		return name;
 	}
-
+	
 	public List<RunwayData> getRunways() {
 		return runways;
 	}
