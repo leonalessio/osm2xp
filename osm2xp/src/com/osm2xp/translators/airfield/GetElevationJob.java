@@ -7,6 +7,7 @@ import java.net.HttpURLConnection;
 import java.net.URL;
 import java.util.HashMap;
 import java.util.List;
+import java.util.Locale;
 import java.util.Map;
 import java.util.stream.Collectors;
 
@@ -79,7 +80,7 @@ public class GetElevationJob extends Job {
 	}
 
 	private String getPointStr(Point2D point2d) {
-		return String.format("(%1.5f,%2.5f)", point2d.y, point2d.x);
+		return String.format(Locale.ROOT, "(%1.5f,%2.5f)", point2d.y, point2d.x);
 	}
 
 	public List<Point2D> getPoints() {

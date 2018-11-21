@@ -1,5 +1,7 @@
 package com.osm2xp.translators.airfield;
 
+import java.util.Locale;
+
 import org.apache.commons.lang.StringUtils;
 
 import com.osm2xp.model.osm.Node;
@@ -17,7 +19,7 @@ public class PointAirfieldData extends AirfieldData {
 		super(node);
 		center = new Point2D(node.getLon(), node.getLat());
 		if (StringUtils.isEmpty(id)) {
-			id = String.format("%1.9f_%2.9f", center.y, center.x);
+			id = String.format(Locale.ROOT, "%1.9f_%2.9f", center.y, center.x);
 		}
 	}
 

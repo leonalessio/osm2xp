@@ -8,6 +8,7 @@ import java.io.PrintWriter;
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
+import java.util.Locale;
 import java.util.stream.Collectors;
 
 import org.apache.commons.lang.StringUtils;
@@ -67,7 +68,7 @@ public class XPAirfieldOutput {
 		List<String> defsList = new ArrayList<String>();
 		defsList.addAll(getAptHeaderString());
 		String icao = checkGetICAO(airfieldData);
-		defsList.add(String.format("1 %d 0 0 %s %s", (int) Math.round(airfieldData.getElevation() * METER_TO_FEET_COEF),
+		defsList.add(String.format(Locale.ROOT, "1 %d 0 0 %s %s", (int) Math.round(airfieldData.getElevation() * METER_TO_FEET_COEF),
 				icao, airfieldData.getLabel()));
 		if (shouldFlatten(airfieldData)) {
 			defsList.add("1302 flatten 1");
@@ -93,17 +94,17 @@ public class XPAirfieldOutput {
 		StringBuilder builder = new StringBuilder("102 ");
 		builder.append("H");
 		builder.append(idx + 1);
-		builder.append(String.format(" %1.8f %2.8f ", helipadData.getLat(), helipadData.getLon()));
+		builder.append(String.format(Locale.ROOT, " %1.8f %2.8f ", helipadData.getLat(), helipadData.getLon()));
 		double heading = helipadData.getHeading();
 		if (heading >= 0) {
-			String.format("%1.2f", heading);
+			String.format(Locale.ROOT, "%1.2f", heading);
 		} else {
 			builder.append(getOrientation(airfieldData));
 		}
 		builder.append(" ");
-		builder.append(String.format("%1.2f",helipadData.getLength()));
+		builder.append(String.format(Locale.ROOT, "%1.2f",helipadData.getLength()));
 		builder.append(" ");
-		builder.append(String.format("%1.2f",helipadData.getWidth()));
+		builder.append(String.format(Locale.ROOT, "%1.2f",helipadData.getWidth()));
 		builder.append(" ");
 		builder.append(airfieldData.isHard() ? "1" : "3");
 		builder.append(" 0 0 ");
@@ -192,9 +193,9 @@ public class XPAirfieldOutput {
 		Point2D[] points = taxiLane.getLine().getPointArray();
 		for (int i = 0; i < points.length; i++) {
 			if (i < points.length - 1) {
-				resList.add(String.format("111 %1.8f %2.8f 1", points[i].y, points[i].x));
+				resList.add(String.format(Locale.ROOT, "111 %1.8f %2.8f 1", points[i].y, points[i].x));
 			} else {
-				resList.add(String.format("115 %1.8f %2.8f", points[i].y, points[i].x));
+				resList.add(String.format(Locale.ROOT, "115 %1.8f %2.8f", points[i].y, points[i].x));
 			}
 		}
 		return resList;
@@ -224,7 +225,7 @@ public class XPAirfieldOutput {
 	private String getOrientation(AirfieldData airfieldData) {
 		List<RunwayData> runways = airfieldData.getRunways();
 		if (runways.size() > 0) {
-			return String.format("%1.2f", runways.get(0).getTrueCourse());
+			return String.format(Locale.ROOT, "%1.2f", runways.get(0).getTrueCourse());
 		}
 		return "0.00";
 	}
@@ -241,9 +242,9 @@ public class XPAirfieldOutput {
 		for (int i = 0; i < n; i++) {
 			Point2D coords = polyline2d.getVertex(i);
 			if (i < n - 1) {
-				resList.add(String.format("111 %1.8f %2.8f", coords.y, coords.x));
+				resList.add(String.format(Locale.ROOT, "111 %1.8f %2.8f", coords.y, coords.x));
 			} else {
-				resList.add(String.format("113 %1.8f %2.8f", coords.y, coords.x));
+				resList.add(String.format(Locale.ROOT, "113 %1.8f %2.8f", coords.y, coords.x));
 			}
 		}
 		return resList;
@@ -272,7 +273,7 @@ public class XPAirfieldOutput {
 	public void writeSingleRunway(RunwayData runwayData) {
 		List<String> defsList = new ArrayList<String>();
 		defsList.addAll(getAptHeaderString());
-		defsList.add(String.format("1 %d 0 0 %s %s", (int) Math.round(runwayData.getElevation() * METER_TO_FEET_COEF),
+		defsList.add(String.format(Locale.ROOT, "1 %d 0 0 %s %s", (int) Math.round(runwayData.getElevation() * METER_TO_FEET_COEF),
 				checkGetICAO(runwayData), runwayData.getLabel()));
 		defsList.add(getRunwayStr(runwayData));
 		defsList.add("99");
@@ -307,7 +308,7 @@ public class XPAirfieldOutput {
 
 	private String getRunwayStr(RunwayData runway) {
 		StringBuilder builder = new StringBuilder("100 ");
-		builder.append(String.format("%1.2f", runway.getWidth()));
+		builder.append(String.format(Locale.ROOT, "%1.2f", runway.getWidth()));
 		builder.append(' ');
 		builder.append(getSurfaceCode(runway));
 		builder.append(' ');
@@ -330,7 +331,7 @@ public class XPAirfieldOutput {
 	private String getEndStr(String marking, Point2D coords, boolean isHard) {
 		StringBuilder builder = new StringBuilder(marking);
 		builder.append(' ');
-		builder.append(String.format("%1.8f %2.8f 0 0 ", coords.y, coords.x));
+		builder.append(String.format(Locale.ROOT, "%1.8f %2.8f 0 0 ", coords.y, coords.x));
 		builder.append(' ');
 		builder.append(getRunwayMarkingCode(isHard));
 		builder.append(' ');

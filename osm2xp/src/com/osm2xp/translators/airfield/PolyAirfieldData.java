@@ -1,5 +1,7 @@
 package com.osm2xp.translators.airfield;
 
+import java.util.Locale;
+
 import org.apache.commons.lang.StringUtils;
 
 import com.osm2xp.model.osm.OsmPolyline;
@@ -24,7 +26,7 @@ public class PolyAirfieldData extends AirfieldData {
 		if (StringUtils.isEmpty(id)) {
 			double lat = (boundingBox.getMaxY() + boundingBox.getMinY()) / 2;
 			double lon = (boundingBox.getMaxX() + boundingBox.getMinX()) / 2;
-			id = String.format("%1.9f_%2.9f", lat, lon);
+			id = String.format(Locale.ROOT, "%1.9f_%2.9f", lat, lon);
 		}
 	}
 
