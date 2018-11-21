@@ -11,7 +11,7 @@ import math.geom2d.line.Line2D;
 public class RunwayData extends AerowayData {
 	
 	private Line2D runwayLine;
-	private double width = XplaneOptionsHelper.getOptions().getAirfieldOptions().getDefaultRunwayWidth();
+	private double width = XplaneOptionsHelper.getOptions().getAirfieldOptions().getDefaultGrassRunwayWidth();
 	private String surface;
 	private boolean hard = false;
 	private double course1, course2;
@@ -20,14 +20,6 @@ public class RunwayData extends AerowayData {
 	public RunwayData(OsmPolyline polyline) {
 		super(polyline);
 		runwayLine = GeomUtils.getCenterline(polyline.getPolyline());
-		String widthStr = polyline.getTagValue("width");
-		if (widthStr != null) {
-			try {
-				width = Double.parseDouble(widthStr);
-			} catch (Exception e) {
-				// Ignore
-			}
-		}
 		surface = polyline.getTagValue("surface");
 		double magneticCourse = GeomUtils.getMagneticBearing(runwayLine.p1, runwayLine.p2);
 		course1 = magneticCourse;
@@ -39,6 +31,17 @@ public class RunwayData extends AerowayData {
 			runwayLine = runwayLine.getReverseCurve();
 		}
 		hard = ("asphalt".equals(surface) || "concrete".equals(surface) || "paved".equals(surface));
+		if (hard) {
+			width = XplaneOptionsHelper.getOptions().getAirfieldOptions().getDefaultHardRunwayWidth();
+		}
+		String widthStr = polyline.getTagValue("width");
+		if (widthStr != null) {
+			try {
+				width = Double.parseDouble(widthStr);
+			} catch (Exception e) {
+				// Ignore
+			}
+		}
 		String ref = polyline.getTagValue("ref");
 		if (!StringUtils.isEmpty(ref) && ref.indexOf('/') > 0) {
 			int idx = ref.indexOf('/');

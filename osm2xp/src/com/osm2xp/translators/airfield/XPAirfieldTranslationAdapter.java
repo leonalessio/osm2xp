@@ -199,7 +199,7 @@ public class XPAirfieldTranslationAdapter implements ITranslationAdapter {
 			Node helipad = (Node) iterator.next();
 			for (AirfieldData airfieldData : airfieldList) {
 				if (airfieldData.contains(helipad.getLon(), helipad.getLat())) {
-					airfieldData.addHelipad(helipad);
+					airfieldData.addHelipad(new HelipadData(helipad.getLon(), helipad.getLat()));
 					iterator.remove();
 					break;
 				}

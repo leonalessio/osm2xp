@@ -90,7 +90,7 @@ public abstract class XPPathTranslator extends XPWritingTranslator {
 				if (needStartEntrance) {
 					double distance = 0;
 					for (int i = 1; i < points.length; i++) {
-						Double curLen = GeomUtils.latLongDistance(points[i-1].y,
+						Double curLen = GeomUtils.latLonDistance(points[i-1].y,
 								points[i-1].x, points[i].y,points[i].x);
 						if (distance + curLen > minLength) {
 							double newSegLen = minLength - distance;
@@ -114,7 +114,7 @@ public abstract class XPPathTranslator extends XPWritingTranslator {
 					points = pathSegment.getPoints();
 					double distance = 0;
 					for (int i = points.length - 2; i >= 0; i--) {
-						Double curLen = GeomUtils.latLongDistance(points[i+1].y,
+						Double curLen = GeomUtils.latLonDistance(points[i+1].y,
 								points[i+1].x, points[i].y,points[i].x);
 						if (distance + curLen > minLength) {
 							double newSegLen = minLength - distance;

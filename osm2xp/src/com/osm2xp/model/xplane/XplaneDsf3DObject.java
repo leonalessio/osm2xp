@@ -50,9 +50,9 @@ public class XplaneDsf3DObject extends XplaneDsfObject {
 					ptLast = polygon.getVertex(i + 3);
 				}
 
-				double segmentX = GeomUtils.latLongDistance(ptX.y, ptX.x,
+				double segmentX = GeomUtils.latLonDistance(ptX.y, ptX.x,
 						ptOrigin.y, ptOrigin.x);
-				double segmentY = GeomUtils.latLongDistance(ptOrigin.y,
+				double segmentY = GeomUtils.latLonDistance(ptOrigin.y,
 						ptOrigin.x, ptY.y, ptY.x);
 				// check if the rule x/y segments "fits" the current osm
 				// polygon

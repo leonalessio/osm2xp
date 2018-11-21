@@ -24,7 +24,7 @@ public class PointAirfieldData extends AirfieldData {
 	@Override
 	public boolean containsPolyline(OsmPolyline polyline) {
 		Point2D center2 = polyline.getCenter();
-		return GeomUtils.latLongDistance(center.y, center.x, center2.y, center2.x) <= maxRadius;
+		return GeomUtils.latLonDistance(center.y, center.x, center2.y, center2.x) <= maxRadius;
 	}
 
 	@Override
@@ -34,7 +34,7 @@ public class PointAirfieldData extends AirfieldData {
 
 	@Override
 	public boolean contains(double lon, double lat) {
-		return GeomUtils.latLongDistance(center.y, center.x, lat, lon) <= maxRadius;
+		return GeomUtils.latLonDistance(center.y, center.x, lat, lon) <= maxRadius;
 	}
 
 	public int getMaxRadius() {

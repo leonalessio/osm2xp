@@ -9,7 +9,7 @@ import javax.xml.bind.annotation.XmlType;
 
 @XmlAccessorType(XmlAccessType.FIELD)
 @XmlType(name="XplaneAirfieldOptions", propOrder = {"generateAirfields","useSingleAptAsMain","generateApron","generateMarks","flatten",
-		"tryGetElev","tryGetName","defaultRunwayWidth","defaultTaxiwayWidth", "defaultHelipadSize", "ignoredAirfields"})
+		"tryGetElev","tryGetName","defaultHardRunwayWidth","defaultGrassRunwayWidth","defaultHardTaxiwayWidth", "defaultGrassTaxiwayWidth", "defaultHelipadSize", "ignoredAirfields"})
 public class XplaneAirfieldOptions {
 	protected boolean generateAirfields = false;
 	protected boolean useSingleAptAsMain = true;
@@ -18,8 +18,10 @@ public class XplaneAirfieldOptions {
 	protected boolean flatten = true;
 	protected boolean tryGetElev = true;
 	protected boolean tryGetName = true;
-	protected int defaultRunwayWidth = 60;
-	protected int defaultTaxiwayWidth = 40;
+	protected int defaultHardRunwayWidth = 60;
+	protected int defaultGrassRunwayWidth = 40;
+	protected int defaultHardTaxiwayWidth = 20;
+	protected int defaultGrassTaxiwayWidth = 10;
 	protected int defaultHelipadSize= 10;
 	protected List<String> ignoredAirfields;
 	
@@ -47,17 +49,17 @@ public class XplaneAirfieldOptions {
 	public void setTryGetElev(boolean tryGetElev) {
 		this.tryGetElev = tryGetElev;
 	}
-	public int getDefaultRunwayWidth() {
-		return defaultRunwayWidth;
+	public int getDefaultHardRunwayWidth() {
+		return defaultHardRunwayWidth;
 	}
-	public void setDefaultRunwayWidth(int defaultRunwayWidth) {
-		this.defaultRunwayWidth = defaultRunwayWidth;
+	public void setDefaultHardRunwayWidth(int defaultHardRunwayWidth) {
+		this.defaultHardRunwayWidth = defaultHardRunwayWidth;
 	}
-	public int getDefaultTaxiwayWidth() {
-		return defaultTaxiwayWidth;
+	public int getDefaultHardTaxiwayWidth() {
+		return defaultHardTaxiwayWidth;
 	}
-	public void setDefaultTaxiwayWidth(int defaultTaxiwayWidth) {
-		this.defaultTaxiwayWidth = defaultTaxiwayWidth;
+	public void setDefaultHardTaxiwayWidth(int defaultHardTaxiwayWidth) {
+		this.defaultHardTaxiwayWidth = defaultHardTaxiwayWidth;
 	}
 	public boolean isGenerateApron() {
 		return generateApron;
@@ -91,6 +93,18 @@ public class XplaneAirfieldOptions {
 	}
 	public void setGenerateMarks(boolean generateMarks) {
 		this.generateMarks = generateMarks;
+	}
+	public int getDefaultGrassTaxiwayWidth() {
+		return defaultGrassTaxiwayWidth;
+	}
+	public void setDefaultGrassTaxiwayWidth(int defaultGrassTaxiwayWidth) {
+		this.defaultGrassTaxiwayWidth = defaultGrassTaxiwayWidth;
+	}
+	public int getDefaultGrassRunwayWidth() {
+		return defaultGrassRunwayWidth;
+	}
+	public void setDefaultGrassRunwayWidth(int defaultGrassRunwayWidth) {
+		this.defaultGrassRunwayWidth = defaultGrassRunwayWidth;
 	}
 
 }

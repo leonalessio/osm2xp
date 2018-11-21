@@ -13,9 +13,7 @@ import java.util.stream.Collectors;
 import org.apache.commons.lang.StringUtils;
 
 import com.osm2xp.constants.Osm2xpConstants;
-import com.osm2xp.model.osm.Node;
 import com.osm2xp.model.osm.OsmPolygon;
-import com.osm2xp.model.osm.OsmPolyline;
 import com.osm2xp.utils.OsmUtils;
 import com.osm2xp.utils.geometry.GeomUtils;
 import com.osm2xp.utils.helpers.XplaneOptionsHelper;
@@ -24,20 +22,21 @@ import com.vividsolutions.jts.geom.Geometry;
 import com.vividsolutions.jts.geom.Polygon;
 import com.vividsolutions.jts.operation.buffer.BufferOp;
 import com.vividsolutions.jts.operation.buffer.BufferParameters;
-import com.vividsolutions.jts.operation.overlay.OverlayOp;
+import com.vividsolutions.jts.operation.union.CascadedPolygonUnion;
 
 import math.geom2d.Point2D;
 import math.geom2d.polygon.LinearRing2D;
 import math.geom2d.polygon.Polyline2D;
 
 /**
- * Airport data writer for X-Plane
- * Based on apt.dat 10.50 spec - <a>http://developer.x-plane.com/wp-content/uploads/2017/02/XP-APT1050-Spec.pdf</a>
+ * Airport data writer for X-Plane Based on apt.dat 10.50 spec -
+ * <a>http://developer.x-plane.com/wp-content/uploads/2017/02/XP-APT1050-Spec.pdf</a>
+ * 
  * @author Dmitry Karpenko
  *
  */
 public class XPAirfieldOutput {
-	
+
 	private static final String NAV_DATA_FOLDER_NAME = "Earth nav data";
 	private static final String OSM2XP_AIRFIELD_PREFFIX = "osm2xp_";
 	private static final double METER_TO_FEET_COEF = 3.28084;
@@ -46,11 +45,11 @@ public class XPAirfieldOutput {
 	private int fakeICAOIdx = 0;
 
 	public XPAirfieldOutput(File baseFolder, boolean writeMainAirfield) {
-		this.baseFolder = writeMainAirfield ? baseFolder : new File(baseFolder, "airports");;
+		this.baseFolder = writeMainAirfield ? baseFolder : new File(baseFolder, "airports");
 		this.writeMainAirfield = writeMainAirfield;
 		baseFolder.mkdirs();
 	}
-	
+
 	public List<String> getAptHeaderString() {
 		List<String> result = new ArrayList<String>();
 		result.add("I");
@@ -58,19 +57,20 @@ public class XPAirfieldOutput {
 		result.add("");
 		return result;
 	}
-	
+
 	public void writeAirfield(AirfieldData airfieldData) {
 		List<RunwayData> runways = airfieldData.getRunways();
-		List<Node> helipads = airfieldData.getHelipads();
+		List<HelipadData> helipads = airfieldData.getHelipads();
 		if (runways.isEmpty() && helipads.isEmpty()) {
-			return; //Do nothing, if no runways assigned for airport
+			return; // Do nothing, if no runways/helipads assigned for airport
 		}
 		List<String> defsList = new ArrayList<String>();
-		defsList.addAll(getAptHeaderString());		
+		defsList.addAll(getAptHeaderString());
 		String icao = checkGetICAO(airfieldData);
-		defsList.add(String.format("1 %d 0 0 %s %s",  (int) Math.round(airfieldData.getElevation() * METER_TO_FEET_COEF), icao, airfieldData.getLabel()));
+		defsList.add(String.format("1 %d 0 0 %s %s", (int) Math.round(airfieldData.getElevation() * METER_TO_FEET_COEF),
+				icao, airfieldData.getLabel()));
 		if (shouldFlatten(airfieldData)) {
-			defsList.add("1302 flatten 1"); 
+			defsList.add("1302 flatten 1");
 		}
 		for (RunwayData runway : runways) {
 			defsList.add(getRunwayStr(runway));
@@ -82,23 +82,28 @@ public class XPAirfieldOutput {
 		if (airfieldData instanceof PolyAirfieldData) {
 			Polyline2D polygon = ((PolyAirfieldData) airfieldData).getPolygon();
 			if (polygon != null && polygon.getVertexNumber() > 3) {
-				defsList.addAll(getAptAreaDef(icao, airfieldData));		
+				defsList.addAll(getAptAreaDef(icao, airfieldData));
 			}
 		}
 		defsList.add("99");
 		writeAptData(airfieldData.getId(), defsList.toArray(new String[0]));
 	}
 
-	private String getHelipadStr(Node helipad, int idx, AirfieldData airfieldData) {
+	private String getHelipadStr(HelipadData helipadData, int idx, AirfieldData airfieldData) {
 		StringBuilder builder = new StringBuilder("102 ");
 		builder.append("H");
 		builder.append(idx + 1);
-		builder.append(String.format(" %1.8f %2.8f ", helipad.getLat(), helipad.getLon()));
-		builder.append(getOrientation(airfieldData));
+		builder.append(String.format(" %1.8f %2.8f ", helipadData.getLat(), helipadData.getLon()));
+		double heading = helipadData.getHeading();
+		if (heading >= 0) {
+			String.format("%1.2f", heading);
+		} else {
+			builder.append(getOrientation(airfieldData));
+		}
 		builder.append(" ");
-		builder.append(XplaneOptionsHelper.getOptions().getAirfieldOptions().getDefaultHelipadSize());
+		builder.append(String.format("%1.2f",helipadData.getLength()));
 		builder.append(" ");
-		builder.append(XplaneOptionsHelper.getOptions().getAirfieldOptions().getDefaultHelipadSize());
+		builder.append(String.format("%1.2f",helipadData.getWidth()));
 		builder.append(" ");
 		builder.append(airfieldData.isHard() ? "1" : "3");
 		builder.append(" 0 0 ");
@@ -113,23 +118,29 @@ public class XPAirfieldOutput {
 		try {
 			Point2D centerPoint = airfieldData.getAreaCenter();
 			List<OsmPolygon> apronAreas = airfieldData.getApronAreas();
-			List<OsmPolyline> taxiLanes = airfieldData.getTaxiLanes();
-			List<Geometry> convertedAreas = apronAreas.stream().
-					map(polyline -> GeomUtils.geom2dToJtsLocal(polyline.getPolyline(), centerPoint)).collect(Collectors.toList());
-			List<Geometry> convertedLanes = taxiLanes.stream().
-					map(polyline -> GeomUtils.geom2dToJtsLocal(polyline.getPolyline(), centerPoint)).collect(Collectors.toList());
-			double dist = XplaneOptionsHelper.getOptions().getAirfieldOptions().getDefaultTaxiwayWidth() / 2.0 / 111000;
-			BufferParameters bufferParameters = new BufferParameters(4, BufferParameters.CAP_ROUND);
-			List<Geometry> bufferedLanes = convertedLanes.stream().map(lane -> buildBufferedLine(dist, bufferParameters, lane)).collect(Collectors.toList());
+			List<TaxiLane> taxiLanes = airfieldData.getTaxiLanes();
+			List<Geometry> convertedAreas = apronAreas.stream()
+					.map(polyline -> GeomUtils.geom2dToJtsLocal(polyline.getPolyline(), centerPoint))
+					.collect(Collectors.toList());
+			double taxiwayWidth = airfieldData.isHard()
+					? XplaneOptionsHelper.getOptions().getAirfieldOptions().getDefaultHardTaxiwayWidth()
+							: XplaneOptionsHelper.getOptions().getAirfieldOptions().getDefaultGrassTaxiwayWidth();
+			double dist = taxiwayWidth / 2.0 / 111000;
+			BufferParameters bufferParameters = new BufferParameters(2, BufferParameters.CAP_ROUND);
+			bufferParameters.setJoinStyle(BufferParameters.JOIN_MITRE);
+			bufferParameters.setMitreLimit(1);
+			List<Geometry> bufferedLanes = taxiLanes.stream()
+					.map(lane -> buildBufferedLine(lane, bufferParameters, dist, centerPoint))
+					.collect(Collectors.toList());
 			List<Geometry> toJoin = new ArrayList<Geometry>(convertedAreas);
 			toJoin.addAll(bufferedLanes);
 			if (toJoin.size() > 0) {
-				Geometry joinResult = toJoin.get(0);
-				joinResult = GeomUtils.fix(joinResult);
-				for (int i = 1; i < toJoin.size(); i++) {
-					Geometry current = toJoin.get(i);
-					current = GeomUtils.fix(current);
-					joinResult = OverlayOp.overlayOp(joinResult, current, OverlayOp.UNION);
+				Geometry joinResult;
+				if (toJoin.size() == 1) {
+					joinResult = toJoin.get(0);
+				} else {
+					CascadedPolygonUnion op = new CascadedPolygonUnion(toJoin);
+					joinResult = GeomUtils.fix(op.union());
 				}
 				List<Polygon> apronPolys = GeomUtils.flatMapToPoly(joinResult);
 				for (Polygon polygon : apronPolys) {
@@ -151,6 +162,13 @@ public class XPAirfieldOutput {
 		Geometry buffered = BufferOp.bufferOp(lane, dist, bufferParameters);
 		return buffered;
 	}
+	
+	protected Geometry buildBufferedLine(TaxiLane lane, BufferParameters bufferParameters, double defaultWidth, Point2D centerPoint) {
+		Geometry geom = GeomUtils.geom2dToJtsLocal(lane.getLine(), centerPoint);
+		double dist = lane.getWidth() > 0 ? lane.getWidth() : defaultWidth; 
+		Geometry buffered = BufferOp.bufferOp(geom, dist, bufferParameters);
+		return buffered;
+	}
 
 	private List<String> getAptAreaDef(String icao, AirfieldData airfieldData) {
 		List<String> resList = new ArrayList<String>();
@@ -160,17 +178,18 @@ public class XPAirfieldOutput {
 	}
 
 	protected boolean shouldFlatten(AirfieldData airfieldData) {
-		//If we have no actual elevation - flattening would goof up airfield, 
-		//making it a giant pit with bottom plateu having elevation 0m
-		//Elevation will be taken from 'ele' tag in OSM if present. 
-		//If not, we'll try to obtain it via REST call, if it's allowed and we are online. 
+		// If we have no actual elevation - flattening would goof up airfield,
+		// making it a giant pit with bottom plateu having elevation 0m
+		// Elevation will be taken from 'ele' tag in OSM if present.
+		// If not, we'll try to obtain it via REST call, if it's allowed and we are
+		// online.
 		return XplaneOptionsHelper.getOptions().getAirfieldOptions().isFlatten() && airfieldData.hasActualElevation();
 	}
-	
-	private List<String> getTaxilaneDef(OsmPolyline polyline, int index) {
+
+	private List<String> getTaxilaneDef(TaxiLane taxiLane, int index) {
 		List<String> resList = new ArrayList<String>();
 		resList.add("120 Taxiway " + index);
-		Point2D[] points = polyline.getPolyline().getPointArray();
+		Point2D[] points = taxiLane.getLine().getPointArray();
 		for (int i = 0; i < points.length; i++) {
 			if (i < points.length - 1) {
 				resList.add(String.format("111 %1.8f %2.8f 1", points[i].y, points[i].x));
@@ -180,19 +199,21 @@ public class XPAirfieldOutput {
 		}
 		return resList;
 	}
-	
+
 	private List<String> getApronDef(AirfieldData airfieldData, Polygon polygon, Point2D centerPoint) {
 		List<String> resList = new ArrayList<String>();
-		String surface = airfieldData.isHard()? "2" : "3";
-		String roughness = airfieldData.isHard()? "0.2" : "0.3";
-		resList.add("110 " + surface + " " + roughness + " " + getOrientation(airfieldData) + " Sample" );
-		resList.addAll(getAreaString(GeomUtils.setCCW(getRing(GeomUtils.jtsToGeom2dLocal(polygon.getExteriorRing(),centerPoint)))));  
+		String surface = airfieldData.isHard() ? "2" : "3";
+		String roughness = airfieldData.isHard() ? "0.2" : "0.3";
+		resList.add("110 " + surface + " " + roughness + " " + getOrientation(airfieldData) + " Sample");
+		resList.addAll(getAreaString(
+				GeomUtils.setCCW(getRing(GeomUtils.jtsToGeom2dLocal(polygon.getExteriorRing(), centerPoint)))));
 		for (int i = 0; i < polygon.getNumInteriorRing(); i++) {
-			resList.addAll(getAreaString(GeomUtils.setClockwise(getRing(GeomUtils.jtsToGeom2dLocal(polygon.getInteriorRingN(i), centerPoint)))));	
+			resList.addAll(getAreaString(GeomUtils
+					.setClockwise(getRing(GeomUtils.jtsToGeom2dLocal(polygon.getInteriorRingN(i), centerPoint)))));
 		}
 		return resList;
 	}
-	
+
 	private LinearRing2D getRing(Polyline2D line) {
 		if (line instanceof LinearRing2D) {
 			return (LinearRing2D) line;
@@ -231,17 +252,17 @@ public class XPAirfieldOutput {
 	protected String checkGetICAO(AirfieldData airfieldData) {
 		String icao = airfieldData.getICAO();
 		if (icao == null) {
-			icao = "xx" + StringUtils.leftPad(""+ getNextICAOIdx(), 2, '0');
+			icao = "xx" + StringUtils.leftPad("" + getNextICAOIdx(), 2, '0');
 		}
 		return icao;
 	}
-	
+
 	protected String checkGetICAO(RunwayData runwayData) {
 		String name = runwayData.getName();
 		if (OsmUtils.isValidICAO(name)) {
 			return name.toUpperCase().trim();
 		}
-		return "xx" + StringUtils.leftPad(""+ getNextICAOIdx(), 2, '0');
+		return "xx" + StringUtils.leftPad("" + getNextICAOIdx(), 2, '0');
 	}
 
 	private int getNextICAOIdx() {
@@ -251,12 +272,13 @@ public class XPAirfieldOutput {
 	public void writeSingleRunway(RunwayData runwayData) {
 		List<String> defsList = new ArrayList<String>();
 		defsList.addAll(getAptHeaderString());
-		defsList.add(String.format("1 %d 0 0 %s %s",  (int) Math.round(runwayData.getElevation() * METER_TO_FEET_COEF), checkGetICAO(runwayData), runwayData.getLabel()));
+		defsList.add(String.format("1 %d 0 0 %s %s", (int) Math.round(runwayData.getElevation() * METER_TO_FEET_COEF),
+				checkGetICAO(runwayData), runwayData.getLabel()));
 		defsList.add(getRunwayStr(runwayData));
 		defsList.add("99");
 		writeAptData(runwayData.getId(), defsList.toArray(new String[0]));
 	}
-	
+
 	protected void writeAptData(String aptId, String[] aptDefinition) {
 		if (aptDefinition.length == 0) {
 			return;
@@ -272,11 +294,12 @@ public class XPAirfieldOutput {
 			dataFolder = new File(airfieldFolder, NAV_DATA_FOLDER_NAME);
 		}
 		dataFolder.mkdirs();
-		try (PrintWriter writer = new PrintWriter(new BufferedWriter(new FileWriter(new File(dataFolder, "apt.dat"))))) {
+		try (PrintWriter writer = new PrintWriter(
+				new BufferedWriter(new FileWriter(new File(dataFolder, "apt.dat"))))) {
 			for (String string : aptDefinition) {
 				writer.println(string);
 			}
-			
+
 		} catch (IOException e) {
 			Osm2xpLogger.error("Error saving apt.dat for airfield " + aptId);
 		}
@@ -303,7 +326,7 @@ public class XPAirfieldOutput {
 		builder.append(getEndStr(runway.getMarking2(), runway.getRunwayLine().p2, runway.isHard()));
 		return builder.toString();
 	}
-	
+
 	private String getEndStr(String marking, Point2D coords, boolean isHard) {
 		StringBuilder builder = new StringBuilder(marking);
 		builder.append(' ');
@@ -318,19 +341,19 @@ public class XPAirfieldOutput {
 		builder.append(getREILCode(isHard));
 		return builder.toString();
 	}
-	
+
 	private int getRunwayMarkingCode(boolean isHard) {
 		return isHard ? 1 : 0;
 	}
-	
+
 	private int getTGZLightingCode(boolean isHard) {
 		return isHard ? 1 : 0;
 	}
-	
+
 	private int getREILCode(boolean isHard) {
 		return isHard ? 1 : 0;
-	}	
-	
+	}
+
 	private int getApproachLightingCode(boolean isHard) {
 		return isHard ? 1 : 0;
 	}
@@ -342,7 +365,7 @@ public class XPAirfieldOutput {
 	private int getCenterLights(RunwayData runway) {
 		return runway.isHard() ? 1 : 0;
 	}
-	
+
 	private int getEdgeLights(RunwayData runway) {
 		return runway.isHard() ? 2 : 0;
 	}
@@ -371,13 +394,14 @@ public class XPAirfieldOutput {
 			return 1;
 		if ("concrete".equals(osmSurfaceType) || "paved".equals(osmSurfaceType))
 			return 2;
-		if ("earth".equals(osmSurfaceType) || "dirt".equals(osmSurfaceType) || "mud".equals(osmSurfaceType) || "sand".equals(osmSurfaceType)) {
+		if ("earth".equals(osmSurfaceType) || "dirt".equals(osmSurfaceType) || "mud".equals(osmSurfaceType)
+				|| "sand".equals(osmSurfaceType)) {
 			return 4;
 		}
 		if ("gravel".equals(osmSurfaceType) || "fine_gravel".equals(osmSurfaceType)) {
 			return 5;
 		}
-		return 3; //grass by default
+		return 3; // grass by default
 	}
 
 }

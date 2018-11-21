@@ -12,7 +12,7 @@ import math.geom2d.Point2D;
 
 public class ElevationProvidingService extends GeoMetaProvidingService<Double> {
 	
-	private static final int MAX_QUERIED_POINTS = 50;
+	private static final int MAX_QUERIED_POINTS = 10;
 
 	private static final String ELEVATIONS_ARR_PROP = "elevations";
 

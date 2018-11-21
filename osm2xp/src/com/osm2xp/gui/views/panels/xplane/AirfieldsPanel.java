@@ -86,14 +86,22 @@ public class AirfieldsPanel extends Osm2xpPanel {
 		getNameCheck.setToolTipText("Try to substitute airfield name online, if this information is missing in tags. Usually it's a name of nearest village/town.");
 		GridDataFactory.swtDefaults().span(2,1).applyTo(getNameCheck);
 		bindComponent(getNameCheck, options, "tryGetElev");
-		toolkit.createLabel(leftComposite,"Ruway default width").setLayoutData(GridDataFactory.swtDefaults().create());
+		toolkit.createLabel(leftComposite,"Hard ruway default width, m").setLayoutData(GridDataFactory.swtDefaults().create());
 		Spinner rwyWidthSpinner = new Spinner(leftComposite, SWT.BORDER);
 		rwyWidthSpinner.setMinimum(1);
-		bindComponent(rwyWidthSpinner, options, "defaultRunwayWidth");
-		toolkit.createLabel(leftComposite,"Taxiway default width").setLayoutData(GridDataFactory.swtDefaults().create());
+		bindComponent(rwyWidthSpinner, options, "defaultHardRunwayWidth");
+		toolkit.createLabel(leftComposite,"Hard taxiway default width, m").setLayoutData(GridDataFactory.swtDefaults().create());
 		Spinner taxiwayWidthSpinner = new Spinner(leftComposite, SWT.BORDER);
 		taxiwayWidthSpinner.setMinimum(1);
-		bindComponent(taxiwayWidthSpinner, options, "defaultTaxiwayWidth");
+		bindComponent(taxiwayWidthSpinner, options, "defaultHardTaxiwayWidth");
+		toolkit.createLabel(leftComposite,"Non-hard ruway default width, m").setLayoutData(GridDataFactory.swtDefaults().create());
+		Spinner grassRwyWidthSpinner = new Spinner(leftComposite, SWT.BORDER);
+		grassRwyWidthSpinner.setMinimum(1);
+		bindComponent(grassRwyWidthSpinner, options, "defaultGrassRunwayWidth");
+		toolkit.createLabel(leftComposite,"Non-hard taxiway default width, m").setLayoutData(GridDataFactory.swtDefaults().create());
+		Spinner grassTaxiwayWidthSpinner = new Spinner(leftComposite, SWT.BORDER);
+		grassTaxiwayWidthSpinner.setMinimum(1);
+		bindComponent(grassTaxiwayWidthSpinner, options, "defaultGrassTaxiwayWidth");
 		
 		Composite rightComposite = toolkit.createComposite(con, SWT.NONE);
 		rightComposite.setLayout(new GridLayout(2, false));
