@@ -118,7 +118,7 @@ public abstract class AirfieldData extends AerowayData {
 		Point2D center = area.getCenter();
 		LinearRing2D ring = area.getPolygon();
 		Collection<LineSegment2D> edges = ring.getEdges();
-		HelipadData data = new HelipadData(center.y, center.x);
+		HelipadData data = new HelipadData(center.x, center.y);
 		if (edges.size() == 4) { //We fully support only rectangular helipads for now
 			double maxLen = 0;
 			double minLen = Double.MAX_VALUE;

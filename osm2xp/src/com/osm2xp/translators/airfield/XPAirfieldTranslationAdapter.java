@@ -195,7 +195,7 @@ public class XPAirfieldTranslationAdapter implements ITranslationAdapter {
 				}
 			}
 		}
-		for (Iterator<Node> iterator = helipadsList.iterator(); iterator.hasNext();) { //Check apron areas matching airports
+		for (Iterator<Node> iterator = helipadsList.iterator(); iterator.hasNext();) { //Check helipad areas matching airports
 			Node helipad = (Node) iterator.next();
 			for (AirfieldData airfieldData : airfieldList) {
 				if (airfieldData.contains(helipad.getLon(), helipad.getLat())) {
