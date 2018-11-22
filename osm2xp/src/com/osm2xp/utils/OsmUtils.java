@@ -523,7 +523,7 @@ public class OsmUtils {
 		if (name.length() == 4) {
 			for (int i = 0; i < name.length(); i++) {
 				char c = name.charAt(i);
-				if (c < 'A' || c > 'Z') {
+				if ((c < 'A' || c > 'Z') && !Character.isDigit(c)) {
 					return false;
 				}
 			}

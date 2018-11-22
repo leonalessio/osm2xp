@@ -263,6 +263,10 @@ public class XPAirfieldOutput {
 		if (OsmUtils.isValidICAO(name)) {
 			return name.toUpperCase().trim();
 		}
+		String ref = runwayData.getRef();
+		if (OsmUtils.isValidICAO(ref)) {
+			return ref.toUpperCase().trim();
+		}
 		return "xx" + StringUtils.leftPad("" + getNextICAOIdx(), 2, '0');
 	}
 

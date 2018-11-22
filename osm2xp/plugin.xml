@@ -205,6 +205,7 @@
                showTitle="false">
          </view>
          <view
+         		closeable="false"
                id="com.osm2xp.viewObjectsTab"
                minimized="false"
                relationship="stack"
@@ -220,6 +221,7 @@
          </view>
          <view
                id="com.osm2xp.viewLastFiles"
+               closeable="false"
                minimized="false"
                ratio="0.15f"
                relationship="left"
@@ -388,12 +390,14 @@
          </view>
          <view
                id="com.osm2xp.viewObjectsTab"
+               closeable="false"
                minimized="false"
                relationship="stack"
                relative="com.osm2xp.viewSceneryTab">
          </view>
           <view
                id="com.osm2xp.viewAirfieldsTab"
+               closeable="false"
                minimized="false"
                relationship="stack"
                relative="com.osm2xp.viewSceneryTab">
@@ -414,6 +418,7 @@
          </view>
          <view
                id="com.osm2xp.viewLastFiles"
+               closeable="false"
                minimized="false"
                ratio="0.15f"
                relationship="left"
@@ -421,6 +426,7 @@
          </view>
          <view
                id="com.osm2xp.Xplane10AdvancedOptionsView"
+               closeable="false"
                minimized="false"
                relationship="stack"
                relative="com.osm2xp.viewSceneryTab">
@@ -638,6 +644,12 @@
                commandId="osm2xp.command.loadRoofColorFile"
                icon="images/toolbarsIcons/alt_window_32.gif"
                label="Load roofs color file"
+               style="push">
+         </command>
+         <command
+               commandId="org.eclipse.ui.window.resetPerspective"
+               icon="images/toolbarsIcons/perspective.png"
+               label="Reset Window layout"
                style="push">
          </command>
       </menuContribution>

@@ -9,6 +9,8 @@ import com.osm2xp.gui.views.panels.xplane.AirfieldsPanel;
 
 public class XPlaneAirfieldsView extends AbstractOptionsView implements IContextProvider {
 
+	public static final String ID = "com.osm2xp.viewAirfieldsTab";
+
 	public XPlaneAirfieldsView() {
 		super("Airfields options", "images/toolbarsIcons/airport_32.png");
 	}

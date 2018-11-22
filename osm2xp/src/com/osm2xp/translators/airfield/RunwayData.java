@@ -13,6 +13,7 @@ public class RunwayData extends AerowayData {
 	private Line2D runwayLine;
 	private double width = XplaneOptionsHelper.getOptions().getAirfieldOptions().getDefaultGrassRunwayWidth();
 	private String surface;
+	private String ref;
 	private boolean hard = false;
 	private double course1, course2;
 	private String marking1, marking2;
@@ -43,6 +44,7 @@ public class RunwayData extends AerowayData {
 			}
 		}
 		String ref = polyline.getTagValue("ref");
+		this.ref = ref;
 		if (!StringUtils.isEmpty(ref) && ref.indexOf('/') > 0) {
 			int idx = ref.indexOf('/');
 			String startMarking = ref.substring(0, idx);
@@ -132,5 +134,9 @@ public class RunwayData extends AerowayData {
 			return super.toString();
 		}
 		return name;
+	}
+
+	public final String getRef() {
+		return ref;
 	}
 }
