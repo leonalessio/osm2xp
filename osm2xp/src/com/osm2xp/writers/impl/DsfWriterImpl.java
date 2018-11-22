@@ -6,6 +6,8 @@ import java.io.File;
 import java.io.FileReader;
 import java.io.FileWriter;
 import java.io.IOException;
+import java.nio.charset.StandardCharsets;
+import java.nio.file.Files;
 
 import org.apache.commons.io.FileUtils;
 
@@ -42,8 +44,7 @@ public class DsfWriterImpl implements IWriter {
 		// create writer for this file
 
 		try {
-			FileWriter fileWriter = new FileWriter(dsfFile, true);
-			writer = new BufferedWriter(fileWriter);
+			writer = Files.newBufferedWriter(dsfFile.toPath(), StandardCharsets.UTF_8);
 
 			// write its header
 			String dsfHeader = DsfUtils.getDsfHeader(tile, this.dsfObjectsProvider);

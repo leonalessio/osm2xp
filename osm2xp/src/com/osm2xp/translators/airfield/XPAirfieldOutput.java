@@ -1,10 +1,10 @@
 package com.osm2xp.translators.airfield;
 
-import java.io.BufferedWriter;
 import java.io.File;
-import java.io.FileWriter;
 import java.io.IOException;
 import java.io.PrintWriter;
+import java.nio.charset.StandardCharsets;
+import java.nio.file.Files;
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
@@ -97,7 +97,7 @@ public class XPAirfieldOutput {
 		builder.append(String.format(Locale.ROOT, " %1.8f %2.8f ", helipadData.getLat(), helipadData.getLon()));
 		double heading = helipadData.getHeading();
 		if (heading >= 0) {
-			String.format(Locale.ROOT, "%1.2f", heading);
+			builder.append(String.format(Locale.ROOT, "%1.2f", heading));
 		} else {
 			builder.append(getOrientation(airfieldData));
 		}
@@ -295,12 +295,10 @@ public class XPAirfieldOutput {
 			dataFolder = new File(airfieldFolder, NAV_DATA_FOLDER_NAME);
 		}
 		dataFolder.mkdirs();
-		try (PrintWriter writer = new PrintWriter(
-				new BufferedWriter(new FileWriter(new File(dataFolder, "apt.dat"))))) {
+		try (PrintWriter writer = new PrintWriter(Files.newBufferedWriter(new File(dataFolder, "apt.dat").toPath(),  StandardCharsets.UTF_8))) {
 			for (String string : aptDefinition) {
 				writer.println(string);
 			}
-
 		} catch (IOException e) {
 			Osm2xpLogger.error("Error saving apt.dat for airfield " + aptId);
 		}
