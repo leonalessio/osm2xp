@@ -28,7 +28,11 @@ public class GeonameProvidingService extends GeoMetaProvidingService<String>{
 
 	@Override
 	protected String getMetaValue(JSONObject current) {
-		return current.get("name").toString();
+		Object object = current.get("name");
+		if (object == null) {
+			return null;
+		}
+		return object.toString();
 	}
 
 	@Override
@@ -59,12 +63,14 @@ public class GeonameProvidingService extends GeoMetaProvidingService<String>{
 		if (value != null) {
 			return value;
 		}
+		double x = Math.floor(coords.x * 1000000) / 1000000.0;
+		double y = Math.floor(coords.y * 1000000) / 1000000.0;
 		WebService.setUserName("osm2xp");
 		try {
-			List<Toponym> result = WebService.findNearbyPlaceName(coords.y, coords.x);
+			List<Toponym> result = WebService.findNearbyPlaceName(y, x);
 			if (result.size() > 0) {
 				String name = result.get(0).getName();
-				metaMap.put(coords, name);
+				metaMap.put(new Point2D(x,y), name);
 				saveToPref();
 				return name;
 			}

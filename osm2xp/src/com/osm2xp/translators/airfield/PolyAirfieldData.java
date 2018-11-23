@@ -24,15 +24,14 @@ public class PolyAirfieldData extends AirfieldData {
 		}
 		boundingBox = osmPolyline.getPolyline().getBoundingBox();
 		if (StringUtils.isEmpty(id)) {
-			double lat = (boundingBox.getMaxY() + boundingBox.getMinY()) / 2;
-			double lon = (boundingBox.getMaxX() + boundingBox.getMinX()) / 2;
-			id = String.format(Locale.ROOT, "%1.9f_%2.9f", lat, lon);
+			Point2D center = Point2D.centroid(osmPolyline.getPolyline().getPointArray());
+			id = String.format(Locale.ROOT, "%1.9f_%2.9f", center.y, center.x);
 		}
 	}
 
 	public boolean containsPolyline(OsmPolyline polyline) { //Simplified check for now
-		Box2D bBox = polyline.getPolyline().getBoundingBox();
-		return boundingBox.contains(bBox.getMinX() / 2 + bBox.getMaxX() / 2, bBox.getMinY() / 2 + bBox.getMaxY() / 2);
+		Point2D center = Point2D.centroid(polyline.getPolyline().getPointArray());
+		return boundingBox.contains(center);
 	}
 
 	public Polyline2D getPolygon() {

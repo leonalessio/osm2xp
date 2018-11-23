@@ -3,6 +3,7 @@ package com.osm2xp.translators.airfield;
 import org.apache.commons.lang.StringUtils;
 
 import com.osm2xp.model.osm.IHasTags;
+import com.osm2xp.utils.helpers.XplaneOptionsHelper;
 
 public class AerowayData {
 
@@ -21,9 +22,10 @@ public class AerowayData {
 				// Ignore
 			}
 		}
-		name = osmEntity.getTagValue("name:en");
-		if (name == null) {
-			name = osmEntity.getTagValue("name");
+		name = osmEntity.getTagValue("name");
+		String nameEn = osmEntity.getTagValue("name:en"); 
+		if (name == null || (XplaneOptionsHelper.getOptions().getAirfieldOptions().isPreferEnglish() && nameEn != null)) {
+			name = nameEn;
 		}
 	}
 

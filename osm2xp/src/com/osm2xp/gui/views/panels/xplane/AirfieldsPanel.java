@@ -77,6 +77,10 @@ public class AirfieldsPanel extends Osm2xpPanel {
 				+ "Without elevation ('ele' property) flattening would cause airfield look like a giant pit");
 		GridDataFactory.swtDefaults().span(2,1).applyTo(flattenCheck);
 		bindComponent(flattenCheck, options, "flatten");
+		Button preferEnglish = toolkit.createButton(leftComposite, "Prefer English airfield names when possible", SWT.CHECK);
+		preferEnglish.setToolTipText("English is international aviation language, so it can be better to use English name instead of local, if it's specified");
+		GridDataFactory.swtDefaults().span(2,1).applyTo(preferEnglish);
+		bindComponent(preferEnglish, options, "preferEnglish");
 		Button getElevCheck = toolkit.createButton(leftComposite, "Try to get Airfield elevation online, if not specified", SWT.CHECK);
 		getElevCheck.setToolTipText("Try to get Airfield elevation on-line, if this data is absent in OSM data. "
 				+ "This data is required e.g. for airfield area flattening. Internet connection is required for this to work.");
@@ -85,8 +89,8 @@ public class AirfieldsPanel extends Osm2xpPanel {
 		Button getNameCheck = toolkit.createButton(leftComposite, "Try to get Airfield name online, if not specified", SWT.CHECK);
 		getNameCheck.setToolTipText("Try to substitute airfield name online, if this information is missing in tags. Usually it's a name of nearest village/town.");
 		GridDataFactory.swtDefaults().span(2,1).applyTo(getNameCheck);
-		bindComponent(getNameCheck, options, "tryGetElev");
-		toolkit.createLabel(leftComposite,"Hard ruway default width, m").setLayoutData(GridDataFactory.swtDefaults().create());
+		bindComponent(getNameCheck, options, "tryGetName");
+		toolkit.createLabel(leftComposite,"Hard runway default width, m").setLayoutData(GridDataFactory.swtDefaults().create());
 		Spinner rwyWidthSpinner = new Spinner(leftComposite, SWT.BORDER);
 		rwyWidthSpinner.setMinimum(1);
 		bindComponent(rwyWidthSpinner, options, "defaultHardRunwayWidth");
@@ -94,7 +98,7 @@ public class AirfieldsPanel extends Osm2xpPanel {
 		Spinner taxiwayWidthSpinner = new Spinner(leftComposite, SWT.BORDER);
 		taxiwayWidthSpinner.setMinimum(1);
 		bindComponent(taxiwayWidthSpinner, options, "defaultHardTaxiwayWidth");
-		toolkit.createLabel(leftComposite,"Non-hard ruway default width, m").setLayoutData(GridDataFactory.swtDefaults().create());
+		toolkit.createLabel(leftComposite,"Non-hard runway default width, m").setLayoutData(GridDataFactory.swtDefaults().create());
 		Spinner grassRwyWidthSpinner = new Spinner(leftComposite, SWT.BORDER);
 		grassRwyWidthSpinner.setMinimum(1);
 		bindComponent(grassRwyWidthSpinner, options, "defaultGrassRunwayWidth");

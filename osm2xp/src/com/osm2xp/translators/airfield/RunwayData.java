@@ -130,10 +130,13 @@ public class RunwayData extends AerowayData {
 	
 	@Override
 	public String toString() {
-		if (name == null) {
-			return super.toString();
+		if (name != null) {
+			return name;
 		}
-		return name;
+		if (id != null) {
+			return id;
+		}
+		return super.toString();
 	}
 
 	public final String getRef() {

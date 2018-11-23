@@ -220,7 +220,11 @@ public abstract class AbstractTranslatingParserImpl extends BinaryParser {
 
 	protected Geometry getGeometry(List<Long> nodeIds) {
 		if (isClosed(nodeIds)) {
-			return getPolygon(nodeIds);
+			if (nodeIds.size() == 3) { //This can be a result of mistake when editing OSM - "closing" 2-point line by clicking first point after adding second one 
+				nodeIds = nodeIds.subList(0,2);
+			} else {
+				return getPolygon(nodeIds);
+			}
 		}
 		Coordinate[] points = getCoords(nodeIds);
 		if (points != null && points.length >= 2) {
@@ -262,6 +266,10 @@ public abstract class AbstractTranslatingParserImpl extends BinaryParser {
 	}
 
 	protected void processWay(Osmformat.Way curWay) {
+		if (curWay.getId() == 627991418) {
+			System.out.println("MultiTileParserImpl.translateWay()"); //XXX debug
+		}
+
 		Way way = createWayFromParsed(curWay);
 	
 		// if roof color information is available, add it to the current way

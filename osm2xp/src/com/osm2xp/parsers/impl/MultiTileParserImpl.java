@@ -175,6 +175,9 @@ public class MultiTileParserImpl extends AbstractTranslatingParserImpl implement
 	}
 	
 	protected void translateWay(com.osm2xp.model.osm.Way way, List<Long> ids) throws Osm2xpBusinessException {
+		if (way.getId() == 627991418) {
+			System.out.println("MultiTileParserImpl.translateWay()"); //XXX debug
+		}
 		Geometry geometry = getGeometry(ids);
 		if (geometry == null) {
 			return;

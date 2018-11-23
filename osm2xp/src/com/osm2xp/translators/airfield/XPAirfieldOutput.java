@@ -37,6 +37,17 @@ import math.geom2d.polygon.Polyline2D;
  *
  */
 public class XPAirfieldOutput {
+	
+//	public static final String wktMollweide = "PROJCS[\"World_Mollweide\"," +
+//            "GEOGCS[\"WGS_1984\",DATUM[\"WGS_1984\",SPHEROID[\"WGS_1984\",6378137.0,298.257223563]]," +
+//            "PRIMEM[\"Greenwich\",0.0],UNIT[\"Degree\",0.0174532925199433]],PROJECTION[\"Mollweide\"]," +
+//            "PARAMETER[\"Central_Meridian\",0.0],UNIT[\"Meter\",1.0]]";
+//
+//
+//    public static final String wktEckert = "PROJCS[\"World_Eckert_IV\"," +
+//            "GEOGCS[\"WGS_1984\",DATUM[\"WGS_1984\",SPHEROID[\"WGS_1984\",6378137.0,298.257223563]],"+
+//            "PRIMEM[\"Greenwich\",0.0],UNIT[\"Degree\",0.0174532925199433]],PROJECTION[\"Eckert_IV\"]," +
+//            "PARAMETER[\"Central_Meridian\",0.0],UNIT[\"Meter\",1.0]]";
 
 	private static final String NAV_DATA_FOLDER_NAME = "Earth nav data";
 	private static final String OSM2XP_AIRFIELD_PREFFIX = "osm2xp_";
@@ -127,6 +138,12 @@ public class XPAirfieldOutput {
 					? XplaneOptionsHelper.getOptions().getAirfieldOptions().getDefaultHardTaxiwayWidth()
 							: XplaneOptionsHelper.getOptions().getAirfieldOptions().getDefaultGrassTaxiwayWidth();
 			double dist = taxiwayWidth / 2.0 / 111000;
+//			String code = "AUTO:42001," + centerPoint.getX() + "," + centerPoint.getY();
+//		    CoordinateReferenceSystem auto = CRS.decode(code);
+//		    CoordinateReferenceSystem auto = CRS.decode(wktMollweide);
+
+//		      MathTransform transform = CRS.findMathTransform(DefaultGeographicCRS.WGS84, DefaultGeocentricCRS.CARTESIAN);
+//		      JTS.transform()
 			BufferParameters bufferParameters = new BufferParameters(2, BufferParameters.CAP_ROUND);
 			bufferParameters.setJoinStyle(BufferParameters.JOIN_MITRE);
 			bufferParameters.setMitreLimit(1);

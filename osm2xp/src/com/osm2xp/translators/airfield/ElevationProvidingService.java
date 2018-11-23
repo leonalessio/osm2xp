@@ -1,9 +1,7 @@
 package com.osm2xp.translators.airfield;
 
 import java.util.ArrayList;
-import java.util.HashMap;
 import java.util.List;
-import java.util.Map;
 
 import org.eclipse.core.runtime.jobs.Job;
 import org.json.simple.JSONObject;
@@ -20,7 +18,6 @@ public class ElevationProvidingService extends GeoMetaProvidingService<Double> {
 
 	private static ElevationProvidingService instance;
 	
-	private Map<Point2D, Double> elevMap = new HashMap<Point2D, Double>();
 	private List<Point2D> toGet = new ArrayList<Point2D>();
 	
 	public static synchronized ElevationProvidingService getInstance() {
@@ -76,7 +73,7 @@ public class ElevationProvidingService extends GeoMetaProvidingService<Double> {
 
 	@Override
 	protected void putObtainedToMap(Job job) {
-		elevMap.putAll(((GetElevationJob) job).getElevMap());
+		metaMap.putAll(((GetElevationJob) job).getElevMap());
 	}
 
 }

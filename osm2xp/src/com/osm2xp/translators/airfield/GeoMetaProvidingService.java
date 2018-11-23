@@ -30,17 +30,19 @@ public abstract class GeoMetaProvidingService<T> {
 	protected List<Job> jobList = new ArrayList<>();
 	
 	public GeoMetaProvidingService() {
-		String elevationsStr = InstanceScope.INSTANCE.getNode(Activator.PLUGIN_ID).get(getInstancePropName(),"");
-		if (!StringUtils.isEmpty(elevationsStr)) {
+		String metaStr = InstanceScope.INSTANCE.getNode(Activator.PLUGIN_ID).get(getInstancePropName(),"");
+		if (!StringUtils.isEmpty(metaStr)) {
 			JSONParser parser = new JSONParser();
 			try {
-				JSONArray array = (JSONArray) parser.parse(elevationsStr);
+				JSONArray array = (JSONArray) parser.parse(metaStr);
 				for (int i = 0; i < array.size(); i++) {
 					JSONObject current = (JSONObject) array.get(i);
 					T ele = getMetaValue(current);
-					Double lat = (Double) current.get(LAT_PROP);
-					Double lon = (Double) current.get(LNG_PROP);
-					metaMap.put(new Point2D(lon, lat), ele);
+					if (ele != null) {
+						Double lat = (Double) current.get(LAT_PROP);
+						Double lon = (Double) current.get(LNG_PROP);
+						metaMap.put(new Point2D(lon, lat), ele);
+					}
 				}
 			} catch (ParseException e) {
 				//just ignore

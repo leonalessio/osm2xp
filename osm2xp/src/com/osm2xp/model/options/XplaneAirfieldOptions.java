@@ -8,7 +8,7 @@ import javax.xml.bind.annotation.XmlAccessorType;
 import javax.xml.bind.annotation.XmlType;
 
 @XmlAccessorType(XmlAccessType.FIELD)
-@XmlType(name="XplaneAirfieldOptions", propOrder = {"generateAirfields","useSingleAptAsMain","generateApron","generateMarks","flatten",
+@XmlType(name="XplaneAirfieldOptions", propOrder = {"generateAirfields","useSingleAptAsMain","generateApron","generateMarks","flatten","preferEnglish",
 		"tryGetElev","tryGetName","defaultHardRunwayWidth","defaultGrassRunwayWidth","defaultHardTaxiwayWidth", "defaultGrassTaxiwayWidth", "defaultHelipadSize", "ignoredAirfields"})
 public class XplaneAirfieldOptions {
 	protected boolean generateAirfields = false;
@@ -16,6 +16,7 @@ public class XplaneAirfieldOptions {
 	protected boolean generateApron = true;
 	protected boolean generateMarks = true;
 	protected boolean flatten = true;
+	protected boolean preferEnglish = true;
 	protected boolean tryGetElev = true;
 	protected boolean tryGetName = true;
 	protected int defaultHardRunwayWidth = 60;
@@ -105,6 +106,12 @@ public class XplaneAirfieldOptions {
 	}
 	public void setDefaultGrassRunwayWidth(int defaultGrassRunwayWidth) {
 		this.defaultGrassRunwayWidth = defaultGrassRunwayWidth;
+	}
+	public final boolean isPreferEnglish() {
+		return preferEnglish;
+	}
+	public final void setPreferEnglish(boolean preferEnglish) {
+		this.preferEnglish = preferEnglish;
 	}
 
 }
