@@ -43,7 +43,7 @@ public class PolyAirfieldData extends AirfieldData {
 	}
 
 	public boolean contains(double lon, double lat) {
-		return polygon.contains(lon, lat);
+		return polygon.isInside(new Point2D(lon, lat));
 	}
 
 }
