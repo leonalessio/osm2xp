@@ -22,7 +22,7 @@ import org.apache.commons.lang.ArrayUtils;
 @XmlRootElement(name = "way")
 public class Way {
 
-	protected List<Tag> tag;
+	protected List<Tag> tags;
 	protected List<Nd> nd;
 	@XmlAttribute(name = "id", required = true)
 	protected long id;
@@ -39,8 +39,8 @@ public class Way {
 	 * Fully-initialising value constructor
 	 * 
 	 */
-	public Way(final List<Tag> tag, final List<Nd> nd, final long id) {
-		this.tag = tag;
+	public Way(final List<Tag> tags, final List<Nd> nd, final long id) {
+		this.tags = tags;
 		this.nd = nd;
 		this.id = id;
 	}
@@ -67,11 +67,11 @@ public class Way {
 	 * 
 	 * 
 	 */
-	public List<Tag> getTag() {
-		if (tag == null) {
-			tag = new ArrayList<Tag>();
+	public List<Tag> getTags() {
+		if (tags == null) {
+			tags = new ArrayList<Tag>();
 		}
-		return this.tag;
+		return this.tags;
 	}
 
 	/**

@@ -46,21 +46,18 @@ public class PbfRelationsLister extends BinaryParser implements RelationsLister 
 			for (Osmformat.Relation rel : rels) {
 				Relation relation = new Relation();
 				relation.setId(rel.getId());
+				long lastMemberId = 0;
 				for (int i = 0; i < rel.getMemidsList().size(); i++) {
-					Member member = new Member();
-					member.setRef(rel.getMemidsList().get(i).toString());
-					switch (rel.getRolesSidList().get(i)) {
-					case 18:
-						member.setRole("inner");
-						break;
-					case 2:
-						member.setRole("outer");
-						break;
-					default:
-						break;
+					long memberId = lastMemberId + rel.getMemids(i);
+					lastMemberId = memberId;
+					Integer rolesSid = rel.getRolesSidList().get(i);
+					String type = rel.getTypesList().get(i).toString();
+					String role = "outer";
+					if (rolesSid == 18) {
+						role = "inner";
 					}
-					member.setType(rel.getTypesList().get(i).toString());
-					relation.getMember().add(member);
+					String ref = rel.getMemidsList().get(i).toString();
+					relation.getMember().add(new Member(memberId,type, ref, role));
 				}
 				relationsList.add(relation);
 			}

@@ -15,7 +15,7 @@ import com.osm2xp.model.osm.OsmPolygon;
 import com.osm2xp.model.osm.OsmPolyline;
 import com.osm2xp.model.osm.OsmPolylineFactory;
 import com.osm2xp.model.osm.Tag;
-import com.osm2xp.translators.ITranslationAdapter;
+import com.osm2xp.translators.ISpecificTranslator;
 import com.osm2xp.utils.OsmUtils;
 import com.osm2xp.utils.helpers.XplaneOptionsHelper;
 import com.vividsolutions.jts.geom.Geometry;
@@ -23,7 +23,7 @@ import com.vividsolutions.jts.geom.Geometry;
 import math.geom2d.Point2D;
 import math.geom2d.line.Line2D;
 
-public class XPAirfieldTranslationAdapter implements ITranslationAdapter {
+public class XPAirfieldTranslationAdapter implements ISpecificTranslator {
 	
 	private static final String RUNWAY_TAG = "runway";
 	private static final String HELIPAD_TAG = "helipad";
@@ -41,7 +41,7 @@ public class XPAirfieldTranslationAdapter implements ITranslationAdapter {
 		workFolder = new File(outputFolder); 
 	}
 	
-	public boolean handlePoly(OsmPolyline osmPolyline) {
+	protected boolean handlePoly(OsmPolyline osmPolyline) {
 		if (!XplaneOptionsHelper.getOptions().getAirfieldOptions().isGenerateAirfields()) {
 			return false;
 		}
@@ -225,12 +225,12 @@ public class XPAirfieldTranslationAdapter implements ITranslationAdapter {
 	}
 
 	@Override
-	public Boolean mustProcessPolyline(List<Tag> tags) {
+	public boolean mustProcessPolyline(List<Tag> tags) {
 		return OsmUtils.isAeroway(tags);
 	}
 
 	@Override
-	public Boolean mustStoreNode(Node node) {
+	public boolean mustStoreNode(Node node) {
 		return false;
 	}
 

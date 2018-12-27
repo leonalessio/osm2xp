@@ -1,14 +1,11 @@
 package com.osm2xp.parsers.impl;
 
-import java.awt.Color;
 import java.io.File;
 import java.io.IOException;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
-import java.util.Map;
 
-import org.openstreetmap.osmosis.osmbinary.Osmformat.Relation;
 import org.xml.sax.Attributes;
 import org.xml.sax.ContentHandler;
 import org.xml.sax.Locator;
@@ -16,17 +13,16 @@ import org.xml.sax.SAXException;
 import org.xml.sax.XMLReader;
 import org.xml.sax.helpers.XMLReaderFactory;
 
-import com.osm2xp.dataProcessors.IDataSink;
 import com.osm2xp.exceptions.DataSinkException;
 import com.osm2xp.exceptions.Osm2xpBusinessException;
 import com.osm2xp.exceptions.OsmParsingException;
+import com.osm2xp.gui.Activator;
 import com.osm2xp.model.osm.Nd;
 import com.osm2xp.model.osm.Node;
-import com.osm2xp.model.osm.OsmPolygon;
 import com.osm2xp.model.osm.Tag;
 import com.osm2xp.model.osm.Way;
-import com.osm2xp.parsers.IParser;
-import com.osm2xp.translators.ITranslator;
+import com.osm2xp.parsers.IOSMDataVisitor;
+import com.osm2xp.parsers.IVisitingParser;
 import com.osm2xp.utils.helpers.GuiOptionsHelper;
 import com.osm2xp.utils.logging.Osm2xpLogger;
 
@@ -36,7 +32,7 @@ import com.osm2xp.utils.logging.Osm2xpLogger;
  * @author Benjamin Blanchet
  * 
  */
-public class SaxParserImpl implements ContentHandler, IParser {
+public class SaxParserImpl implements ContentHandler, IVisitingParser {
 
 	private static final String XML_ATTRIBUTE_LONGITUDE = "lon";
 	private static final String XML_ATTRIBUTE_LATITUDE = "lat";
@@ -51,17 +47,12 @@ public class SaxParserImpl implements ContentHandler, IParser {
 	protected OsmAttributes currentAttributes;
 	protected List<Nd> ndList;
 	private File xmlFile;
-	private ITranslator translator;
-	private Map<Long, Color> roofsColorMap;
-	private IDataSink processor;
 	private boolean nodesRefCollectionDone;
+	private IOSMDataVisitor visitor;
 
-	public void init(File xmlFile, ITranslator translator,
-			Map<Long, Color> roofsColorMap, IDataSink processor) {
+	public SaxParserImpl(File xmlFile, IOSMDataVisitor visitor) {
 		this.xmlFile = xmlFile;
-		this.translator = translator;
-		this.roofsColorMap = roofsColorMap;
-		this.processor = processor;
+		this.visitor = visitor;
 	}
 
 	/**
@@ -148,104 +139,39 @@ public class SaxParserImpl implements ContentHandler, IParser {
 			parseNode();
 
 		}
-	}
-
-	private void sendWayToTranslator(Way way) throws Osm2xpBusinessException,
-			DataSinkException {
-
-		// if roof color information is available, add it to the current way
-		if (this.roofsColorMap != null
-				&& this.roofsColorMap.get(way.getId()) != null) {
-			String hexColor = Integer.toHexString(this.roofsColorMap.get(
-					way.getId()).getRGB() & 0x00ffffff);
-			Tag roofColorTag = new Tag("building:roof:color", "#"
-					+ hexColor.toUpperCase());
-			way.getTag().add(roofColorTag);
-		}
-
-		List<Long> ids = new ArrayList<Long>();
-		for (Nd nd : way.getNd()) {
-			ids.add(nd.getRef());
-		}
-
-		List<Node> nodes;
-
-		nodes = processor.getNodes(ids);
-
-		if (nodes != null) {
-			OsmPolygon polygon = new OsmPolygon(way.getId(), way.getTag(),
-					nodes, nodes.size() < ids.size());
-			translator.processPolyline(polygon);
-		}
-
-	}
-
-	private void checkWaysForUsefullNodes(Way way)
-			throws Osm2xpBusinessException, DataSinkException {
-		if (translator.mustProcessWay(way)) {
-			for (Nd nd : way.getNd()) {
-				com.osm2xp.model.osm.Node node = new com.osm2xp.model.osm.Node();
-				node.setId(nd.getRef());
-				node.setLat(0);
-				node.setLon(0);
-				processor.storeNode(node);
-			}
-		}
-
-	}
+	}	
 
 	private void parseWay() throws Osm2xpBusinessException, DataSinkException {
 		Way way = new Way();
 		way.setId(Long.parseLong(currentAttributes.getValue(XML_ATTRIBUTE_ID)));
-		way.getTag().addAll(tagList);
+		way.getTags().addAll(tagList);
 		way.getNd().addAll(ndList);
 
-		// if we're not on a single pass mode, send ways to translator
-		if (!GuiOptionsHelper.getOptions().isSinglePass()
-				|| (GuiOptionsHelper.getOptions().isSinglePass() && nodesRefCollectionDone)) {
-			sendWayToTranslator(way);
-		} else {
-			checkWaysForUsefullNodes(way);
-		}
+		visitor.visit(way);
 
 	}
 
 	private void parseNode() {
-		// parse nodes only if we're not on a single pass mode, or if the nodes
-		// collection of single pass mode is done
-		if (!GuiOptionsHelper.getOptions().isSinglePass()
-				|| (GuiOptionsHelper.getOptions().isSinglePass() && this.nodesRefCollectionDone)) {
-			Node node = new Node();
-			node.setId(Long.parseLong(currentAttributes
-					.getValue(XML_ATTRIBUTE_ID)));
-			node.setLat(Double.parseDouble(currentAttributes
-					.getValue(XML_ATTRIBUTE_LATITUDE)));
-			node.setLon(Double.parseDouble(currentAttributes
-					.getValue(XML_ATTRIBUTE_LONGITUDE)));
-			node.getTags().addAll(tagList);
-			try {
-				translator.processNode(node);
-				if (translator.mustStoreNode(node)) {
-					processor.storeNode(node);
-				}
-			} catch (Osm2xpBusinessException e) {
-				Osm2xpLogger.error("Error processing node.", e);
-			} catch (DataSinkException e) {
-				Osm2xpLogger.error("Error processing node.", e);
-			}
-		}
+		Node node = new Node();
+		node.setId(Long.parseLong(currentAttributes
+				.getValue(XML_ATTRIBUTE_ID)));
+		node.setLat(Double.parseDouble(currentAttributes
+				.getValue(XML_ATTRIBUTE_LATITUDE)));
+		node.setLon(Double.parseDouble(currentAttributes
+				.getValue(XML_ATTRIBUTE_LONGITUDE)));
+		node.getTags().addAll(tagList);
+		visitor.visit(node);
 	}
 
-	public void process() throws OsmParsingException {
+	public void process() {
 		try {
-			translator.init();
 			this.parseDocument();
 		} catch (Osm2xpBusinessException e) {
-			throw new OsmParsingException("Osm parser error on line "
+			Activator.log(new OsmParsingException("Osm parser error on line "
 					+ locator.getLineNumber() + " col "
-					+ locator.getColumnNumber(), e);
+					+ locator.getColumnNumber(), e));
 		} catch (SAXException e) {
-			throw new OsmParsingException("Sax parser initialization error.", e);
+			Activator.log(new OsmParsingException("Sax parser initialization error.", e));
 		}
 
 	}
@@ -254,16 +180,10 @@ public class SaxParserImpl implements ContentHandler, IParser {
 		if (GuiOptionsHelper.getOptions().isSinglePass()
 				&& !nodesRefCollectionDone) {
 			nodesRefCollectionDone = true;
-			try {
-				Osm2xpLogger.info("First pass done, "
-						+ processor.getNodesNumber()
-						+ " nodes are needed to generate scenery");
-				process();
-			} catch (OsmParsingException e) {
-				Osm2xpLogger.error(e.getMessage());
-			}
+			Osm2xpLogger.info("First pass done");
+			process();
 		} else {
-			translator.complete();
+			visitor.complete();
 		}
 	}
 
@@ -302,5 +222,10 @@ public class SaxParserImpl implements ContentHandler, IParser {
 		public String getValue(String key) {
 			return values.get(key);
 		}
+	}
+
+	@Override
+	public IOSMDataVisitor getVisitor() {
+		return visitor;
 	}
 }

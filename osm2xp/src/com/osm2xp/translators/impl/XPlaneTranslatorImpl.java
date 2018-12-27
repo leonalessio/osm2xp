@@ -362,6 +362,10 @@ public class XPlaneTranslatorImpl implements ITranslator{
 	 */
 	public Integer computeFacadeIndex(OsmPolygon polygon) {
 		Integer result = null;
+		int index = dsfObjectsProvider.computeFacadeIndexFromRules(polygon);
+		if (index >= 0) {
+			return index;
+		}
 		SpecialFacadeType specialFacadeType = getSpecialBuildingType(polygon);
 		if (specialFacadeType != null) {
 			return dsfObjectsProvider.computeSpecialFacadeDsfIndex(specialFacadeType, polygon);
@@ -370,6 +374,7 @@ public class XPlaneTranslatorImpl implements ITranslator{
 		BuildingType buildingType = getBuildingType(polygon);
 		if (XplaneOptionsHelper.getOptions().isGenerateSlopedRoofs()
 				&& polygon.isSimplePolygon() && polygon.getHeight() < 20) { //Suggesting that buildings higher than 20m usually have flat roofs
+			
 			result = dsfObjectsProvider.computeFacadeDsfIndex(true, buildingType, true,
 					polygon);
 		}
@@ -656,11 +661,7 @@ public class XPlaneTranslatorImpl implements ITranslator{
 	}
 
 	@Override
-	public void processRelation(Relation relation) throws Osm2xpBusinessException {
-	}
-
-	@Override
-	public Boolean mustStoreNode(Node node) {
+	public boolean mustStoreNode(Node node) {
 		Boolean result = true;
 //		if (!GuiOptionsHelper.getOptions().isSinglePass()) { //XXX debug
 //			result = GeomUtils.compareCoordinates(currentTile, node);
@@ -668,14 +669,9 @@ public class XPlaneTranslatorImpl implements ITranslator{
 		return result;
 	}
 
+
 	@Override
-	public Boolean mustProcessWay(Way way) {
-		List<Tag> tags = way.getTag();
-		return mustProcessPolyline(tags);
-	}
-	
-	@Override
-	public Boolean mustProcessPolyline(List<Tag> tags) {
+	public boolean mustProcessPolyline(List<Tag> tags) {
 		return (OsmUtils.isBuilding(tags) || OsmUtils.isForest(tags) || OsmUtils
 				.isObject(tags) || OsmUtils.isRailway(tags) || OsmUtils.isRoad(tags) || OsmUtils.isPowerline(tags) || OsmUtils.isFence(tags) || OsmUtils.isAeroway(tags));
 	}

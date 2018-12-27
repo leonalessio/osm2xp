@@ -160,12 +160,7 @@ public class OsmTranslatorImpl implements ITranslator {
 	}
 
 	@Override
-	public void processRelation(Relation relation)
-			throws Osm2xpBusinessException {
-	}
-
-	@Override
-	public Boolean mustStoreNode(Node node) {
+	public boolean mustStoreNode(Node node) {
 		Boolean result = true;
 		if (!GuiOptionsHelper.getOptions().isSinglePass()) {
 			result = GeomUtils.compareCoordinates(currentTile, node);
@@ -174,17 +169,12 @@ public class OsmTranslatorImpl implements ITranslator {
 	}
 
 	@Override
-	public Boolean mustProcessWay(Way way) {
-		return null;
-	}
-	
-	@Override
 	public void processBoundingBox(HeaderBBox bbox) {
 		// Do nothing
 	}
 
 	@Override
-	public Boolean mustProcessPolyline(List<Tag> tags) {
+	public boolean mustProcessPolyline(List<Tag> tags) {
 		return false;
 	}
 	

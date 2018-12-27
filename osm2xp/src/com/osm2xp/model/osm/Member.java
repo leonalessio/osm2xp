@@ -26,6 +26,7 @@ public class Member {
 	protected String ref;
 	@XmlAttribute(name = "role")
 	protected String role;
+	private long id;
 
 	/**
 	 * Default no-arg constructor
@@ -37,9 +38,11 @@ public class Member {
 
 	/**
 	 * Fully-initialising value constructor
+	 * @param id 
 	 * 
 	 */
-	public Member(final String type, final String ref, final String role) {
+	public Member(long id, final String type, final String ref, final String role) {
+		this.id = id;
 		this.type = type;
 		this.ref = ref;
 		this.role = role;
@@ -106,6 +109,14 @@ public class Member {
 	 */
 	public void setRole(String value) {
 		this.role = value;
+	}
+
+	public long getId() {
+		return id;
+	}
+
+	public void setId(long id) {
+		this.id = id;
 	}
 
 }

@@ -1,6 +1,6 @@
 package com.osm2xp.parsers;
 
-public interface IMultiTilesParser extends IBasicParser {
+public interface IMultiTilesConverter extends IBasicParser {
 	
 	int getTilesCount();
 	

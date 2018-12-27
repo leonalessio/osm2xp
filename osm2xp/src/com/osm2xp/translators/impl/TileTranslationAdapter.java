@@ -16,7 +16,7 @@ import com.osm2xp.model.osm.Node;
 import com.osm2xp.model.osm.OsmPolyline;
 import com.osm2xp.model.osm.OsmPolylineFactory;
 import com.osm2xp.model.osm.Tag;
-import com.osm2xp.translators.ITranslationAdapter;
+import com.osm2xp.translators.ISpecificTranslator;
 import com.osm2xp.translators.ITranslator;
 import com.osm2xp.utils.geometry.CoordinateNodeIdPreserver;
 import com.osm2xp.utils.geometry.GeomUtils;
@@ -30,7 +30,7 @@ import com.vividsolutions.jts.geom.Polygon;
 
 import math.geom2d.Point2D;
 
-public class TileTranslationAdapter implements ITranslationAdapter{
+public class TileTranslationAdapter implements ISpecificTranslator{
 
 	private GeometryClipper tileClipper;
 	private Envelope bounds;
@@ -147,12 +147,12 @@ public class TileTranslationAdapter implements ITranslationAdapter{
 	}
 
 	@Override
-	public Boolean mustStoreNode(Node node) {
+	public boolean mustStoreNode(Node node) {
 		return translator.mustStoreNode(node);
 	}
 
 	@Override
-	public Boolean mustProcessPolyline(List<Tag> tags) {
+	public boolean mustProcessPolyline(List<Tag> tags) {
 		return translator.mustProcessPolyline(tags);
 	}
 

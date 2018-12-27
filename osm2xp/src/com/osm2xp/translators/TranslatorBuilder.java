@@ -227,7 +227,7 @@ public class TranslatorBuilder {
 		return xplane9TranslatorImpl;
 	}
 
-	public static Collection<ITranslationAdapter> createAdditinalAdapters(String folderPath) {
+	public static Collection<ISpecificTranslator> createAdditinalAdapters(String folderPath) {
 		if (GuiOptionsHelper.getOptions().getOutputFormat()
 				.equals(Perspectives.PERSPECTIVE_XPLANE10)) {
 			return Collections.singletonList(new XPAirfieldTranslationAdapter(folderPath));

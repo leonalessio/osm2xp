@@ -11,7 +11,11 @@
 	<classpathentry exported="true" kind="lib" path="lib/osmosis-pbf-0.46.jar" sourcepath="C:/Users/Sviridov/AppData/Local/Temp/.org.sf.feeling.decompiler1530080284876/source/osmosis-pbf-0.46-sources-1530082362976.jar"/>
 	<classpathentry exported="true" kind="lib" path="lib/osmosis-pbf2-0.46.jar" sourcepath="C:/Users/Sviridov/AppData/Local/Temp/.org.sf.feeling.decompiler1523515037489/source/osmosis-pbf2-0.46-sources.jar"/>
 	<classpathentry exported="true" kind="lib" path="lib/osmosis-xml-0.46.jar"/>
-	<classpathentry kind="con" path="org.eclipse.jdt.launching.JRE_CONTAINER"/>
+	<classpathentry kind="con" path="org.eclipse.jdt.launching.JRE_CONTAINER">
+		<attributes>
+			<attribute name="module" value="true"/>
+		</attributes>
+	</classpathentry>
 	<classpathentry kind="src" path="src"/>
 	<classpathentry kind="lib" path="lib/commons-collections-3.2.1.jar"/>
 	<classpathentry kind="lib" path="lib/commons-compress-1.0.jar"/>

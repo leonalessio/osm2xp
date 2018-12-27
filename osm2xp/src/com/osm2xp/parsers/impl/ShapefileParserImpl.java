@@ -1,27 +1,22 @@
 package com.osm2xp.parsers.impl;
 
-import java.awt.Color;
 import java.io.File;
 import java.io.IOException;
 import java.util.ArrayList;
 import java.util.List;
-import java.util.Map;
+
+import org.eclipse.core.runtime.IStatus;
 
 import com.bbn.openmap.layer.shape.ESRIPoly.ESRIFloatPoly;
 import com.bbn.openmap.layer.shape.ESRIPolygonRecord;
 import com.bbn.openmap.layer.shape.ShapeFile;
-import com.osm2xp.dataProcessors.IDataSink;
-import com.osm2xp.exceptions.DataSinkException;
-import com.osm2xp.exceptions.Osm2xpBusinessException;
-import com.osm2xp.exceptions.OsmParsingException;
+import com.osm2xp.gui.Activator;
 import com.osm2xp.model.osm.Nd;
 import com.osm2xp.model.osm.Node;
-import com.osm2xp.model.osm.OsmPolygon;
 import com.osm2xp.model.osm.Way;
-import com.osm2xp.parsers.IParser;
-import com.osm2xp.translators.ITranslator;
+import com.osm2xp.parsers.IOSMDataVisitor;
+import com.osm2xp.parsers.IVisitingParser;
 import com.osm2xp.utils.helpers.GuiOptionsHelper;
-import com.osm2xp.utils.logging.Osm2xpLogger;
 
 /**
  * Shapefile parser implementation.
@@ -29,29 +24,25 @@ import com.osm2xp.utils.logging.Osm2xpLogger;
  * @author Benjamin Blanchet
  * 
  */
-public class ShapefileParserImpl implements IParser {
+public class ShapefileParserImpl implements IVisitingParser {
 	private ShapeFile shapeFile;
-	private ITranslator translator;
 	private int nodeIndex = 1;
 	private int wayIndex = 1;
-	private IDataSink processor;
-
-	@Override
-	public void init(File file, ITranslator translator,
-			Map<Long, Color> roofsColorMap, IDataSink processor) {
+	private IOSMDataVisitor visitor;
+	
+	public ShapefileParserImpl(File file,IOSMDataVisitor visitor) {
+		this.visitor = visitor;
+		this.visitor = visitor;
 		try {
 			this.shapeFile = new ShapeFile(file);
-			this.translator = translator;
 		} catch (IOException e) {
-			Osm2xpLogger.error("Error loading shapefile file", e);
+			Activator.log(IStatus.ERROR, "Error parsing shapefile " + file.getAbsolutePath());
 		}
-
 	}
 
 	@Override
-	public void process() throws OsmParsingException {
+	public void process()  {
 		try {
-			translator.init();
 			ESRIPolygonRecord esriPolygonRecord = (ESRIPolygonRecord) shapeFile
 					.getNextRecord();
 
@@ -59,7 +50,7 @@ public class ShapefileParserImpl implements IParser {
 
 				ESRIFloatPoly poly = (ESRIFloatPoly) esriPolygonRecord.polygons[0];
 				Way way = new Way();
-				way.getTag().add(GuiOptionsHelper.getShapefileTag());
+				way.getTags().add(GuiOptionsHelper.getShapefileTag());
 				way.setId(++wayIndex);
 
 				for (int i = 0; i < poly.getRadians().length - 1; i = i + 2) {
@@ -71,10 +62,7 @@ public class ShapefileParserImpl implements IParser {
 					// add the node ref to the way
 					way.getNd().add(new Nd(nodeIndex));
 					// send the node to the translator for storage
-					translator.processNode(node);
-					if (translator.mustStoreNode(node)) {
-						processor.storeNode(node);
-					}
+					visitor.visit(node);
 					// increment node index
 					nodeIndex++;
 
@@ -83,32 +71,26 @@ public class ShapefileParserImpl implements IParser {
 				for (Nd nd : way.getNd()) {
 					ids.add(nd.getRef());
 				}
-				List<Node> nodes = processor.getNodes(ids);
-				if (nodes != null) {
-					OsmPolygon polygon = new OsmPolygon(way.getId(),
-							way.getTag(), nodes, nodes.size() < ids.size());
-					translator.processPolyline(polygon);
-				}
+				visitor.visit(way);
 				esriPolygonRecord = (ESRIPolygonRecord) shapeFile
 						.getNextRecord();
 			}
-
 			complete();
 
-		} catch (IOException e) {
-			throw new OsmParsingException("Error parsing shapeFile.", e);
-		} catch (DataSinkException e) {
-			throw new OsmParsingException("DataSink error.", e);
-		} catch (Osm2xpBusinessException e) {
-			throw new OsmParsingException("Translation error.", e);
+		} catch (Exception e) {
+			Activator.log(IStatus.ERROR, "Error processing shapefile");
 		}
 
 	}
 
 	@Override
 	public void complete() {
-		translator.complete();
+		visitor.complete();
+	}
 
+	@Override
+	public IOSMDataVisitor getVisitor() {
+		return visitor;
 	}
 
 }

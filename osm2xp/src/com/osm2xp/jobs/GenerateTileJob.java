@@ -11,7 +11,6 @@ import org.eclipse.core.runtime.Status;
 
 import com.osm2xp.exceptions.DataSinkException;
 import com.osm2xp.exceptions.Osm2xpBusinessException;
-import com.osm2xp.exceptions.OsmParsingException;
 import com.osm2xp.model.osm.Relation;
 import com.osm2xp.parsers.IParser;
 import com.osm2xp.parsers.ParserBuilder;
@@ -48,8 +47,6 @@ public class GenerateTileJob extends GenerateJob {
 			Osm2xpLogger.info("Finished generation of " + getCoordinatesStr(coordinates) + ", target folder " + folderPath);
 		} catch (DataSinkException e) {
 			Osm2xpLogger.error("Data sink exception : ", e);
-		} catch (OsmParsingException e) {
-			Osm2xpLogger.error("Parsing exception : ", e);
 		} catch (Osm2xpBusinessException e) {
 			Osm2xpLogger.error("Business exception : ", e);
 		}

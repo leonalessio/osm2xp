@@ -8,13 +8,17 @@ import com.osm2xp.dataProcessors.DataSinkFactory;
 import com.osm2xp.dataProcessors.IDataSink;
 import com.osm2xp.exceptions.DataSinkException;
 import com.osm2xp.exceptions.Osm2xpBusinessException;
-import com.osm2xp.parsers.impl.MultiTileParserImpl;
-import com.osm2xp.parsers.impl.PbfSingleTileParserImpl;
-import com.osm2xp.parsers.impl.PbfWholeFileParserImpl;
+import com.osm2xp.gui.Activator;
+import com.osm2xp.parsers.impl.MultiTileDataConverter;
 import com.osm2xp.parsers.impl.SaxParserImpl;
 import com.osm2xp.parsers.impl.ShapefileParserImpl;
+import com.osm2xp.parsers.impl.SpecificTranslatingConverter;
+import com.osm2xp.parsers.impl.TranslatingBinaryParser;
+import com.osm2xp.parsers.impl.AbstractTranslatingConverter;
+import com.osm2xp.parsers.impl.GeneralTranslatingConverter;
 import com.osm2xp.translators.ITranslator;
 import com.osm2xp.translators.TranslatorBuilder;
+import com.osm2xp.translators.airfield.XPAirfieldTranslationAdapter;
 import com.osm2xp.utils.FilesUtils;
 import com.osm2xp.utils.helpers.GuiOptionsHelper;
 
@@ -42,7 +46,6 @@ public class ParserBuilder {
 	public static IParser getParser(Point2D currentTile, File currentFile,
 			String folderPath)
 			throws DataSinkException {
-		IParser parser = null;
 		ITranslator translator = TranslatorBuilder.getTranslator(currentFile,
 				currentTile, folderPath);
 		// if a roof color file is available, load it into a map and give it to
@@ -53,31 +56,36 @@ public class ParserBuilder {
 					.getRoofColorFile());
 		}
 		IDataSink processor = DataSinkFactory.getProcessor();
-		// PBF FILE
-		if (GuiOptionsHelper.getOptions().getCurrentFilePath().toLowerCase()
-				.contains(".pbf")) {
-			if (GuiOptionsHelper.getOptions().isSinglePass()) {
-				parser = new PbfWholeFileParserImpl();
-			} else {
-				parser = new PbfSingleTileParserImpl(currentTile);
-			}
+		AbstractTranslatingConverter converter = new GeneralTranslatingConverter(translator, processor, roofsColorMap);
+		return getParser(currentFile, converter);
+	}
 
+	private static IParser getParser(File currentFile, IOSMDataVisitor converter) {
+		// PBF FILE
+		if (currentFile.getName().toLowerCase().endsWith(".pbf")) {
+			return new TranslatingBinaryParser(currentFile, converter);
 		}
 		// OSM FILE
-		else if (GuiOptionsHelper.getOptions().getCurrentFilePath()
-				.toLowerCase().contains(".osm")) {
-			parser = new SaxParserImpl();
-
+		else if (currentFile.getName().toLowerCase().endsWith(".osm")) {
+			return new SaxParserImpl(currentFile, converter);
 		}
 		// SHP FILE
-		else if (GuiOptionsHelper.getOptions().getCurrentFilePath()
-				.toLowerCase().contains(".shp")) {
-			parser = new ShapefileParserImpl();
-
+		else if (currentFile.getName().toLowerCase().endsWith(".shp")) {
+			return new ShapefileParserImpl(currentFile, converter);
 		}
-		parser.init(currentFile, translator, roofsColorMap, processor);
-		return parser;
+		return null;
 	}
+	
+	public static IParser getXPAirfieldGeneratingParser(File currentFile,
+			String folderPath) {
+		try {
+			return getParser(currentFile, new SpecificTranslatingConverter(new XPAirfieldTranslationAdapter(folderPath), DataSinkFactory.getProcessor(), null));
+		} catch (DataSinkException e) {
+			Activator.log(e);
+		}
+		return null;
+	}
+	
 	
 	/**
 	 * Build the parser implementation for the type of file
@@ -92,7 +100,7 @@ public class ParserBuilder {
 	 * @throws NumberFormatException
 	 * @throws Exception
 	 */
-	public static IMultiTilesParser getMultiTileParser(File currentFile,
+	public static IVisitingParser getMultiTileParser(File currentFile,
 			String folderPath)
 			throws DataSinkException {
 		IDataSink processor = DataSinkFactory.getProcessor();
@@ -103,12 +111,8 @@ public class ParserBuilder {
 			roofsColorMap = FilesUtils.loadG2xplColorFile(GuiOptionsHelper
 					.getRoofColorFile());
 		}
-		//TODO supported only for pbf yet 
-		if (GuiOptionsHelper.getOptions().getCurrentFilePath().toLowerCase()
-				.contains(".pbf")) {
-			return new MultiTileParserImpl(currentFile,folderPath, roofsColorMap,processor);
-		}
-		return null;
+		MultiTileDataConverter converter = new MultiTileDataConverter(processor, currentFile, folderPath, roofsColorMap);		
+		return (IVisitingParser) getParser(currentFile, converter);
 	}
 
 }

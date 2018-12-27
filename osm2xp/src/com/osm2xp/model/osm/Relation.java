@@ -20,7 +20,7 @@ import javax.xml.bind.annotation.XmlType;
 @XmlRootElement(name = "relation")
 public class Relation {
 
-	protected Tag tag;
+	protected List<Tag> tags;
 	protected List<Member> member;
 	@XmlAttribute(name = "id", required = true)
 	protected long id;
@@ -37,20 +37,20 @@ public class Relation {
 	 * Fully-initialising value constructor
 	 * 
 	 */
-	public Relation(final Tag tag, final List<Member> member, final long id) {
-		this.tag = tag;
+	public Relation(final List<Tag> tags, final List<Member> member, final long id) {
+		this.tags = tags;
 		this.member = member;
 		this.id = id;
 	}
 
 	/**
-	 * Gets the value of the tag property.
+	 * Gets tag list.
 	 * 
 	 * @return possible object is {@link Tag }
 	 * 
 	 */
-	public Tag getTag() {
-		return tag;
+	public List<Tag> getTags() {
+		return tags;
 	}
 
 	/**
@@ -60,8 +60,8 @@ public class Relation {
 	 *            allowed object is {@link Tag }
 	 * 
 	 */
-	public void setTag(Tag value) {
-		this.tag = value;
+	public void setTags(List<Tag> value) {
+		this.tags = value;
 	}
 
 	/**
@@ -107,6 +107,15 @@ public class Relation {
 	 */
 	public void setId(long value) {
 		this.id = value;
+	}
+
+	public Object getTagValue(String key) {
+		for (Tag tag : tags) {
+			if (key.equals(tag.getKey())) {
+				return tag.getValue();
+			}
+		}
+		return null;
 	}
 
 }

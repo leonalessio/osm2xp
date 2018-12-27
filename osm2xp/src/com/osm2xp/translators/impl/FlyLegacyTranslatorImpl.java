@@ -5,16 +5,11 @@ import java.util.List;
 
 import org.openstreetmap.osmosis.osmbinary.Osmformat.HeaderBBox;
 
-import math.geom2d.Point2D;
-import math.geom2d.polygon.LinearRing2D;
-
 import com.osm2xp.exceptions.Osm2xpBusinessException;
 import com.osm2xp.model.osm.Node;
 import com.osm2xp.model.osm.OsmPolygon;
 import com.osm2xp.model.osm.OsmPolyline;
-import com.osm2xp.model.osm.Relation;
 import com.osm2xp.model.osm.Tag;
-import com.osm2xp.model.osm.Way;
 import com.osm2xp.translators.ITranslator;
 import com.osm2xp.utils.FilesUtils;
 import com.osm2xp.utils.OsmUtils;
@@ -22,6 +17,9 @@ import com.osm2xp.utils.geometry.GeomUtils;
 import com.osm2xp.utils.helpers.FlyLegacyOptionsHelper;
 import com.osm2xp.utils.helpers.GuiOptionsHelper;
 import com.osm2xp.utils.logging.Osm2xpLogger;
+
+import math.geom2d.Point2D;
+import math.geom2d.polygon.LinearRing2D;
 
 /**
  * Fly Legacy Translator implementation. Generates a .ofe file, that is used by
@@ -156,11 +154,6 @@ public class FlyLegacyTranslatorImpl implements ITranslator {
 	}
 
 	@Override
-	public void processRelation(Relation relation)
-			throws Osm2xpBusinessException {
-	}
-
-	@Override
 	public void complete() {
 		FilesUtils.writeTextToFile(this.ofeFile, "END", true);
 		Osm2xpLogger.info("Fly! Legacy buildings file finished.");
@@ -173,7 +166,7 @@ public class FlyLegacyTranslatorImpl implements ITranslator {
 	}
 
 	@Override
-	public Boolean mustStoreNode(Node node) {
+	public boolean mustStoreNode(Node node) {
 		Boolean result = true;
 		if (!GuiOptionsHelper.getOptions().isSinglePass()) {
 			result = GeomUtils.compareCoordinates(currentTile, node);
@@ -182,12 +175,7 @@ public class FlyLegacyTranslatorImpl implements ITranslator {
 	}
 
 	@Override
-	public Boolean mustProcessWay(Way way) {
-		return null;
-	}
-	
-	@Override
-	public Boolean mustProcessPolyline(List<Tag> tags) {
+	public boolean mustProcessPolyline(List<Tag> tags) {
 		return false;
 	}
 

@@ -1,5 +1,6 @@
 package com.osm2xp.gui.views.panels.xplane;
 
+import java.io.File;
 import java.util.List;
 
 import org.eclipse.jface.dialogs.InputDialog;
@@ -23,10 +24,13 @@ import org.eclipse.ui.forms.widgets.FormToolkit;
 import org.eclipse.ui.forms.widgets.Section;
 import org.eclipse.ui.plugin.AbstractUIPlugin;
 
+import com.osm2xp.controllers.BuildController;
 import com.osm2xp.gui.Activator;
 import com.osm2xp.gui.views.panels.Osm2xpPanel;
+import com.osm2xp.jobs.GenerateXPAirfiledsJob;
 import com.osm2xp.model.options.XplaneAirfieldOptions;
 import com.osm2xp.utils.UiUtil;
+import com.osm2xp.utils.helpers.GuiOptionsHelper;
 import com.osm2xp.utils.helpers.XplaneOptionsHelper;
 
 public class AirfieldsPanel extends Osm2xpPanel {
@@ -106,6 +110,26 @@ public class AirfieldsPanel extends Osm2xpPanel {
 		Spinner grassTaxiwayWidthSpinner = new Spinner(leftComposite, SWT.BORDER);
 		grassTaxiwayWidthSpinner.setMinimum(1);
 		bindComponent(grassTaxiwayWidthSpinner, options, "defaultGrassTaxiwayWidth");
+		
+		Button generateAFOnlyBtn = new Button(leftComposite, SWT.NONE);
+		generateAFOnlyBtn.setText("Generate Airfields");
+		generateAFOnlyBtn.setToolTipText("Generate only airfields for selected file, without generating overlay DSF");
+		GridDataFactory.swtDefaults().span(2,1).applyTo(generateAFOnlyBtn);
+		
+		generateAFOnlyBtn.addSelectionListener(new SelectionAdapter() {
+			
+			@Override
+			public void widgetSelected(SelectionEvent e) {
+				File file = BuildController.getSelectedFile();
+				if (file != null) {
+					String folderPath = file.getParent() + File.separator
+							+ GuiOptionsHelper.getSceneName();
+					GenerateXPAirfiledsJob job = new GenerateXPAirfiledsJob(file, folderPath);
+					job.schedule();
+				}
+			}
+			
+		});
 		
 		Composite rightComposite = toolkit.createComposite(con, SWT.NONE);
 		rightComposite.setLayout(new GridLayout(2, false));

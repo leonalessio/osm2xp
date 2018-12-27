@@ -9,9 +9,6 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map.Entry;
 
-import math.geom2d.Point2D;
-import math.geom2d.polygon.LinearRing2D;
-
 import org.openstreetmap.osmosis.osmbinary.Osmformat.HeaderBBox;
 import org.osm2world.core.ConversionFacade;
 import org.osm2world.core.target.Target;
@@ -24,19 +21,20 @@ import com.osm2xp.model.options.ObjectsRulesList;
 import com.osm2xp.model.osm.Node;
 import com.osm2xp.model.osm.OsmPolygon;
 import com.osm2xp.model.osm.OsmPolyline;
-import com.osm2xp.model.osm.Relation;
 import com.osm2xp.model.osm.Tag;
-import com.osm2xp.model.osm.Way;
 import com.osm2xp.translators.ITranslator;
+import com.osm2xp.utils.DsfObjectsProvider;
 import com.osm2xp.utils.DsfUtils;
 import com.osm2xp.utils.FilesUtils;
 import com.osm2xp.utils.OsmUtils;
 import com.osm2xp.utils.geometry.GeomUtils;
-import com.osm2xp.utils.DsfObjectsProvider;
 import com.osm2xp.utils.helpers.GuiOptionsHelper;
 import com.osm2xp.utils.helpers.WavefrontOptionsHelper;
 import com.osm2xp.utils.helpers.XmlHelper;
 import com.osm2xp.utils.logging.Osm2xpLogger;
+
+import math.geom2d.Point2D;
+import math.geom2d.polygon.LinearRing2D;
 
 /**
  * Wavefront translator implementation. Uses Osm2World (http://osm2world.org/)
@@ -196,11 +194,6 @@ public class WavefrontTranslatorImpl implements ITranslator {
 			}
 		}
 
-	}
-
-	@Override
-	public void processRelation(Relation relation)
-			throws Osm2xpBusinessException {
 	}
 
 	@Override
@@ -443,7 +436,7 @@ public class WavefrontTranslatorImpl implements ITranslator {
 	}
 
 	@Override
-	public Boolean mustStoreNode(Node node) {
+	public boolean mustStoreNode(Node node) {
 		Boolean result = true;
 		if (!GuiOptionsHelper.getOptions().isSinglePass()) {
 			result = GeomUtils.compareCoordinates(currentTile, node);
@@ -452,12 +445,7 @@ public class WavefrontTranslatorImpl implements ITranslator {
 	}
 
 	@Override
-	public Boolean mustProcessWay(Way way) {
-		return null;
-	}
-	
-	@Override
-	public Boolean mustProcessPolyline(List<Tag> tags) {
+	public boolean mustProcessPolyline(List<Tag> tags) {
 		return false;
 	}
 

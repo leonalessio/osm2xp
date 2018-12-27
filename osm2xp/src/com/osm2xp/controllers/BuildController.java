@@ -46,26 +46,8 @@ public class BuildController {
 	 * @throws Osm2xpBusinessException
 	 */
 	public void launchBuild() throws Osm2xpBusinessException {
-		String currentFilePath = GuiOptionsHelper.getOptions()
-				.getCurrentFilePath();
-		String path = StringUtils.stripToEmpty(currentFilePath).trim();
-		if (path.isEmpty()) {
-			MessageDialog.openError(Display.getDefault().getActiveShell(),"No file specified", "No file with OSM data (*.pbf, *.osm...) specified. Please choose valid file");
-			try {
-				PlatformUI.getWorkbench().getActiveWorkbenchWindow().getActivePage().showView(MainSceneryFileView.ID);
-			} catch (PartInitException e) {
-				Activator.log(e);
-			}
-			return;
-		}
-		File currentFile = new File(path);
-		if (!currentFile.isFile()) {
-			MessageDialog.openError(Display.getDefault().getActiveShell(),"Invalid file specified", "Can't open OSM data file " + path + ". Please check this file exists");
-			try {
-				PlatformUI.getWorkbench().getActiveWorkbenchWindow().getActivePage().showView(MainSceneryFileView.ID);
-			} catch (PartInitException e) {
-				Activator.log(e);
-			}
+		File currentFile = getSelectedFile();
+		if (currentFile == null) {
 			return;
 		}
 		// if choosen output mode will generate file, first check that user is
@@ -83,6 +65,32 @@ public class BuildController {
 		} else {
 			startGeneration(currentFile);
 		}
+	}
+
+	public static File getSelectedFile() {
+		String currentFilePath = GuiOptionsHelper.getOptions()
+				.getCurrentFilePath();
+		String path = StringUtils.stripToEmpty(currentFilePath).trim();
+		if (path.isEmpty()) {
+			MessageDialog.openError(Display.getDefault().getActiveShell(),"No file specified", "No file with OSM data (*.pbf, *.osm...) specified. Please choose valid file");
+			try {
+				PlatformUI.getWorkbench().getActiveWorkbenchWindow().getActivePage().showView(MainSceneryFileView.ID);
+			} catch (PartInitException e) {
+				Activator.log(e);
+			}
+			return null;
+		}
+		File currentFile = new File(path);
+		if (!currentFile.isFile()) {
+			MessageDialog.openError(Display.getDefault().getActiveShell(),"Invalid file specified", "Can't open OSM data file " + path + ". Please check this file exists");
+			try {
+				PlatformUI.getWorkbench().getActiveWorkbenchWindow().getActivePage().showView(MainSceneryFileView.ID);
+			} catch (PartInitException e) {
+				Activator.log(e);
+			}
+			return null;
+		}
+		return currentFile;
 	}
 
 	/**

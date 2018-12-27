@@ -7,6 +7,7 @@ import java.util.logging.FileHandler;
 import java.util.logging.Logger;
 
 import org.eclipse.core.resources.ResourcesPlugin;
+import org.eclipse.core.runtime.IPath;
 
 import com.osm2xp.constants.Osm2xpConstants;
 
@@ -18,9 +19,7 @@ import com.osm2xp.constants.Osm2xpConstants;
  */
 public class Osm2xpLogger {
 
-	private static final String ERROR_LOG_PATH = ResourcesPlugin.getWorkspace()
-			.getRoot().getLocation()
-			+ File.separator + "error.log";
+	private static final String ERROR_LOG_NAME = "error.log";
 	private static Logger logger;
 	private static Logger logger2;
 	private static Logger errorFileLogger;
@@ -35,10 +34,12 @@ public class Osm2xpLogger {
 		ConsoleHandler ch = new ConsoleHandler();
 		ch.setFormatter(new Osm2xpConsoleLoggerFormater());
 		logger.addHandler(ch);
-		logger2.addHandler(ch);
+		logger2.addHandler(ch);		
 		FileHandler fileHandler = null;
+		IPath location = ResourcesPlugin.getWorkspace()
+		.getRoot().getLocation();
 		try {
-			fileHandler = new FileHandler(ERROR_LOG_PATH);
+			fileHandler = new FileHandler(new File(location.toFile(), ERROR_LOG_NAME).getAbsolutePath());
 		} catch (SecurityException e) {
 			e.printStackTrace();
 		} catch (IOException e) {

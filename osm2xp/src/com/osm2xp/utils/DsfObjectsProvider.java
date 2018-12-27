@@ -52,6 +52,7 @@ public class DsfObjectsProvider {
 	private List<String> forestsList = new ArrayList<String>();
 	private List<String> polygonsList = new ArrayList<String>();
 	private List<String> lightsObjectsList = new ArrayList<String>();
+	private List<FacadeTagRule> facadesRules = XplaneOptionsHelper.getOptions().getFacadesRules().getRules();
 
 	private FacadeSetManager facadeSetManager;
 	private Box2D exclusionBox;
@@ -108,6 +109,32 @@ public class DsfObjectsProvider {
 		lastPolyId = osmPolygon.getId();
 		lastFacade = idx;
 		return idx;
+	}
+	
+	public int computeFacadeIndexFromRules(OsmPolygon osmPolygon) {
+		if (osmPolygon.getId() == lastPolyId && lastFacade >= 0) {
+			return lastFacade;
+		}
+		String name = getFacadeNameFromRules(osmPolygon);
+		if (name != null) {
+			int idx = polygonsList.indexOf(name);
+			lastPolyId = osmPolygon.getId();
+			lastFacade = idx;
+			return idx;
+		}
+		return -1;
+	}
+	
+	protected String getFacadeNameFromRules(OsmPolygon osmPolygon) {
+		for (FacadeTagRule facadeTagRule : facadesRules) {
+			String value = osmPolygon.getTagValue(facadeTagRule.getTag().getKey());
+			if (facadeTagRule.getTag().getValue().equals(value)) {
+				List<ObjectFile> objectsFiles = facadeTagRule.getObjectsFiles();
+				Random rand = new Random();
+				return objectsFiles.get(rand.nextInt(objectsFiles.size())).getPath();
+			}
+		}
+		return null;
 	}
 	
 	public Integer computeSpecialFacadeDsfIndex(SpecialFacadeType specialFacadeType, OsmPolyline polyline) {
