@@ -56,10 +56,7 @@ public class BuildController {
 			folderPath = currentFile.getParent() + File.separator
 					+ GuiOptionsHelper.getSceneName();
 
-			if (!new File(folderPath).exists()
-					|| MessageDialog.openConfirm(Display.getCurrent()
-							.getActiveShell(), "Confirm", folderPath
-							+ " already exists, delete?")) {
+			if (checkDeleteFolder(new File(folderPath))) {
 				startGeneration(currentFile);
 			}
 		} else {
@@ -117,6 +114,19 @@ public class BuildController {
 			}
 		}
 
+	}
+	
+	public static boolean checkDeleteFolder(File currentFolder) {
+		if (!currentFolder.exists()) {
+			return true;
+		}
+		if (MessageDialog.openConfirm(Display.getDefault()
+						.getActiveShell(), "Confirm", currentFolder.getAbsolutePath()
+						+ " already exists, delete?")) {
+			FilesUtils.deleteDirectory(currentFolder);
+			return true;
+		}
+		return false;
 	}
 
 	/**

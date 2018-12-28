@@ -67,6 +67,7 @@ public class MultiTileDataConverter extends AbstractOSMDataConverter {
 	
 	@Override
 	public void visit(Node node) {
+		pointParsed(node.getLon(), node.getLat());
 		// give the node to the translator for processing 
 		for (ISpecificTranslator adapter : translationAdapters) {
 			try {

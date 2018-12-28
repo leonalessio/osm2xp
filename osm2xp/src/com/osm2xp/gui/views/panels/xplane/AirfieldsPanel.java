@@ -124,6 +124,9 @@ public class AirfieldsPanel extends Osm2xpPanel {
 				if (file != null) {
 					String folderPath = file.getParent() + File.separator
 							+ GuiOptionsHelper.getSceneName();
+					if (!BuildController.checkDeleteFolder(new File(folderPath))) {
+						return;
+					}
 					GenerateXPAirfiledsJob job = new GenerateXPAirfiledsJob(file, folderPath);
 					job.schedule();
 				}

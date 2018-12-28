@@ -231,7 +231,7 @@ public class XPAirfieldTranslationAdapter implements ISpecificTranslator {
 
 	@Override
 	public boolean mustStoreNode(Node node) {
-		return false;
+		return true;
 	}
 
 }
