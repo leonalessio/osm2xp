@@ -93,6 +93,10 @@ public class Relation {
 		return this.member;
 	}
 
+	public void setMember(List<Member> member) {
+		this.member = member;
+	}
+
 	/**
 	 * Gets the value of the id property.
 	 * 

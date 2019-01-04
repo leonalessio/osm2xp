@@ -89,7 +89,7 @@ public abstract class AbstractOSMDataConverter implements IOSMDataVisitor {
 
 			wayCnt++;
 			if (wayCnt % 100000 == 0) {
-				Osm2xpLogger.info(nodeCnt + " ways processed");
+				Osm2xpLogger.info(wayCnt + " ways processed");
 			}
 		} catch (Exception e) {
 			Osm2xpLogger.error(

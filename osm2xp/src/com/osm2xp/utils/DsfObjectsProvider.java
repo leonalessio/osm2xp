@@ -127,8 +127,7 @@ public class DsfObjectsProvider {
 	
 	protected String getFacadeNameFromRules(OsmPolygon osmPolygon) {
 		for (FacadeTagRule facadeTagRule : facadesRules) {
-			String value = osmPolygon.getTagValue(facadeTagRule.getTag().getKey());
-			if (facadeTagRule.getTag().getValue().equals(value)) {
+			if (facadeTagRule.matches(osmPolygon)) {
 				List<ObjectFile> objectsFiles = facadeTagRule.getObjectsFiles();
 				Random rand = new Random();
 				return objectsFiles.get(rand.nextInt(objectsFiles.size())).getPath();
@@ -252,14 +251,14 @@ public class DsfObjectsProvider {
 				if (objectsFolder.isDirectory()) {
 					registerAndCopyObjectsFolder(objectsFolder, OBJECTS_TARGET_FOLDER_NAME);
 				} else {
-					Activator.log(IStatus.ERROR, "Special facades folder not present in resources dir");
+					Activator.log(IStatus.ERROR, "Special objects folder not present in resources dir - this can result in generation errors");
 				} 
 				File specObjectsFolder = new File(
 						ResourcesPlugin.getWorkspace().getRoot().getLocation() + "/resources/specobjects");
 				if (specObjectsFolder.isDirectory()) {
 					registerAndCopyObjectsFolder(specObjectsFolder, SPECIAL_OBJECTS_TARGET_FOLDER_NAME);
 				} else {
-					Activator.log(IStatus.ERROR, "Special facades folder not present in resources dir");
+					Activator.log(IStatus.ERROR, "Special objects folder not present in resources dir - this can result in generation errors");
 				} 
 			}
 	}

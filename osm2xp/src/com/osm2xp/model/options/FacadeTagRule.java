@@ -6,6 +6,9 @@ import javax.xml.bind.annotation.XmlAccessType;
 import javax.xml.bind.annotation.XmlAccessorType;
 import javax.xml.bind.annotation.XmlType;
 
+import org.apache.commons.lang.StringUtils;
+
+import com.osm2xp.model.osm.OsmPolygon;
 import com.osm2xp.model.osm.Tag;
 
 /**
@@ -70,6 +73,12 @@ public class FacadeTagRule extends TagsRule {
 	 */
 	public void setSizeMax(int value) {
 		this.sizeMax = value;
+	}
+
+	public boolean matches(OsmPolygon osmPolygon) {
+		String key = getTag().getKey();
+		String value = StringUtils.stripToEmpty(getTag().getValue());
+		return value.equals(osmPolygon.getTagValue(key));
 	}
 
 }

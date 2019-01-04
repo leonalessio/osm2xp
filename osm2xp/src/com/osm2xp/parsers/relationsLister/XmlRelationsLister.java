@@ -70,8 +70,13 @@ public class XmlRelationsLister implements ContentHandler, RelationsLister {
 			currentRelation = new Relation();
 		}
 		if (parsingRelation && localName.equalsIgnoreCase("member")) {
-			Member member = new Member(0, attributs.getValue("type"), //TODO use actual id here
-					attributs.getValue("ref"), attributs.getValue("role"));
+			long id = 0;
+			String ref = attributs.getValue("ref");
+			if (ref != null) {
+				id = Long.parseLong(ref);
+			}
+			Member member = new Member(id, attributs.getValue("type"), //TODO use actual id here
+					ref, attributs.getValue("role"));
 			currentRelation.getMember().add(member);
 		}
 	}

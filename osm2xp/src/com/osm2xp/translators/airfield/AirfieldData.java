@@ -13,6 +13,7 @@ import com.osm2xp.utils.OsmUtils;
 import com.osm2xp.utils.geometry.GeomUtils;
 
 import math.geom2d.Point2D;
+import math.geom2d.line.Line2D;
 import math.geom2d.line.LineSegment2D;
 import math.geom2d.polygon.LinearRing2D;
 
@@ -103,6 +104,33 @@ public abstract class AirfieldData extends AerowayData {
 	}
 
 	public abstract Point2D getAreaCenter();
+	
+	/**
+	 * Return datum point of an airfield
+	 * In Russian, it's 'ÊÒÀ' - Control Point of an Aerodrome, usually - centerpoint of the main/single runway
+	 * @return
+	 */
+	public Point2D getDatum() {
+		RunwayData longestRunway = getLongestRunway();
+		if (longestRunway != null) {
+			Line2D runwayLine = longestRunway.getRunwayLine();
+			return new Point2D(runwayLine.p1.x / 2 + runwayLine.p2.x / 2, runwayLine.p1.y / 2 + runwayLine.p2.y / 2);
+		}
+		return getAreaCenter();
+	}
+	
+	public RunwayData getLongestRunway() {
+		double maxLen = 0;
+		RunwayData longestRwy = null;
+		for (RunwayData runway : runways) {
+			double curLen = runway.getRunwayLine().getLength();
+			if (curLen > maxLen) {
+				maxLen = curLen;
+				longestRwy = runway;
+			}
+		}
+		return longestRwy;
+	}
 
 	public abstract boolean contains(double lon, double lat);
 

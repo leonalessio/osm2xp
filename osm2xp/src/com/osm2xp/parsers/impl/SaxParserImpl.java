@@ -17,8 +17,10 @@ import com.osm2xp.exceptions.DataSinkException;
 import com.osm2xp.exceptions.Osm2xpBusinessException;
 import com.osm2xp.exceptions.OsmParsingException;
 import com.osm2xp.gui.Activator;
+import com.osm2xp.model.osm.Member;
 import com.osm2xp.model.osm.Nd;
 import com.osm2xp.model.osm.Node;
+import com.osm2xp.model.osm.Relation;
 import com.osm2xp.model.osm.Tag;
 import com.osm2xp.model.osm.Way;
 import com.osm2xp.parsers.IOSMDataVisitor;
@@ -41,9 +43,12 @@ public class SaxParserImpl implements ContentHandler, IVisitingParser {
 	private static final String XML_NODE_ND = "nd";
 	private static final String XML_NODE_TAG = "tag";
 	private static final String XML_NODE_NODE = "node";
+	private static final String XML_NODE_MEMBER = "member";
 	private static final String XML_NODE_WAY = "way";
+	private static final String XML_NODE_RELATION = "relation";
 	protected Locator locator;
 	protected List<Tag> tagList;
+	protected List<Member> membersList;
 	protected OsmAttributes currentAttributes;
 	protected List<Nd> ndList;
 	private File xmlFile;
@@ -98,29 +103,30 @@ public class SaxParserImpl implements ContentHandler, IVisitingParser {
 
 	}
 
-	public void startElement(String nameSpaceURI, String localName,
-			String rawName, Attributes attributs) {
-		if (localName.equalsIgnoreCase(XML_NODE_WAY)
+	public void startElement(String nameSpaceURI, String localName, String rawName, Attributes attributs) {
+		if (localName.equalsIgnoreCase(XML_NODE_WAY) || localName.equalsIgnoreCase(XML_NODE_RELATION)
 				|| localName.equalsIgnoreCase(XML_NODE_NODE)) {
 			tagList = new ArrayList<Tag>();
 			ndList = new ArrayList<Nd>();
+			membersList = new ArrayList<>();
 			currentAttributes = new OsmAttributes(attributs);
-		} else {
-			if (localName.equalsIgnoreCase(XML_NODE_TAG)) {
-				Tag tag = new Tag();
-				tag.setKey(attributs.getValue(0));
-				tag.setValue(attributs.getValue(1));
-				tagList.add(tag);
-			} else {
-				if (localName.equalsIgnoreCase(XML_NODE_ND)) {
-					Nd nd = new Nd();
-					nd.setRef(Long.parseLong(attributs
-							.getValue(XML_ATTRIBUTE_REF)));
-					this.ndList.add(nd);
-
-				}
+		} else if (localName.equalsIgnoreCase(XML_NODE_TAG)) {
+			Tag tag = new Tag();
+			tag.setKey(attributs.getValue(0));
+			tag.setValue(attributs.getValue(1));
+			tagList.add(tag);
+		} else if (localName.equalsIgnoreCase(XML_NODE_ND)) {
+			Nd nd = new Nd();
+			nd.setRef(Long.parseLong(attributs.getValue(XML_ATTRIBUTE_REF)));
+			this.ndList.add(nd);
+		} else if (localName.equalsIgnoreCase(XML_NODE_MEMBER)) {
+			long id = 0;
+			String ref = attributs.getValue("ref");
+			if (ref != null) {
+				id = Long.parseLong(ref);
 			}
-
+			membersList.add(new Member(id, attributs.getValue("type"), //TODO use actual id here
+					ref, attributs.getValue("role")));
 		}
 	}
 
@@ -135,11 +141,21 @@ public class SaxParserImpl implements ContentHandler, IVisitingParser {
 			} catch (DataSinkException e) {
 				Osm2xpLogger.error("Error parsing way object.", e);
 			}
+		} if (localName.equals(XML_NODE_RELATION)) {
+			parseRelation();
 		} else if (localName.equals(XML_NODE_NODE)) {
 			parseNode();
-
 		}
 	}	
+
+	private void parseRelation() {
+		Relation relation = new Relation();
+		relation.setId(Long.parseLong(currentAttributes.getValue(XML_ATTRIBUTE_ID)));
+		relation.setTags(tagList);
+		relation.setMember(membersList);
+		
+		visitor.visit(relation);
+	}
 
 	private void parseWay() throws Osm2xpBusinessException, DataSinkException {
 		Way way = new Way();

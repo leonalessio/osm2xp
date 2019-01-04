@@ -84,6 +84,9 @@ public class XPAirfieldOutput {
 		if (shouldFlatten(airfieldData)) {
 			defsList.add("1302 flatten 1");
 		}
+		Point2D datum = airfieldData.getDatum();
+		defsList.add(String.format(Locale.ROOT, "1302 datum_lat %1.6f", datum.y));
+		defsList.add(String.format(Locale.ROOT, "1302 datum_lon %1.6f", datum.x));
 		for (RunwayData runway : runways) {
 			defsList.add(getRunwayStr(runway));
 		}

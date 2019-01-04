@@ -34,6 +34,8 @@ public class IDListFactory {
 			return ((IIDStore) store).getIds();
 		} else if (store instanceof long[]) {
 			return (long[]) store;
+		} else if (store == null) {
+			return null;
 		}
 		throw new IllegalArgumentException("Store of type " + store + " is not supported!");
 	}
