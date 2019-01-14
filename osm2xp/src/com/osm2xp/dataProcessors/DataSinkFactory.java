@@ -1,8 +1,8 @@
 package com.osm2xp.dataProcessors;
 
+import com.osm2xp.core.exceptions.DataSinkException;
 import com.osm2xp.dataProcessors.impl.Jdbm2ProcessorImpl;
 import com.osm2xp.dataProcessors.impl.MemoryCriticalProcessorImpl;
-import com.osm2xp.exceptions.DataSinkException;
 import com.osm2xp.utils.helpers.GuiOptionsHelper;
 
 /**

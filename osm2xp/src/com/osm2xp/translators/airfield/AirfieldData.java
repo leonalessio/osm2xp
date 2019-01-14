@@ -6,9 +6,9 @@ import java.util.List;
 
 import org.apache.commons.lang.StringUtils;
 
-import com.osm2xp.model.osm.IHasTags;
-import com.osm2xp.model.osm.OsmPolygon;
-import com.osm2xp.model.osm.OsmPolyline;
+import com.osm2xp.core.model.osm.IHasTags;
+import com.osm2xp.model.osm.polygon.OsmPolygon;
+import com.osm2xp.model.osm.polygon.OsmPolyline;
 import com.osm2xp.utils.OsmUtils;
 import com.osm2xp.utils.geometry.GeomUtils;
 

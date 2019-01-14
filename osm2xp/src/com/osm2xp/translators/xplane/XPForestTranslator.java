@@ -2,8 +2,8 @@ package com.osm2xp.translators.xplane;
 
 import java.util.List;
 
-import com.osm2xp.model.osm.OsmPolygon;
-import com.osm2xp.model.osm.OsmPolyline;
+import com.osm2xp.model.osm.polygon.OsmPolygon;
+import com.osm2xp.model.osm.polygon.OsmPolyline;
 import com.osm2xp.model.stats.GenerationStats;
 import com.osm2xp.translators.impl.XPOutputFormat;
 import com.osm2xp.utils.DsfObjectsProvider;

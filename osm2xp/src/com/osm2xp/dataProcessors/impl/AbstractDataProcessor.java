@@ -3,9 +3,9 @@ package com.osm2xp.dataProcessors.impl;
 import java.util.ArrayList;
 import java.util.List;
 
+import com.osm2xp.core.exceptions.DataSinkException;
+import com.osm2xp.core.model.osm.Node;
 import com.osm2xp.dataProcessors.IDataSink;
-import com.osm2xp.exceptions.DataSinkException;
-import com.osm2xp.model.osm.Node;
 
 public abstract class AbstractDataProcessor implements IDataSink {
 

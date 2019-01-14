@@ -6,7 +6,7 @@ import javax.xml.bind.annotation.XmlAccessType;
 import javax.xml.bind.annotation.XmlAccessorType;
 import javax.xml.bind.annotation.XmlType;
 
-import com.osm2xp.model.osm.Tag;
+import com.osm2xp.core.model.osm.Tag;
 
 /**
  * XplaneBuildingObjectTagRule.

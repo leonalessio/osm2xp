@@ -6,22 +6,22 @@ import java.util.Collections;
 import java.util.List;
 
 import org.apache.commons.lang.StringUtils;
-import org.openstreetmap.osmosis.osmbinary.Osmformat.HeaderBBox;
 
-import com.osm2xp.exceptions.Osm2xpBusinessException;
+import com.osm2xp.core.exceptions.Osm2xpBusinessException;
+import com.osm2xp.core.logging.Osm2xpLogger;
+import com.osm2xp.core.model.osm.Node;
+import com.osm2xp.core.model.osm.Tag;
 import com.osm2xp.model.options.ObjectFile;
 import com.osm2xp.model.options.TagsRule;
-import com.osm2xp.model.osm.Node;
-import com.osm2xp.model.osm.OsmPolyline;
-import com.osm2xp.model.osm.Tag;
+import com.osm2xp.model.osm.polygon.OsmPolyline;
 import com.osm2xp.translators.ITranslator;
 import com.osm2xp.utils.FilesUtils;
 import com.osm2xp.utils.OsmUtils;
 import com.osm2xp.utils.geometry.GeomUtils;
 import com.osm2xp.utils.helpers.FlightGearOptionsHelper;
 import com.osm2xp.utils.helpers.GuiOptionsHelper;
-import com.osm2xp.utils.logging.Osm2xpLogger;
 
+import math.geom2d.Box2D;
 import math.geom2d.Point2D;
 import math.geom2d.polygon.LinearRing2D;
 
@@ -151,7 +151,7 @@ public class FlightGearTranslatorImpl implements ITranslator {
 
 	
 	@Override
-	public void processBoundingBox(HeaderBBox bbox) {
+	public void processBoundingBox(Box2D bbox) {
 		// Do nothing
 	}
 	

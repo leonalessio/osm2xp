@@ -6,11 +6,11 @@ import org.eclipse.core.runtime.IProgressMonitor;
 import org.eclipse.core.runtime.IStatus;
 import org.eclipse.core.runtime.Status;
 
-import com.osm2xp.exceptions.DataSinkException;
-import com.osm2xp.parsers.IVisitingParser;
-import com.osm2xp.parsers.ParserBuilder;
-import com.osm2xp.parsers.impl.MultiTileDataConverter;
-import com.osm2xp.utils.logging.Osm2xpLogger;
+import com.osm2xp.converters.impl.MultiTileDataConverter;
+import com.osm2xp.core.exceptions.DataSinkException;
+import com.osm2xp.core.logging.Osm2xpLogger;
+import com.osm2xp.core.parsers.IVisitingParser;
+import com.osm2xp.parsers.builders.ParserBuilder;
 
 /**
  * Job for generating scenario for multiple tiles 

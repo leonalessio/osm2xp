@@ -1,7 +1,7 @@
 package com.osm2xp.translators;
 
-import com.osm2xp.model.osm.OsmPolygon;
-import com.osm2xp.model.osm.OsmPolyline;
+import com.osm2xp.model.osm.polygon.OsmPolygon;
+import com.osm2xp.model.osm.polygon.OsmPolyline;
 
 public interface ITranslationListener {
 	public void processBuilding(OsmPolygon polygon, Integer facade);

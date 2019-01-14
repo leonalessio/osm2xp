@@ -14,11 +14,11 @@ import org.eclipse.swt.widgets.Shell;
 import org.osgi.service.prefs.BackingStoreException;
 
 import com.osm2xp.constants.Perspectives;
-import com.osm2xp.exceptions.Osm2xpBusinessException;
+import com.osm2xp.core.exceptions.Osm2xpBusinessException;
+import com.osm2xp.core.logging.Osm2xpLogger;
+import com.osm2xp.core.model.osm.Tag;
 import com.osm2xp.gui.Activator;
 import com.osm2xp.model.options.GuiOptions;
-import com.osm2xp.model.osm.Tag;
-import com.osm2xp.utils.logging.Osm2xpLogger;
 
 import math.geom2d.Point2D;
 

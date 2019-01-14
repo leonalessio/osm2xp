@@ -30,15 +30,15 @@ import org.eclipse.swt.widgets.ToolItem;
 import org.eclipse.wb.swt.ResourceManager;
 
 import com.osm2xp.constants.MessagesConstants;
-import com.osm2xp.exceptions.Osm2xpBusinessException;
+import com.osm2xp.core.exceptions.Osm2xpBusinessException;
+import com.osm2xp.core.logging.Osm2xpLogger;
+import com.osm2xp.core.model.osm.Tag;
 import com.osm2xp.gui.components.FilesPathsTable;
 import com.osm2xp.gui.components.TagsRulesTable;
 import com.osm2xp.model.options.ObjectFile;
 import com.osm2xp.model.options.FlightGearObjectTagRule;
-import com.osm2xp.model.osm.Tag;
 import com.osm2xp.utils.helpers.XmlHelper;
 import com.osm2xp.utils.helpers.FlightGearOptionsHelper;
-import com.osm2xp.utils.logging.Osm2xpLogger;
 
 /**
  * FlightGearObjectsRulesPanel.

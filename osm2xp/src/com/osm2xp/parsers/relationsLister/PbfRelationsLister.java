@@ -13,9 +13,9 @@ import org.openstreetmap.osmosis.osmbinary.Osmformat;
 import org.openstreetmap.osmosis.osmbinary.Osmformat.*;
 import org.openstreetmap.osmosis.osmbinary.file.BlockInputStream;
 
-import com.osm2xp.exceptions.Osm2xpBusinessException;
-import com.osm2xp.model.osm.Member;
-import com.osm2xp.model.osm.Relation;
+import com.osm2xp.core.exceptions.Osm2xpBusinessException;
+import com.osm2xp.core.model.osm.Member;
+import com.osm2xp.core.model.osm.Relation;
 
 /**
  * PbfRelationsLister.

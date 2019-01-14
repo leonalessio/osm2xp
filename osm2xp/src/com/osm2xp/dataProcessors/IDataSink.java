@@ -2,9 +2,9 @@ package com.osm2xp.dataProcessors;
 
 import java.util.List;
 
-import com.osm2xp.exceptions.DataSinkException;
-import com.osm2xp.model.osm.Node;
-import com.osm2xp.model.osm.Way;
+import com.osm2xp.core.exceptions.DataSinkException;
+import com.osm2xp.core.model.osm.Node;
+import com.osm2xp.core.model.osm.Way;
 
 /**
  * Data sink interface. Store open street map nodes.

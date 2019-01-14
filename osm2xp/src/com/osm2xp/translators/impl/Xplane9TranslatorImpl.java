@@ -3,8 +3,8 @@ package com.osm2xp.translators.impl;
 import java.util.List;
 import java.util.Random;
 
-import com.osm2xp.exceptions.Osm2xpBusinessException;
-import com.osm2xp.model.osm.OsmPolyline;
+import com.osm2xp.core.exceptions.Osm2xpBusinessException;
+import com.osm2xp.model.osm.polygon.OsmPolyline;
 import com.osm2xp.model.stats.GenerationStats;
 import com.osm2xp.utils.DsfObjectsProvider;
 import com.osm2xp.utils.OsmUtils;

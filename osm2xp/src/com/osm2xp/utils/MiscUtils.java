@@ -14,8 +14,8 @@ import org.eclipse.ui.IWorkbenchWindow;
 import org.eclipse.ui.PlatformUI;
 
 import com.osm2xp.constants.Osm2xpConstants;
+import com.osm2xp.core.logging.Osm2xpLogger;
 import com.osm2xp.gui.Activator;
-import com.osm2xp.utils.logging.Osm2xpLogger;
 
 /**
  * MiscUtils.

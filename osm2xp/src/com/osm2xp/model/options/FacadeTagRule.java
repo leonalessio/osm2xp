@@ -8,8 +8,8 @@ import javax.xml.bind.annotation.XmlType;
 
 import org.apache.commons.lang.StringUtils;
 
-import com.osm2xp.model.osm.OsmPolygon;
-import com.osm2xp.model.osm.Tag;
+import com.osm2xp.core.model.osm.Tag;
+import com.osm2xp.model.osm.polygon.OsmPolygon;
 
 /**
  * FacadeTagRule.

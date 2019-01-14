@@ -2,9 +2,9 @@ package com.osm2xp.parsers.tilesLister;
 
 import java.util.Set;
 
-import math.geom2d.Point2D;
+import com.osm2xp.core.exceptions.Osm2xpBusinessException;
 
-import com.osm2xp.exceptions.Osm2xpBusinessException;
+import math.geom2d.Point2D;
 
 /**
  * TilesLister.

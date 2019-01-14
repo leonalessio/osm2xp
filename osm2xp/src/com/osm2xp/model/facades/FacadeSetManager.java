@@ -19,7 +19,7 @@ import org.eclipse.core.runtime.Status;
 
 import com.google.common.collect.HashMultimap;
 import com.google.common.collect.Multimap;
-import com.osm2xp.exceptions.Osm2xpTechnicalException;
+import com.osm2xp.core.exceptions.Osm2xpTechnicalException;
 import com.osm2xp.gui.Activator;
 import com.osm2xp.translators.BuildingType;
 import com.osm2xp.utils.DsfUtils;

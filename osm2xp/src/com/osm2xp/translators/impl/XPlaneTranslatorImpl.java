@@ -7,18 +7,16 @@ import java.util.List;
 
 import org.apache.commons.lang.StringUtils;
 import org.eclipse.core.runtime.preferences.InstanceScope;
-import org.openstreetmap.osmosis.osmbinary.Osmformat.HeaderBBox;
 
 import com.osm2xp.constants.Osm2xpConstants;
-import com.osm2xp.exceptions.Osm2xpBusinessException;
+import com.osm2xp.core.exceptions.Osm2xpBusinessException;
+import com.osm2xp.core.logging.Osm2xpLogger;
+import com.osm2xp.core.model.osm.Node;
+import com.osm2xp.core.model.osm.Tag;
 import com.osm2xp.gui.Activator;
 import com.osm2xp.model.facades.SpecialFacadeType;
-import com.osm2xp.model.osm.Node;
-import com.osm2xp.model.osm.OsmPolygon;
-import com.osm2xp.model.osm.OsmPolyline;
-import com.osm2xp.model.osm.Relation;
-import com.osm2xp.model.osm.Tag;
-import com.osm2xp.model.osm.Way;
+import com.osm2xp.model.osm.polygon.OsmPolygon;
+import com.osm2xp.model.osm.polygon.OsmPolyline;
 import com.osm2xp.model.stats.GenerationStats;
 import com.osm2xp.model.xplane.XplaneDsf3DObject;
 import com.osm2xp.model.xplane.XplaneDsfObject;
@@ -41,7 +39,6 @@ import com.osm2xp.utils.geometry.GeomUtils;
 import com.osm2xp.utils.helpers.GuiOptionsHelper;
 import com.osm2xp.utils.helpers.StatsHelper;
 import com.osm2xp.utils.helpers.XplaneOptionsHelper;
-import com.osm2xp.utils.logging.Osm2xpLogger;
 import com.osm2xp.writers.IWriter;
 
 import math.geom2d.Box2D;
@@ -434,9 +431,9 @@ public class XPlaneTranslatorImpl implements ITranslator{
 	}
 
 	@Override
-	public void processBoundingBox(HeaderBBox bbox) {
+	public void processBoundingBox(Box2D bbox) {
 		if (bbox != null && GuiOptionsHelper.isUseExclusionsFromPBF()) {
-			Box2D bboxRect = new Box2D(bbox.getLeft() / COORD_DIV_FACTOR,bbox.getRight() / COORD_DIV_FACTOR, bbox.getBottom() / COORD_DIV_FACTOR, bbox.getTop() / COORD_DIV_FACTOR);
+			Box2D bboxRect = new Box2D(bbox.getMinX() / COORD_DIV_FACTOR,bbox.getMaxX() / COORD_DIV_FACTOR, bbox.getMinY() / COORD_DIV_FACTOR, bbox.getMaxY() / COORD_DIV_FACTOR);
 			if (currentTile != null) {
 				Box2D tileRect = new Box2D(currentTile, 1,1);
 				dsfObjectsProvider.setExclusionBox(tileRect.intersection(bboxRect));

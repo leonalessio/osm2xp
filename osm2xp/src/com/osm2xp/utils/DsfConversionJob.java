@@ -8,7 +8,7 @@ import org.eclipse.core.runtime.IStatus;
 import org.eclipse.core.runtime.Status;
 import org.eclipse.core.runtime.jobs.Job;
 
-import com.osm2xp.utils.logging.Osm2xpLogger;
+import com.osm2xp.core.logging.Osm2xpLogger;
 
 public class DsfConversionJob extends Job {
 

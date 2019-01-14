@@ -6,20 +6,19 @@ import java.util.Iterator;
 import java.util.List;
 import java.util.stream.Collectors;
 
-import org.openstreetmap.osmosis.osmbinary.Osmformat.HeaderBBox;
-
-import com.osm2xp.exceptions.Osm2xpBusinessException;
-import com.osm2xp.model.osm.IHasTags;
-import com.osm2xp.model.osm.Node;
-import com.osm2xp.model.osm.OsmPolygon;
-import com.osm2xp.model.osm.OsmPolyline;
-import com.osm2xp.model.osm.OsmPolylineFactory;
-import com.osm2xp.model.osm.Tag;
+import com.osm2xp.core.exceptions.Osm2xpBusinessException;
+import com.osm2xp.core.model.osm.IHasTags;
+import com.osm2xp.core.model.osm.Node;
+import com.osm2xp.core.model.osm.Tag;
+import com.osm2xp.model.osm.polygon.OsmPolygon;
+import com.osm2xp.model.osm.polygon.OsmPolyline;
+import com.osm2xp.model.osm.polygon.OsmPolylineFactory;
 import com.osm2xp.translators.ISpecificTranslator;
 import com.osm2xp.utils.OsmUtils;
 import com.osm2xp.utils.helpers.XplaneOptionsHelper;
 import com.vividsolutions.jts.geom.Geometry;
 
+import math.geom2d.Box2D;
 import math.geom2d.Point2D;
 import math.geom2d.line.Line2D;
 
@@ -220,7 +219,7 @@ public class XPAirfieldTranslationAdapter implements ISpecificTranslator {
 	
 
 	@Override
-	public void processBoundingBox(HeaderBBox bbox) {
+	public void processBoundingBox(Box2D bbox) {
 		// Do nothing		
 	}
 

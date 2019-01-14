@@ -4,7 +4,6 @@ import java.io.PrintStream;
 
 import org.eclipse.core.runtime.IExtension;
 import org.eclipse.swt.graphics.Point;
-import org.eclipse.swt.widgets.Shell;
 import org.eclipse.ui.IWorkbenchPreferenceConstants;
 import org.eclipse.ui.PlatformUI;
 import org.eclipse.ui.application.ActionBarAdvisor;
@@ -19,14 +18,15 @@ import org.eclipse.ui.internal.WorkbenchPlugin;
 import org.eclipse.ui.internal.registry.ActionSetRegistry;
 import org.eclipse.ui.internal.registry.IActionSetDescriptor;
 
-import com.osm2xp.exceptions.Osm2xpBusinessException;
+import com.osm2xp.constants.Osm2xpConstants;
+import com.osm2xp.core.exceptions.Osm2xpBusinessException;
+import com.osm2xp.core.logging.Osm2xpLogger;
 import com.osm2xp.utils.helpers.FlightGearOptionsHelper;
 import com.osm2xp.utils.helpers.FlyLegacyOptionsHelper;
 import com.osm2xp.utils.helpers.FsxOptionsHelper;
 import com.osm2xp.utils.helpers.GuiOptionsHelper;
 import com.osm2xp.utils.helpers.StatsHelper;
 import com.osm2xp.utils.helpers.XplaneOptionsHelper;
-import com.osm2xp.utils.logging.Osm2xpLogger;
 
 /**
  * ApplicationWorkbenchWindowAdvisor
@@ -34,6 +34,7 @@ import com.osm2xp.utils.logging.Osm2xpLogger;
  * @author Benjamin Blanchet
  * 
  */
+@SuppressWarnings("restriction")
 public class ApplicationWorkbenchWindowAdvisor extends WorkbenchWindowAdvisor {
 
 	public ApplicationWorkbenchWindowAdvisor(
@@ -104,10 +105,18 @@ public class ApplicationWorkbenchWindowAdvisor extends WorkbenchWindowAdvisor {
 //		Shell shell = PlatformUI.getWorkbench().getWorkbenchWindows()[0]
 //				.getShell();
 //		shell.setMaximized(true);
-		Osm2xpLogger.displayWelcomeMessage();
+		displayWelcomeMessage();
 		// reset last used file
 		GuiOptionsHelper.getOptions().setCurrentFilePath(null);
 	}
+	
+	public static void displayWelcomeMessage() {
+		Osm2xpLogger.info("==================================================");
+		Osm2xpLogger.info("Osm2XP " + Osm2xpConstants.OSM2XP_VERSION
+				+ " by Benjamin Blanchet and Dmitry Karpenko");
+		Osm2xpLogger.info("==================================================");
+	}
+
 
 	@Override
 	public void dispose() {

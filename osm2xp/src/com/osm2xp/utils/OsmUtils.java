@@ -11,14 +11,14 @@ import java.util.List;
 import java.util.regex.Pattern;
 
 import com.osm2xp.constants.Osm2xpConstants;
+import com.osm2xp.core.model.osm.Node;
+import com.osm2xp.core.model.osm.Tag;
 import com.osm2xp.gui.Activator;
 import com.osm2xp.model.options.ForestTagRule;
 import com.osm2xp.model.options.TagsRule;
 import com.osm2xp.model.options.XplaneObjectTagRule;
-import com.osm2xp.model.osm.Node;
-import com.osm2xp.model.osm.OsmPolygon;
-import com.osm2xp.model.osm.OsmPolyline;
-import com.osm2xp.model.osm.Tag;
+import com.osm2xp.model.osm.polygon.OsmPolygon;
+import com.osm2xp.model.osm.polygon.OsmPolyline;
 import com.osm2xp.utils.helpers.XplaneOptionsHelper;
 
 /**

@@ -6,8 +6,8 @@ import java.util.HashMap;
 import java.util.Map;
 
 import com.osm2xp.constants.Osm2xpConstants;
-import com.osm2xp.exceptions.DataSinkException;
-import com.osm2xp.model.osm.Node;
+import com.osm2xp.core.exceptions.DataSinkException;
+import com.osm2xp.core.model.osm.Node;
 import com.osm2xp.utils.FilesUtils;
 
 import jdbm.PrimaryTreeMap;

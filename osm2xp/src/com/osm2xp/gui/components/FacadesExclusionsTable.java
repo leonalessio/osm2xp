@@ -18,7 +18,7 @@ import org.eclipse.swt.widgets.Composite;
 import org.eclipse.swt.widgets.Table;
 import org.eclipse.swt.widgets.TableColumn;
 
-import com.osm2xp.model.osm.Tag;
+import com.osm2xp.core.model.osm.Tag;
 import com.osm2xp.utils.helpers.XplaneOptionsHelper;
 
 /**

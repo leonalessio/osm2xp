@@ -1,7 +1,7 @@
 package com.osm2xp.model.xplane;
 
-import com.osm2xp.exceptions.Osm2xpBusinessException;
-import com.osm2xp.model.osm.OsmPolygon;
+import com.osm2xp.core.exceptions.Osm2xpBusinessException;
+import com.osm2xp.model.osm.polygon.OsmPolygon;
 
 /**
  * XplaneDsfObject.

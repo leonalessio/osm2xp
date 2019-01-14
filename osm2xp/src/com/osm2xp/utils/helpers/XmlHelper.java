@@ -10,7 +10,7 @@ import javax.xml.bind.Unmarshaller;
 import javax.xml.namespace.QName;
 import javax.xml.transform.stream.StreamSource;
 
-import com.osm2xp.exceptions.Osm2xpBusinessException;
+import com.osm2xp.core.exceptions.Osm2xpBusinessException;
 
 /**
  * XmlHelper.

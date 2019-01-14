@@ -16,8 +16,8 @@ import org.openstreetmap.osmosis.osmbinary.file.BlockInputStream;
 
 import math.geom2d.Point2D;
 
-import com.osm2xp.exceptions.Osm2xpBusinessException;
-import com.osm2xp.model.osm.Tag;
+import com.osm2xp.core.exceptions.Osm2xpBusinessException;
+import com.osm2xp.core.model.osm.Tag;
 
 
 /**

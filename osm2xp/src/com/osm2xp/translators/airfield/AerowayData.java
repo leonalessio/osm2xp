@@ -2,7 +2,7 @@ package com.osm2xp.translators.airfield;
 
 import org.apache.commons.lang.StringUtils;
 
-import com.osm2xp.model.osm.IHasTags;
+import com.osm2xp.core.model.osm.IHasTags;
 import com.osm2xp.utils.helpers.XplaneOptionsHelper;
 
 public class AerowayData {

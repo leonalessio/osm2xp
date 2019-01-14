@@ -14,11 +14,11 @@ import java.util.stream.Collectors;
 import org.apache.commons.lang.StringUtils;
 
 import com.osm2xp.constants.Osm2xpConstants;
-import com.osm2xp.model.osm.OsmPolygon;
+import com.osm2xp.core.logging.Osm2xpLogger;
+import com.osm2xp.model.osm.polygon.OsmPolygon;
 import com.osm2xp.utils.OsmUtils;
 import com.osm2xp.utils.geometry.GeomUtils;
 import com.osm2xp.utils.helpers.XplaneOptionsHelper;
-import com.osm2xp.utils.logging.Osm2xpLogger;
 import com.vividsolutions.jts.geom.Geometry;
 import com.vividsolutions.jts.geom.Polygon;
 import com.vividsolutions.jts.operation.buffer.BufferOp;

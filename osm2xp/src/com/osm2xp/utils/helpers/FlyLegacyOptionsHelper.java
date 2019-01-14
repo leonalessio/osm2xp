@@ -6,12 +6,12 @@ import java.util.List;
 
 import org.eclipse.core.resources.ResourcesPlugin;
 
-import com.osm2xp.exceptions.Osm2xpBusinessException;
+import com.osm2xp.core.exceptions.Osm2xpBusinessException;
+import com.osm2xp.core.logging.Osm2xpLogger;
+import com.osm2xp.core.model.osm.Tag;
 import com.osm2xp.model.options.BuildingsExclusionsList;
 import com.osm2xp.model.options.FlyLegacyOptions;
 import com.osm2xp.model.options.WatchedTagsList;
-import com.osm2xp.model.osm.Tag;
-import com.osm2xp.utils.logging.Osm2xpLogger;
 
 /**
  * FlyLegacyOptionsHelper.

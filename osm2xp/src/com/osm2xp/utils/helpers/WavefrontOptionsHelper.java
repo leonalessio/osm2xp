@@ -4,9 +4,9 @@ import java.io.File;
 
 import org.eclipse.core.resources.ResourcesPlugin;
 
-import com.osm2xp.exceptions.Osm2xpBusinessException;
+import com.osm2xp.core.exceptions.Osm2xpBusinessException;
+import com.osm2xp.core.logging.Osm2xpLogger;
 import com.osm2xp.model.options.WavefrontOptions;
-import com.osm2xp.utils.logging.Osm2xpLogger;
 
 /**
  * WavefrontOptionsHelper.

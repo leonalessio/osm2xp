@@ -5,7 +5,7 @@ import java.util.List;
 
 import org.eclipse.core.runtime.jobs.Job;
 
-import com.osm2xp.model.osm.Relation;
+import com.osm2xp.core.model.osm.Relation;
 
 public abstract class GenerateJob extends Job {
 

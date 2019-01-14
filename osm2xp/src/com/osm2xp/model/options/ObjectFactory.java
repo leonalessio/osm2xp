@@ -2,7 +2,7 @@ package com.osm2xp.model.options;
 
 import javax.xml.bind.annotation.XmlRegistry;
 
-import com.osm2xp.model.osm.Tag;
+import com.osm2xp.core.model.osm.Tag;
 
 /**
  * ObjectFactory.

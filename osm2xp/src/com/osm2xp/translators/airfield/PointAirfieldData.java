@@ -4,8 +4,8 @@ import java.util.Locale;
 
 import org.apache.commons.lang.StringUtils;
 
-import com.osm2xp.model.osm.Node;
-import com.osm2xp.model.osm.OsmPolyline;
+import com.osm2xp.core.model.osm.Node;
+import com.osm2xp.model.osm.polygon.OsmPolyline;
 import com.osm2xp.utils.geometry.GeomUtils;
 
 import math.geom2d.Point2D;

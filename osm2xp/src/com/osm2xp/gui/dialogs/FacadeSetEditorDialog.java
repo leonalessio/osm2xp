@@ -58,7 +58,8 @@ import org.eclipse.swt.widgets.TableColumn;
 import org.eclipse.swt.widgets.Text;
 import org.eclipse.ui.plugin.AbstractUIPlugin;
 
-import com.osm2xp.exceptions.Osm2xpBusinessException;
+import com.osm2xp.core.exceptions.Osm2xpBusinessException;
+import com.osm2xp.core.logging.Osm2xpLogger;
 import com.osm2xp.gui.Activator;
 import com.osm2xp.gui.dialogs.utils.Osm2xpDialogsHelper;
 import com.osm2xp.model.facades.Facade;
@@ -66,7 +67,6 @@ import com.osm2xp.model.facades.FacadeSet;
 import com.osm2xp.model.facades.SpecialFacadeType;
 import com.osm2xp.utils.helpers.FacadeSetHelper;
 import com.osm2xp.utils.helpers.ScaleChangeHelper;
-import com.osm2xp.utils.logging.Osm2xpLogger;
 
 /**
  * FacadeSetEditorDialog.

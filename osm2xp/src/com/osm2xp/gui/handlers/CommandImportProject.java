@@ -11,9 +11,9 @@ import org.eclipse.swt.widgets.Display;
 import org.eclipse.swt.widgets.FileDialog;
 
 import com.osm2xp.controllers.BuildController;
-import com.osm2xp.exceptions.Osm2xpBusinessException;
+import com.osm2xp.core.exceptions.Osm2xpBusinessException;
+import com.osm2xp.core.logging.Osm2xpLogger;
 import com.osm2xp.utils.helpers.Osm2xpProjectHelper;
-import com.osm2xp.utils.logging.Osm2xpLogger;
 
 /**
  * CommandImportProject.

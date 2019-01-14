@@ -4,9 +4,11 @@ import java.util.List;
 
 import org.openstreetmap.osmosis.osmbinary.Osmformat.HeaderBBox;
 
-import com.osm2xp.exceptions.Osm2xpBusinessException;
-import com.osm2xp.model.osm.Node;
-import com.osm2xp.model.osm.Tag;
+import com.osm2xp.core.exceptions.Osm2xpBusinessException;
+import com.osm2xp.core.model.osm.Node;
+import com.osm2xp.core.model.osm.Tag;
+
+import math.geom2d.Box2D;
 
 public interface IBasicTranslator {
 
@@ -52,5 +54,5 @@ public interface IBasicTranslator {
 	 * Process bounding box definition
 	 * @param bbox Bounding box
 	 */
-	public void processBoundingBox(HeaderBBox bbox);
+	public void processBoundingBox(Box2D bbox);
 }

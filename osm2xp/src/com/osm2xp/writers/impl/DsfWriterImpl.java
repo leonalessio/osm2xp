@@ -12,10 +12,10 @@ import java.nio.file.Files;
 import org.apache.commons.io.FileUtils;
 
 import com.osm2xp.constants.XplaneConstants;
+import com.osm2xp.core.logging.Osm2xpLogger;
 import com.osm2xp.utils.DsfObjectsProvider;
 import com.osm2xp.utils.DsfUtils;
 import com.osm2xp.utils.helpers.XplaneOptionsHelper;
-import com.osm2xp.utils.logging.Osm2xpLogger;
 import com.osm2xp.writers.IWriter;
 
 import math.geom2d.Point2D;

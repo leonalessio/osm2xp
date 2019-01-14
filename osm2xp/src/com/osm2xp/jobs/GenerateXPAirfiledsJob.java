@@ -6,9 +6,9 @@ import org.eclipse.core.runtime.IProgressMonitor;
 import org.eclipse.core.runtime.IStatus;
 import org.eclipse.core.runtime.Status;
 
-import com.osm2xp.parsers.IParser;
-import com.osm2xp.parsers.ParserBuilder;
-import com.osm2xp.utils.logging.Osm2xpLogger;
+import com.osm2xp.core.logging.Osm2xpLogger;
+import com.osm2xp.core.parsers.IParser;
+import com.osm2xp.parsers.builders.ParserBuilder;
 
 /**
  * Job for generating scenario for multiple tiles 

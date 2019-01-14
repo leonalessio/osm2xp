@@ -1,11 +1,11 @@
 package com.osm2xp.dataProcessors.impl;
 
-import com.osm2xp.exceptions.DataSinkException;
+import com.osm2xp.core.exceptions.DataSinkException;
+import com.osm2xp.core.model.osm.Node;
 import com.osm2xp.index.IIdIndex;
 import com.osm2xp.index.IdToObjectIndex;
 import com.osm2xp.index.IntIndexStorage;
 import com.osm2xp.index.PointCoordsIndex;
-import com.osm2xp.model.osm.Node;
 
 /**
  * Memory-critical data sink implementation for processing large files. 

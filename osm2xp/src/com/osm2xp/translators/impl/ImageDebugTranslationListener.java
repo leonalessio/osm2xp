@@ -13,8 +13,8 @@ import java.io.IOException;
 import javax.imageio.ImageIO;
 
 import com.osm2xp.gui.Activator;
-import com.osm2xp.model.osm.OsmPolygon;
-import com.osm2xp.model.osm.OsmPolyline;
+import com.osm2xp.model.osm.polygon.OsmPolygon;
+import com.osm2xp.model.osm.polygon.OsmPolyline;
 import com.osm2xp.translators.IPolyHandler;
 import com.osm2xp.translators.ITranslationListener;
 import com.osm2xp.translators.xplane.XPBarrierTranslator;

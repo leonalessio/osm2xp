@@ -3,8 +3,8 @@ package com.osm2xp.translators.xplane;
 import org.apache.commons.lang.ArrayUtils;
 import org.apache.commons.lang.StringUtils;
 
-import com.osm2xp.model.osm.IHasTags;
-import com.osm2xp.model.osm.OsmPolyline;
+import com.osm2xp.core.model.osm.IHasTags;
+import com.osm2xp.model.osm.polygon.OsmPolyline;
 import com.osm2xp.translators.impl.XPOutputFormat;
 import com.osm2xp.utils.helpers.GuiOptionsHelper;
 import com.osm2xp.utils.helpers.XplaneOptionsHelper;

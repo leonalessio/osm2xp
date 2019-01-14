@@ -9,8 +9,8 @@ import java.util.Locale;
 import org.eclipse.core.runtime.IStatus;
 
 import com.osm2xp.gui.Activator;
-import com.osm2xp.model.osm.OsmMultiPolygon;
-import com.osm2xp.model.osm.OsmPolygon;
+import com.osm2xp.model.osm.polygon.OsmMultiPolygon;
+import com.osm2xp.model.osm.polygon.OsmPolygon;
 import com.osm2xp.translators.xplane.XPPathSegment;
 import com.osm2xp.utils.geometry.GeomUtils;
 import com.osm2xp.utils.helpers.XplaneOptionsHelper;

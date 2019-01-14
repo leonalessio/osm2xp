@@ -6,16 +6,15 @@ import java.util.List;
 import java.util.stream.Collectors;
 
 import org.geotools.geometry.jts.GeometryClipper;
-import org.openstreetmap.osmosis.osmbinary.Osmformat.HeaderBBox;
 
+import com.osm2xp.core.exceptions.DataSinkException;
+import com.osm2xp.core.exceptions.Osm2xpBusinessException;
+import com.osm2xp.core.model.osm.Node;
+import com.osm2xp.core.model.osm.Tag;
 import com.osm2xp.dataProcessors.IDataSink;
-import com.osm2xp.exceptions.DataSinkException;
-import com.osm2xp.exceptions.Osm2xpBusinessException;
 import com.osm2xp.gui.Activator;
-import com.osm2xp.model.osm.Node;
-import com.osm2xp.model.osm.OsmPolyline;
-import com.osm2xp.model.osm.OsmPolylineFactory;
-import com.osm2xp.model.osm.Tag;
+import com.osm2xp.model.osm.polygon.OsmPolyline;
+import com.osm2xp.model.osm.polygon.OsmPolylineFactory;
 import com.osm2xp.translators.ISpecificTranslator;
 import com.osm2xp.translators.ITranslator;
 import com.osm2xp.utils.geometry.CoordinateNodeIdPreserver;
@@ -28,6 +27,7 @@ import com.vividsolutions.jts.geom.GeometryFactory;
 import com.vividsolutions.jts.geom.LinearRing;
 import com.vividsolutions.jts.geom.Polygon;
 
+import math.geom2d.Box2D;
 import math.geom2d.Point2D;
 
 public class TileTranslationAdapter implements ISpecificTranslator{
@@ -98,7 +98,7 @@ public class TileTranslationAdapter implements ISpecificTranslator{
 	}
 
 	protected Coordinate[] getCoords(List<Long> nodeIds) {
-		List<com.osm2xp.model.osm.Node> nodes = getNodes(nodeIds);
+		List<com.osm2xp.core.model.osm.Node> nodes = getNodes(nodeIds);
 		NodeCoordinate[] points = nodes.stream().map(node -> new NodeCoordinate(node.getLon(), node.getLat(), node.getId()))
 				.toArray(NodeCoordinate[]::new);
 		if (points.length < 1) {
@@ -114,7 +114,7 @@ public class TileTranslationAdapter implements ISpecificTranslator{
 		return false;
 	}
 	
-	protected List<com.osm2xp.model.osm.Node> getNodes(List<Long> polyIds) {
+	protected List<com.osm2xp.core.model.osm.Node> getNodes(List<Long> polyIds) {
 		try {
 			return processor.getNodes(polyIds);
 		} catch (DataSinkException e) {
@@ -157,7 +157,7 @@ public class TileTranslationAdapter implements ISpecificTranslator{
 	}
 
 	@Override
-	public void processBoundingBox(HeaderBBox bbox) {
+	public void processBoundingBox(Box2D bbox) {
 		translator.processBoundingBox(bbox);
 	}
 

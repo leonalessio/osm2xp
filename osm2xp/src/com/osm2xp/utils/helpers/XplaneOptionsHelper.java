@@ -7,7 +7,9 @@ import java.util.List;
 import org.eclipse.core.resources.ResourcesPlugin;
 
 import com.osm2xp.constants.Osm2xpConstants;
-import com.osm2xp.exceptions.Osm2xpBusinessException;
+import com.osm2xp.core.exceptions.Osm2xpBusinessException;
+import com.osm2xp.core.logging.Osm2xpLogger;
+import com.osm2xp.core.model.osm.Tag;
 import com.osm2xp.model.options.BuildingsExclusionsList;
 import com.osm2xp.model.options.FacadesRulesList;
 import com.osm2xp.model.options.ForestTagRule;
@@ -20,8 +22,6 @@ import com.osm2xp.model.options.XplaneLightTagRule;
 import com.osm2xp.model.options.XplaneObjectTagRule;
 import com.osm2xp.model.options.XplaneObjectsRulesList;
 import com.osm2xp.model.options.XplaneOptions;
-import com.osm2xp.model.osm.Tag;
-import com.osm2xp.utils.logging.Osm2xpLogger;
 
 /**
  * XplaneOptionsHelper.

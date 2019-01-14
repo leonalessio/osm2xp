@@ -12,9 +12,9 @@ import org.xml.sax.SAXException;
 import org.xml.sax.XMLReader;
 import org.xml.sax.helpers.XMLReaderFactory;
 
-import com.osm2xp.exceptions.Osm2xpBusinessException;
-import com.osm2xp.model.osm.Member;
-import com.osm2xp.model.osm.Relation;
+import com.osm2xp.core.exceptions.Osm2xpBusinessException;
+import com.osm2xp.core.model.osm.Member;
+import com.osm2xp.core.model.osm.Relation;
 
 /**
  * Permet de lister les tuiles existantes dans le fichier osm

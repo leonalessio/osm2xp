@@ -3,9 +3,9 @@ package com.osm2xp.model.xplane;
 import math.geom2d.Point2D;
 import math.geom2d.polygon.LinearRing2D;
 
-import com.osm2xp.exceptions.Osm2xpBusinessException;
+import com.osm2xp.core.exceptions.Osm2xpBusinessException;
 import com.osm2xp.model.options.XplaneLightTagRule;
-import com.osm2xp.model.osm.OsmPolygon;
+import com.osm2xp.model.osm.polygon.OsmPolygon;
 
 /**
  * XplaneDsfObject.

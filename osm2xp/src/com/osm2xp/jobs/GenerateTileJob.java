@@ -9,13 +9,13 @@ import org.eclipse.core.runtime.IProgressMonitor;
 import org.eclipse.core.runtime.IStatus;
 import org.eclipse.core.runtime.Status;
 
-import com.osm2xp.exceptions.DataSinkException;
-import com.osm2xp.exceptions.Osm2xpBusinessException;
-import com.osm2xp.model.osm.Relation;
-import com.osm2xp.parsers.IParser;
-import com.osm2xp.parsers.ParserBuilder;
+import com.osm2xp.core.exceptions.DataSinkException;
+import com.osm2xp.core.exceptions.Osm2xpBusinessException;
+import com.osm2xp.core.logging.Osm2xpLogger;
+import com.osm2xp.core.model.osm.Relation;
+import com.osm2xp.core.parsers.IParser;
+import com.osm2xp.parsers.builders.ParserBuilder;
 import com.osm2xp.utils.helpers.Osm2xpProjectHelper;
-import com.osm2xp.utils.logging.Osm2xpLogger;
 
 import math.geom2d.Point2D;
 

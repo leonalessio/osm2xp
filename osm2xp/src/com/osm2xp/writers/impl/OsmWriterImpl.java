@@ -9,7 +9,7 @@ import java.io.OutputStreamWriter;
 import math.geom2d.Point2D;
 
 import com.osm2xp.constants.Osm2xpConstants;
-import com.osm2xp.utils.logging.Osm2xpLogger;
+import com.osm2xp.core.logging.Osm2xpLogger;
 import com.osm2xp.writers.IWriter;
 
 /**

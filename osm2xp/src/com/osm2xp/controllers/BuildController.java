@@ -15,7 +15,8 @@ import org.eclipse.ui.PartInitException;
 import org.eclipse.ui.PlatformUI;
 
 import com.osm2xp.constants.Perspectives;
-import com.osm2xp.exceptions.Osm2xpBusinessException;
+import com.osm2xp.core.exceptions.Osm2xpBusinessException;
+import com.osm2xp.core.logging.Osm2xpLogger;
 import com.osm2xp.gui.Activator;
 import com.osm2xp.gui.views.MainSceneryFileView;
 import com.osm2xp.jobs.GenerateMultiTilesJob;
@@ -28,7 +29,6 @@ import com.osm2xp.utils.MiscUtils;
 import com.osm2xp.utils.helpers.GuiOptionsHelper;
 import com.osm2xp.utils.helpers.Osm2xpProjectHelper;
 import com.osm2xp.utils.helpers.StatsHelper;
-import com.osm2xp.utils.logging.Osm2xpLogger;
 
 import math.geom2d.Point2D;
 

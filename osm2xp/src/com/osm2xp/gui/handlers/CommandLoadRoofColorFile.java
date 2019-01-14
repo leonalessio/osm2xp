@@ -9,8 +9,8 @@ import org.eclipse.swt.SWT;
 import org.eclipse.swt.widgets.Display;
 import org.eclipse.swt.widgets.FileDialog;
 
+import com.osm2xp.core.logging.Osm2xpLogger;
 import com.osm2xp.utils.helpers.GuiOptionsHelper;
-import com.osm2xp.utils.logging.Osm2xpLogger;
 
 /**
  * CommandLoadRoofColorFile.

@@ -9,7 +9,7 @@ import javax.xml.bind.annotation.XmlElement;
 import javax.xml.bind.annotation.XmlSeeAlso;
 import javax.xml.bind.annotation.XmlType;
 
-import com.osm2xp.model.osm.Tag;
+import com.osm2xp.core.model.osm.Tag;
 
 /**
  * TagsRules.

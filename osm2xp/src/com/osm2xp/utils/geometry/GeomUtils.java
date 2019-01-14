@@ -9,8 +9,8 @@ import java.util.Iterator;
 import java.util.List;
 import java.util.stream.Collectors;
 
+import com.osm2xp.core.model.osm.Node;
 import com.osm2xp.model.geom.Lod13Location;
-import com.osm2xp.model.osm.Node;
 import com.vividsolutions.jts.algorithm.CGAlgorithms;
 import com.vividsolutions.jts.algorithm.CentroidArea;
 import com.vividsolutions.jts.geom.Coordinate;

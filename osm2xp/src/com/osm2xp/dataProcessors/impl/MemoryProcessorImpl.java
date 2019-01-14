@@ -3,8 +3,8 @@ package com.osm2xp.dataProcessors.impl;
 import java.util.HashMap;
 import java.util.Map;
 
-import com.osm2xp.exceptions.DataSinkException;
-import com.osm2xp.model.osm.Node;
+import com.osm2xp.core.exceptions.DataSinkException;
+import com.osm2xp.core.model.osm.Node;
 
 /**
  * Memory data sink implementation <br>

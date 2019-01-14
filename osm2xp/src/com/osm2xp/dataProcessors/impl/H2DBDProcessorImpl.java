@@ -9,9 +9,9 @@ import java.util.Date;
 
 import org.h2.tools.Server;
 
-import com.osm2xp.exceptions.DataSinkException;
-import com.osm2xp.model.osm.Node;
-import com.osm2xp.utils.logging.Osm2xpLogger;
+import com.osm2xp.core.exceptions.DataSinkException;
+import com.osm2xp.core.logging.Osm2xpLogger;
+import com.osm2xp.core.model.osm.Node;
 
 /**
  * H2DBD Data sink implementation.

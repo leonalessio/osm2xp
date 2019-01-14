@@ -4,7 +4,7 @@ import java.util.Locale;
 
 import org.apache.commons.lang.StringUtils;
 
-import com.osm2xp.model.osm.OsmPolyline;
+import com.osm2xp.model.osm.polygon.OsmPolyline;
 import com.osm2xp.utils.geometry.GeomUtils;
 
 import math.geom2d.Box2D;

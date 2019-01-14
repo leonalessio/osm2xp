@@ -10,7 +10,7 @@ import javax.xml.bind.Unmarshaller;
 
 import math.geom2d.Point2D;
 
-import com.osm2xp.exceptions.Osm2xpBusinessException;
+import com.osm2xp.core.exceptions.Osm2xpBusinessException;
 import com.osm2xp.gui.Activator;
 import com.osm2xp.model.project.Coordinates;
 import com.osm2xp.model.project.CoordinatesList;

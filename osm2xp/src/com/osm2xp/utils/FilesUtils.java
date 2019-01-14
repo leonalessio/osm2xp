@@ -19,9 +19,9 @@ import java.util.List;
 import java.util.Map;
 
 import com.osm2xp.constants.Osm2xpConstants;
-import com.osm2xp.exceptions.Osm2xpBusinessException;
-import com.osm2xp.exceptions.Osm2xpTechnicalException;
-import com.osm2xp.utils.logging.Osm2xpLogger;
+import com.osm2xp.core.exceptions.Osm2xpBusinessException;
+import com.osm2xp.core.exceptions.Osm2xpTechnicalException;
+import com.osm2xp.core.logging.Osm2xpLogger;
 
 /**
  * FilesUtils.

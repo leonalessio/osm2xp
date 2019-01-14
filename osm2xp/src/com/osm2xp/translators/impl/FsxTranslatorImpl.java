@@ -6,23 +6,22 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
-import org.openstreetmap.osmosis.osmbinary.Osmformat.HeaderBBox;
-
 import com.osm2xp.constants.FsxConstants;
-import com.osm2xp.exceptions.Osm2xpBusinessException;
+import com.osm2xp.core.exceptions.Osm2xpBusinessException;
+import com.osm2xp.core.logging.Osm2xpLogger;
+import com.osm2xp.core.model.osm.Node;
+import com.osm2xp.core.model.osm.Tag;
 import com.osm2xp.model.fsx.FsxObject;
 import com.osm2xp.model.geom.Lod13Location;
-import com.osm2xp.model.osm.Node;
-import com.osm2xp.model.osm.OsmPolyline;
-import com.osm2xp.model.osm.Tag;
+import com.osm2xp.model.osm.polygon.OsmPolyline;
 import com.osm2xp.model.stats.GenerationStats;
 import com.osm2xp.translators.ITranslator;
 import com.osm2xp.utils.OsmUtils;
 import com.osm2xp.utils.geometry.GeomUtils;
 import com.osm2xp.utils.helpers.GuiOptionsHelper;
-import com.osm2xp.utils.logging.Osm2xpLogger;
 import com.osm2xp.writers.IWriter;
 
+import math.geom2d.Box2D;
 import math.geom2d.Point2D;
 
 /**
@@ -158,7 +157,7 @@ public class FsxTranslatorImpl implements ITranslator {
 	}
 	
 	@Override
-	public void processBoundingBox(HeaderBBox bbox) {
+	public void processBoundingBox(Box2D bbox) {
 		// Do nothing
 	}
 	

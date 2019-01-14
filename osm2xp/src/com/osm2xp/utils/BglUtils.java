@@ -3,8 +3,8 @@ package com.osm2xp.utils;
 import java.util.Collections;
 import java.util.List;
 
+import com.osm2xp.core.model.osm.Tag;
 import com.osm2xp.model.options.ObjectTagRule;
-import com.osm2xp.model.osm.Tag;
 import com.osm2xp.utils.helpers.FsxOptionsHelper;
 
 /**

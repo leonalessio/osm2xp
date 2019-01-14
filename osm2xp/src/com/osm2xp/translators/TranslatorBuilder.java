@@ -7,7 +7,7 @@ import java.util.Collections;
 import org.eclipse.core.runtime.preferences.InstanceScope;
 
 import com.osm2xp.constants.Perspectives;
-import com.osm2xp.exceptions.Osm2xpBusinessException;
+import com.osm2xp.core.exceptions.Osm2xpBusinessException;
 import com.osm2xp.gui.Activator;
 import com.osm2xp.model.facades.FacadeSetManager;
 import com.osm2xp.model.stats.GenerationStats;

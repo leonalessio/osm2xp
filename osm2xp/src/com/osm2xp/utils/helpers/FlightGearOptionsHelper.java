@@ -7,14 +7,14 @@ import java.util.List;
 import org.eclipse.core.resources.ResourcesPlugin;
 
 import com.osm2xp.constants.Osm2xpConstants;
-import com.osm2xp.exceptions.Osm2xpBusinessException;
+import com.osm2xp.core.exceptions.Osm2xpBusinessException;
+import com.osm2xp.core.logging.Osm2xpLogger;
+import com.osm2xp.core.model.osm.Tag;
 import com.osm2xp.model.options.FlightGearObjectTagRule;
 import com.osm2xp.model.options.FlightGearObjectsRulesList;
 import com.osm2xp.model.options.FlightGearOptions;
 import com.osm2xp.model.options.ObjectFile;
 import com.osm2xp.model.options.ObjectsRulesList;
-import com.osm2xp.model.osm.Tag;
-import com.osm2xp.utils.logging.Osm2xpLogger;
 
 /**
  * FlightGearOptionsHelper.
