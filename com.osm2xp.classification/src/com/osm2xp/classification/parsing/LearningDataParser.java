@@ -14,8 +14,12 @@ import com.osm2xp.classification.HeightProvider;
 import com.osm2xp.classification.RelationBuildingData;
 import com.osm2xp.classification.TypeProvider;
 import com.osm2xp.classification.WayBuildingData;
+import com.osm2xp.core.model.osm.Node;
 import com.osm2xp.core.model.osm.Tag;
 import com.osm2xp.core.parsers.impl.TranslatingBinaryParser;
+
+import math.geom2d.Point2D;
+import math.geom2d.polygon.Polyline2D;
 
 public class LearningDataParser {
 	
@@ -36,22 +40,77 @@ public class LearningDataParser {
 		LearningWaysCollector heightWaysCollector = new LearningWaysCollector(getHeightPredicate(), necessaryHeightWays);
 		new TranslatingBinaryParser(inputFile, new CompositeVisitor(typeWaysCollector, heightWaysCollector)).process();
 		
+		List<WayBuildingData> typeWays = typeWaysCollector.getCollectedWayData();
+		typeWays.addAll(createBuildings(typeRelationsList, typeWaysCollector.getWayNds()));
 		
-				
+		List<WayBuildingData> heightWays = heightWaysCollector.getCollectedWayData();
+		heightWays.addAll(createBuildings(heightRelationsList, heightWaysCollector.getWayNds()));
+		
+		Set<Long> typeNds = typeWays.stream().flatMap(way -> way.getNodes().stream()).collect(Collectors.toSet());
+		Set<Long> heightNds = heightWays.stream().flatMap(way -> way.getNodes().stream()).collect(Collectors.toSet());
+		
+		LearningNodesCollector typeNdCollector = new LearningNodesCollector(getTypePredicate(), typeNds);
+		LearningNodesCollector heightNdCollector = new LearningNodesCollector(getHeightPredicate(), heightNds);		
+		new TranslatingBinaryParser(inputFile, new CompositeVisitor(typeNdCollector, heightNdCollector)).process();
+		
+		computeGeometryData(typeWays, typeNdCollector.getCollectedNodes());
+		computeGeometryData(heightWays, heightNdCollector.getCollectedNodes());
 	}
 	
+	private void computeGeometryData(List<WayBuildingData> ways, Map<Long, Node> collectedNodes) {
+		int invalid = 0;
+		for (WayBuildingData wayData : ways) {
+			List<Point2D> points = wayData.getNodes().stream()
+				.map(id -> collectedNodes.get(id))
+				.filter(node -> node != null)
+				.map(node -> new Point2D(node.getLon(), node.getLat()))
+				.collect(Collectors.toList());
+			if (points.size() > 0 && points.size() == wayData.getNodes().size()) {
+				Point2D base = points.get(0);
+				double coef = Math.cos(base.y);
+				List<Point2D> resList = new ArrayList<>();
+				resList.add(new Point2D(0,0));
+				for (int i = 1; i < points.size(); i++) {
+					Point2D curPt = points.get(i);
+					resList.add(new Point2D((curPt.x - base.x) * coef, (curPt.y - base.y)));
+				}
+				Polyline2D polyline2d = new Polyline2D(resList);
+				double length = polyline2d.getLength();
+				System.out.println("LearningDataParser.computeGeometryData() " + length); //XXX debug
+			} else {
+				invalid++;
+			}
+			
+		}
+		System.out.println("Missing some nodes for " + invalid + " ways");
+		
+	}
+
 	private List<WayBuildingData> createBuildings(List<RelationBuildingData> relationBuildings, Map<Long, List<Long>> wayNds) {
 		List<WayBuildingData> resultList = new ArrayList<WayBuildingData>();
 		for (RelationBuildingData relationBuildingData : relationBuildings) {
 			List<Long> outerWayIds = relationBuildingData.getOuterWayIds();
-			List<List<Long>> ndsList = outerWayIds.stream().map(id -> wayNds.get(id)).filter(lst -> lst != null).collect(Collectors.toList());
-			List<List<Long>> polygonsLists = getPolygonsFrom(ndsList);
-			if (polygonsLists.size() != 1) {
-				continue;
+			List<List<Long>> outerNdsList = outerWayIds.stream().map(id -> wayNds.get(id)).filter(lst -> lst != null).collect(Collectors.toList());
+			List<List<Long>> polygonLists = getPolygonsFrom(outerNdsList);
+			List<List<Long>> innerNdsList = relationBuildingData.getInnerWayIds().stream().map(id -> wayNds.get(id)).filter(lst -> lst != null).collect(Collectors.toList());
+			if (polygonLists.size() > 1) {
+				if (innerNdsList.size() > 0) {
+					continue; //No deep analysis for now
+				}
+				for (List<Long> list : polygonLists) {
+					WayBuildingData buildingData = new WayBuildingData(list);
+					buildingData.copyProps(relationBuildingData);
+					resultList.add(buildingData);
+				}
 			}
-			
+			else if (polygonLists.size() == 1) {
+				boolean hasHoles = getPolygonsFrom(innerNdsList).size() > 0;
+				WayBuildingData buildingData = new WayBuildingData(polygonLists.get(0));
+				buildingData.copyProps(relationBuildingData);
+				buildingData.setHasHoles(hasHoles);
+				resultList.add(buildingData);
+			}
 		}
-		
 		
 		return resultList;
 		

@@ -15,6 +15,16 @@ public class BuildingData {
 	public BuildingData() {
 		super();
 	}
+	
+	public void copyProps(BuildingData data) {
+		this.type = data.type;
+		this.perimeter = data.perimeter;
+		this.square = data.square;
+		this.maxSide = data.maxSide;
+		this.height = data.height;
+		this.levels = data.levels;
+		this.sidesCount = data.sidesCount;
+	}
 
 	public BuildingType getType() {
 		return type;

@@ -43,7 +43,7 @@ public class LearningRelationsCollector extends LearningDataCollector {
 		List<Tag> tags = relation.getTags();
 		if (isGoodSample(tags)) {
 			RelationBuildingData buildingData = new RelationBuildingData(relation.getMember().stream().filter(member -> isOuter(member)).map(member -> member.getId()).collect(Collectors.toList()),
-																		relation.getMember().stream().filter(member -> isOuter(member)).map(member -> member.getId()).collect(Collectors.toList()));
+																		relation.getMember().stream().filter(member -> isInner(member)).map(member -> member.getId()).collect(Collectors.toList()));
 			initDataFromTags(buildingData, tags);
 			collectedRelationData.add(buildingData);
 		}
