@@ -13,3 +13,6 @@ bin/
 hs_err_pid*
 /.settings/
 /.metadata
+
+#Prepared learning datasets
+*.arff

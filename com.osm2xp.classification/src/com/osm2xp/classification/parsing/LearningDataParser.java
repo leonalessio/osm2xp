@@ -6,6 +6,7 @@ import java.util.Collections;
 import java.util.Iterator;
 import java.util.List;
 import java.util.Map;
+import java.util.OptionalDouble;
 import java.util.Set;
 import java.util.function.Predicate;
 import java.util.stream.Collectors;
@@ -19,10 +20,14 @@ import com.osm2xp.core.model.osm.Tag;
 import com.osm2xp.core.parsers.impl.TranslatingBinaryParser;
 
 import math.geom2d.Point2D;
-import math.geom2d.polygon.Polyline2D;
+import math.geom2d.polygon.LinearRing2D;
 
 public class LearningDataParser {
 	
+	private static final int WGS_TO_METERS_COEF = 111000;
+	private List<WayBuildingData> typeWays;
+	private List<WayBuildingData> heightWays;
+
 	public LearningDataParser(File inputFile) {
 		LearningRelationsCollector typeRelationsCollector = new LearningRelationsCollector(getTypePredicate());
 		LearningRelationsCollector heightRelationsCollector = new LearningRelationsCollector(getHeightPredicate());
@@ -40,10 +45,10 @@ public class LearningDataParser {
 		LearningWaysCollector heightWaysCollector = new LearningWaysCollector(getHeightPredicate(), necessaryHeightWays);
 		new TranslatingBinaryParser(inputFile, new CompositeVisitor(typeWaysCollector, heightWaysCollector)).process();
 		
-		List<WayBuildingData> typeWays = typeWaysCollector.getCollectedWayData();
+		typeWays = typeWaysCollector.getCollectedWayData();
 		typeWays.addAll(createBuildings(typeRelationsList, typeWaysCollector.getWayNds()));
 		
-		List<WayBuildingData> heightWays = heightWaysCollector.getCollectedWayData();
+		heightWays = heightWaysCollector.getCollectedWayData();
 		heightWays.addAll(createBuildings(heightRelationsList, heightWaysCollector.getWayNds()));
 		
 		Set<Long> typeNds = typeWays.stream().flatMap(way -> way.getNodes().stream()).collect(Collectors.toSet());
@@ -72,11 +77,20 @@ public class LearningDataParser {
 				resList.add(new Point2D(0,0));
 				for (int i = 1; i < points.size(); i++) {
 					Point2D curPt = points.get(i);
-					resList.add(new Point2D((curPt.x - base.x) * coef, (curPt.y - base.y)));
+					resList.add(new Point2D((curPt.x - base.x) * coef * WGS_TO_METERS_COEF, (curPt.y - base.y) * WGS_TO_METERS_COEF));
 				}
-				Polyline2D polyline2d = new Polyline2D(resList);
-				double length = polyline2d.getLength();
-				System.out.println("LearningDataParser.computeGeometryData() " + length); //XXX debug
+				if (resList.size() > 2) {
+					LinearRing2D ring2d = new LinearRing2D(resList);
+					OptionalDouble max = ring2d.getEdges().stream().mapToDouble(edge -> edge.getLength()).max();
+					double perimeter = ring2d.getLength();
+					double area = ring2d.getArea();
+					wayData.setSidesCount(resList.size() - 1);
+					wayData.setPerimeter(perimeter);
+					wayData.setArea(area);
+					if (max.isPresent()) {
+						wayData.setMaxSide(max.getAsDouble());
+					}
+				}
 			} else {
 				invalid++;
 			}
@@ -170,5 +184,13 @@ public class LearningDataParser {
 			return nodeList.get(0).equals(nodeList.get(nodeList.size() - 1));
 		}
 		return false;
+	}
+
+	public List<WayBuildingData> getTypeWays() {
+		return typeWays;
+	}
+
+	public List<WayBuildingData> getHeightWays() {
+		return heightWays;
 	}
 }

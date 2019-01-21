@@ -1,12 +1,14 @@
 package com.osm2xp.classification;
 
+import com.osm2xp.classification.annotations.Result;
 import com.osm2xp.core.model.osm.BuildingType;
 
 public class BuildingData {
 	
+	@Result
 	private BuildingType type;
 	private double perimeter;
-	private double square;
+	private double area;
 	private double maxSide;
 	private double height;
 	private int levels;
@@ -19,7 +21,7 @@ public class BuildingData {
 	public void copyProps(BuildingData data) {
 		this.type = data.type;
 		this.perimeter = data.perimeter;
-		this.square = data.square;
+		this.area = data.area;
 		this.maxSide = data.maxSide;
 		this.height = data.height;
 		this.levels = data.levels;
@@ -42,12 +44,12 @@ public class BuildingData {
 		this.perimeter = perimeter;
 	}
 
-	public double getSquare() {
-		return square;
+	public double getArea() {
+		return area;
 	}
 
-	public void setSquare(double square) {
-		this.square = square;
+	public void setArea(double area) {
+		this.area = area;
 	}
 
 	public double getMaxSide() {
