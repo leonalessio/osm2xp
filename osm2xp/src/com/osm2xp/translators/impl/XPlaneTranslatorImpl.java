@@ -10,14 +10,12 @@ import org.eclipse.core.runtime.preferences.InstanceScope;
 
 import com.osm2xp.constants.Osm2xpConstants;
 import com.osm2xp.core.exceptions.Osm2xpBusinessException;
-import com.osm2xp.core.logging.Osm2xpLogger;
 import com.osm2xp.core.model.osm.Node;
 import com.osm2xp.core.model.osm.Tag;
 import com.osm2xp.gui.Activator;
 import com.osm2xp.model.facades.SpecialFacadeType;
 import com.osm2xp.model.osm.polygon.OsmPolygon;
 import com.osm2xp.model.osm.polygon.OsmPolyline;
-import com.osm2xp.model.stats.GenerationStats;
 import com.osm2xp.model.xplane.XplaneDsf3DObject;
 import com.osm2xp.model.xplane.XplaneDsfObject;
 import com.osm2xp.translators.BuildingType;
@@ -37,9 +35,8 @@ import com.osm2xp.utils.MiscUtils;
 import com.osm2xp.utils.OsmUtils;
 import com.osm2xp.utils.geometry.GeomUtils;
 import com.osm2xp.utils.helpers.GuiOptionsHelper;
-import com.osm2xp.utils.helpers.StatsHelper;
 import com.osm2xp.utils.helpers.XplaneOptionsHelper;
-import com.osm2xp.writers.IWriter;
+import com.osm2xp.writers.IHeaderedWriter;
 
 import math.geom2d.Box2D;
 import math.geom2d.Point2D;
@@ -72,14 +69,11 @@ public class XPlaneTranslatorImpl implements ITranslator{
 	 * Line separator
 	 */
 	public static final String LINE_SEP = System.getProperty("line.separator");
-	/**
-	 * stats object.
-	 */
-	protected GenerationStats stats;
+	
 	/**
 	 * file writer.
 	 */
-	protected IWriter writer;
+	protected IHeaderedWriter writer;
 	/**
 	 * start time.
 	 */
@@ -104,11 +98,10 @@ public class XPlaneTranslatorImpl implements ITranslator{
 	protected double levelHeight = InstanceScope.INSTANCE.getNode(Activator.PLUGIN_ID).getDouble(Osm2xpConstants.LEVEL_HEIGHT_PROP, 3);
 	protected List<IPolyHandler> polyHandlers = new ArrayList<IPolyHandler>();
 
-	public XPlaneTranslatorImpl(GenerationStats stats, IWriter writer,
+	public XPlaneTranslatorImpl(IHeaderedWriter writer,
 			Point2D currentTile, String folderPath,
 			DsfObjectsProvider dsfObjectsProvider) {
 		this.currentTile = currentTile;
-		this.stats = stats;
 		this.writer = writer;
 		this.folderPath = folderPath;
 		this.dsfObjectsProvider = dsfObjectsProvider;
@@ -124,7 +117,7 @@ public class XPlaneTranslatorImpl implements ITranslator{
 		polyHandlers.add(new XPPowerlineTranslator(writer, outputFormat, idProvider));
 		polyHandlers.add(new XPCoolingTowerTranslator(writer, dsfObjectsProvider));
 		polyHandlers.add(new XPChimneyTranslator(writer, dsfObjectsProvider));
-		forestTranslator = new XPForestTranslator(writer, dsfObjectsProvider, outputFormat, stats);
+		forestTranslator = new XPForestTranslator(writer, dsfObjectsProvider, outputFormat);
 		
 	}
 	
@@ -132,50 +125,16 @@ public class XPlaneTranslatorImpl implements ITranslator{
 	public void init() {
 		// writer initialization
 		writer.init(currentTile);
-
+		writer.setHeader(outputFormat.getHeaderString(currentTile, null, dsfObjectsProvider));
 	}
 	
 	@Override
 	public void complete() {
 		writer.complete(null);
-		saveStats();
 		if (translationListener != null) {
 			translationListener.complete();
 		}
-	}
-
-	protected void saveStats() {
-		if (!StatsHelper.isTileEmpty(stats)) {
-			Osm2xpLogger.info("stats for tile " + (int) currentTile.y + "/"
-					+ (int) currentTile.x + " : " + stats.getBuildingsNumber()
-					+ " buildings, " + stats.getForestsNumber() + " forests, "
-					+ stats.getStreetlightsNumber() + " street lights, "
-					+ stats.getObjectsNumber() + " objects. (generation took "
-					+ MiscUtils.getTimeDiff(startTime, new Date()) + ")");
-
-			// stats
-			try {
-				if (XplaneOptionsHelper.getOptions().isGenerateXmlStats()
-						|| XplaneOptionsHelper.getOptions()
-								.isGeneratePdfStats()) {
-					StatsHelper.getStatsList().add(stats);
-
-				}
-				if (XplaneOptionsHelper.getOptions().isGenerateXmlStats()) {
-					StatsHelper.saveStats(folderPath, currentTile, stats);
-				}
-				if (XplaneOptionsHelper.getOptions().isGeneratePdfStats()) {
-					StatsHelper.generatePdfReport(folderPath, stats);
-				}
-			} catch (Osm2xpBusinessException e) {
-				Osm2xpLogger.error("Error saving stats file for tile "
-						+ currentTile, e);
-			}
-		} else if (!GuiOptionsHelper.getOptions().isSinglePass()) {
-			Osm2xpLogger.info("Tile " + (int) currentTile.y + "/"
-					+ (int) currentTile.x + " is empty, no dsf generated");
-		}
-	}
+	}	
 
 	/**
 	 * write a building in the dsf file.
@@ -191,24 +150,7 @@ public class XPlaneTranslatorImpl implements ITranslator{
 			if (osmPolygon.getPolygon().getArea() * 100000000 > 0.1
 					&& osmPolygon.getPolygon().getVertexNumber() > 3) {
 				writer.write(outputFormat.getPolygonString(osmPolygon, facade +"", osmPolygon.getHeight() + ""));
-	
-				// stats TODO not working anymore since v2 facades new features.
-				if (dsfObjectsProvider.getPolygonsList().get(facade)
-						.toLowerCase().contains(BUILDING_TAG)
-						|| dsfObjectsProvider.getPolygonsList().get(facade)
-								.toLowerCase().contains("shape")) {
-					StatsHelper.addBuildingType("Building", stats);
-				} else {
-					if (dsfObjectsProvider.getPolygonsList().get(facade)
-							.toLowerCase().contains("house")
-							|| dsfObjectsProvider.getPolygonsList().get(facade)
-									.toLowerCase().contains("common")) {
-						StatsHelper.addBuildingType("Residential", stats);
-					} else {
-						StatsHelper.addBuildingType("Facade rule", stats);
-					}
 				}
-			}
 		}
 	}
 
@@ -423,11 +365,7 @@ public class XPlaneTranslatorImpl implements ITranslator{
 	
 		String objectDsfText = object.asObjDsfText();
 		writer.write(objectDsfText);
-		// stats
-		StatsHelper.addObjectType(
-				dsfObjectsProvider.getObjectsList().get(object.getDsfIndex()),
-				stats);
-	
+
 	}
 
 	@Override
@@ -436,9 +374,9 @@ public class XPlaneTranslatorImpl implements ITranslator{
 			Box2D bboxRect = new Box2D(bbox.getMinX() / COORD_DIV_FACTOR,bbox.getMaxX() / COORD_DIV_FACTOR, bbox.getMinY() / COORD_DIV_FACTOR, bbox.getMaxY() / COORD_DIV_FACTOR);
 			if (currentTile != null) {
 				Box2D tileRect = new Box2D(currentTile, 1,1);
-				dsfObjectsProvider.setExclusionBox(tileRect.intersection(bboxRect));
+				writer.setHeader(outputFormat.getHeaderString(currentTile, tileRect.intersection(bboxRect), dsfObjectsProvider));
 			} else {
-				dsfObjectsProvider.setExclusionBox(bboxRect);
+				writer.setHeader(outputFormat.getHeaderString(currentTile, bboxRect, dsfObjectsProvider));
 			}
 		}
 	}

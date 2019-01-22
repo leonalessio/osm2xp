@@ -4,12 +4,7 @@ import java.io.File;
 import java.util.Collection;
 import java.util.Collections;
 
-import org.eclipse.core.runtime.preferences.InstanceScope;
-
 import com.osm2xp.constants.Perspectives;
-import com.osm2xp.core.exceptions.Osm2xpBusinessException;
-import com.osm2xp.gui.Activator;
-import com.osm2xp.model.facades.FacadeSetManager;
 import com.osm2xp.model.stats.GenerationStats;
 import com.osm2xp.translators.airfield.XPAirfieldTranslationAdapter;
 import com.osm2xp.translators.impl.ConsoleTranslatorImpl;
@@ -17,20 +12,15 @@ import com.osm2xp.translators.impl.FlightGearTranslatorImpl;
 import com.osm2xp.translators.impl.FlyLegacyTranslatorImpl;
 import com.osm2xp.translators.impl.FsxBgTranslatorImpl;
 import com.osm2xp.translators.impl.G2xplTranslatorImpl;
-import com.osm2xp.translators.impl.ImageDebugTranslationListener;
 import com.osm2xp.translators.impl.OsmTranslatorImpl;
 import com.osm2xp.translators.impl.WavefrontTranslatorImpl;
-import com.osm2xp.translators.impl.Xplane10TranslatorImpl;
-import com.osm2xp.translators.impl.Xplane9TranslatorImpl;
-import com.osm2xp.utils.DsfObjectsProvider;
-import com.osm2xp.utils.helpers.FacadeSetHelper;
+import com.osm2xp.translators.xplane.XPlane10TranslatorProvider;
+import com.osm2xp.translators.xplane.XPlane9TranslatorProvider;
 import com.osm2xp.utils.helpers.GuiOptionsHelper;
 import com.osm2xp.utils.helpers.StatsHelper;
 import com.osm2xp.utils.helpers.WavefrontOptionsHelper;
-import com.osm2xp.utils.helpers.XplaneOptionsHelper;
 import com.osm2xp.writers.IWriter;
 import com.osm2xp.writers.impl.BglWriterImpl;
-import com.osm2xp.writers.impl.DsfWriterImpl;
 import com.osm2xp.writers.impl.OsmWriterImpl;
 
 import math.geom2d.Point2D;
@@ -46,20 +36,8 @@ public class TranslatorBuilder {
 	public static ITranslator getTranslator(File currentFile,
 			Point2D currentTile, String folderPath) {
 		ITranslator result = null;
-		// XPLANE 9 DSF implementation
-		if (GuiOptionsHelper.getOptions().getOutputFormat()
-				.equals(Perspectives.PERSPECTIVE_XPLANE9)) {
-			result = buildXplane9Translator(currentFile, currentTile,
-					folderPath);
-		}
-		// XPLANE 10 DSF implementation
-		else if (GuiOptionsHelper.getOptions().getOutputFormat()
-				.equals(Perspectives.PERSPECTIVE_XPLANE10)) {
-			result = buildXplane10Translator(currentFile, currentTile,
-					folderPath);
-		}
 		// OSM implementation
-		else if (GuiOptionsHelper.getOptions().getOutputFormat()
+		if (GuiOptionsHelper.getOptions().getOutputFormat()
 				.equals(Perspectives.PERSPECTIVE_OSM)) {
 			result = buildOsmTranslator(currentTile, folderPath);
 		}
@@ -181,50 +159,63 @@ public class TranslatorBuilder {
 		return new FlightGearTranslatorImpl(currentTile, folderPath);
 	}
 
-	/**
-	 * @param currentFile
-	 * @param currentTile
-	 * @param folderPath
-	 * @param processor
-	 * @return
-	 * @throws Osm2xpBusinessException
-	 */
-	private static ITranslator buildXplane10Translator(File currentFile,
-			Point2D currentTile, String folderPath) {
-
-		GenerationStats stats = StatsHelper.initStats(currentFile, currentTile);
-		String facadeSetsStr = InstanceScope.INSTANCE.getNode(Activator.PLUGIN_ID).get(FacadeSetManager.FACADE_SETS_PROP,FacadeSetHelper.getDefaultFacadePath());
-		DsfObjectsProvider dsfObjectsProvider = new DsfObjectsProvider(folderPath, FacadeSetManager.getManager(facadeSetsStr, new File(folderPath)));
-		IWriter writer = new DsfWriterImpl(folderPath, currentTile, dsfObjectsProvider);
-		Xplane10TranslatorImpl translatorImpl = new Xplane10TranslatorImpl(stats, writer, currentTile,
-				folderPath, dsfObjectsProvider);
-		if (XplaneOptionsHelper.getOptions().isGenerateDebugImg()) {
-			translatorImpl.setTranslationListener(new ImageDebugTranslationListener());
+//	/**
+//	 * @param currentFile
+//	 * @param currentTile
+//	 * @param folderPath
+//	 * @param processor
+//	 * @return
+//	 * @throws Osm2xpBusinessException
+//	 */
+//	private static ITranslator buildXplane10Translator(File currentFile,
+//			Point2D currentTile, String folderPath) {
+//
+//		String facadeSetsStr = InstanceScope.INSTANCE.getNode(Activator.PLUGIN_ID).get(FacadeSetManager.FACADE_SETS_PROP,FacadeSetHelper.getDefaultFacadePath());
+//		DsfObjectsProvider dsfObjectsProvider = new DsfObjectsProvider(folderPath, FacadeSetManager.getManager(facadeSetsStr, new File(folderPath)));
+//		IHeaderedWriter writer = new DsfWriterImpl(folderPath, currentTile, dsfObjectsProvider);
+//		Xplane10TranslatorImpl translatorImpl = new Xplane10TranslatorImpl(writer, currentTile,
+//				folderPath, dsfObjectsProvider);
+//		if (XplaneOptionsHelper.getOptions().isGenerateDebugImg()) {
+//			translatorImpl.setTranslationListener(new ImageDebugTranslationListener());
+//		}
+//		return translatorImpl;
+//	}
+//
+//	/**
+//	 * @param currentFile
+//	 * @param currentTile
+//	 * @param folderPath
+//	 * @param processor
+//	 * @return
+//	 * @throws Osm2xpBusinessException
+//	 */
+//	private static ITranslator buildXplane9Translator(File currentFile,
+//			Point2D currentTile, String folderPath) {
+//
+//		String facadeSetsStr = InstanceScope.INSTANCE.getNode(Activator.PLUGIN_ID).get(FacadeSetManager.FACADE_SETS_PROP,FacadeSetHelper.getDefaultFacadePath());
+//		DsfObjectsProvider dsfObjectsProvider = new DsfObjectsProvider(folderPath, FacadeSetManager.getManager(facadeSetsStr, new File(folderPath)));
+//		IHeaderedWriter writer = new DsfWriterImpl(folderPath, currentTile, dsfObjectsProvider);
+//		Xplane9TranslatorImpl xplane9TranslatorImpl = new Xplane9TranslatorImpl(writer, currentTile,
+//				folderPath, dsfObjectsProvider);
+//		if (XplaneOptionsHelper.getOptions().isGenerateDebugImg()) {
+//			xplane9TranslatorImpl.setTranslationListener(new ImageDebugTranslationListener());
+//		}
+//		return xplane9TranslatorImpl;
+//	}
+	
+	public static ITranslatorProvider getTranslatorProvider(File currentFile, String folderPath) {
+		// XPLANE 9 DSF translator provider
+		if (GuiOptionsHelper.getOptions().getOutputFormat()
+				.equals(Perspectives.PERSPECTIVE_XPLANE9)) {
+			return new XPlane9TranslatorProvider(currentFile, folderPath);
 		}
-		return translatorImpl;
-	}
-
-	/**
-	 * @param currentFile
-	 * @param currentTile
-	 * @param folderPath
-	 * @param processor
-	 * @return
-	 * @throws Osm2xpBusinessException
-	 */
-	private static ITranslator buildXplane9Translator(File currentFile,
-			Point2D currentTile, String folderPath) {
-
-		GenerationStats stats = StatsHelper.initStats(currentFile, currentTile);
-		String facadeSetsStr = InstanceScope.INSTANCE.getNode(Activator.PLUGIN_ID).get(FacadeSetManager.FACADE_SETS_PROP,FacadeSetHelper.getDefaultFacadePath());
-		DsfObjectsProvider dsfObjectsProvider = new DsfObjectsProvider(folderPath, FacadeSetManager.getManager(facadeSetsStr, new File(folderPath)));
-		IWriter writer = new DsfWriterImpl(folderPath, currentTile, dsfObjectsProvider);
-		Xplane9TranslatorImpl xplane9TranslatorImpl = new Xplane9TranslatorImpl(stats, writer, currentTile,
-				folderPath, dsfObjectsProvider);
-		if (XplaneOptionsHelper.getOptions().isGenerateDebugImg()) {
-			xplane9TranslatorImpl.setTranslationListener(new ImageDebugTranslationListener());
+		// XPLANE 10 DSF translator provider
+		else if (GuiOptionsHelper.getOptions().getOutputFormat()
+				.equals(Perspectives.PERSPECTIVE_XPLANE10)) {
+			return new XPlane10TranslatorProvider(currentFile, folderPath);
 		}
-		return xplane9TranslatorImpl;
+		return new DefaultTranslatorProvider(currentFile, folderPath);
+		
 	}
 
 	public static Collection<ISpecificTranslator> createAdditinalAdapters(String folderPath) {

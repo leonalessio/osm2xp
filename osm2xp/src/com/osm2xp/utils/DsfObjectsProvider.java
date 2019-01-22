@@ -55,7 +55,6 @@ public class DsfObjectsProvider {
 	private List<FacadeTagRule> facadesRules = XplaneOptionsHelper.getOptions().getFacadesRules().getRules();
 
 	private FacadeSetManager facadeSetManager;
-	private Box2D exclusionBox;
 	private String targetFolderPath;
 	
 	private long lastPolyId = -1;
@@ -511,14 +510,6 @@ public class DsfObjectsProvider {
 			}
 		}
 		return result;
-	}
-
-	public void setExclusionBox(Box2D boundingBox) {
-		this.exclusionBox = boundingBox;
-	}
-
-	public Box2D getExclusionBox() {
-		return exclusionBox;
 	}
 
 	public Integer getSpecialObject(String specialObjectFile) {

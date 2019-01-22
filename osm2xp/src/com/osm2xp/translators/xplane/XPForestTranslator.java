@@ -4,11 +4,9 @@ import java.util.List;
 
 import com.osm2xp.model.osm.polygon.OsmPolygon;
 import com.osm2xp.model.osm.polygon.OsmPolyline;
-import com.osm2xp.model.stats.GenerationStats;
 import com.osm2xp.translators.impl.XPOutputFormat;
 import com.osm2xp.utils.DsfObjectsProvider;
 import com.osm2xp.utils.geometry.GeomUtils;
-import com.osm2xp.utils.helpers.StatsHelper;
 import com.osm2xp.utils.helpers.XplaneOptionsHelper;
 import com.osm2xp.writers.IWriter;
 
@@ -17,14 +15,12 @@ import math.geom2d.polygon.LinearRing2D;
 public class XPForestTranslator extends XPWritingTranslator {
 
 	private DsfObjectsProvider dsfObjectsProvider;
-	private GenerationStats stats;
 	private XPOutputFormat outputFormat;
 
-	public XPForestTranslator(IWriter writer, DsfObjectsProvider dsfObjectsProvider, XPOutputFormat outputFormat, GenerationStats stats) {
+	public XPForestTranslator(IWriter writer, DsfObjectsProvider dsfObjectsProvider, XPOutputFormat outputFormat) {
 		super(writer);
 		this.dsfObjectsProvider = dsfObjectsProvider;
 		this.outputFormat = outputFormat;
-		this.stats = stats;
 	}
 
 	@Override
@@ -61,11 +57,7 @@ public class XPForestTranslator extends XPWritingTranslator {
 	private void writeForestToDsf(OsmPolygon osmPolygon, Integer[] forestIndexAndDensity) {
 	
 		writer.write(outputFormat.getPolygonString(osmPolygon, forestIndexAndDensity[0] + "", forestIndexAndDensity[1] + ""));
-		// stats
-		StatsHelper.addForestType(
-				dsfObjectsProvider.getPolygonsList().get(
-						forestIndexAndDensity[0]), stats);
-	
+			
 	}
 
 }

@@ -1,7 +1,6 @@
 package com.osm2xp.converters.impl;
 
 import java.awt.Color;
-import java.io.File;
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.HashSet;
@@ -18,7 +17,7 @@ import com.osm2xp.core.model.osm.Tag;
 import com.osm2xp.dataProcessors.IDataSink;
 import com.osm2xp.gui.Activator;
 import com.osm2xp.translators.ISpecificTranslator;
-import com.osm2xp.translators.TranslatorBuilder;
+import com.osm2xp.translators.ITranslatorProvider;
 import com.osm2xp.translators.impl.TileTranslationAdapter;
 import com.osm2xp.utils.OsmUtils;
 import com.vividsolutions.jts.geom.Geometry;
@@ -38,14 +37,13 @@ public class MultiTileDataConverter extends AbstractOSMDataConverter {
 	
 	private List<ISpecificTranslator> translationAdapters = new ArrayList<>();
 	private Set<Point2D> tiles = new HashSet<Point2D>();
-	private String folderPath;
-	private File binaryFile;
+	private Box2D boundingBox;
+	private ITranslatorProvider translatorProvider;
 
-	public MultiTileDataConverter(IDataSink processor, File binaryFile, String folderPath, Map<Long, Color> roofsColorMap) {
+	public MultiTileDataConverter(IDataSink processor, ITranslatorProvider translatorProvider, Map<Long, Color> roofsColorMap) {
 		super(processor, roofsColorMap);
-		this.binaryFile = binaryFile;
-		this.folderPath = folderPath;
-		translationAdapters.addAll(TranslatorBuilder.createAdditinalAdapters(folderPath));
+		this.translatorProvider = translatorProvider;
+		translationAdapters.addAll(translatorProvider.createAdditinalAdapters());
 	}
 	
 	public void complete() {
@@ -58,10 +56,17 @@ public class MultiTileDataConverter extends AbstractOSMDataConverter {
 		Point2D cleanedLoc = new Point2D((int) Math.floor(lonf), (int) Math.floor(latf));
 		if (!tiles.contains(cleanedLoc)) {
 			Osm2xpLogger.info("Detected tile (" + cleanedLoc.x + ", " + cleanedLoc.y + ")");
-			TileTranslationAdapter adapter = new TileTranslationAdapter(cleanedLoc, processor, TranslatorBuilder.getTranslator(binaryFile, cleanedLoc, folderPath));
-			adapter.init();
-			translationAdapters.add(adapter);
-			tiles.add(cleanedLoc);
+			addTranslationAdapter(cleanedLoc);
+		}
+	}
+
+	protected void addTranslationAdapter(Point2D point) {
+		TileTranslationAdapter adapter = new TileTranslationAdapter(point, processor, translatorProvider.getTranslator(point));
+		adapter.init();
+		translationAdapters.add(adapter);
+		tiles.add(point);
+		if (boundingBox != null) {
+			adapter.processBoundingBox(boundingBox);
 		}
 	}
 	
@@ -126,9 +131,10 @@ public class MultiTileDataConverter extends AbstractOSMDataConverter {
 	}
 
 	@Override
-	public void visit(Box2D box) {
+	public void visit(Box2D boundingBox) {
+		this.boundingBox = boundingBox;
 		for (ISpecificTranslator tileTranslationAdapter : translationAdapters) {
-			tileTranslationAdapter.processBoundingBox(box);
+			tileTranslationAdapter.processBoundingBox(boundingBox);
 		}
 		
 	}

@@ -20,6 +20,7 @@ import com.osm2xp.dataProcessors.DataSinkFactory;
 import com.osm2xp.dataProcessors.IDataSink;
 import com.osm2xp.gui.Activator;
 import com.osm2xp.translators.ITranslator;
+import com.osm2xp.translators.ITranslatorProvider;
 import com.osm2xp.translators.TranslatorBuilder;
 import com.osm2xp.translators.airfield.XPAirfieldTranslationAdapter;
 import com.osm2xp.utils.FilesUtils;
@@ -103,8 +104,7 @@ public class ParserBuilder {
 	 * @throws NumberFormatException
 	 * @throws Exception
 	 */
-	public static IVisitingParser getMultiTileParser(File currentFile,
-			String folderPath)
+	public static IVisitingParser getMultiTileParser(File currentFile,ITranslatorProvider translatorProvider)
 			throws DataSinkException {
 		IDataSink processor = DataSinkFactory.getProcessor();
 		// if a roof color file is available, load it into a map and give it to
@@ -114,7 +114,7 @@ public class ParserBuilder {
 			roofsColorMap = FilesUtils.loadG2xplColorFile(GuiOptionsHelper
 					.getRoofColorFile());
 		}
-		MultiTileDataConverter converter = new MultiTileDataConverter(processor, currentFile, folderPath, roofsColorMap);		
+		MultiTileDataConverter converter = new MultiTileDataConverter(processor, translatorProvider, roofsColorMap);		
 		return (IVisitingParser) getParser(currentFile, converter);
 	}
 

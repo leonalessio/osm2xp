@@ -11,6 +11,7 @@ import com.osm2xp.utils.OsmUtils;
 import com.osm2xp.utils.geometry.GeomUtils;
 import com.osm2xp.utils.helpers.StatsHelper;
 import com.osm2xp.utils.helpers.XplaneOptionsHelper;
+import com.osm2xp.writers.IHeaderedWriter;
 import com.osm2xp.writers.IWriter;
 
 import math.geom2d.Point2D;
@@ -56,10 +57,10 @@ public class Xplane9TranslatorImpl extends XPlaneTranslatorImpl {
 	 * @param dsfObjectsProvider
 	 *            dsf object provider.
 	 */
-	public Xplane9TranslatorImpl(GenerationStats stats, IWriter writer,
+	public Xplane9TranslatorImpl(IHeaderedWriter writer,
 			Point2D currentTile, String folderPath,
 			DsfObjectsProvider dsfObjectsProvider) {
-		super(stats, writer, currentTile, folderPath, dsfObjectsProvider);
+		super(writer, currentTile, folderPath, dsfObjectsProvider);
 	}
 
 	

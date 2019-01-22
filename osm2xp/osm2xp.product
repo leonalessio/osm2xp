@@ -85,6 +85,7 @@ Icons by Open Icon Library http://http://openiconlibrary.sourceforge.net/
    <plugins>
       <plugin id="com.ibm.icu"/>
       <plugin id="com.osm2xp"/>
+      <plugin id="com.osm2xp.core"/>
       <plugin id="javax.annotation"/>
       <plugin id="javax.inject"/>
       <plugin id="javax.xml"/>

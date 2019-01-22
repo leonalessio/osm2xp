@@ -13,10 +13,8 @@ import org.apache.commons.io.FileUtils;
 
 import com.osm2xp.constants.XplaneConstants;
 import com.osm2xp.core.logging.Osm2xpLogger;
-import com.osm2xp.utils.DsfObjectsProvider;
 import com.osm2xp.utils.DsfUtils;
-import com.osm2xp.utils.helpers.XplaneOptionsHelper;
-import com.osm2xp.writers.IWriter;
+import com.osm2xp.writers.IHeaderedWriter;
 
 import math.geom2d.Point2D;
 
@@ -26,17 +24,14 @@ import math.geom2d.Point2D;
  * @author Benjamin Blanchet, Dmitry Karpenko
  * 
  */
-public class DsfWriterImpl implements IWriter {
+public class DsfWriterImpl implements IHeaderedWriter {
 
-	private String sceneFolder;
-	private DsfObjectsProvider dsfObjectsProvider;
 	private File dsfFile;
 	private BufferedWriter writer;
-
-	public DsfWriterImpl(String sceneFolder, Point2D tile, DsfObjectsProvider dsfObjectsProvider) {
-		this.sceneFolder = sceneFolder;
-		this.dsfObjectsProvider = dsfObjectsProvider;
-
+	private boolean headerWritten = false;
+	private String header;
+	
+	public DsfWriterImpl(String sceneFolder, Point2D tile) {
 		dsfFile = DsfUtils.computeXPlaneDsfFilePath(sceneFolder, tile);
 		// create the parent folder file
 		File parentFolder = new File(dsfFile.getParent());
@@ -45,10 +40,6 @@ public class DsfWriterImpl implements IWriter {
 
 		try {
 			writer = Files.newBufferedWriter(dsfFile.toPath(), StandardCharsets.UTF_8);
-
-			// write its header
-			String dsfHeader = DsfUtils.getDsfHeader(tile, this.dsfObjectsProvider);
-			writer.write(dsfHeader);
 		} catch (IOException e) {
 			Osm2xpLogger.error("Error writing " + dsfFile.getAbsolutePath(), e);
 		}		
@@ -56,6 +47,10 @@ public class DsfWriterImpl implements IWriter {
 
 	public void write(Object data) {
 		try {
+			if (!headerWritten) {
+				writer.write(header);
+				headerWritten = true;
+			}
 			if (data != null) {
 				// write into this dsf file
 				writer.write((String) data);
@@ -90,17 +85,6 @@ public class DsfWriterImpl implements IWriter {
 	@Override
 	public void init(Point2D coordinates) {
 
-		// create stats folder
-		if (XplaneOptionsHelper.getOptions().isGeneratePdfStats()
-				|| XplaneOptionsHelper.getOptions().isGenerateXmlStats()) {
-			new File(sceneFolder + File.separatorChar + "stats").mkdirs();
-		}
-
-		// write the libraty file if needed
-		if (!XplaneOptionsHelper.getOptions().isPackageFacades()) {
-			DsfUtils.writeLibraryFile(sceneFolder, dsfObjectsProvider);
-		}
-
 	}
 
 	private void injectSmartExclusions(String exclusionText) throws IOException {
@@ -130,5 +114,10 @@ public class DsfWriterImpl implements IWriter {
 		tempFile.delete();
 		tempFile.deleteOnExit();
 
+	}
+
+	@Override
+	public void setHeader(Object header) {
+		this.header = header.toString();
 	}
 }

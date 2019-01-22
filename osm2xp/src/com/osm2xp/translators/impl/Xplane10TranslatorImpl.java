@@ -13,7 +13,7 @@ import com.osm2xp.utils.helpers.GuiOptionsHelper;
 import com.osm2xp.utils.helpers.StatsHelper;
 import com.osm2xp.utils.helpers.XplaneExclusionsHelper;
 import com.osm2xp.utils.helpers.XplaneOptionsHelper;
-import com.osm2xp.writers.IWriter;
+import com.osm2xp.writers.IHeaderedWriter;
 
 import math.geom2d.Point2D;
 
@@ -38,16 +38,16 @@ public class Xplane10TranslatorImpl extends XPlaneTranslatorImpl {
 	 * @param writer
 	 *            file writer.
 	 * @param currentTile
-	 *            current lat/long tile.
+	 *            current lat/lon tile.
 	 * @param folderPath
 	 *            generated scenery folder path.
 	 * @param dsfObjectsProvider
 	 *            dsf object provider.
 	 */
-	public Xplane10TranslatorImpl(GenerationStats stats, IWriter writer,
+	public Xplane10TranslatorImpl(IHeaderedWriter writer,
 			Point2D currentTile, String folderPath,
 			DsfObjectsProvider dsfObjectsProvider) {
-		super(stats, writer, currentTile, folderPath, dsfObjectsProvider);
+		super(writer, currentTile, folderPath, dsfObjectsProvider);
 	}
 
 	@Override
@@ -59,8 +59,7 @@ public class Xplane10TranslatorImpl extends XPlaneTranslatorImpl {
 
 		// if smart exclusions enabled and tile is not empty, send them to
 		// writer
-		if (!StatsHelper.isTileEmpty(stats)
-				&& XplaneOptionsHelper.getOptions().isSmartExclusions()) {
+		if (XplaneOptionsHelper.getOptions().isSmartExclusions()) {
 			String exclusions = exclusionsHelper.exportExclusions();
 			writer.complete(exclusions);
 
@@ -68,8 +67,6 @@ public class Xplane10TranslatorImpl extends XPlaneTranslatorImpl {
 			writer.complete(null);
 		}
 
-		saveStats();
-		
 		if (translationListener != null) {
 			translationListener.complete();
 		}
@@ -119,8 +116,6 @@ public class Xplane10TranslatorImpl extends XPlaneTranslatorImpl {
 							+ " " + (lightLoc.y) + " " + (lightLoc.x) + " "
 							+ orientation);
 					sb.append(LINE_SEP);
-					// stats
-					StatsHelper.addStreetLight(stats);
 				}
 			}
 		}
