@@ -53,5 +53,9 @@ public class XPCoolingTowerTranslator extends XPSpecObjectTranslator {
 		commentBuilder.append(System.getProperty("line.separator"));
 		return commentBuilder.toString();
 	}
-	
+
+	@Override
+	public String getId() {
+		return "cooling_tower";
+	}
 }

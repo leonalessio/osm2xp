@@ -47,6 +47,8 @@ public class ShapefileParserImpl implements IVisitingParser {
 					.getNextRecord();
 
 			while (esriPolygonRecord != null) {
+//				ESRIPoint minPt = esriPolygonRecord.bounds.min; //TODO handle bounding box
+//				ESRIPoint maxPt = esriPolygonRecord.bounds.max;
 
 				ESRIFloatPoly poly = (ESRIFloatPoly) esriPolygonRecord.polygons[0];
 				Way way = new Way();

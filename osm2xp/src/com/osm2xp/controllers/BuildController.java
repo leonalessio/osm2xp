@@ -24,6 +24,7 @@ import com.osm2xp.jobs.GenerateTileJob;
 import com.osm2xp.jobs.MutexRule;
 import com.osm2xp.model.facades.FacadeSetManager;
 import com.osm2xp.model.project.Coordinates;
+import com.osm2xp.stats.StatsProvider;
 import com.osm2xp.utils.FilesUtils;
 import com.osm2xp.utils.MiscUtils;
 import com.osm2xp.utils.helpers.GuiOptionsHelper;
@@ -140,6 +141,7 @@ public class BuildController {
 				&& new File(folderPath).exists()) {
 			FilesUtils.deleteDirectory(new File(folderPath));
 		}
+		StatsProvider.reinit();
 		// switch to build perspective
 		MiscUtils.switchPerspective(Perspectives.PERSPECTIVE_BUILD);
 		// get user setted cordinates

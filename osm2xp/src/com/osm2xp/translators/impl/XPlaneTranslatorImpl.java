@@ -6,6 +6,7 @@ import java.util.Date;
 import java.util.List;
 
 import org.apache.commons.lang.StringUtils;
+import org.apache.commons.logging.LogFactory;
 import org.eclipse.core.runtime.preferences.InstanceScope;
 
 import com.osm2xp.constants.Osm2xpConstants;
@@ -18,6 +19,8 @@ import com.osm2xp.model.osm.polygon.OsmPolygon;
 import com.osm2xp.model.osm.polygon.OsmPolyline;
 import com.osm2xp.model.xplane.XplaneDsf3DObject;
 import com.osm2xp.model.xplane.XplaneDsfObject;
+import com.osm2xp.stats.CountStats;
+import com.osm2xp.stats.StatsProvider;
 import com.osm2xp.translators.BuildingType;
 import com.osm2xp.translators.IPolyHandler;
 import com.osm2xp.translators.ITranslationListener;
@@ -57,10 +60,6 @@ public class XPlaneTranslatorImpl implements ITranslator{
 	 * Buildings maximum vectors.
 	 */
 	protected static final int BUILDING_MAX_VECTORS = 512;	
-	/**
-	 * Factor to get bounding box lat/long
-	 */
-	protected static final double COORD_DIV_FACTOR = 1000000000;
 	/**
 	 * current lat/long tile.
 	 */
@@ -130,11 +129,25 @@ public class XPlaneTranslatorImpl implements ITranslator{
 	
 	@Override
 	public void complete() {
-		writer.complete(null);
+		for (IPolyHandler polyHandler : polyHandlers) {
+			polyHandler.translationComplete();
+		}
+		writer.complete(getExclusionsStr());
+		CountStats tileStats = StatsProvider.getTileStats(currentTile, false);
+		if (tileStats != null) {
+			System.out.println("Tile " + currentTile + ", generated: " + tileStats.getSummary().toLowerCase());
+		} else {
+			System.out.println("No generation stats available");
+		}
 		if (translationListener != null) {
 			translationListener.complete();
 		}
 	}	
+
+	protected String getExclusionsStr() {
+		// Override if necessary
+		return null;
+	}
 
 	/**
 	 * write a building in the dsf file.
@@ -300,6 +313,7 @@ public class XPlaneTranslatorImpl implements ITranslator{
 	 * @return Integer the facade index.
 	 */
 	public Integer computeFacadeIndex(OsmPolygon polygon) {
+		StatsProvider.getTileStats(currentTile, true).incCount("building");
 		Integer result = null;
 		int index = dsfObjectsProvider.computeFacadeIndexFromRules(polygon);
 		if (index >= 0) {
@@ -307,10 +321,12 @@ public class XPlaneTranslatorImpl implements ITranslator{
 		}
 		SpecialFacadeType specialFacadeType = getSpecialBuildingType(polygon);
 		if (specialFacadeType != null) {
+			StatsProvider.getTileStats(currentTile, true).incCount(specialFacadeType.name());
 			return dsfObjectsProvider.computeSpecialFacadeDsfIndex(specialFacadeType, polygon);
 		}
 		// we check if we can use a sloped roof if the user wants them
 		BuildingType buildingType = getBuildingType(polygon);
+		StatsProvider.getTileStats(currentTile, true).incCount(buildingType.name());
 		if (XplaneOptionsHelper.getOptions().isGenerateSlopedRoofs()
 				&& polygon.isSimplePolygon() && polygon.getHeight() < 20) { //Suggesting that buildings higher than 20m usually have flat roofs
 			
@@ -371,12 +387,12 @@ public class XPlaneTranslatorImpl implements ITranslator{
 	@Override
 	public void processBoundingBox(Box2D bbox) {
 		if (bbox != null && GuiOptionsHelper.isUseExclusionsFromPBF()) {
-			Box2D bboxRect = new Box2D(bbox.getMinX() / COORD_DIV_FACTOR,bbox.getMaxX() / COORD_DIV_FACTOR, bbox.getMinY() / COORD_DIV_FACTOR, bbox.getMaxY() / COORD_DIV_FACTOR);
+//			Box2D bboxRect = new Box2D(bbox.getMinX() / COORD_DIV_FACTOR,bbox.getMaxX() / COORD_DIV_FACTOR, bbox.getMinY() / COORD_DIV_FACTOR, bbox.getMaxY() / COORD_DIV_FACTOR);
 			if (currentTile != null) {
 				Box2D tileRect = new Box2D(currentTile, 1,1);
-				writer.setHeader(outputFormat.getHeaderString(currentTile, tileRect.intersection(bboxRect), dsfObjectsProvider));
+				writer.setHeader(outputFormat.getHeaderString(currentTile, tileRect.intersection(bbox), dsfObjectsProvider));
 			} else {
-				writer.setHeader(outputFormat.getHeaderString(currentTile, bboxRect, dsfObjectsProvider));
+				writer.setHeader(outputFormat.getHeaderString(currentTile, bbox, dsfObjectsProvider));
 			}
 		}
 	}
@@ -427,6 +443,7 @@ public class XPlaneTranslatorImpl implements ITranslator{
 							// nothing generated? try to generate a forest.
 							if (forestTranslator.handlePoly(poly) && translationListener != null) {
 								translationListener.processForest((OsmPolygon) poly);
+								StatsProvider.getTileStats(currentTile, true).incCount(forestTranslator.getId());
 							} 
 						}
 					}
@@ -469,7 +486,6 @@ public class XPlaneTranslatorImpl implements ITranslator{
 	 * @return true if a 3D object has been written in the dsf file.
 	 */
 	protected boolean process3dObject(OsmPolyline poly) {
-		Boolean result = false;
 
 		if (!(poly instanceof OsmPolygon) || poly.isPart() || !((OsmPolygon) poly).getPolygon().isClosed()) {
 			return false;
@@ -487,14 +503,15 @@ public class XPlaneTranslatorImpl implements ITranslator{
 				object.setPolygon((OsmPolygon) poly);
 				try {
 					writeObjectToDsf(object);
-					result = true;
+					StatsProvider.getTileStats(currentTile, true).incCount("object");
+					return true;
 				} catch (Osm2xpBusinessException e) {
-					result = false;
+					LogFactory.getLog(getClass()).error(e.getMessage(), e);
 				}
 
 			}
 		}
-		return result;
+		return false;
 	}
 	
 	/**
@@ -574,6 +591,7 @@ public class XPlaneTranslatorImpl implements ITranslator{
 				if (translationListener != null) {
 					translationListener.polyProcessed(poly, handler);
 				}
+				StatsProvider.getTileStats(currentTile,true).incCount(handler.getId());
 				return true;
 			}
 		}

@@ -53,5 +53,10 @@ public class XPChimneyTranslator extends XPSpecObjectTranslator {
 		commentBuilder.append(System.getProperty("line.separator"));
 		return commentBuilder.toString();
 	}
+
+	@Override
+	public String getId() {
+		return "chimney";
+	}
 	
 }

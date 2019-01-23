@@ -4,13 +4,10 @@ import java.util.Random;
 
 import com.osm2xp.model.osm.polygon.OsmPolygon;
 import com.osm2xp.model.osm.polygon.OsmPolyline;
-import com.osm2xp.model.stats.GenerationStats;
-import com.osm2xp.translators.IPolyHandler;
 import com.osm2xp.utils.DsfObjectsProvider;
 import com.osm2xp.utils.OsmUtils;
 import com.osm2xp.utils.geometry.GeomUtils;
 import com.osm2xp.utils.helpers.GuiOptionsHelper;
-import com.osm2xp.utils.helpers.StatsHelper;
 import com.osm2xp.utils.helpers.XplaneExclusionsHelper;
 import com.osm2xp.utils.helpers.XplaneOptionsHelper;
 import com.osm2xp.writers.IHeaderedWriter;
@@ -51,36 +48,20 @@ public class Xplane10TranslatorImpl extends XPlaneTranslatorImpl {
 	}
 
 	@Override
-	public void complete() {
-		
-		for (IPolyHandler polyHandler : polyHandlers) {
-			polyHandler.translationComplete();
-		}
-
-		// if smart exclusions enabled and tile is not empty, send them to
-		// writer
+	protected String getExclusionsStr() {
 		if (XplaneOptionsHelper.getOptions().isSmartExclusions()) {
-			String exclusions = exclusionsHelper.exportExclusions();
-			writer.complete(exclusions);
-
-		} else {
-			writer.complete(null);
+			return exclusionsHelper.exportExclusions();
 		}
-
-		if (translationListener != null) {
-			translationListener.complete();
-		}
+		return super.getExclusionsStr();
 	}
 
 	@Override
 	public void init() {
-		// writer initialization
-		writer.init(currentTile);
+		super.init();
 		// exclusionHelper
 		if (XplaneOptionsHelper.getOptions().isSmartExclusions()) {
 			exclusionsHelper.run();
 		}
-
 	}
 
 	/**

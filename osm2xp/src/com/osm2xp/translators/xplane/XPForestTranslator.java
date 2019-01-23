@@ -59,5 +59,10 @@ public class XPForestTranslator extends XPWritingTranslator {
 		writer.write(outputFormat.getPolygonString(osmPolygon, forestIndexAndDensity[0] + "", forestIndexAndDensity[1] + ""));
 			
 	}
+	
+	@Override
+	public String getId() {
+		return "forest";
+	}
 
 }

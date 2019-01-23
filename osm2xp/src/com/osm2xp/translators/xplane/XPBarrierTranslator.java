@@ -64,4 +64,9 @@ public class XPBarrierTranslator extends XPWritingTranslator {
 		// Do nothing
 	}
 
+	@Override
+	public String getId() {
+		return "barrier";
+	}
+
 }

@@ -30,11 +30,6 @@ public class XPPowerlineTranslator extends XPPathTranslator {
 	}
 	
 	@Override
-	protected String getComment(IHasTags poly) {
-		return "power line";
-	}
-
-	@Override
 	protected boolean isBridge(IHasTags poly) {
 		return false; //Not supported for power lines
 	}
@@ -42,5 +37,10 @@ public class XPPowerlineTranslator extends XPPathTranslator {
 	@Override
 	protected int getBridgeRampLength() {
 		return 0;  //Not supported for power lines
+	}
+	
+	@Override
+	public String getId() {
+		return "powerline";
 	}
 }

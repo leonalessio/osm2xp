@@ -30,12 +30,12 @@ public class XPRailTranslator extends XPPathTranslator {
 	}
 	
 	@Override
-	protected String getComment(IHasTags poly) {
-		return "railway";
-	}
-
-	@Override
 	protected int getBridgeRampLength() {
 		return XplaneOptionsHelper.getOptions().getRailBridgeRampLen();
+	}
+	
+	@Override
+	public String getId() {
+		return "railway";
 	}
 }

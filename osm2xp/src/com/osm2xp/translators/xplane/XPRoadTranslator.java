@@ -72,12 +72,12 @@ public class XPRoadTranslator extends XPPathTranslator {
 	}
 	
 	@Override
-	protected String getComment(IHasTags poly) {
-		return "road";
-	}
-
-	@Override
 	protected int getBridgeRampLength() {
 		return XplaneOptionsHelper.getOptions().getRoadBridgeRampLen();
+	}
+	
+	@Override
+	public String getId() {
+		return "road";
 	}
 }

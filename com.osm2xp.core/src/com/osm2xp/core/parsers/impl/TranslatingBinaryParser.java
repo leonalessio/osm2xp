@@ -33,6 +33,11 @@ import math.geom2d.Box2D;
 
 public class TranslatingBinaryParser extends BinaryParser implements IParser, IVisitingParser {
 
+	/**
+	 * Factor to get bounding box lat/long - PBF contains value in nanodegrees
+	 */
+	protected static final double COORD_DIV_FACTOR = 1000000000;
+	
 	protected IOSMDataVisitor osmDataVisitor;
 	private File binaryFile;
 	
@@ -87,7 +92,7 @@ public class TranslatingBinaryParser extends BinaryParser implements IParser, IV
 	@Override
 	protected void parse(HeaderBlock header) {
 		HeaderBBox bbox = header.getBbox();
-		osmDataVisitor.visit(Box2D.create(bbox.getLeft(), bbox.getRight(), bbox.getBottom(), bbox.getTop()));
+		osmDataVisitor.visit(Box2D.create(bbox.getLeft() / COORD_DIV_FACTOR, bbox.getRight() / COORD_DIV_FACTOR, bbox.getBottom() / COORD_DIV_FACTOR, bbox.getTop() / COORD_DIV_FACTOR));  
 	}
 
 	
@@ -116,11 +121,11 @@ public class TranslatingBinaryParser extends BinaryParser implements IParser, IV
 			double latf = parseLat(lat), lonf = parseLon(lon);
 			if (nodes.getKeysValsCount() > 0) {
 				while (nodes.getKeysVals(j) != 0) {
-					int keyid = nodes.getKeysVals(j++);
-					int valid = nodes.getKeysVals(j++);
+					int keyId = nodes.getKeysVals(j++);
+					int valId = nodes.getKeysVals(j++);
 					Tag tag = new Tag();
-					tag.setKey(getStringById(keyid));
-					tag.setValue(getStringById(valid));
+					tag.setKey(getStringById(keyId));
+					tag.setValue(getStringById(valId));
 					tags.add(tag);
 				}
 				j++;

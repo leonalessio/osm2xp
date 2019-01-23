@@ -56,7 +56,7 @@ public class XPOutputFormat {
 		sb.append("PROPERTY sim/require_object 1/0\n");
 		// }
 		sb.append("PROPERTY sim/require_facade 6/0\n");
-		sb.append("PROPERTY sim/creation_agent Osm2Xp " + Osm2xpConstants.OSM2XP_VERSION + " by Benjamin Blanchet \n");
+		sb.append("PROPERTY sim/creation_agent Osm2Xp " + Osm2xpConstants.OSM2XP_VERSION + " by Benjamin Blanchet, Dmitry Karpenko \n");
 		// Exclusions
 		String exclusionCoordinate = exclusionBox != null
 				? formatDsfCoord(exclusionBox.getMinX()) + "/" + formatDsfCoord(exclusionBox.getMinY()) + "/"

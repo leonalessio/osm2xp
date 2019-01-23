@@ -3,7 +3,7 @@
 	<classpathentry exported="true" kind="lib" path="lib/openmap.jar"/>
 	<classpathentry exported="true" kind="lib" path="lib/protobuf-java-3.4.0.jar"/>
 	<classpathentry exported="true" kind="lib" path="lib/osmosis-core-0.46.jar"/>
-	<classpathentry exported="true" kind="lib" path="lib/osmosis-osm-binary-0.46.jar" sourcepath="C:/Users/32kda/AppData/Local/Temp/.org.sf.feeling.decompiler1547187189092/source/osmosis-osm-binary-0.46-sources.jar"/>
+	<classpathentry exported="true" kind="lib" path="lib/osmosis-osm-binary-0.46.jar" sourcepath="C:/Users/32kda/AppData/Local/Temp/.org.sf.feeling.decompiler1548223480338/source/osmosis-osm-binary-0.46-sources-1548236084638.jar"/>
 	<classpathentry exported="true" kind="lib" path="lib/osmosis-pbf-0.46.jar"/>
 	<classpathentry exported="true" kind="lib" path="lib/osmosis-pbf2-0.46.jar"/>
 	<classpathentry exported="true" kind="lib" path="lib/osmosis-xml-0.46.jar"/>

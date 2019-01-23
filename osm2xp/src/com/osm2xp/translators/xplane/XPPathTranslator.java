@@ -180,7 +180,7 @@ public abstract class XPPathTranslator extends XPWritingTranslator {
 						newEndId,
 						GeomUtils.getPointsFromOsmNodes(currentSegment));
 				segment.setBridge(bridge);
-				segment.setComment(getComment(poly));
+				segment.setComment(getId());
 				result.add(segment);
 				currentSegment.clear();
 				if (i < nodes.size() - 1) {
@@ -200,15 +200,6 @@ public abstract class XPPathTranslator extends XPWritingTranslator {
 //		int lonDiff = (int) (Math.floor(node.getLon()) - Math.floor(nextNode.getLon()));
 //		return latDiff != 0 || lonDiff != 0;
 //	}
-
-	/**
-	 * Get comment to be written into DSF file for this path/poly
-	 * @param poly
-	 * @return comment string, without "#' mark before. <code>null</code> by default, override if necessary
-	 */
-	protected String getComment(IHasTags poly) {
-		return null;
-	}
 
 	protected abstract int getPathType(IHasTags polygon); 
 

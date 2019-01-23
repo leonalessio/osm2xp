@@ -27,6 +27,8 @@ import com.osm2xp.core.model.osm.Way;
 import com.osm2xp.core.parsers.IOSMDataVisitor;
 import com.osm2xp.core.parsers.IVisitingParser;
 
+import math.geom2d.Box2D;
+
 /**
  * Sax parser implementation.
  * 
@@ -35,6 +37,10 @@ import com.osm2xp.core.parsers.IVisitingParser;
  */
 public class SaxParserImpl implements ContentHandler, IVisitingParser {
 
+	private static final String XML_ATTRIBUTE_MAXLON = "maxlon";
+	private static final String XML_ATTRIBUTE_MAXLAT = "maxlat";
+	private static final String XML_ATTRIBUTE_MINLON = "minlon";
+	private static final String XML_ATTRIBUTE_MINLAT = "minlat";
 	private static final String XML_ATTRIBUTE_LONGITUDE = "lon";
 	private static final String XML_ATTRIBUTE_LATITUDE = "lat";
 	private static final String XML_ATTRIBUTE_ID = "id";
@@ -42,6 +48,7 @@ public class SaxParserImpl implements ContentHandler, IVisitingParser {
 	private static final String XML_NODE_ND = "nd";
 	private static final String XML_NODE_TAG = "tag";
 	private static final String XML_NODE_NODE = "node";
+	private static final String XML_NODE_BOUNDS = "bounds";
 	private static final String XML_NODE_MEMBER = "member";
 	private static final String XML_NODE_WAY = "way";
 	private static final String XML_NODE_RELATION = "relation";
@@ -73,7 +80,7 @@ public class SaxParserImpl implements ContentHandler, IVisitingParser {
 			saxReader.setContentHandler(this);
 			saxReader.parse(this.xmlFile.getAbsolutePath());
 		} catch (Exception e) {
-			throw new Osm2xpBusinessException(e.getMessage());
+			throw new Osm2xpBusinessException(e.getMessage(), e);
 		}
 	}
 
@@ -105,7 +112,7 @@ public class SaxParserImpl implements ContentHandler, IVisitingParser {
 	public void startElement(String nameSpaceURI, String localName, String rawName, Attributes attributs) {
 		String name = !localName.isEmpty() ? localName : rawName;
 		if (name.equalsIgnoreCase(XML_NODE_WAY) || name.equalsIgnoreCase(XML_NODE_RELATION)
-				|| name.equalsIgnoreCase(XML_NODE_NODE)) {
+				|| name.equalsIgnoreCase(XML_NODE_NODE) || name.equalsIgnoreCase(XML_NODE_BOUNDS)) {
 			tagList = new ArrayList<Tag>();
 			ndList = new ArrayList<Nd>();
 			membersList = new ArrayList<>();
@@ -146,6 +153,8 @@ public class SaxParserImpl implements ContentHandler, IVisitingParser {
 			parseRelation();
 		} else if (name.equals(XML_NODE_NODE)) {
 			parseNode();
+		} else if (name.equals(XML_NODE_BOUNDS)) {
+			parseBounds();
 		}
 	}	
 
@@ -178,6 +187,19 @@ public class SaxParserImpl implements ContentHandler, IVisitingParser {
 				.getValue(XML_ATTRIBUTE_LONGITUDE)));
 		node.getTags().addAll(tagList);
 		visitor.visit(node);
+	}
+	
+	private void parseBounds() {
+		double minlat = Double.parseDouble(currentAttributes
+				.getValue(XML_ATTRIBUTE_MINLAT)); 
+		double minlon = Double.parseDouble(currentAttributes
+				.getValue(XML_ATTRIBUTE_MINLON)); 
+		double maxlat = Double.parseDouble(currentAttributes
+				.getValue(XML_ATTRIBUTE_MAXLAT)); 
+		double maxlon = Double.parseDouble(currentAttributes
+				.getValue(XML_ATTRIBUTE_MAXLON)); 
+		Box2D box2d = new Box2D(minlon, maxlon, minlat, maxlat);
+		visitor.visit(box2d);
 	}
 
 	public void process() {

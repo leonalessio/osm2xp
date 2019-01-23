@@ -6,4 +6,6 @@ public interface IPolyHandler {
 	public boolean handlePoly(OsmPolyline osmPolyline);
 	
 	public void translationComplete();
+	
+	public String getId();
 }
