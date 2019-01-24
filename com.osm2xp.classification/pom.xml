@@ -22,5 +22,10 @@
   		<artifactId>weka-stable</artifactId>
   		<version>3.8.3</version>
   	</dependency>
+  	<dependency>
+         <groupId>com.eatthepath</groupId>
+         <artifactId>jvptree</artifactId>
+         <version>0.3.0</version>
+     </dependency>
   </dependencies>
 </project>

@@ -17,6 +17,7 @@ import java.util.Set;
 import java.util.stream.Collectors;
 
 import com.osm2xp.classification.annotations.Ignore;
+import com.osm2xp.classification.annotations.Positive;
 import com.osm2xp.classification.annotations.Result;
 
 public class ARFFWriter<T> implements Closeable{
@@ -38,6 +39,7 @@ public class ARFFWriter<T> implements Closeable{
 	private PrintWriter writer;
 	
 	private List<Field> numFields;
+	private Set<Field> positiveFields;
 	private List<Field> boolFields;
 	private List<Field> stringFields;
 	private Field classField;
@@ -59,7 +61,11 @@ public class ARFFWriter<T> implements Closeable{
 					builder.append(',');
 				}
 				double value = fld.getDouble(data);
-				builder.append(String.format(Locale.ROOT, doubleFormat, value));
+				if (positiveFields.contains(fld) && value <= 0) {
+					builder.append('?');
+				} else {
+					builder.append(String.format(Locale.ROOT, doubleFormat, value));
+				}
 			} catch (IllegalArgumentException e) {
 				// TODO Auto-generated catch block
 				e.printStackTrace();
@@ -124,6 +130,7 @@ public class ARFFWriter<T> implements Closeable{
 		}
 		allFields = allFields.stream().filter(field -> !isIgnored(field)).collect(Collectors.toList());
 		numFields = allFields.stream().filter(field -> isNumeric(field)).collect(Collectors.toList());
+		positiveFields = numFields.stream().filter(field -> isPoistive(field)).collect(Collectors.toSet());
 		boolFields = allFields.stream().filter(field -> isBool(field)).collect(Collectors.toList());
 		Optional<Field> classFieldOp = allFields.stream().filter(field -> isResult(field)).findFirst();
 		if (!classFieldOp.isPresent()) {
@@ -170,6 +177,10 @@ public class ARFFWriter<T> implements Closeable{
 
 	protected boolean isResult(Field field) {
 		return field.isAnnotationPresent(Result.class);
+	}
+	
+	protected boolean isPoistive(Field field) {
+		return field.isAnnotationPresent(Positive.class);
 	}
 	
 	protected  static boolean isReflectedAsNumber(Class<?> type) {

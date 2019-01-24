@@ -2,9 +2,9 @@ package com.osm2xp.classification.learning;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 
+import weka.classifiers.AbstractClassifier;
 import weka.classifiers.Classifier;
 import weka.classifiers.evaluation.Evaluation;
-import weka.classifiers.trees.J48;
 import weka.core.Instances;
 import weka.core.SerializationHelper;
 import weka.core.converters.ConverterUtils.DataSource;
@@ -33,16 +33,19 @@ public class ModelGenerator {
         return dataset;
     }
 
-    public Classifier buildClassifier(Instances traindataset) {
-        J48 m = new J48();
+    public Classifier buildClassifier(Instances traindataset, AbstractClassifier classifier) {
+//        J48 m = new J48();
         //m.setGUI(true);
         //m.setValidationSetSize(0);
-        m.setBatchSize("100");
+//        m.setBatchSize("100");
 //        m.setLearningRate(0.3);
-        m.setSeed(0);
+//        m.setSeed(0);
 //        m.setMomentum(0.2);
 //        m.setTrainingTime(500);//epochs
         //m.setNormalizeAttributes(true);
+        
+        
+        
         
         /*Multipreceptron parameters and its default values 
         *Learning Rate for the backpropagation algorithm (Value should be between 0 - 1, Default = 0.3).
@@ -70,12 +73,12 @@ public class ModelGenerator {
         *m.setBatchSize("1");
          */
         try {
-            m.buildClassifier(traindataset);
+            classifier.buildClassifier(traindataset);
 
         } catch (Exception ex) {
             Logger.getLogger(ModelGenerator.class.getName()).log(Level.SEVERE, null, ex);
         }
-        return m;
+        return classifier;
     }
 
     public String evaluateModel(Classifier model, Instances traindataset, Instances testdataset) {
