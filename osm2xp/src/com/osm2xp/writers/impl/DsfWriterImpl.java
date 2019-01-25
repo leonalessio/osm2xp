@@ -69,17 +69,18 @@ public class DsfWriterImpl implements IHeaderedWriter {
 			} catch (IOException e) {
 				Osm2xpLogger.error(e.getMessage());
 			}
-
-
-		if (data != null) {
-			try {
-				injectSmartExclusions((String) data);
-			} catch (IOException e) {
-				e.printStackTrace();
+		if (headerWritten) {
+			if (data != null) {
+				try {
+					injectSmartExclusions((String) data);
+				} catch (IOException e) {
+					e.printStackTrace();
+				}
 			}
+			DsfUtils.textToDsf(dsfFile, new File(dsfFile.getPath().replaceAll(".txt", "")));
+		} else {
+			dsfFile.delete(); //No header writter means empty file - nothing was added to it. So just delete.
 		}
-		DsfUtils.textToDsf(dsfFile, new File(dsfFile.getPath().replaceAll(".txt", "")));
-
 	}
 
 	@Override

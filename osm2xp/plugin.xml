@@ -821,5 +821,4 @@
   <extension point="org.eclipse.ui.startup">
      <startup class="com.osm2xp.startup.OSM2XPStartup"/>
    </extension>
-
 </plugin>

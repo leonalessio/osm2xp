@@ -10,10 +10,12 @@ import org.eclipse.jface.viewers.IStructuredSelection;
 import org.eclipse.jface.viewers.LabelProvider;
 import org.eclipse.jface.viewers.StructuredSelection;
 import org.eclipse.jface.viewers.TableViewer;
+import org.eclipse.jface.viewers.ViewerCell;
 import org.eclipse.swt.SWT;
 import org.eclipse.swt.events.MouseAdapter;
 import org.eclipse.swt.events.MouseEvent;
 import org.eclipse.swt.graphics.Image;
+import org.eclipse.swt.graphics.Point;
 import org.eclipse.swt.layout.FillLayout;
 import org.eclipse.swt.widgets.Composite;
 import org.eclipse.swt.widgets.Display;
@@ -69,7 +71,8 @@ public class LastFilesView extends ViewPart {
 		lastFilesTable.addMouseListener(new MouseAdapter() {
 			@Override
 			public void mouseDoubleClick(MouseEvent e) {
-				if (!lastFilesTableViewer.getSelection().isEmpty()) {
+				ViewerCell cell = lastFilesTableViewer.getCell(new Point(e.x,e.y));
+				if (cell != null && !lastFilesTableViewer.getSelection().isEmpty()) {
 					IStructuredSelection selection = (IStructuredSelection) lastFilesTableViewer.getSelection();
 					if (!selection.isEmpty()) {
 						GuiOptionsHelper.getOptions().setCurrentFilePath((String) selection.getFirstElement());
@@ -121,14 +124,15 @@ public class LastFilesView extends ViewPart {
 		}
 	}
 
+	
+	
 	public void refreshList() {
 		lastFilesTableViewer.refresh();
 	}
 
 	@Override
 	public void setFocus() {
-		// TODO Auto-model.options method stub
-
+		lastFilesTable.setFocus();
 	}
 	
 	@Override
