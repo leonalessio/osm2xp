@@ -79,7 +79,7 @@ public class DsfWriterImpl implements IHeaderedWriter {
 			}
 			DsfUtils.textToDsf(dsfFile, new File(dsfFile.getPath().replaceAll(".txt", "")));
 		} else {
-			dsfFile.delete(); //No header writter means empty file - nothing was added to it. So just delete.
+			dsfFile.delete(); //No header written means empty file - nothing was added to it. So just delete.
 		}
 	}
 

@@ -573,6 +573,13 @@
          <toolbar
                id="osm2xp.toolbarMain">
             <command
+                  commandId="osm2xp.command.selectFile"
+                  icon="images/toolbarsIcons/map_add_32.png"
+                  label="Select input file"
+                  style="push"
+                  tooltip="Select input OSM/PBF file for scenery generation">
+            </command>
+            <command
                   commandId="osm2xp.command.buildScene"
                   icon="images/toolbarsIcons/build_32.png"
                   label="Build"
@@ -659,9 +666,9 @@
          <command
                commandId="osm2xp.command.xplane10Mode"
                icon="images/toolbarsIcons/xplane10logo.jpg"
-               label=" "
+               label=" X-Plane 10/11 mode"
                style="push"
-               tooltip="Xplane10 mode">
+               tooltip="X-Plane 10/11 mode">
          </command>
          <command
                commandId="osm2xp.command.fsxMode"
@@ -810,6 +817,11 @@
             defaultHandler="com.osm2xp.gui.handlers.CommandGoBack"
             id="osm2xp.command.goBack"
             name="goBack">
+      </command>
+      <command
+            defaultHandler="com.osm2xp.gui.handlers.CommandSelectFile"
+            id="osm2xp.command.selectFile"
+            name="selectFile">
       </command>
    </extension>
    <extension

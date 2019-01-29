@@ -1,8 +1,11 @@
 package com.osm2xp.classification;
 
+import com.osm2xp.classification.annotations.Ignore;
 import com.osm2xp.classification.annotations.Positive;
 import com.osm2xp.classification.annotations.Result;
 import com.osm2xp.core.model.osm.BuildingType;
+
+import math.geom2d.Point2D;
 
 public class BuildingData {
 	
@@ -20,6 +23,8 @@ public class BuildingData {
 	private int levels;
 	@Positive
 	private int sidesCount;
+	@Ignore
+	private Point2D center;
 	
 	public BuildingData() {
 		super();
@@ -90,5 +95,18 @@ public class BuildingData {
 	public void setSidesCount(int sidesCount) {
 		this.sidesCount = sidesCount;
 	}
+
+	public Point2D getCenter() {
+		return center;
+	}
+
+	public void setCenter(Point2D center) {
+		this.center = center;
+	}
+	
+	public void setCenter(double lat, double lon) {
+		this.center = new Point2D(lon, lat);
+	}
+	
 	
 }

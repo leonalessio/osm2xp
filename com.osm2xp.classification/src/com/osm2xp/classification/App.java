@@ -4,10 +4,13 @@ import java.io.File;
 import java.io.IOException;
 import java.util.List;
 
+import com.eatthepath.jeospatial.SimpleGeospatialPoint;
+import com.eatthepath.jeospatial.VPTreeGeospatialIndex;
 import com.osm2xp.classification.learning.ModelGenerator;
 import com.osm2xp.classification.output.ARFFWriter;
 import com.osm2xp.classification.parsing.LearningDataParser;
 
+import math.geom2d.Point2D;
 import weka.classifiers.AbstractClassifier;
 import weka.classifiers.bayes.NaiveBayes;
 import weka.classifiers.evaluation.Evaluation;
@@ -21,8 +24,9 @@ import weka.filters.unsupervised.attribute.Normalize;
 public class App {
 
 	public static void main(String[] args) {
+		buildGeoindex();
 //		buildDataset();
-		buildClassifier();
+//		buildClassifier();
 	}
 
 	protected static void buildDataset() {
@@ -36,6 +40,17 @@ public class App {
 			// TODO Auto-generated catch block
 			e.printStackTrace();
 		}
+	}
+	
+	protected static void buildGeoindex() {
+		LearningDataParser parser = new LearningDataParser(new File("F:/tmp/siberian-fed-district-latest.osm.pbf"));
+		VPTreeGeospatialIndex<BuildingPoint> geospatialIndex = new VPTreeGeospatialIndex<>();
+		List<WayBuildingData> typeWays = parser.getTypeWays();
+		for (WayBuildingData wayBuildingData : typeWays) {
+			Point2D center = wayBuildingData.getCenter();
+			geospatialIndex.add(new BuildingPoint(center.x, center.y, wayBuildingData));
+		}
+		System.out.println("App.buildGeoindex() "+ geospatialIndex.getAllWithinDistance(new SimpleGeospatialPoint(55.01, 82.55), 0.001));
 	}	
 
 	protected static void buildClassifier() {

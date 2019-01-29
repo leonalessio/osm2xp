@@ -2,7 +2,6 @@ package com.osm2xp.gui.views;
 
 import java.io.File;
 
-import org.eclipse.core.runtime.Preferences.IPropertyChangeListener;
 import org.eclipse.core.runtime.preferences.IEclipsePreferences.IPreferenceChangeListener;
 import org.eclipse.core.runtime.preferences.InstanceScope;
 import org.eclipse.jface.viewers.ArrayContentProvider;
@@ -28,16 +27,18 @@ import org.eclipse.wb.swt.ResourceManager;
 
 import com.osm2xp.constants.Osm2xpConstants;
 import com.osm2xp.gui.Activator;
-import com.osm2xp.gui.views.panels.generic.SceneryFilePanel;
 import com.osm2xp.utils.helpers.GuiOptionsHelper;
 
 /**
  * LastFilesView.
  * 
- * @author Benjamin Blanchet
+ * @author Benjamin Blanchet, Dmitry Karpenko
  * 
  */
 public class LastFilesView extends ViewPart {
+	
+	public static final String ID = "com.osm2xp.viewLastFiles";
+	
 	private final FormToolkit formToolkit = new FormToolkit(
 			Display.getDefault());
 	private Table lastFilesTable;
@@ -47,6 +48,8 @@ public class LastFilesView extends ViewPart {
 			refreshList();
 		}
 	};
+
+	private DelegateSelectionProvider delegateSelectionProvider;
 
 	public LastFilesView() {
 		InstanceScope.INSTANCE.getNode(Activator.PLUGIN_ID).addPreferenceChangeListener(prefChangeListener);
@@ -93,7 +96,8 @@ public class LastFilesView extends ViewPart {
 				}
 			}
 		});
-		getSite().setSelectionProvider(lastFilesTableViewer);
+		delegateSelectionProvider = new DelegateSelectionProvider(lastFilesTableViewer);
+		getSite().setSelectionProvider(delegateSelectionProvider);
 		formToolkit.paintBordersFor(lastFilesTable);
 		if (GuiOptionsHelper.getLastFiles() != null) {
 			lastFilesTableViewer.setContentProvider(new ArrayContentProvider());
@@ -124,7 +128,15 @@ public class LastFilesView extends ViewPart {
 		}
 	}
 
-	
+	public void selectFile(String fileName) {
+		if (fileName != null) {
+			GuiOptionsHelper.addUsedFile(fileName);
+			refreshList();
+			StructuredSelection selection = new StructuredSelection(fileName);
+			lastFilesTableViewer.setSelection(selection);
+			delegateSelectionProvider.fireSelection(selection);
+		}
+	}
 	
 	public void refreshList() {
 		lastFilesTableViewer.refresh();
