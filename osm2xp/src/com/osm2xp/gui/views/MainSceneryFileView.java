@@ -33,6 +33,8 @@ public class MainSceneryFileView extends ViewPart implements IContextProvider {
 	
 	private ScrolledForm form;
 
+	private SceneryFilePanel sceneryFilePanel;
+
 	public MainSceneryFileView() {
 	}
 
@@ -69,7 +71,7 @@ public class MainSceneryFileView extends ViewPart implements IContextProvider {
 		sectionFile.setLayoutData(new TableWrapData(TableWrapData.FILL,
 				TableWrapData.TOP, 1, 1));
 		sectionFile.setText("File and scene name");
-		SceneryFilePanel sceneryFilePanel = new SceneryFilePanel(sectionFile,
+		sceneryFilePanel = new SceneryFilePanel(sectionFile,
 				SWT.BORDER, getSite());
 		toolkit.adapt(sceneryFilePanel, true, true);
 		sectionFile.setClient(sceneryFilePanel);

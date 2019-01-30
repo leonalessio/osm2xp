@@ -4,6 +4,7 @@ import java.io.File;
 import java.text.DateFormat;
 import java.text.SimpleDateFormat;
 import java.util.Date;
+import java.util.function.Consumer;
 
 import org.apache.commons.lang.StringUtils;
 import org.eclipse.jface.layout.GridDataFactory;
@@ -63,12 +64,16 @@ public class SceneryFilePanel extends Osm2xpPanel {
 		}
 	};
 	private Text filenameText;
+	
+	private Consumer<String> inputFileListener;
 
 	public SceneryFilePanel(final Composite parent, int style, IWorkbenchPartSite partSite) {
 		super(parent, SWT.BORDER);
 		this.partSite = partSite;
 		partSite.getWorkbenchWindow().getSelectionService().addSelectionListener(selectionListener);
 	}
+
+
 
 //	private boolean isValidPbf(File file) {
 //		if (!file.isFile()) {
@@ -211,6 +216,10 @@ public class SceneryFilePanel extends Osm2xpPanel {
 		new Label(grpCoordinates, SWT.NONE);
 		new Label(grpCoordinates, SWT.NONE);
 
+		inputFileListener = (name) -> {
+			selectFile(name);
+		};		
+		GuiOptionsHelper.addInputFileListener(inputFileListener);
 	}
 
 	@Override
@@ -219,8 +228,24 @@ public class SceneryFilePanel extends Osm2xpPanel {
 
 	}
 
+	private void selectFile(String name) {
+		if (filenameText.isDisposed()) {
+			return;
+		}
+		if (new File(name).isFile() && !filenameText.getText().trim().equals(name)) {
+			refreshCurrentFilePath(name);
+//			String sceneName = computeSceneName();
+//			GuiOptionsHelper.setSceneName(sceneName);
+//			textInputSceneName.setText(sceneName);
+//			GuiOptionsHelper.addUsedFile(name);
+//			if (name.toUpperCase().contains(".SHP")) {
+//				GuiOptionsHelper.askShapeFileNature(getShell());
+//			}
+		}
+	}
+
 	protected void fileSelected(String fileName) {
-		GuiOptionsHelper.getOptions().setCurrentFilePath(fileName);
+		GuiOptionsHelper.setCurrentFilePath(fileName);
 		String sceneName = computeSceneName();
 		GuiOptionsHelper.setSceneName(sceneName);
 		textInputSceneName.setText(sceneName);
@@ -263,6 +288,7 @@ public class SceneryFilePanel extends Osm2xpPanel {
 	@Override
 	public void dispose() {
 		partSite.getWorkbenchWindow().getSelectionService().removeSelectionListener(selectionListener);
+		GuiOptionsHelper.removeInputFileListener(inputFileListener);
 		super.dispose();
 	}
 

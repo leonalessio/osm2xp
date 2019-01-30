@@ -4,6 +4,7 @@ import java.io.File;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
+import java.util.function.Consumer;
 import java.util.stream.Collectors;
 
 import org.eclipse.core.resources.ResourcesPlugin;
@@ -47,6 +48,7 @@ public class GuiOptionsHelper {
 			.getWorkspace().getRoot().getLocation()
 			+ File.separator + "GuiOptions.xml";
 	private static Point2D selectedCoordinates;
+	private static List<Consumer<String>> selectedFileListeners  = new ArrayList<>();
 
 	static {
 		if (new File(INTERFACE_OPTIONS_FILE_PATH).exists()) {
@@ -246,6 +248,25 @@ public class GuiOptionsHelper {
 	
 	public static void setUseExclusionsFromPBF(boolean useExclusionsFromPBF) {
 		putProperty(USE_EXCLUSIONS_FROM_PBF, String.valueOf(useExclusionsFromPBF));
+	}
+
+	public static void setCurrentFilePath(String fileName) {
+		getOptions().setCurrentFilePath(fileName);
+		for (Consumer<String> consumer: selectedFileListeners) {
+			consumer.accept(fileName);
+		}
+	}
+	
+	public String getCurrentFilePath() {
+		return getOptions().getCurrentFilePath();
+	}
+	
+	public static void addInputFileListener(Consumer<String> listener) {
+		selectedFileListeners.add(listener);
+	}
+	
+	public static void removeInputFileListener(Consumer<String> listener) {
+		selectedFileListeners.remove(listener);
 	}
 	
 }

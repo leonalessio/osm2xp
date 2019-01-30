@@ -1,10 +1,12 @@
 package com.osm2xp.gui.views;
 
 import java.io.File;
+import java.util.function.Consumer;
 
 import org.eclipse.core.runtime.preferences.IEclipsePreferences.IPreferenceChangeListener;
 import org.eclipse.core.runtime.preferences.InstanceScope;
 import org.eclipse.jface.viewers.ArrayContentProvider;
+import org.eclipse.jface.viewers.ISelection;
 import org.eclipse.jface.viewers.IStructuredSelection;
 import org.eclipse.jface.viewers.LabelProvider;
 import org.eclipse.jface.viewers.StructuredSelection;
@@ -48,8 +50,10 @@ public class LastFilesView extends ViewPart {
 			refreshList();
 		}
 	};
-
-	private DelegateSelectionProvider delegateSelectionProvider;
+	
+	private Consumer<String> inputFileListener = (name) -> {
+		selectFile(name);
+	};
 
 	public LastFilesView() {
 		InstanceScope.INSTANCE.getNode(Activator.PLUGIN_ID).addPreferenceChangeListener(prefChangeListener);
@@ -96,8 +100,7 @@ public class LastFilesView extends ViewPart {
 				}
 			}
 		});
-		delegateSelectionProvider = new DelegateSelectionProvider(lastFilesTableViewer);
-		getSite().setSelectionProvider(delegateSelectionProvider);
+		getSite().setSelectionProvider(lastFilesTableViewer);
 		formToolkit.paintBordersFor(lastFilesTable);
 		if (GuiOptionsHelper.getLastFiles() != null) {
 			lastFilesTableViewer.setContentProvider(new ArrayContentProvider());
@@ -126,16 +129,24 @@ public class LastFilesView extends ViewPart {
 			lastFilesTableViewer.setInput(GuiOptionsHelper.getLastFiles());
 
 		}
+		GuiOptionsHelper.addInputFileListener(inputFileListener);
 	}
 
-	public void selectFile(String fileName) {
-		if (fileName != null) {
+	protected void selectFile(String fileName) {
+		if (fileName != null && !fileName.equals(getSelection())) {
 			GuiOptionsHelper.addUsedFile(fileName);
 			refreshList();
 			StructuredSelection selection = new StructuredSelection(fileName);
 			lastFilesTableViewer.setSelection(selection);
-			delegateSelectionProvider.fireSelection(selection);
 		}
+	}
+	
+	protected String getSelection() {
+		ISelection selection = lastFilesTableViewer.getSelection();
+		if (selection instanceof StructuredSelection && !selection.isEmpty()) {
+			return ((StructuredSelection) selection).getFirstElement().toString();
+		}
+		return null;
 	}
 	
 	public void refreshList() {
@@ -150,6 +161,7 @@ public class LastFilesView extends ViewPart {
 	@Override
 	public void dispose() {
 		InstanceScope.INSTANCE.getNode(Activator.PLUGIN_ID).removePreferenceChangeListener(prefChangeListener);
+		GuiOptionsHelper.removeInputFileListener(inputFileListener);
 		super.dispose();
 	}
 }

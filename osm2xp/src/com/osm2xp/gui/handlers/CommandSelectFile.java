@@ -33,14 +33,7 @@ public class CommandSelectFile extends AbstractHandler {
 		dlg.setFilterExtensions(Osm2xpConstants.OSM_FILE_FILTER_EXTS);
 		String fileName = dlg.open();
 		if (fileName != null) {
-			IViewPart view = window.getActivePage().findView(LastFilesView.ID);
-			if (view instanceof LastFilesView) {
-				((LastFilesView) view).selectFile(fileName);
-			} else {
-				GuiOptionsHelper.getOptions().setCurrentFilePath(fileName);
-				GuiOptionsHelper.setSceneName(new Path(fileName).lastSegment());
-				GuiOptionsHelper.addUsedFile(fileName);
-			}
+			GuiOptionsHelper.setCurrentFilePath(fileName);
 		}
 
 		return null;
