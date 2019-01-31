@@ -4,7 +4,7 @@ import java.util.List;
 
 import com.osm2xp.classification.annotations.Ignore;
 
-public class WayBuildingData extends BuildingData {
+public class WayBuildingData extends SimpleBuildingData {
 
 	@Ignore
 	private List<Long> nodes;

@@ -137,10 +137,12 @@ public class LearningDataParser {
 	}
 	
 	private Predicate<List<Tag>> getTypePredicate() {
-		return (tags) -> TypeProvider.getBuildingType(tags) != null;
+		return (tags) -> TypeProvider.isBuilding(tags);
+//		return (tags) -> TypeProvider.getBuildingType(tags) != null;
 	}
 	private Predicate<List<Tag>> getHeightPredicate() {
-		return (tags) ->HeightProvider.getHeight(tags) > 0 && TypeProvider.isBuilding(tags);
+		return (tags) -> false;
+//		return (tags) ->HeightProvider.getHeight(tags) > 0 && TypeProvider.isBuilding(tags);
 	}
 	
 	protected List<List<Long>> getPolygonsFrom(List<List<Long>> input) {

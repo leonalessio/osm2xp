@@ -8,7 +8,8 @@ public class BuildingPoint extends SimpleGeospatialPoint {
 
 	public BuildingPoint(double latitude, double longitude, BuildingData buildingData) {
 		super(latitude, longitude);
-		this.buildingData = buildingData;
+		this.buildingData = new BuildingData();
+		this.buildingData.copyProps(buildingData);
 	}
 
 	public BuildingData getBuildingData() {

@@ -23,8 +23,6 @@ public class BuildingData {
 	private int levels;
 	@Positive
 	private int sidesCount;
-	@Ignore
-	private Point2D center;
 	
 	public BuildingData() {
 		super();
@@ -96,17 +94,4 @@ public class BuildingData {
 		this.sidesCount = sidesCount;
 	}
 
-	public Point2D getCenter() {
-		return center;
-	}
-
-	public void setCenter(Point2D center) {
-		this.center = center;
-	}
-	
-	public void setCenter(double lat, double lon) {
-		this.center = new Point2D(lon, lat);
-	}
-	
-	
 }
