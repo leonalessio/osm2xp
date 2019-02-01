@@ -154,6 +154,9 @@ public class WavefrontTranslatorImpl implements ITranslator {
 				ObjectTagRule objectTagRule = new ObjectTagRule(new Tag("id",
 						String.valueOf(osmPolygon.getId())),
 						new ArrayList<ObjectFile>() {
+							
+							private static final long serialVersionUID = 1L;
+
 							{
 								add(new ObjectFile("objects/"
 										+ osmPolygon.getId() + ".obj"));

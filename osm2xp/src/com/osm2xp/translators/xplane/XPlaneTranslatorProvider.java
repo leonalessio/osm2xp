@@ -34,11 +34,6 @@ public abstract class XPlaneTranslatorProvider extends AbstractTranslatorProvide
 	}
 
 	@Override
-	public Collection<ISpecificTranslator> createAdditinalAdapters() {
-		return Collections.emptyList();
-	}
-
-	@Override
 	public ITranslator getTranslator(Point2D currentTile) {
 		// create stats folder
 //				if (XplaneOptionsHelper.getOptions().isGeneratePdfStats()
@@ -46,7 +41,7 @@ public abstract class XPlaneTranslatorProvider extends AbstractTranslatorProvide
 //					new File(folderPath + File.separatorChar + "stats").mkdirs();
 //				}
 
-		// write the libraty file if needed
+		// write the library file if needed
 		if (!XplaneOptionsHelper.getOptions().isPackageFacades()) {
 			DsfUtils.writeLibraryFile(folderPath, dsfObjectsProvider);
 		}

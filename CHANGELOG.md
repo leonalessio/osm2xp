@@ -6,6 +6,26 @@ and this project adheres to [Semantic Versioning](http://semver.org/spec/v2.0.0.
 
 ## [Unreleased]
 
+## [3.5.1]
+
+### Added
+- Open scenery file action for toolbar
+- Action to generate only airfileds not geneating anything else 
+
+### Fixed
+- osm file support
+- getting exclusion zone coordinates from input file (was broken from 3.4.0)
+- rules for facades (height property not yet supported)
+
+### Changed
+- PDF reports are deprecated and no longer supported
+
+## [3.5.0]
+
+### Added
+- Airfield generation. Program is able to generate apt.dat files from OSM, containing runways, helipads, apron and taxiways
+- Restet perspective action
+
 ## [3.4.0]
 
 ### Fixed

@@ -1,6 +1,7 @@
 package com.osm2xp.translators;
 
 import java.io.File;
+import java.util.ArrayList;
 import java.util.Collection;
 import java.util.Collections;
 
@@ -219,10 +220,6 @@ public class TranslatorBuilder {
 	}
 
 	public static Collection<ISpecificTranslator> createAdditinalAdapters(String folderPath) {
-		if (GuiOptionsHelper.getOptions().getOutputFormat()
-				.equals(Perspectives.PERSPECTIVE_XPLANE10)) {
-			return Collections.singletonList(new XPAirfieldTranslationAdapter(folderPath));
-		}
-		return Collections.emptyList();
+		return new ArrayList<>();
 	}
 }

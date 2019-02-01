@@ -712,10 +712,10 @@
          point="org.eclipse.core.runtime.products">
       <product
             application="com.osm2xp.application"
-            name="Osm2XP">
+            name="OSM2XP">
          <property
                name="appName"
-               value="Osm2XP">
+               value="OSM2XP">
          </property>
          <property
                name="startupProgressRect"
