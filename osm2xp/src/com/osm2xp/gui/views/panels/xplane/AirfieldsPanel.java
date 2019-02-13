@@ -29,9 +29,9 @@ import com.osm2xp.gui.Activator;
 import com.osm2xp.gui.views.panels.Osm2xpPanel;
 import com.osm2xp.jobs.GenerateXPAirfiledsJob;
 import com.osm2xp.model.options.XplaneAirfieldOptions;
-import com.osm2xp.utils.UiUtil;
 import com.osm2xp.utils.helpers.GuiOptionsHelper;
 import com.osm2xp.utils.helpers.XplaneOptionsHelper;
+import com.osm2xp.utils.ui.UiUtil;
 
 public class AirfieldsPanel extends Osm2xpPanel {
 

@@ -9,8 +9,8 @@ import org.eclipse.core.resources.ResourcesPlugin;
 
 import com.osm2xp.constants.Perspectives;
 import com.osm2xp.gui.views.panels.generic.OutPutFormatPanel;
-import com.osm2xp.utils.MiscUtils;
 import com.osm2xp.utils.helpers.GuiOptionsHelper;
+import com.osm2xp.utils.ui.UiUtil;
 
 /**
  * CommandXplane10Mode.
@@ -37,7 +37,7 @@ public class CommandXplane10Mode extends AbstractHandler {
 	public Object execute(ExecutionEvent event) throws ExecutionException {
 		GuiOptionsHelper.getOptions().setOutputFormat(
 				Perspectives.PERSPECTIVE_XPLANE10);
-		MiscUtils.switchPerspective(Perspectives.PERSPECTIVE_XPLANE10);
+		UiUtil.switchPerspective(Perspectives.PERSPECTIVE_XPLANE10);
 
 		OutPutFormatPanel.updateBrowserUrl(HTML_FILE);
 		return null;

@@ -17,14 +17,13 @@
 	<classpathentry kind="lib" path="lib/commons-compress-1.0.jar"/>
 	<classpathentry kind="lib" path="lib/commons-configuration-1.6.jar"/>
 	<classpathentry kind="lib" path="lib/commons-io-2.4.jar"/>
-	<classpathentry kind="lib" path="lib/commons-logging-1.1.1.jar"/>
+	<classpathentry kind="lib" path="lib/commons-logging-1.1.1.jar" sourcepath="C:/Users/32kda/AppData/Local/Temp/.org.sf.feeling.decompiler1549434118086/source/commons-logging-1.1.1-sources.jar"/>
 	<classpathentry kind="lib" path="lib/guava-r08.jar"/>
 	<classpathentry kind="lib" path="lib/h2-1.3.160.jar"/>
 	<classpathentry kind="lib" path="lib/JDBM-3.0-alpha3.jar"/>
 	<classpathentry kind="lib" path="lib/persistence-api-1.0.jar"/>
 	<classpathentry kind="lib" path="lib/Tuple.jar"/>
 	<classpathentry kind="con" path="org.eclipse.pde.core.requiredPlugins"/>
-	<classpathentry kind="lib" path="lib/jts-1.13.jar" sourcepath="C:/Users/Sviridov/AppData/Local/Temp/.org.sf.feeling.decompiler1539334469429/source/jts-1.13-sources-1539334482126.jar"/>
 	<classpathentry kind="lib" path="lib/jdbm-2.4.jar"/>
 	<classpathentry kind="lib" path="lib/OSM2World.jar"/>
 	<classpathentry kind="output" path="bin"/>

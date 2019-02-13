@@ -33,8 +33,8 @@ import org.osgi.service.prefs.BackingStoreException;
 import com.osm2xp.gui.Activator;
 import com.osm2xp.gui.dialogs.FacadeSetEditorDialog;
 import com.osm2xp.gui.views.panels.Osm2xpPanel;
+import com.osm2xp.model.facades.FacadeSetHelper;
 import com.osm2xp.model.facades.FacadeSetManager;
-import com.osm2xp.utils.helpers.FacadeSetHelper;
 import com.osm2xp.utils.helpers.XplaneOptionsHelper;
 
 /**

@@ -14,9 +14,9 @@ import com.osm2xp.core.exceptions.Osm2xpBusinessException;
 import com.osm2xp.core.logging.Osm2xpLogger;
 import com.osm2xp.gui.Activator;
 import com.osm2xp.gui.dialogs.utils.Osm2xpDialogsHelper;
+import com.osm2xp.model.facades.FacadeSetHelper;
 import com.osm2xp.model.facades.FacadeSetManager;
 import com.osm2xp.utils.StatusInfo;
-import com.osm2xp.utils.helpers.FacadeSetHelper;
 import com.osm2xp.utils.helpers.FsxOptionsHelper;
 import com.osm2xp.utils.helpers.GuiOptionsHelper;
 

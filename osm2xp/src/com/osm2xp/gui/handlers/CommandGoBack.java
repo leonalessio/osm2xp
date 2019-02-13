@@ -9,7 +9,7 @@ import org.eclipse.core.runtime.preferences.InstanceScope;
 import com.osm2xp.constants.Osm2xpConstants;
 import com.osm2xp.constants.Perspectives;
 import com.osm2xp.gui.Activator;
-import com.osm2xp.utils.MiscUtils;
+import com.osm2xp.utils.ui.UiUtil;
 
 public class CommandGoBack extends AbstractHandler {
 
@@ -18,7 +18,7 @@ public class CommandGoBack extends AbstractHandler {
 		try {
 			IEclipsePreferences node = InstanceScope.INSTANCE.getNode(Activator.PLUGIN_ID);
 			String id = node.get(Osm2xpConstants.LAST_PERSP_PROP, Perspectives.PERSPECTIVE_XPLANE10);
-			MiscUtils.switchPerspective(id);
+			UiUtil.switchPerspective(id);
 		} catch (Exception e) {
 			Activator.log(e);
 		}

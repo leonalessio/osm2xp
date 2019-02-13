@@ -9,8 +9,8 @@ import org.eclipse.core.resources.ResourcesPlugin;
 
 import com.osm2xp.constants.Perspectives;
 import com.osm2xp.gui.views.panels.generic.OutPutFormatPanel;
-import com.osm2xp.utils.MiscUtils;
 import com.osm2xp.utils.helpers.GuiOptionsHelper;
+import com.osm2xp.utils.ui.UiUtil;
 
 /**
  * CommandFsxMode.
@@ -36,7 +36,7 @@ public class CommandFsxMode extends AbstractHandler {
 	public Object execute(ExecutionEvent event) throws ExecutionException {
 		GuiOptionsHelper.getOptions().setOutputFormat(
 				Perspectives.PERSPECTIVE_FSX);
-		MiscUtils.switchPerspective(Perspectives.PERSPECTIVE_FSX);
+		UiUtil.switchPerspective(Perspectives.PERSPECTIVE_FSX);
 		OutPutFormatPanel.updateBrowserUrl(HTML_FILE);
 		return null;
 	}

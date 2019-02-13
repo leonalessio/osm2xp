@@ -89,8 +89,8 @@ public class Osm2xpProjectHelper {
 					.getCoordinates()) {
 				Point2D point2d = new Point2D(coords.getLongitude(),
 						coords.getLatitude());
-				if ((point2d.x == coordinates.x)
-						&& (point2d.y == coordinates.y)) {
+				if ((point2d.x() == coordinates.x())
+						&& (point2d.y() == coordinates.y())) {
 					osm2XpProject.getCoordinatesList().getCoordinates()
 							.remove(coords);
 					if (osm2XpProject.getCoordinatesList().getCoordinates()

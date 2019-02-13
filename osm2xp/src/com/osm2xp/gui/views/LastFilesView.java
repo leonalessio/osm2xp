@@ -78,7 +78,7 @@ public class LastFilesView extends ViewPart {
 		lastFilesTable.addMouseListener(new MouseAdapter() {
 			@Override
 			public void mouseDoubleClick(MouseEvent e) {
-				ViewerCell cell = lastFilesTableViewer.getCell(new Point(e.x,e.y));
+				ViewerCell cell = lastFilesTableViewer.getCell(new Point(e.x,e.y()));
 				if (cell != null && !lastFilesTableViewer.getSelection().isEmpty()) {
 					IStructuredSelection selection = (IStructuredSelection) lastFilesTableViewer.getSelection();
 					if (!selection.isEmpty()) {

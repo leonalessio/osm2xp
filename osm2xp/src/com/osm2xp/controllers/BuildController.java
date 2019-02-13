@@ -26,10 +26,10 @@ import com.osm2xp.model.facades.FacadeSetManager;
 import com.osm2xp.model.project.Coordinates;
 import com.osm2xp.stats.StatsProvider;
 import com.osm2xp.utils.FilesUtils;
-import com.osm2xp.utils.MiscUtils;
 import com.osm2xp.utils.helpers.GuiOptionsHelper;
 import com.osm2xp.utils.helpers.Osm2xpProjectHelper;
 import com.osm2xp.utils.helpers.StatsHelper;
+import com.osm2xp.utils.ui.UiUtil;
 
 import math.geom2d.Point2D;
 
@@ -97,7 +97,7 @@ public class BuildController {
 	public void restartImportedProject() throws Osm2xpBusinessException {
 
 		// switch to build perspective
-		MiscUtils.switchPerspective(Perspectives.PERSPECTIVE_BUILD);
+		UiUtil.switchPerspective(Perspectives.PERSPECTIVE_BUILD);
 		GuiOptionsHelper.getOptions().setCurrentFilePath(
 				Osm2xpProjectHelper.getOsm2XpProject().getFile());
 		File currentFile = new File(Osm2xpProjectHelper.getOsm2XpProject()
@@ -143,7 +143,7 @@ public class BuildController {
 		}
 		StatsProvider.reinit();
 		// switch to build perspective
-		MiscUtils.switchPerspective(Perspectives.PERSPECTIVE_BUILD);
+		UiUtil.switchPerspective(Perspectives.PERSPECTIVE_BUILD);
 		// get user setted cordinates
 		Point2D coordinates = GuiOptionsHelper.getSelectedCoordinates();
 		// launch generation
@@ -221,8 +221,8 @@ public class BuildController {
 	private void generateSingleTile(File currentFile, Point2D coordinates,
 			final String folderPath)
 			throws Osm2xpBusinessException {
-		String jobTitle = "Generate tile " + +(int) coordinates.y + " / "
-				+ (int) coordinates.x + " of file " + currentFile.getName();
+		String jobTitle = "Generate tile " + +(int) coordinates.y() + " / "
+				+ (int) coordinates.x() + " of file " + currentFile.getName();
 		final GenerateMultiTilesJob job = new GenerateMultiTilesJob(jobTitle, currentFile, folderPath, "todoJob");
 //		final GenerateTileJob job = new GenerateTileJob(jobTitle, currentFile,
 //				coordinates, folderPath, relationsList, "todoJob");

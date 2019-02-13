@@ -73,16 +73,16 @@ public class LearningDataParser {
 			int n = points.size();
 			if (n > 0 && n == wayData.getNodes().size()) {
 				Point2D base = points.get(0);
-				double coef = Math.cos(base.y);
+				double coef = Math.cos(base.y());
 				List<Point2D> resList = new ArrayList<>();
 				resList.add(new Point2D(0,0));
-				double centerLat = base.y / n;
-				double centerLon = base.x / n;
+				double centerLat = base.y() / n;
+				double centerLon = base.x() / n;
 				for (int i = 1; i < n; i++) {
 					Point2D curPt = points.get(i);
-					centerLat += curPt.y / n;
-					centerLon += curPt.x / n;
-					resList.add(new Point2D((curPt.x - base.x) * coef * WGS_TO_METERS_COEF, (curPt.y - base.y) * WGS_TO_METERS_COEF));
+					centerLat += curPt.y() / n;
+					centerLon += curPt.x() / n;
+					resList.add(new Point2D((curPt.x() - base.x()) * coef * WGS_TO_METERS_COEF, (curPt.y() - base.y()) * WGS_TO_METERS_COEF));
 				}
 				if (resList.size() > 2) {
 					LinearRing2D ring2d = new LinearRing2D(resList);

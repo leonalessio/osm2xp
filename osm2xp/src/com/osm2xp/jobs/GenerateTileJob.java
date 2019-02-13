@@ -60,7 +60,7 @@ public class GenerateTileJob extends GenerateJob {
 			return "whole file";
 		}
 		Point intPt = coords.getAsInt();
-		return String.format(Locale.ROOT, "tile (%d,%d)", intPt.x, intPt.y);
+		return String.format(Locale.ROOT, "tile (%d,%d)", intPt.x, intPt.y());
 	}
 
 }

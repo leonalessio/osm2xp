@@ -171,8 +171,8 @@ public class StatsHelper {
 		stats.setDate(dateFormat.format(new Date()));
 		stats.setOsmFile(currentFile.getPath());
 		if (coordinates != null) {
-			stats.setLatitude((int) coordinates.y);
-			stats.setLongitude((int) coordinates.x);
+			stats.setLatitude((int) coordinates.y());
+			stats.setLongitude((int) coordinates.x());
 		}
 	}
 
@@ -334,7 +334,7 @@ public class StatsHelper {
 	public static void saveStats(String folderPath, Point2D tile,
 			GenerationStats stats) throws Osm2xpBusinessException {
 		File file = new File(folderPath + File.separator + STATS_FOLDER
-				+ File.separator + "stats_" + (int) tile.y + "-" + (int) tile.x
+				+ File.separator + "stats_" + (int) tile.y() + "-" + (int) tile.x
 				+ ".xml");
 		try {
 			JAXBContext jc = JAXBContext.newInstance(GenerationStats.class

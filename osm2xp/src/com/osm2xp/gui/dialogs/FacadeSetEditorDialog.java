@@ -64,8 +64,8 @@ import com.osm2xp.gui.Activator;
 import com.osm2xp.gui.dialogs.utils.Osm2xpDialogsHelper;
 import com.osm2xp.model.facades.Facade;
 import com.osm2xp.model.facades.FacadeSet;
+import com.osm2xp.model.facades.FacadeSetHelper;
 import com.osm2xp.model.facades.SpecialFacadeType;
-import com.osm2xp.utils.helpers.FacadeSetHelper;
 import com.osm2xp.utils.helpers.ScaleChangeHelper;
 
 /**

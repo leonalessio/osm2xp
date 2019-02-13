@@ -9,8 +9,8 @@ import org.eclipse.core.resources.ResourcesPlugin;
 
 import com.osm2xp.constants.Perspectives;
 import com.osm2xp.gui.views.panels.generic.OutPutFormatPanel;
-import com.osm2xp.utils.MiscUtils;
 import com.osm2xp.utils.helpers.GuiOptionsHelper;
+import com.osm2xp.utils.ui.UiUtil;
 
 /**
  * CommandOsmMode.
@@ -36,7 +36,7 @@ public class CommandOsmMode extends AbstractHandler {
 	public Object execute(ExecutionEvent event) throws ExecutionException {
 		GuiOptionsHelper.getOptions().setOutputFormat(
 				Perspectives.PERSPECTIVE_OSM);
-		MiscUtils.switchPerspective(Perspectives.PERSPECTIVE_OSM);
+		UiUtil.switchPerspective(Perspectives.PERSPECTIVE_OSM);
 		OutPutFormatPanel.updateBrowserUrl(HTML_FILE);
 		return null;
 	}
