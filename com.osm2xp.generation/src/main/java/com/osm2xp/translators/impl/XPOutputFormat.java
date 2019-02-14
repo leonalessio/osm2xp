@@ -6,13 +6,13 @@ import java.util.Collection;
 import java.util.List;
 import java.util.Locale;
 
-import com.osm2xp.constants.Perspectives;
 import com.osm2xp.core.constants.CoreConstants;
 import com.osm2xp.core.logging.Osm2xpLogger;
 import com.osm2xp.generation.options.GlobalOptionsProvider;
 import com.osm2xp.generation.options.XPlaneOptionsProvider;
 import com.osm2xp.model.osm.polygon.OsmMultiPolygon;
 import com.osm2xp.model.osm.polygon.OsmPolygon;
+import com.osm2xp.translators.OutputFormat;
 import com.osm2xp.translators.xplane.XPPathSegment;
 import com.osm2xp.utils.DsfObjectsProvider;
 import com.osm2xp.utils.geometry.GeomUtils;
@@ -212,8 +212,8 @@ public class XPOutputFormat {
 			sb.append("PROPERTY sim/exclude_str " + tileCoordinate);
 		}
 	
-		if (GlobalOptionsProvider.getOptions().getOutputFormat()
-				.equals(Perspectives.PERSPECTIVE_XPLANE10)) {
+		if (GlobalOptionsProvider.getOutputFormat()
+				.equals(OutputFormat.XPLANE10)) {
 	
 			if (XPlaneOptionsProvider.getOptions().isExcludePol()) {
 				sb.append("PROPERTY sim/exclude_pol " + tileCoordinate);

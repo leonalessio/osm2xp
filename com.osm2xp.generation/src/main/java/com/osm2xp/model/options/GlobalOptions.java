@@ -6,6 +6,8 @@ import javax.xml.bind.annotation.XmlElement;
 import javax.xml.bind.annotation.XmlRootElement;
 import javax.xml.bind.annotation.XmlType;
 
+import org.apache.commons.lang.StringUtils;
+
 /**
  * GlobalOptions.
  * 
@@ -14,7 +16,8 @@ import javax.xml.bind.annotation.XmlType;
  */
 @XmlAccessorType(XmlAccessType.FIELD)
 @XmlType(name = "", propOrder = { "databaseMode", "appendHour", "appendTile",
-		"simplifyShapes", "currentFilePath", "outputFormat", "singlePass" })
+		"simplifyShapes", "currentFilePath", "outputFormat", "levelHeight", "singlePass",
+		"allowedHighwayTypes","allowedHighwayLinkTypes", "allowedHighwaySurfaceTypes"})
 @XmlRootElement(name = "GlobalOptions")
 public class GlobalOptions {
 
@@ -25,8 +28,11 @@ public class GlobalOptions {
 	@XmlElement(required = true)
 	protected String currentFilePath;
 	@XmlElement(required = true)
-	protected String outputFormat;
+	protected double levelHeight = 3;
 	protected boolean singlePass;
+	protected String allowedHighwayTypes = "motorway;trunk;primary;secondary;tertiary;unclassified;residential";
+	protected String allowedHighwayLinkTypes = "motorway_link;trunk_link;primary_link;secondary_link;tertiary_link";
+	protected String allowedHighwaySurfaceTypes = "paved;asphalt;concrete";
 
 	/**
 	 * Default no-arg constructor
@@ -42,14 +48,13 @@ public class GlobalOptions {
 	 */
 	public GlobalOptions(final boolean databaseMode, final boolean appendHour,
 			final boolean appendTile, final boolean simplifyShapes,
-			final String currentFilePath, final String outputFormat,
+			final String currentFilePath, 
 			final boolean singlePass) {
 		this.databaseMode = databaseMode;
 		this.appendHour = appendHour;
 		this.appendTile = appendTile;
 		this.simplifyShapes = simplifyShapes;
 		this.currentFilePath = currentFilePath;
-		this.outputFormat = outputFormat;
 		this.singlePass = singlePass;
 	}
 
@@ -139,27 +144,6 @@ public class GlobalOptions {
 	}
 
 	/**
-	 * Gets the value of the outputFormat property.
-	 * 
-	 * @return possible object is {@link String }
-	 * 
-	 */
-	public String getOutputFormat() {
-		return outputFormat;
-	}
-
-	/**
-	 * Sets the value of the outputFormat property.
-	 * 
-	 * @param value
-	 *            allowed object is {@link String }
-	 * 
-	 */
-	public void setOutputFormat(String value) {
-		this.outputFormat = value;
-	}
-
-	/**
 	 * Gets the value of the singlePass property.
 	 * 
 	 */
@@ -173,6 +157,55 @@ public class GlobalOptions {
 	 */
 	public void setSinglePass(boolean value) {
 		this.singlePass = value;
+	}
+
+	/**
+	 * @return Building level height, 3m by default
+	 */
+	public double getLevelHeight() {
+		return levelHeight;
+	}
+	/**
+	 * @param levelHeight building level height, meters
+	 */
+	public void setLevelHeight(double levelHeight) {
+		this.levelHeight = levelHeight;
+	}
+
+	public String getAllowedHighwayTypes() {
+		return allowedHighwayTypes;
+	}
+	
+	public String[] getAllowedHighwayTypesArray() {
+		return StringUtils.stripToEmpty(allowedHighwayTypes).split(";");
+	}
+
+	public void setAllowedHighwayTypes(String allowedHighwayTypes) {
+		this.allowedHighwayTypes = allowedHighwayTypes;
+	}
+
+	public String[] getAllowedHighwayLinkTypesArray() {
+		return StringUtils.stripToEmpty(allowedHighwayLinkTypes).split(";");
+	}
+	
+	public String getAllowedHighwayLinkTypes() {
+		return allowedHighwayLinkTypes;
+	}
+
+	public void setAllowedHighwayLinkTypes(String allowedHighwayLinkTypes) {
+		this.allowedHighwayLinkTypes = allowedHighwayLinkTypes;
+	}
+
+	public String getAllowedHighwaySurfaceTypes() {
+		return allowedHighwaySurfaceTypes;
+	}
+	
+	public String[] getAllowedHighwaySurfaceTypesArray() {
+		return StringUtils.stripToEmpty(allowedHighwaySurfaceTypes).split(";");
+	}
+
+	public void setAllowedHighwaySurfaceTypes(String allowedHighwaySurfaceTypes) {
+		this.allowedHighwaySurfaceTypes = allowedHighwaySurfaceTypes;
 	}
 
 }

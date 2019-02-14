@@ -10,17 +10,17 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.regex.Pattern;
 
-import com.osm2xp.constants.Osm2xpConstants;
+import com.osm2xp.core.constants.CoreConstants;
+import com.osm2xp.core.logging.Osm2xpLogger;
 import com.osm2xp.core.model.osm.Node;
 import com.osm2xp.core.model.osm.Tag;
-import com.osm2xp.gui.Activator;
+import com.osm2xp.generation.options.XPlaneOptionsProvider;
 import com.osm2xp.model.options.ForestTagRule;
 import com.osm2xp.model.options.TagsRule;
 import com.osm2xp.model.options.XplaneObjectTagRule;
 import com.osm2xp.model.osm.polygon.OsmPolygon;
 import com.osm2xp.model.osm.polygon.OsmPolyline;
 import com.osm2xp.utils.MiscUtils;
-import com.osm2xp.generation.options.XPlaneOptionsProvider;
 
 /**
  * OsmUtils.
@@ -441,7 +441,7 @@ public class OsmUtils {
 		try (BufferedWriter output = new BufferedWriter(new FileWriter(filePath, false))){
 			output.write("<?xml version=\"1.0\" encoding=\"UTF-8\"?>\n");
 			output.write("<osm version=\"0.6\" generator=\"osm2xp "
-					+ Osm2xpConstants.OSM2XP_VERSION + "\">\n");
+					+ CoreConstants.OSM2XP_VERSION + "\">\n");
 	
 			// write all nodes
 			for (OsmPolyline osmPolygon : wayList) {
@@ -485,7 +485,7 @@ public class OsmUtils {
 		try (BufferedWriter output = new BufferedWriter(new FileWriter(filePath, false))){
 			output.write("<?xml version=\"1.0\" encoding=\"UTF-8\"?>\n");
 			output.write("<osm version=\"0.6\" generator=\"osm2xp "
-					+ Osm2xpConstants.OSM2XP_VERSION + "\">\n");
+					+ CoreConstants.OSM2XP_VERSION + "\">\n");
 	
 			for (Node node : osmPolygon.getNodes()) {
 				output.write("<node id=\"" + node.getId() + "\" lat=\""

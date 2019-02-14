@@ -6,12 +6,11 @@ import java.util.List;
 import com.osm2xp.core.exceptions.Osm2xpBusinessException;
 import com.osm2xp.core.model.osm.Node;
 import com.osm2xp.core.model.osm.Tag;
+import com.osm2xp.generation.options.GlobalOptionsProvider;
 import com.osm2xp.model.osm.polygon.OsmPolyline;
-import com.osm2xp.model.stats.GenerationStats;
 import com.osm2xp.translators.ITranslator;
 import com.osm2xp.utils.BglUtils;
 import com.osm2xp.utils.geometry.GeomUtils;
-import com.osm2xp.generation.options.GlobalOptionsProvider;
 import com.osm2xp.writers.IWriter;
 
 import math.geom2d.Box2D;
@@ -56,7 +55,7 @@ public class FsxBgTranslatorImpl implements ITranslator {
 	 * @param folderPath
 	 *            generated scenery folder Path
 	 */
-	public FsxBgTranslatorImpl(GenerationStats stats, IWriter writer,
+	public FsxBgTranslatorImpl(IWriter writer,
 			Point2D currentTile, String folderPath) {
 		this.currentTile = currentTile;
 		this.writer = writer;

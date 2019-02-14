@@ -1,25 +1,30 @@
 package com.osm2xp.utils;
 
-import org.eclipse.core.runtime.Assert;
-import org.eclipse.core.runtime.IStatus;
-
-import com.osm2xp.gui.Activator;
-
 /**
  * A settable IStatus. 
  * Can be an error, warning, info or ok. For error, info and warning states,
  * a message describes the problem.
  */
-public class StatusInfo implements IStatus {
+public class StatusInfo {
+	
+	public enum Severity {
+		OK,
+		INFO,
+		WARNING,
+		ERROR
+	}
+
+	public static final StatusInfo OK_STATUS = new StatusInfo();
 	
 	private String fStatusMessage;
-	private int fSeverity;
+	private Severity fSeverity;
+	private Throwable excception;
 	
 	/**
 	 * Creates a status set to OK (no message)
 	 */
 	public StatusInfo() {
-		this(OK, null);
+		this(Severity.OK, null);
 	}
 
 	/**
@@ -28,37 +33,43 @@ public class StatusInfo implements IStatus {
 	 * @param message The message of the status. Applies only for ERROR,
 	 * WARNING and INFO.
 	 */	
-	public StatusInfo(int severity, String message) {
+	public StatusInfo(Severity severity, String message) {
 		fStatusMessage= message;
 		fSeverity= severity;
+	}
+	
+	public StatusInfo(Severity severity, String message, Throwable excception) {
+		fStatusMessage= message;
+		fSeverity= severity;
+		this.excception = excception;
 	}		
 	
 	/**
 	 *  Returns if the status' severity is OK.
 	 */
 	public boolean isOK() {
-		return fSeverity == IStatus.OK;
+		return fSeverity == Severity.OK;
 	}
 
 	/**
 	 *  Returns if the status' severity is WARNING.
 	 */	
 	public boolean isWarning() {
-		return fSeverity == IStatus.WARNING;
+		return fSeverity == Severity.WARNING;
 	}
 
 	/**
 	 *  Returns if the status' severity is INFO.
 	 */	
 	public boolean isInfo() {
-		return fSeverity == IStatus.INFO;
+		return fSeverity == Severity.INFO;
 	}	
 
 	/**
 	 *  Returns if the status' severity is ERROR.
 	 */	
 	public boolean isError() {
-		return fSeverity == IStatus.ERROR;
+		return fSeverity == Severity.ERROR;
 	}
 	
 	/**
@@ -73,9 +84,8 @@ public class StatusInfo implements IStatus {
 	 * @param The error message (can be empty, but not null)
 	 */	
 	public void setError(String errorMessage) {
-		Assert.isNotNull(errorMessage);
 		fStatusMessage= errorMessage;
-		fSeverity= IStatus.ERROR;
+		fSeverity= Severity.ERROR;
 	}
 
 	/**
@@ -83,9 +93,8 @@ public class StatusInfo implements IStatus {
 	 * @param The warning message (can be empty, but not null)
 	 */		
 	public void setWarning(String warningMessage) {
-		Assert.isNotNull(warningMessage);
 		fStatusMessage= warningMessage;
-		fSeverity= IStatus.WARNING;
+		fSeverity= Severity.WARNING;
 	}
 
 	/**
@@ -93,9 +102,8 @@ public class StatusInfo implements IStatus {
 	 * @param The info message (can be empty, but not null)
 	 */		
 	public void setInfo(String infoMessage) {
-		Assert.isNotNull(infoMessage);
 		fStatusMessage= infoMessage;
-		fSeverity= IStatus.INFO;
+		fSeverity= Severity.INFO;
 	}	
 
 	/**
@@ -103,60 +111,35 @@ public class StatusInfo implements IStatus {
 	 */		
 	public void setOK() {
 		fStatusMessage= null;
-		fSeverity= IStatus.OK;
+		fSeverity= Severity.OK;
 	}
 	
-	/*
-	 * @see IStatus#matches(int)
-	 */
-	public boolean matches(int severityMask) {
-		return (fSeverity & severityMask) != 0;
-	}
-
-	/**
-	 * Returns always <code>false</code>.
-	 * @see IStatus#isMultiStatus()
-	 */
-	public boolean isMultiStatus() {
-		return false;
-	}
-
-	/*
-	 * @see IStatus#getSeverity()
-	 */
-	public int getSeverity() {
+	public Severity getSeverity() {
 		return fSeverity;
 	}
 
-	/*
-	 * @see IStatus#getPlugin()
-	 */
-	public String getPlugin() {
-		return Activator.PLUGIN_ID;
-	}
-
-	/**
-	 * Returns always <code>null</code>.
-	 * @see IStatus#getException()
-	 */
 	public Throwable getException() {
-		return null;
+		return excception;
 	}
 
 	/**
 	 * Returns always the error severity.
 	 * @see IStatus#getCode()
 	 */
-	public int getCode() {
+	public Severity getCode() {
 		return fSeverity;
 	}
-
-	/**
-	 * Returns always <code>null</code>.
-	 * @see IStatus#getChildren()
-	 */
-	public IStatus[] getChildren() {
-		return new IStatus[0];
-	}	
+	
+	public static StatusInfo error(String message) {
+		return new StatusInfo(Severity.ERROR, message);
+	}
+	
+	public static StatusInfo warning(String message) {
+		return new StatusInfo(Severity.WARNING, message);
+	}
+	
+	public static StatusInfo info(String message) {
+		return new StatusInfo(Severity.INFO, message);
+	}
 
 }

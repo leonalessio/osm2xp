@@ -72,7 +72,7 @@ public class DsfWriterImpl implements IHeaderedWriter {
 //					e.printStackTrace();
 //				}
 //			}
-			if (new File(DsfUtils.getDsfToolPath()).isFile()) {
+			if (DsfUtils.getDsfTool().isFile()) {
 				 ProcessExecutor.getExecutor().execute(new DsfConversionRunnable(dsfFile, new File(dsfFile.getPath().replaceAll(".txt", ""))));
 			}
 		} else {

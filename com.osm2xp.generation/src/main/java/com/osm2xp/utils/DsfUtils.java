@@ -8,27 +8,15 @@ import java.io.IOException;
 import java.io.RandomAccessFile;
 import java.text.DecimalFormat;
 import java.util.GregorianCalendar;
-import java.util.Locale;
 
-import org.eclipse.core.runtime.jobs.Job;
-import org.eclipse.core.runtime.preferences.InstanceScope;
-
-import com.osm2xp.constants.Osm2xpConstants;
-import com.osm2xp.constants.Perspectives;
-import com.osm2xp.constants.XplaneConstants;
 import com.osm2xp.core.exceptions.Osm2xpBusinessException;
 import com.osm2xp.core.exceptions.Osm2xpTechnicalException;
-import com.osm2xp.gui.Activator;
-import com.osm2xp.jobs.DsfConversionJob;
-import com.osm2xp.model.facades.FacadeSetManager;
+import com.osm2xp.generation.options.XPlaneOptionsProvider;
+import com.osm2xp.generation.paths.PathsService;
 import com.osm2xp.model.xplane.XplaneDsfObject;
 import com.osm2xp.utils.geometry.GeomUtils;
-import com.osm2xp.generation.options.GlobalOptionsProvider;
-import com.osm2xp.generation.options.XPlaneOptionsProvider;
-import com.osm2xp.utils.ui.MiscUtils;
 import com.osm2xp.writers.impl.OsmWriterImpl;
 
-import math.geom2d.Box2D;
 import math.geom2d.Point2D;
 
 /**
@@ -82,17 +70,15 @@ public class DsfUtils {
 	 * 
 	 * @return String the path to the dsfTool executable
 	 */
-	public static String getDsfToolPath() {
-		String dsfTool;
+	public static File getDsfTool() {
+		File dsfTool;
+		String parentDir = PathsService.getPathsProvider().getXPlaneToolsFolder().getAbsolutePath();
 		if (MiscUtils.isWindows()) {
-			dsfTool = Osm2xpConstants.UTILS_PATH + File.separatorChar
-					+ "DSFTool.exe";
+			dsfTool = new File(parentDir, "DSFTool.exe");
 		} else if (MiscUtils.isMac()) {
-			dsfTool = Osm2xpConstants.UTILS_PATH + File.separatorChar
-					+ "DSFToolMac";
+			dsfTool = new File(parentDir, "DSFToolMac");
 		} else {
-			dsfTool = Osm2xpConstants.UTILS_PATH + File.separatorChar
-					+ "DSFToolLinux";
+			dsfTool = new File(parentDir, "DSFToolLinux");
 		}
 		return dsfTool;
 	}
@@ -199,7 +185,7 @@ public class DsfUtils {
 				outputlibrary.write("EXPORT \\lib\\osm2xp\\facades\\" + facade
 						+ " .." + File.separator + "osm2xpFacades"
 						+ File.separator
-						+ InstanceScope.INSTANCE.getNode(Activator.PLUGIN_ID).get(FacadeSetManager.FACADE_SETS_PROP,"")
+						+ XPlaneOptionsProvider.getOptions().getFacadeSets()
 						+ File.separator + facade + "\n");
 
 			}

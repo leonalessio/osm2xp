@@ -13,22 +13,18 @@ import java.util.stream.Collectors;
 
 import org.apache.commons.lang.StringUtils;
 import org.apache.commons.logging.LogFactory;
-import org.eclipse.core.resources.ResourcesPlugin;
-import org.eclipse.core.runtime.IStatus;
-import org.eclipse.core.runtime.Status;
 
 import com.google.common.collect.HashMultimap;
 import com.google.common.collect.Multimap;
 import com.osm2xp.core.exceptions.Osm2xpTechnicalException;
 import com.osm2xp.core.logging.Osm2xpLogger;
-import com.osm2xp.gui.Activator;
+import com.osm2xp.generation.options.XPlaneOptionsProvider;
+import com.osm2xp.generation.paths.PathsService;
 import com.osm2xp.translators.BuildingType;
 import com.osm2xp.utils.DsfUtils;
 import com.osm2xp.utils.FilesUtils;
 import com.osm2xp.utils.MiscUtils;
 import com.osm2xp.utils.StatusInfo;
-import com.osm2xp.utils.helpers.FacadeSetHelper;
-import com.osm2xp.generation.options.XPlaneOptionsProvider;
 
 public class FacadeSetManager {
 	
@@ -80,7 +76,7 @@ public class FacadeSetManager {
 		String problems = getSpecialFacadeProblems();
 		if (!StringUtils.isBlank(problems)) {
 			Osm2xpLogger.warning( problems);
-			File specFacadesFolder = new File(ResourcesPlugin.getWorkspace().getRoot().getLocation() + "/resources/specfacades");
+			File specFacadesFolder = PathsService.getPathsProvider().getSpecFacadesFolder();
 			FacadeSet set = loadFacadeSet(specFacadesFolder);
 			if (set != null) {
 				list.add(set);
@@ -132,7 +128,7 @@ public class FacadeSetManager {
 				return; //Don't copy facades second time
 			}
 			if (copySpecFacades) {
-				File specFacadesFolder = new File(ResourcesPlugin.getWorkspace().getRoot().getLocation() + "/resources/specfacades");
+				File specFacadesFolder = PathsService.getPathsProvider().getSpecFacadesFolder();
 				if (specFacadesFolder.isDirectory()) {
 					try {
 						FilesUtils.copyDirectory(specFacadesFolder, targetFacadesFolder,
@@ -287,18 +283,18 @@ public class FacadeSetManager {
 		return facadeResult;
 	}
 	
-	public IStatus getFacadeSetStatus() {
+	public StatusInfo getFacadeSetStatus() {
 		if (!XPlaneOptionsProvider.getOptions().isGenerateBuildings() && !XPlaneOptionsProvider.getOptions().isGenerateFence()) {
-			return Status.OK_STATUS;	
+			return StatusInfo.OK_STATUS;	
 		}
 		if (setPaths == null || setPaths.length == 0 || (setPaths.length == 1 && setPaths[0].trim().isEmpty())) {
-			return new StatusInfo(IStatus.ERROR, "No facade sets configured. Please add at least one facade set.");
+			return StatusInfo.error("No facade sets configured. Please add at least one facade set.");
 		}
 		if (buildingFacades.isEmpty() && specialFacades.isEmpty()) {
-			return new StatusInfo(IStatus.ERROR, "All specified facade sets are invalid.");
+			return StatusInfo.error("All specified facade sets are invalid.");
 		}
 		if (XPlaneOptionsProvider.getOptions().isGenerateBuildings() && buildingFacades.isEmpty()) {
-			return new StatusInfo(IStatus.WARNING, "'Generate buildings' option chosen, but no building facades loaded.");
+			return StatusInfo.warning("'Generate buildings' option chosen, but no building facades loaded.");
 		}
 		StringBuilder badPaths = new StringBuilder();
 		for (String path : setPaths) {
@@ -310,9 +306,9 @@ public class FacadeSetManager {
 			}
 		}
 		if (badPaths.length() > 0) {
-			return new StatusInfo(IStatus.WARNING, "Invalid facade path(s): " + badPaths);
+			return StatusInfo.warning("Invalid facade path(s): " + badPaths);
 		}
-		return Status.OK_STATUS;
+		return StatusInfo.OK_STATUS;
 	}
 
 }

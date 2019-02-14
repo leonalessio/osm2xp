@@ -12,13 +12,10 @@ import java.io.FilenameFilter;
 import java.io.IOException;
 import java.io.InputStream;
 import java.io.OutputStream;
-import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.HashMap;
-import java.util.List;
 import java.util.Map;
 
-import com.osm2xp.constants.Osm2xpConstants;
 import com.osm2xp.core.exceptions.Osm2xpBusinessException;
 import com.osm2xp.core.exceptions.Osm2xpTechnicalException;
 import com.osm2xp.core.logging.Osm2xpLogger;
@@ -119,25 +116,25 @@ public class FilesUtils {
 	 * @param repertoire
 	 * @throws Osm2xpBusinessException
 	 */
-	public static List<String> listFacadesSets() throws Osm2xpBusinessException {
-		List<String> listeSetsFacades = new ArrayList<String>();
-
-		File repertoire = new File(Osm2xpConstants.FACADES_SETS_PATH);
-
-		File[] list = repertoire.listFiles();
-		if (list != null) {
-			for (int i = 0; i < list.length; i++) {
-				if (list[i].isDirectory()) {
-					listeSetsFacades.add(list[i].getName());
-				}
-			}
-		}
-		if (listeSetsFacades.isEmpty()) {
-			throw new Osm2xpBusinessException(
-					"No facades sets found in /ressources/facades!");
-		}
-		return listeSetsFacades;
-	}
+//	public static List<String> listFacadesSets() throws Osm2xpBusinessException {
+//		List<String> listeSetsFacades = new ArrayList<String>();
+//
+//		File repertoire = new File(Osm2xpConstants.FACADES_SETS_PATH);
+//
+//		File[] list = repertoire.listFiles();
+//		if (list != null) {
+//			for (int i = 0; i < list.length; i++) {
+//				if (list[i].isDirectory()) {
+//					listeSetsFacades.add(list[i].getName());
+//				}
+//			}
+//		}
+//		if (listeSetsFacades.isEmpty()) {
+//			throw new Osm2xpBusinessException(
+//					"No facades sets found in /ressources/facades!");
+//		}
+//		return listeSetsFacades;
+//	}
 	
 	public static void copyDirectory(File sourceLocation, File targetLocation) throws IOException {
 		copyDirectory(sourceLocation, targetLocation, false);

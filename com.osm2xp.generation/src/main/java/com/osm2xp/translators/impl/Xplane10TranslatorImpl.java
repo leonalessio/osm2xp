@@ -24,11 +24,6 @@ import math.geom2d.polygon.LinearRing2D;
 public class Xplane10TranslatorImpl extends XPlaneTranslatorImpl {
 
 	/**
-	 * Smart exclusions helper.
-	 */
-	XplaneExclusionsHelper exclusionsHelper = new XplaneExclusionsHelper();
-	
-	/**
 	 * Constructor.
 	 * 
 	 * @param stats
@@ -46,23 +41,6 @@ public class Xplane10TranslatorImpl extends XPlaneTranslatorImpl {
 			Point2D currentTile, String folderPath,
 			DsfObjectsProvider dsfObjectsProvider) {
 		super(writer, currentTile, folderPath, dsfObjectsProvider);
-	}
-
-	@Override
-	protected String getExclusionsStr() {
-		if (XPlaneOptionsProvider.getOptions().isSmartExclusions()) {
-			return exclusionsHelper.exportExclusions();
-		}
-		return super.getExclusionsStr();
-	}
-
-	@Override
-	public void init() {
-		super.init();
-		// exclusionHelper
-		if (XPlaneOptionsProvider.getOptions().isSmartExclusions()) {
-			exclusionsHelper.run();
-		}
 	}
 
 	/**
@@ -104,63 +82,5 @@ public class Xplane10TranslatorImpl extends XPlaneTranslatorImpl {
 
 		writer.write(sb.toString());
 	}
-
 	
-	/**
-	 * Construct and write a facade building in the dsf file.
-	 * 
-	 * @param osmPolygon
-	 *            osm polygon
-	 * @return true if a building has been gennerated in the dsf file.
-	 */
-	protected boolean processBuilding(OsmPolyline polyline) {
-		if (!(polyline instanceof OsmPolygon)) {
-			return false;
-		}
-		OsmPolygon osmPolygon = (OsmPolygon) polyline;
-		boolean result = false;
-		if (XPlaneOptionsProvider.getOptions().isGenerateBuildings()
-				&& OsmUtils.isBuilding(osmPolygon.getTags())
-				&& !OsmUtils.isExcluded(osmPolygon.getTags(),
-						osmPolygon.getId())
-				&& !specialExcluded(osmPolygon)				
-				&& osmPolygon.getPolygon().vertexNumber() > BUILDING_MIN_VECTORS
-				&& osmPolygon.getPolygon().vertexNumber() < BUILDING_MAX_VECTORS) { 
-	
-			// check that the largest vector of the building
-			// and that the area of the osmPolygon.getPolygon() are over the
-			// minimum values set by the user
-			Double maxVector = osmPolygon.getMaxVectorSize();
-			if (maxVector > XPlaneOptionsProvider.getOptions()
-					.getMinHouseSegment()
-					&& maxVector < XPlaneOptionsProvider.getOptions()
-							.getMaxHouseSegment()
-					&& ((osmPolygon.getPolygon().area() * 100000) * 100000) > XPlaneOptionsProvider
-							.getOptions().getMinHouseArea()) {
-	
-				// simplify shape if checked and if necessary
-				if (GlobalOptionsProvider.getOptions().isSimplifyShapes()
-						&& !osmPolygon.isSimplePolygon()) {
-					osmPolygon = osmPolygon.toSimplifiedPoly();
-				}
-	
-				// compute height and facade dsf index
-				osmPolygon.setHeight(computeBuildingHeight(osmPolygon));
-				Integer facade = computeFacadeIndex(osmPolygon);
-				if (translationListener != null) {
-					translationListener.processBuilding(osmPolygon, facade);
-				}
-				
-				// write building in dsf file
-				writeBuildingToDsf(osmPolygon, facade);
-				// Smart exclusions
-				if (XPlaneOptionsProvider.getOptions().isSmartExclusions()) {
-					exclusionsHelper.addTodoPolygon(osmPolygon);
-					exclusionsHelper.run();
-				}
-				result = true;
-			}
-		}
-		return result;
-	}
 }

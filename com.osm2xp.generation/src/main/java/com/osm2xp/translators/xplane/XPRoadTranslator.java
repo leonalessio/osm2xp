@@ -14,9 +14,9 @@ public class XPRoadTranslator extends XPPathTranslator {
 	
 	private static final String[] WIDE_ROAD_TYPES = {"motorway", "trunk", "primary", "secondary"}; 
 	private static final String HIGHWAY_TAG = "highway";
-	private String[] allowedHighwayTypes = GlobalOptionsProvider.getAllowedHighwayTypes();
-	private String[] allowedHighwayLinkTypes = GlobalOptionsProvider.getAllowedHighwayLinkTypes();
-	private String[] allowedHighwaySurfaceTypes = GlobalOptionsProvider.getAllowedHighwaySurfaceTypes();
+	private String[] allowedHighwayTypes = GlobalOptionsProvider.getOptions().getAllowedHighwayTypesArray();
+	private String[] allowedHighwayLinkTypes = GlobalOptionsProvider.getOptions().getAllowedHighwayLinkTypesArray();
+	private String[] allowedHighwaySurfaceTypes = GlobalOptionsProvider.getOptions().getAllowedHighwaySurfaceTypesArray();
 	public XPRoadTranslator(IWriter writer, XPOutputFormat outputFormat, IDRenumbererService idProvider) {
 		super(writer, outputFormat, idProvider);
 	}

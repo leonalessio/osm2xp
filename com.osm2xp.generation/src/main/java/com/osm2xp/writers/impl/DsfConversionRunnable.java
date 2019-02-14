@@ -21,7 +21,7 @@ public class DsfConversionRunnable implements Runnable{
 	public void run() {
 		try {
 			Runtime runtime = Runtime.getRuntime();
-			Process process = runtime.exec(new String[] { DsfUtils.getDsfToolPath(), "--text2dsf",
+			Process process = runtime.exec(new String[] { DsfUtils.getDsfTool().getAbsolutePath(), "--text2dsf",
 					textFile.getPath(), dsfFile.getPath() });
 			int result = process.waitFor();
 			if (result != 0) {

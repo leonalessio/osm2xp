@@ -93,7 +93,7 @@ public class XPlaneTranslatorImpl implements ITranslator{
 	/**
 	 * Building level height, 3 m by default 
 	 */
-	protected double levelHeight = XPlaneOptionsProvider.getOptions().getLevelHeight();
+	protected double levelHeight = GlobalOptionsProvider.getOptions().getLevelHeight();
 	protected List<IPolyHandler> polyHandlers = new ArrayList<IPolyHandler>();
 
 	public XPlaneTranslatorImpl(IHeaderedWriter writer,
@@ -521,7 +521,6 @@ public class XPlaneTranslatorImpl implements ITranslator{
 	 * @return true if a building has been gennerated in the dsf file.
 	 */
 	protected boolean processBuilding(OsmPolyline polyline) {
-		Boolean result = false;
 		if (!(polyline instanceof OsmPolygon)) {
 			return false;
 		}
@@ -560,10 +559,10 @@ public class XPlaneTranslatorImpl implements ITranslator{
 				}
 				// write building in dsf file
 				writeBuildingToDsf(osmPolygon, facade);
-				result = true;
+				return true;
 			}
 		}
-		return result;
+		return false;
 	}
 
 	protected boolean specialExcluded(OsmPolygon osmPolygon) {

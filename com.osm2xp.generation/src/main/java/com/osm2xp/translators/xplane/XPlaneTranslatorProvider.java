@@ -1,22 +1,15 @@
 package com.osm2xp.translators.xplane;
 
 import java.io.File;
-import java.util.Collection;
-import java.util.Collections;
 
-import org.eclipse.core.runtime.preferences.InstanceScope;
-
-import com.osm2xp.gui.Activator;
+import com.osm2xp.generation.options.XPlaneOptionsProvider;
 import com.osm2xp.model.facades.FacadeSetManager;
 import com.osm2xp.translators.AbstractTranslatorProvider;
-import com.osm2xp.translators.ISpecificTranslator;
 import com.osm2xp.translators.ITranslator;
 import com.osm2xp.translators.impl.ImageDebugTranslationListener;
 import com.osm2xp.translators.impl.XPlaneTranslatorImpl;
 import com.osm2xp.utils.DsfObjectsProvider;
 import com.osm2xp.utils.DsfUtils;
-import com.osm2xp.utils.helpers.FacadeSetHelper;
-import com.osm2xp.generation.options.XPlaneOptionsProvider;
 import com.osm2xp.writers.IHeaderedWriter;
 import com.osm2xp.writers.impl.DsfWriterImpl;
 
@@ -29,7 +22,7 @@ public abstract class XPlaneTranslatorProvider extends AbstractTranslatorProvide
 
 	public XPlaneTranslatorProvider(File binaryFile, String folderPath) {
 		super(binaryFile, folderPath);
-		facadeSetsStr = InstanceScope.INSTANCE.getNode(Activator.PLUGIN_ID).get(FacadeSetManager.FACADE_SETS_PROP,FacadeSetHelper.getDefaultFacadePath());
+		facadeSetsStr = XPlaneOptionsProvider.getOptions().getFacadeSets();
 		dsfObjectsProvider = new DsfObjectsProvider(folderPath, FacadeSetManager.getManager(facadeSetsStr, new File(folderPath)));		
 	}
 

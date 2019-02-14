@@ -20,7 +20,7 @@ import com.google.common.io.Files;
 import com.osm2xp.core.exceptions.Osm2xpBusinessException;
 import com.osm2xp.core.exceptions.Osm2xpTechnicalException;
 import com.osm2xp.core.logging.Osm2xpLogger;
-import com.osm2xp.generation.options.XPlaneOptionsProvider;
+import com.osm2xp.generation.options.GlobalOptionsProvider;
 import com.osm2xp.generation.paths.PathsService;
 import com.osm2xp.utils.FilesUtils;
 
@@ -123,7 +123,7 @@ public class FacadeSetHelper {
 					// Ignore
 				}
 			}
-			double levelHeight = XPlaneOptionsProvider.getOptions().getLevelHeight();
+			double levelHeight = GlobalOptionsProvider.getOptions().getLevelHeight();
 			String minHeightStr = values.get("FLOORS_MIN");
 			if (!StringUtils.isEmpty(minHeightStr)) {
 				try {

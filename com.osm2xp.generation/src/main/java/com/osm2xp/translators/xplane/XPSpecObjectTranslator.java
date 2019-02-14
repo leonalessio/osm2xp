@@ -5,12 +5,11 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.Locale;
 
-import org.eclipse.core.resources.ResourcesPlugin;
-
+import com.osm2xp.generation.options.XPlaneOptionsProvider;
+import com.osm2xp.generation.paths.PathsService;
 import com.osm2xp.model.osm.polygon.OsmPolygon;
 import com.osm2xp.model.osm.polygon.OsmPolyline;
 import com.osm2xp.utils.DsfObjectsProvider;
-import com.osm2xp.generation.options.XPlaneOptionsProvider;
 import com.osm2xp.writers.IWriter;
 
 import math.geom2d.Point2D;
@@ -42,8 +41,7 @@ public abstract class XPSpecObjectTranslator extends XPWritingTranslator {
 		this.objectsProvider = objectsProvider;
 		String preffix = getObjectFilePreffix();
 		if (generationEnabled()) {
-			File specObjectsFolder = new File(
-					ResourcesPlugin.getWorkspace().getRoot().getLocation() + "/resources/specobjects");
+			File specObjectsFolder = PathsService.getPathsProvider().getSpecObjectsFolder(); 
 			if (specObjectsFolder.isDirectory()) {
 				String[] chimneyFiles = specObjectsFolder.list((parent, name) -> name.toLowerCase().startsWith(preffix) && name.toLowerCase().endsWith(".obj"));
 				for (String currentFile : chimneyFiles) {

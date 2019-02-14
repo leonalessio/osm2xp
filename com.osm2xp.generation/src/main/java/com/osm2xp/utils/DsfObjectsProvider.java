@@ -8,12 +8,11 @@ import java.util.Collections;
 import java.util.List;
 import java.util.Random;
 
-import org.eclipse.core.resources.ResourcesPlugin;
-import org.eclipse.core.runtime.IStatus;
-
 import com.osm2xp.core.exceptions.Osm2xpBusinessException;
 import com.osm2xp.core.logging.Osm2xpLogger;
 import com.osm2xp.core.model.osm.Tag;
+import com.osm2xp.generation.options.XPlaneOptionsProvider;
+import com.osm2xp.generation.paths.PathsService;
 import com.osm2xp.model.facades.Facade;
 import com.osm2xp.model.facades.FacadeSetManager;
 import com.osm2xp.model.facades.SpecialFacadeType;
@@ -30,10 +29,8 @@ import com.osm2xp.model.xplane.XplaneDsfLightObject;
 import com.osm2xp.model.xplane.XplaneDsfObject;
 import com.osm2xp.translators.BuildingType;
 import com.osm2xp.utils.geometry.GeomUtils;
-import com.osm2xp.generation.options.XPlaneOptionsProvider;
 import com.osm2xp.utils.osm.OsmUtils;
 
-import math.geom2d.Box2D;
 import math.geom2d.polygon.LinearRing2D;
 
 /**
@@ -232,8 +229,7 @@ public class DsfObjectsProvider {
 	}
 	
 	private void copyForestFiles() {
-		File forestsFolder = new File(
-				ResourcesPlugin.getWorkspace().getRoot().getLocation() + "/resources/forests");
+		File forestsFolder = PathsService.getPathsProvider().getForestsFolder();
 		if (forestsFolder.isDirectory()) {
 			try {
 				FilesUtils.copyDirectory(forestsFolder, new File(targetFolderPath, FORESTS_TARGET_FOLDER_NAME),
@@ -246,15 +242,13 @@ public class DsfObjectsProvider {
 
 	private void add3DObjects() {
 		if (XPlaneOptionsProvider.getOptions().isGenerateChimneys() || XPlaneOptionsProvider.getOptions().isGenerateObj() ) {
-				File objectsFolder = new File(
-						ResourcesPlugin.getWorkspace().getRoot().getLocation() + "/resources/objects");
+				File objectsFolder = PathsService.getPathsProvider().getObjectsFolder();
 				if (objectsFolder.isDirectory()) {
 					registerAndCopyObjectsFolder(objectsFolder, OBJECTS_TARGET_FOLDER_NAME);
 				} else {
 					Osm2xpLogger.error("Special objects folder not present in resources dir - this can result in generation errors");
 				} 
-				File specObjectsFolder = new File(
-						ResourcesPlugin.getWorkspace().getRoot().getLocation() + "/resources/specobjects");
+				File specObjectsFolder = PathsService.getPathsProvider().getSpecObjectsFolder();
 				if (specObjectsFolder.isDirectory()) {
 					registerAndCopyObjectsFolder(specObjectsFolder, SPECIAL_OBJECTS_TARGET_FOLDER_NAME);
 				} else {

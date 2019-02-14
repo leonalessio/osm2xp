@@ -19,12 +19,13 @@ import com.osm2xp.core.parsers.impl.ShapefileParserImpl;
 import com.osm2xp.core.parsers.impl.TranslatingBinaryParser;
 import com.osm2xp.datastore.DataSinkFactory;
 import com.osm2xp.datastore.IDataSink;
+import com.osm2xp.generation.options.GlobalOptionsProvider;
+import com.osm2xp.generation.paths.PathsService;
 import com.osm2xp.translators.ITranslator;
 import com.osm2xp.translators.ITranslatorProvider;
 import com.osm2xp.translators.TranslatorBuilder;
 import com.osm2xp.translators.airfield.XPAirfieldTranslationAdapter;
 import com.osm2xp.utils.FilesUtils;
-import com.osm2xp.generation.options.GlobalOptionsProvider;
 
 import math.geom2d.Point2D;
 
@@ -55,8 +56,8 @@ public class ParserBuilder {
 		// if a roof color file is available, load it into a map and give it to
 		// the parser
 		Map<Long, Color> roofsColorMap = null;
-		if (GlobalOptionsProvider.getRoofColorFile() != null) {
-			roofsColorMap = FilesUtils.loadG2xplColorFile(GlobalOptionsProvider
+		if (PathsService.getPathsProvider().getRoofColorFile() != null) {
+			roofsColorMap = FilesUtils.loadG2xplColorFile(PathsService.getPathsProvider()
 					.getRoofColorFile());
 		}
 		IDataSink processor = DataSinkFactory.getProcessor();
@@ -110,8 +111,8 @@ public class ParserBuilder {
 		// if a roof color file is available, load it into a map and give it to
 		// the parser
 		Map<Long, Color> roofsColorMap = null;
-		if (GlobalOptionsProvider.getRoofColorFile() != null) {
-			roofsColorMap = FilesUtils.loadG2xplColorFile(GlobalOptionsProvider
+		if (PathsService.getPathsProvider().getRoofColorFile() != null) {
+			roofsColorMap = FilesUtils.loadG2xplColorFile(PathsService.getPathsProvider()
 					.getRoofColorFile());
 		}
 		MultiTileDataConverter converter = new MultiTileDataConverter(processor, translatorProvider, roofsColorMap);		

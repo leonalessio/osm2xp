@@ -10,17 +10,14 @@ import java.util.concurrent.Executors;
 import java.util.concurrent.Future;
 
 import org.apache.commons.lang.StringUtils;
-import org.eclipse.core.runtime.jobs.Job;
-import org.eclipse.core.runtime.preferences.IEclipsePreferences;
-import org.eclipse.core.runtime.preferences.InstanceScope;
 import org.json.simple.JSONArray;
 import org.json.simple.JSONObject;
 import org.json.simple.parser.JSONParser;
 import org.json.simple.parser.ParseException;
-import org.osgi.service.prefs.BackingStoreException;
 
 import com.osm2xp.core.logging.Osm2xpLogger;
-import com.osm2xp.gui.Activator;
+import com.osm2xp.generation.preferences.IProgramPreferenceNode;
+import com.osm2xp.generation.preferences.PreferenceService;
 
 import math.geom2d.Point2D;
 
@@ -30,13 +27,12 @@ public abstract class GeoMetaProvidingService<T> {
 
 	private static final String LAT_PROP = "lat";
 
-	
 	protected Map<Point2D, T> metaMap = new HashMap<Point2D, T>();
 	protected ExecutorService executor = Executors.newFixedThreadPool(10);
 	List<Future<?>> futureList = new ArrayList<>();
 	
 	public GeoMetaProvidingService() {
-		String metaStr = InstanceScope.INSTANCE.getNode(Activator.PLUGIN_ID).get(getInstancePropName(),"");
+		String metaStr = PreferenceService.getProgramPreferences().getNode("com.osm2xp").get(getInstancePropName(),"");
 		if (!StringUtils.isEmpty(metaStr)) {
 			JSONParser parser = new JSONParser();
 			try {
@@ -107,13 +103,9 @@ public abstract class GeoMetaProvidingService<T> {
 			putMetaValue(object, metaMap.get(p2d));
 			array.add(object);
 		}
-		IEclipsePreferences node = InstanceScope.INSTANCE.getNode(Activator.PLUGIN_ID);
+		IProgramPreferenceNode node = PreferenceService.getProgramPreferences().getNode("com.osm2xp");
 		node.put(getInstancePropName(), array.toJSONString());
-		try {
-			node.flush();
-		} catch (BackingStoreException e) {
-			Osm2xpLogger.log(e);
-		}
+		PreferenceService.getProgramPreferences().flush(node);
 	}
 	
 }
