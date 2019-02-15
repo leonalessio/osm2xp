@@ -42,6 +42,7 @@ public class ParserBuilder {
 	 * 
 	 * @param currentTile tile to create parser for
 	 * @param folderPath
+	 * @param outputFormat 
 	 * @return
 	 * @throws Osm2xpBusinessException
 	 * @throws DataSinkException
@@ -49,10 +50,10 @@ public class ParserBuilder {
 	 * @throws Exception
 	 */
 	public static IParser getParser(Point2D currentTile, File currentFile,
-			String folderPath)
+			String folderPath, String outputFormat)
 			throws DataSinkException {
 		ITranslator translator = TranslatorBuilder.getTranslator(currentFile,
-				currentTile, folderPath);
+				currentTile, folderPath, outputFormat);
 		// if a roof color file is available, load it into a map and give it to
 		// the parser
 		Map<Long, Color> roofsColorMap = null;

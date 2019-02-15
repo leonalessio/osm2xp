@@ -19,19 +19,21 @@ public class TranslationAdapterFactory {
 	private IDataSink processor;
 	private String folderPath;
 	private File binaryFile;
+	private String outputFormat;
 	
-	public TranslationAdapterFactory(File binaryFile, IDataSink processor, String folderPath) {
+	public TranslationAdapterFactory(File binaryFile, IDataSink processor, String folderPath, String outputFormat) {
 		super();
 		this.binaryFile = binaryFile;
 		this.processor = processor;
 		this.folderPath = folderPath;
+		this.outputFormat = outputFormat;
 	}
 	
 	public void pointParsed(double lonf, double latf) {
 		Point2D cleanedLoc = new Point2D((int) Math.floor(lonf), (int) Math.floor(latf));
 		if (!tileTranslationAdapters.containsKey(cleanedLoc)) {
 			Osm2xpLogger.info("Detected tile (" + cleanedLoc.x() + ", " + cleanedLoc.y() + ")");
-			TileTranslationAdapter adapter = new TileTranslationAdapter(cleanedLoc, processor, TranslatorBuilder.getTranslator(binaryFile, cleanedLoc, folderPath));
+			TileTranslationAdapter adapter = new TileTranslationAdapter(cleanedLoc, processor, TranslatorBuilder.getTranslator(binaryFile, cleanedLoc, folderPath, outputFormat));
 			adapter.init();
 			tileTranslationAdapters.put(cleanedLoc, adapter);
 		}

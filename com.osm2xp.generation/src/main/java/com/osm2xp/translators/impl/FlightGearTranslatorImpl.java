@@ -11,14 +11,14 @@ import com.osm2xp.core.exceptions.Osm2xpBusinessException;
 import com.osm2xp.core.logging.Osm2xpLogger;
 import com.osm2xp.core.model.osm.Node;
 import com.osm2xp.core.model.osm.Tag;
-import com.osm2xp.model.options.ObjectFile;
-import com.osm2xp.model.options.TagsRule;
 import com.osm2xp.model.osm.polygon.OsmPolyline;
 import com.osm2xp.translators.ITranslator;
 import com.osm2xp.utils.FilesUtils;
 import com.osm2xp.utils.geometry.GeomUtils;
-import com.osm2xp.utils.helpers.FlightGearOptionsHelper;
+import com.osm2xp.generation.options.FlightGearOptionsProvider;
 import com.osm2xp.generation.options.GlobalOptionsProvider;
+import com.osm2xp.generation.options.ObjectFile;
+import com.osm2xp.generation.options.TagsRule;
 import com.osm2xp.utils.osm.OsmUtils;
 
 import math.geom2d.Box2D;
@@ -78,7 +78,7 @@ public class FlightGearTranslatorImpl implements ITranslator {
 			// check if the current polygon has some tags this translator wants
 			// to use
 			List<TagsRule> matchingTags = OsmUtils.getMatchingRules(
-					FlightGearOptionsHelper.getOptions().getObjectsRules()
+					FlightGearOptionsProvider.getOptions().getObjectsRules()
 							.getRules(), osmPolygon);
 			if (matchingTags != null && !matchingTags.isEmpty()) {
 

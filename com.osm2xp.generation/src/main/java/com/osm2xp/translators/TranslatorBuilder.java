@@ -4,7 +4,6 @@ import java.io.File;
 import java.util.ArrayList;
 import java.util.Collection;
 
-import com.osm2xp.generation.options.GlobalOptionsProvider;
 import com.osm2xp.translators.impl.ConsoleTranslatorImpl;
 import com.osm2xp.translators.impl.FlightGearTranslatorImpl;
 import com.osm2xp.translators.impl.FlyLegacyTranslatorImpl;
@@ -28,45 +27,45 @@ import math.geom2d.Point2D;
 public class TranslatorBuilder {
 
 	public static ITranslator getTranslator(File currentFile,
-			Point2D currentTile, String folderPath) {
+			Point2D currentTile, String folderPath, String outputFormat) {
 		ITranslator result = null;
 		// OSM implementation
-		if (GlobalOptionsProvider.getOutputFormat()
+		if (outputFormat
 				.equals(OutputFormat.OSM)) {
 			result = buildOsmTranslator(currentTile, folderPath);
 		}
 		// DEBUG CONSOLE
-		else if (GlobalOptionsProvider.getOutputFormat()
+		else if (outputFormat
 				.equals(OutputFormat.CONSOLE)) {
 			result = buildConsoleTranslator(currentTile);
 		}
 
 		// WAVEFRONT OBJECT //TODO no console/unit test generation of Wavefront yet
-//		else if (GlobalOptionsProvider.getOutputFormat()
+//		else if (outputFormat
 //				.equals(OutputFormat.PERSPECTIVE_WAVEFRONT)) {
 //			result = buildWavefrontTranslator(currentTile, folderPath);
 //		}
 
 		// FSX TRANSLATOR
-		else if (GlobalOptionsProvider.getOutputFormat()
+		else if (outputFormat
 				.equals(OutputFormat.FSX)) {
 			result = buildFsxTranslator(currentFile, currentTile, folderPath);
 		}
 
 		// G2XPL TRANSLATOR
-		else if (GlobalOptionsProvider.getOutputFormat()
+		else if (outputFormat
 				.equals(OutputFormat.G2XPL)) {
 			result = buildG2xplTranslator(currentTile, folderPath);
 		}
 
 		// FLY! LEGACY TRANSLATOR
-		else if (GlobalOptionsProvider.getOutputFormat()
+		else if (outputFormat
 				.equals(OutputFormat.FLY_LEGACY)) {
 			result = buildFlyLegacyTranslator(currentTile, folderPath);
 		}
 
 		// FLIGHTGEAR TRANSLATOR
-		else if (GlobalOptionsProvider.getOutputFormat()
+		else if (outputFormat
 				.equals(OutputFormat.FLIGHT_GEAR)) {
 			result = buildFlightGearTranslator(currentTile, folderPath);
 		}
@@ -196,18 +195,16 @@ public class TranslatorBuilder {
 //		return xplane9TranslatorImpl;
 //	}
 	
-	public static ITranslatorProvider getTranslatorProvider(File currentFile, String folderPath) {
+	public static ITranslatorProvider getTranslatorProvider(File currentFile, String folderPath, String outputFomat) {
 		// XPLANE 9 DSF translator provider
-		if (GlobalOptionsProvider.getOutputFormat()
-				.equals(OutputFormat.XPLANE9)) {
+		if (outputFomat.equals(OutputFormat.XPLANE9)) {
 			return new XPlane9TranslatorProvider(currentFile, folderPath);
 		}
 		// XPLANE 10 DSF translator provider
-		else if (GlobalOptionsProvider.getOutputFormat()
-				.equals(OutputFormat.XPLANE10)) {
+		else if (outputFomat.equals(OutputFormat.XPLANE10)) {
 			return new XPlane10TranslatorProvider(currentFile, folderPath);
 		}
-		return new DefaultTranslatorProvider(currentFile, folderPath);
+		return new DefaultTranslatorProvider(currentFile, folderPath, outputFomat);
 		
 	}
 

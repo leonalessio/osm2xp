@@ -2,8 +2,6 @@ package com.osm2xp.translators.xplane;
 
 import java.io.File;
 
-import com.osm2xp.translators.impl.XPlaneTranslatorImpl;
-import com.osm2xp.translators.impl.Xplane9TranslatorImpl;
 import com.osm2xp.writers.IHeaderedWriter;
 
 import math.geom2d.Point2D;

@@ -12,7 +12,6 @@ public abstract class GenerateJob extends Job {
 	protected String family;
 	protected transient File currentFile;
 	protected transient String folderPath;
-	protected transient List<Relation> relationsList;
 	
 	public GenerateJob(String name, File currentFile, 
 			String folderPath, String family) {

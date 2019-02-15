@@ -21,7 +21,7 @@ import org.eclipse.ui.internal.registry.IActionSetDescriptor;
 import com.osm2xp.constants.Osm2xpConstants;
 import com.osm2xp.core.exceptions.Osm2xpBusinessException;
 import com.osm2xp.core.logging.Osm2xpLogger;
-import com.osm2xp.utils.helpers.FlightGearOptionsHelper;
+import com.osm2xp.utils.helpers.FlightGearOptionsProvider;
 import com.osm2xp.utils.helpers.FlyLegacyOptionsHelper;
 import com.osm2xp.utils.helpers.FsxOptionsHelper;
 import com.osm2xp.utils.helpers.GuiOptionsHelper;
@@ -126,7 +126,7 @@ public class ApplicationWorkbenchWindowAdvisor extends WorkbenchWindowAdvisor {
 			XplaneOptionsHelper.saveOptions();
 			FsxOptionsHelper.saveOptions();
 			FlyLegacyOptionsHelper.saveOptions();
-			FlightGearOptionsHelper.saveOptions();
+			FlightGearOptionsProvider.saveOptions();
 		} catch (Osm2xpBusinessException e) {
 			Osm2xpLogger.error(e.getMessage());
 		}

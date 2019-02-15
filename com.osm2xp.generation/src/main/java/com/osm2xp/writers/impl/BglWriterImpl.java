@@ -3,12 +3,12 @@ package com.osm2xp.writers.impl;
 import java.io.File;
 import java.io.IOException;
 
-import math.geom2d.Point2D;
-
 import com.osm2xp.core.logging.Osm2xpLogger;
+import com.osm2xp.generation.options.FsxOptionsProvider;
 import com.osm2xp.utils.FilesUtils;
-import com.osm2xp.utils.helpers.FsxOptionsHelper;
 import com.osm2xp.writers.IWriter;
+
+import math.geom2d.Point2D;
 
 /**
  * Bgl writer implementation.
@@ -30,7 +30,7 @@ public class BglWriterImpl implements IWriter {
 		try {
 			Runtime runtime = Runtime.getRuntime();
 			runtime.exec(new String[] {
-					FsxOptionsHelper.getOptions().getBglCompPath(),
+					FsxOptionsProvider.getOptions().getBglCompPath(),
 					currentBglFile.getPath() });
 			currentBglFile.deleteOnExit();
 		} catch (IOException e) {

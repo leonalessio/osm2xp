@@ -1,13 +1,13 @@
 package com.osm2xp.translators.xplane;
 
-import static com.osm2xp.translators.impl.XPlaneTranslatorImpl.LINE_SEP;
-
 import com.osm2xp.model.facades.SpecialFacadeType;
 import com.osm2xp.model.osm.polygon.OsmPolygon;
 import com.osm2xp.model.osm.polygon.OsmPolyline;
-import com.osm2xp.translators.impl.XPOutputFormat;
 import com.osm2xp.utils.DsfObjectsProvider;
 import com.osm2xp.utils.geometry.GeomUtils;
+
+import static com.osm2xp.translators.xplane.XPlaneTranslatorImpl.LINE_SEP;
+
 import com.osm2xp.generation.options.XPlaneOptionsProvider;
 import com.osm2xp.writers.IWriter;
 

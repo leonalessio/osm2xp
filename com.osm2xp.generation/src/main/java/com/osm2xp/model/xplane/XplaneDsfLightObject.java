@@ -4,7 +4,7 @@ import math.geom2d.Point2D;
 import math.geom2d.polygon.LinearRing2D;
 
 import com.osm2xp.core.exceptions.Osm2xpBusinessException;
-import com.osm2xp.model.options.XplaneLightTagRule;
+import com.osm2xp.generation.options.XplaneLightTagRule;
 import com.osm2xp.model.osm.polygon.OsmPolygon;
 
 /**

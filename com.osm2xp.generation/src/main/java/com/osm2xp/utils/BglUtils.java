@@ -4,8 +4,8 @@ import java.util.Collections;
 import java.util.List;
 
 import com.osm2xp.core.model.osm.Tag;
-import com.osm2xp.model.options.ObjectTagRule;
-import com.osm2xp.utils.helpers.FsxOptionsHelper;
+import com.osm2xp.generation.options.FsxOptionsProvider;
+import com.osm2xp.generation.options.ObjectTagRule;
 import com.osm2xp.utils.osm.OsmUtils;
 
 /**
@@ -24,7 +24,7 @@ public class BglUtils {
 	 */
 	public static String getRandomBglGuid(List<Tag> tags, Long id) {
 		for (Tag tag : tags) {
-			for (ObjectTagRule objectTagRule : FsxOptionsHelper.getOptions()
+			for (ObjectTagRule objectTagRule : FsxOptionsProvider.getOptions()
 					.getObjectsRules().getRules()) {
 				if ((objectTagRule.getTag().getKey().equalsIgnoreCase("id") && objectTagRule
 						.getTag().getValue()

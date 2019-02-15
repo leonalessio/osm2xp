@@ -5,8 +5,6 @@ import java.util.Collection;
 
 import com.osm2xp.translators.ISpecificTranslator;
 import com.osm2xp.translators.airfield.XPAirfieldTranslationAdapter;
-import com.osm2xp.translators.impl.XPlaneTranslatorImpl;
-import com.osm2xp.translators.impl.Xplane10TranslatorImpl;
 import com.osm2xp.writers.IHeaderedWriter;
 
 import math.geom2d.Point2D;
@@ -29,5 +27,5 @@ public class XPlane10TranslatorProvider extends XPlaneTranslatorProvider {
 		return adapters;
 	}
 
-
+	
 }

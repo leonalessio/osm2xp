@@ -10,6 +10,7 @@ import com.osm2xp.core.exceptions.Osm2xpBusinessException;
 import com.osm2xp.core.logging.Osm2xpLogger;
 import com.osm2xp.core.model.osm.Node;
 import com.osm2xp.core.model.osm.Tag;
+import com.osm2xp.model.fsx.FsxConstants;
 import com.osm2xp.model.fsx.FsxObject;
 import com.osm2xp.model.geom.Lod13Location;
 import com.osm2xp.model.osm.polygon.OsmPolyline;

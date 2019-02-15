@@ -38,7 +38,7 @@ import com.osm2xp.gui.components.TagsRulesTable;
 import com.osm2xp.model.options.ObjectFile;
 import com.osm2xp.model.options.FlightGearObjectTagRule;
 import com.osm2xp.utils.helpers.XmlHelper;
-import com.osm2xp.utils.helpers.FlightGearOptionsHelper;
+import com.osm2xp.utils.helpers.FlightGearOptionsProvider;
 
 /**
  * FlightGearObjectsRulesPanel.
@@ -86,7 +86,7 @@ public class FlightGearObjectsRulesPanel extends Composite {
 		tltmAdd.addSelectionListener(new SelectionAdapter() {
 			@Override
 			public void widgetSelected(SelectionEvent e) {
-				FlightGearOptionsHelper
+				FlightGearOptionsProvider
 						.getOptions()
 						.getObjectsRules()
 						.getRules()
@@ -114,7 +114,7 @@ public class FlightGearObjectsRulesPanel extends Composite {
 						.getViewer().getSelection();
 				FlightGearObjectTagRule selectedFlightGearObjectTagRule = (FlightGearObjectTagRule) selection
 						.getFirstElement();
-				FlightGearOptionsHelper.getOptions().getObjectsRules()
+				FlightGearOptionsProvider.getOptions().getObjectsRules()
 						.getRules().remove(selectedFlightGearObjectTagRule);
 				compositeRuleDetail.setVisible(false);
 				tagsTable.getViewer().refresh();
@@ -137,7 +137,7 @@ public class FlightGearObjectsRulesPanel extends Composite {
 				String fn = dlg.open();
 				if (fn != null) {
 					try {
-						XmlHelper.saveToXml(FlightGearOptionsHelper
+						XmlHelper.saveToXml(FlightGearOptionsProvider
 								.getOptions().getObjectsRules(), new File(fn));
 					} catch (Osm2xpBusinessException e1) {
 						Osm2xpLogger.error("Error saving rules to xml file "
@@ -161,8 +161,8 @@ public class FlightGearObjectsRulesPanel extends Composite {
 				dlg.setFilterExtensions(FILTER_EXTS);
 				String fn = dlg.open();
 				if (fn != null) {
-					FlightGearOptionsHelper.importObjectsRules(new File(fn));
-					tagsTable.updateInput(FlightGearOptionsHelper.getOptions()
+					FlightGearOptionsProvider.importObjectsRules(new File(fn));
+					tagsTable.updateInput(FlightGearOptionsProvider.getOptions()
 							.getObjectsRules().getRules());
 
 				}
@@ -178,7 +178,7 @@ public class FlightGearObjectsRulesPanel extends Composite {
 		groupTags.setLayoutData(gridData);
 		groupTags.setLayout(new FillLayout(SWT.HORIZONTAL));
 		tagsTable = new TagsRulesTable(groupTags, SWT.NONE,
-				FlightGearOptionsHelper.getOptions().getObjectsRules()
+				FlightGearOptionsProvider.getOptions().getObjectsRules()
 						.getRules());
 		tagsTable.setLayout(new FillLayout(SWT.HORIZONTAL));
 		tagsTable.getTable().addListener(SWT.Selection, new Listener() {

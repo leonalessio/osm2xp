@@ -17,12 +17,12 @@ import com.osm2xp.model.options.ObjectFile;
 import com.osm2xp.model.options.ObjectsRulesList;
 
 /**
- * FlightGearOptionsHelper.
+ * FlightGearOptionsProvider.
  * 
  * @author Benjamin Blanchet
  * 
  */
-public class FlightGearOptionsHelper extends OptionsHelper {
+public class FlightGearOptionsProvider extends OptionsHelper {
 
 	private static FlightGearOptions options;
 	private static final String FLIGHTGEAR_OPTIONS_FILE_PATH = ResourcesPlugin

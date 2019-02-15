@@ -12,7 +12,7 @@ import com.osm2xp.model.osm.polygon.OsmPolyline;
 import com.osm2xp.translators.ITranslator;
 import com.osm2xp.utils.FilesUtils;
 import com.osm2xp.utils.geometry.GeomUtils;
-import com.osm2xp.utils.helpers.FlyLegacyOptionsHelper;
+import com.osm2xp.generation.options.FlyLegacyOptionsProvider;
 import com.osm2xp.generation.options.GlobalOptionsProvider;
 import com.osm2xp.utils.osm.OsmUtils;
 
@@ -92,7 +92,7 @@ public class FlyLegacyTranslatorImpl implements ITranslator {
 		OsmPolyline osmPolygon =new OsmPolygon(node.getId(), node.getTags(), null, false);
 		// get list of watched tags that are also in the osm polygon
 		List<Tag> matchingTags = OsmUtils.getMatchingTags(
-				FlyLegacyOptionsHelper.getOptions().getWatchedTagsList()
+				FlyLegacyOptionsProvider.getOptions().getWatchedTagsList()
 						.getTags(), osmPolygon);
 		if (matchingTags != null) {
 			StringBuilder stringBuilder = new StringBuilder();
@@ -129,7 +129,7 @@ public class FlyLegacyTranslatorImpl implements ITranslator {
 
 		// get list of watched tags that are also in the osm polygon
 		List<Tag> matchingTags = OsmUtils.getMatchingTags(
-				FlyLegacyOptionsHelper.getOptions().getWatchedTagsList()
+				FlyLegacyOptionsProvider.getOptions().getWatchedTagsList()
 						.getTags(), osmPolyline);
 		if (matchingTags != null) {
 			StringBuilder stringBuilder = new StringBuilder();

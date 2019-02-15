@@ -123,7 +123,7 @@ public class MiscUtils {
 	 * 
 	 * @param command
 	 */
-	public static void execProgramm(String command) {
+	public static void execProgram(String command) {
 		try {
 			Runtime rt = Runtime.getRuntime();
 

@@ -1,7 +1,5 @@
 package com.osm2xp.generation.options;
 
-import com.osm2xp.model.options.XplaneOptions;
-
 public class XPlaneOptionsProvider {
 	
 	private static XplaneOptions options;

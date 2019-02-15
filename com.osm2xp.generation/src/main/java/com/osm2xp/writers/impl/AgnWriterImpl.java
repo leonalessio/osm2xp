@@ -13,10 +13,9 @@ import java.util.Locale;
 import math.geom2d.Point2D;
 
 import com.osm2xp.core.logging.Osm2xpLogger;
-import com.osm2xp.jobs.MutexRule;
-import com.osm2xp.jobs.RunProcessJob;
 import com.osm2xp.model.fsx.FsxObject;
 import com.osm2xp.model.geom.Lod13Location;
+import com.osm2xp.utils.ProcessExecutor;
 import com.osm2xp.writers.IWriter;
 
 /**
@@ -96,11 +95,14 @@ public class AgnWriterImpl implements IWriter {
 		Osm2xpLogger.info("Starting .agn compilation jobs.");
 		for (String filePath : Arrays.asList(files)) {
 
-			RunProcessJob job = new RunProcessJob("Agn compilation of file "
-					+ filePath, "agnCompilation", txt2agn + " " + sceneFolder
-					+ File.separator + filePath + " " + sceneFolder);
-			job.setRule(new MutexRule());
-			job.schedule();
+//			RunProcessJob job = new RunProcessJob("Agn compilation of file "
+//					+ filePath, "agnCompilation", txt2agn + " " + sceneFolder
+//					+ File.separator + filePath + " " + sceneFolder);
+//			
+//			job.setRule(new MutexRule());
+//			job.schedule();
+			ProcessExecutor.getExecutor().execute(new RunProcessRunnable(txt2agn + " " + sceneFolder
+					+ File.separator + filePath + " " + sceneFolder));
 
 		}
 

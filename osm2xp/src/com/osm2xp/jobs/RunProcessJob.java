@@ -30,13 +30,7 @@ public class RunProcessJob extends Job {
 	protected IStatus run(final IProgressMonitor monitor) {
 
 		MiscUtils.execProgramm(this.command);
-
-		Display.getDefault().asyncExec(new Runnable() {
-			@Override
-			public void run() {
-
-			}
-		});
+		
 		return Status.OK_STATUS;
 
 	}

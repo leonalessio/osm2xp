@@ -7,7 +7,6 @@ import com.osm2xp.model.facades.FacadeSetManager;
 import com.osm2xp.translators.AbstractTranslatorProvider;
 import com.osm2xp.translators.ITranslator;
 import com.osm2xp.translators.impl.ImageDebugTranslationListener;
-import com.osm2xp.translators.impl.XPlaneTranslatorImpl;
 import com.osm2xp.utils.DsfObjectsProvider;
 import com.osm2xp.utils.DsfUtils;
 import com.osm2xp.writers.IHeaderedWriter;
