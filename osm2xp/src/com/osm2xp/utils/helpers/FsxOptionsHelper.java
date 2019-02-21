@@ -10,6 +10,7 @@ import com.osm2xp.constants.Osm2xpConstants;
 import com.osm2xp.core.exceptions.Osm2xpBusinessException;
 import com.osm2xp.core.logging.Osm2xpLogger;
 import com.osm2xp.core.model.osm.Tag;
+import com.osm2xp.generation.options.XmlHelper;
 import com.osm2xp.model.options.FsxOptions;
 import com.osm2xp.model.options.ObjectFile;
 import com.osm2xp.model.options.ObjectTagRule;

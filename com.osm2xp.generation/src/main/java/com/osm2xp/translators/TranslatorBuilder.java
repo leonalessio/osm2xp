@@ -205,7 +205,6 @@ public class TranslatorBuilder {
 			return new XPlane10TranslatorProvider(currentFile, folderPath);
 		}
 		return new DefaultTranslatorProvider(currentFile, folderPath, outputFomat);
-		
 	}
 
 	public static Collection<ISpecificTranslator> createAdditinalAdapters(String folderPath) {

@@ -11,7 +11,6 @@ import java.util.Set;
 import java.util.function.Predicate;
 import java.util.stream.Collectors;
 
-import com.osm2xp.classification.HeightProvider;
 import com.osm2xp.classification.RelationBuildingData;
 import com.osm2xp.classification.TypeProvider;
 import com.osm2xp.classification.WayBuildingData;
@@ -86,9 +85,9 @@ public class LearningDataParser {
 				}
 				if (resList.size() > 2) {
 					LinearRing2D ring2d = new LinearRing2D(resList);
-					OptionalDouble max = ring2d.getEdges().stream().mapToDouble(edge -> edge.getLength()).max();
-					double perimeter = ring2d.getLength();
-					double area = ring2d.getArea();
+					OptionalDouble max = ring2d.edges().stream().mapToDouble(edge -> edge.length()).max();
+					double perimeter = ring2d.length();
+					double area = ring2d.area();
 					wayData.setSidesCount(resList.size() - 1);
 					wayData.setPerimeter(perimeter);
 					wayData.setArea(area);

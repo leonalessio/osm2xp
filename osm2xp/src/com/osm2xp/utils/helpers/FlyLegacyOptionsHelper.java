@@ -9,6 +9,7 @@ import org.eclipse.core.resources.ResourcesPlugin;
 import com.osm2xp.core.exceptions.Osm2xpBusinessException;
 import com.osm2xp.core.logging.Osm2xpLogger;
 import com.osm2xp.core.model.osm.Tag;
+import com.osm2xp.generation.options.XmlHelper;
 import com.osm2xp.model.options.BuildingsExclusionsList;
 import com.osm2xp.model.options.FlyLegacyOptions;
 import com.osm2xp.model.options.WatchedTagsList;

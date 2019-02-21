@@ -13,6 +13,7 @@ import com.bbn.openmap.layer.shape.ShapeFile;
 import com.osm2xp.core.exceptions.Osm2xpBusinessException;
 import com.osm2xp.core.logging.Osm2xpLogger;
 import com.osm2xp.core.model.osm.Node;
+import com.osm2xp.generation.collections.PointSet;
 
 /**
  * ShapefileTilesLister.
@@ -22,7 +23,7 @@ import com.osm2xp.core.model.osm.Node;
  */
 public class ShapefileTilesLister implements TilesLister {
 	private ShapeFile shapeFile;
-	private Set<Point2D> tilesList = new HashSet<Point2D>();
+	private Set<Point2D> tilesList = new PointSet();
 
 	public ShapefileTilesLister(File file) {
 		try {

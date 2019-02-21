@@ -24,7 +24,6 @@ import org.locationtech.jts.geom.LinearRing;
 import org.locationtech.jts.geom.MultiPolygon;
 import org.locationtech.jts.geom.Point;
 import org.locationtech.jts.geom.Polygon;
-import org.locationtech.jts.geom.PrecisionModel;
 import org.locationtech.jts.geom.TopologyException;
 import org.locationtech.jts.geom.impl.CoordinateArraySequenceFactory;
 import org.locationtech.jts.geom.util.LineStringExtracter;
@@ -35,7 +34,6 @@ import org.locationtech.jts.operation.valid.TopologyValidationError;
 
 import com.osm2xp.core.model.osm.Node;
 import com.osm2xp.model.geom.Lod13Location;
-
 
 import math.geom2d.Angle2D;
 import math.geom2d.Box2D;
@@ -135,7 +133,7 @@ public class GeomUtils {
 				.toArray(new Coordinate[coords.size()]);
 		CoordinateSequence coordSeq = CoordinateArraySequenceFactory.instance()
 				.create(points);
-		GeometryFactory geometryFactory = new GeometryFactory(getDefaultPrecisionModel());
+		GeometryFactory geometryFactory = Osm2XPGeometryFactory.getInstance();
 		if (line.isClosed()) {
 			LinearRing linearRing = geometryFactory.createLinearRing(coordSeq);
 			Polygon jtsPolygon = geometryFactory.createPolygon(linearRing, null);
@@ -173,7 +171,7 @@ public class GeomUtils {
 				.toArray(new Coordinate[coords.size()]);
 		CoordinateSequence coordSeq = CoordinateArraySequenceFactory.instance()
 				.create(points);
-		GeometryFactory geometryFactory = new GeometryFactory(getDefaultPrecisionModel());
+		GeometryFactory geometryFactory = Osm2XPGeometryFactory.getInstance();
 		LinearRing linearRing = geometryFactory.createLinearRing(coordSeq);
 		Polygon jtsPolygon = geometryFactory.createPolygon(linearRing, null);
 		return jtsPolygon;
@@ -184,7 +182,7 @@ public class GeomUtils {
 		for (Point2D point : line.vertices()) {
 			coords.add(new Coordinate(point.x(), point.y()));
 		}
-		GeometryFactory geometryFactory = new GeometryFactory(getDefaultPrecisionModel());
+		GeometryFactory geometryFactory = Osm2XPGeometryFactory.getInstance();
 		return geometryFactory.createLineString(coords.toArray(new Coordinate[0]));
 	}
 
@@ -382,12 +380,8 @@ public class GeomUtils {
 		Coordinate[] coordinatesTab = (Coordinate[]) coordinates
 				.toArray(new Coordinate[coordinates.size()]);
 
-		GeometryFactory factory = new GeometryFactory(getDefaultPrecisionModel());
+		GeometryFactory factory = Osm2XPGeometryFactory.getInstance();
 		return factory.createPolygon(coordinatesTab);
-	}
-
-	public static PrecisionModel getDefaultPrecisionModel() {
-		return new PrecisionModel(1000000);
 	}
 
 	/**
@@ -1162,7 +1156,7 @@ public class GeomUtils {
 		if (numHoles <= maxHoleCount) {
 			return Collections.singletonList(geometry);
 		}
-		GeometryFactory geometryFactory = new GeometryFactory(GeomUtils.getDefaultPrecisionModel());
+		GeometryFactory geometryFactory = Osm2XPGeometryFactory.getInstance();
 		Polygon poly = (Polygon) geometry;
 		Envelope envelope = poly.getExteriorRing().getCoordinateSequence().expandEnvelope(new Envelope());
 		Coordinate p1 = poly.getInteriorRingN(0).getCentroid().getCoordinate();

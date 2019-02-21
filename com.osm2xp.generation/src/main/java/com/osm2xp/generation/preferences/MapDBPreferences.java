@@ -13,7 +13,7 @@ public class MapDBPreferences implements IProgramPreferences {
 	private DB prefsDB;
 
 	public MapDBPreferences() {
-		File prefsFolder = new File(PathsService.getPathsProvider().getInstallFolder(),"preferences");
+		File prefsFolder = new File(PathsService.getPathsProvider().getBasicFolder(),"preferences");
 		prefsFolder.mkdir();
 		File prefsFile = new File(prefsFolder, "preferences.dat");
 		prefsDB = DBMaker.fileDB(prefsFile).fileMmapEnableIfSupported().closeOnJvmShutdown().make();

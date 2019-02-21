@@ -16,12 +16,12 @@ import org.apache.commons.lang.StringUtils;
  */
 @XmlAccessorType(XmlAccessType.FIELD)
 @XmlType(name = "", propOrder = { "databaseMode", "appendHour", "appendTile",
-		"simplifyShapes", "currentFilePath", "outputFormat", "levelHeight", "singlePass",
+		"simplifyShapes", "currentFilePath", "levelHeight", "singlePass",
 		"allowedHighwayTypes","allowedHighwayLinkTypes", "allowedHighwaySurfaceTypes"})
 @XmlRootElement(name = "GlobalOptions")
 public class GlobalOptions {
 
-	protected boolean databaseMode;
+	protected boolean databaseMode = false;
 	protected boolean appendHour;
 	protected boolean appendTile;
 	protected boolean simplifyShapes;

@@ -22,6 +22,7 @@ import com.osm2xp.core.parsers.IOSMDataVisitor;
 import com.osm2xp.datastore.IDataSink;
 import com.osm2xp.utils.geometry.GeomUtils;
 import com.osm2xp.utils.geometry.NodeCoordinate;
+import com.osm2xp.utils.geometry.Osm2XPGeometryFactory;
 import com.osm2xp.utils.osm.OsmUtils;
 import org.locationtech.jts.geom.Coordinate;
 import org.locationtech.jts.geom.Geometry;
@@ -203,7 +204,7 @@ public abstract class AbstractOSMDataConverter implements IOSMDataVisitor {
 	}
 	
 	protected List<Polygon> doCleanup(List<List<Long>> outer, List<List<Long>> inner) {
-		GeometryFactory factory = new GeometryFactory(GeomUtils.getDefaultPrecisionModel());
+		GeometryFactory factory = Osm2XPGeometryFactory.getInstance();
 		if (outer.size() == 1) { // If we have only one outer ring - assign all inner rings to it and return
 			LinearRing[] innerRings = inner.stream().map(ids -> getRing(ids)).filter(ring -> ring != null)
 					.toArray(LinearRing[]::new);
@@ -242,7 +243,7 @@ public abstract class AbstractOSMDataConverter implements IOSMDataVisitor {
 		}
 		Coordinate[] points = getCoords(nodeIds);
 		if (points != null && points.length >= 2) {
-			GeometryFactory factory = new GeometryFactory(GeomUtils.getDefaultPrecisionModel());
+			GeometryFactory factory = Osm2XPGeometryFactory.getInstance();
 			return factory.createLineString(points);
 		}
 		return null;	
@@ -251,7 +252,7 @@ public abstract class AbstractOSMDataConverter implements IOSMDataVisitor {
 	protected Polygon getPolygon(List<Long> polyNodeIds) {
 		Coordinate[] points = getCoords(polyNodeIds);
 		if (points != null && points.length >= 4 && points.length == polyNodeIds.size()) {
-			GeometryFactory factory = new GeometryFactory(GeomUtils.getDefaultPrecisionModel());
+			GeometryFactory factory = Osm2XPGeometryFactory.getInstance();
 			return factory.createPolygon(points);
 		}
 		return null;
@@ -260,7 +261,7 @@ public abstract class AbstractOSMDataConverter implements IOSMDataVisitor {
 	protected LinearRing getRing(List<Long> nodeIds) {
 		Coordinate[] points = getCoords(nodeIds);
 		if (points != null && points.length >= 4) {
-			GeometryFactory factory = new GeometryFactory(GeomUtils.getDefaultPrecisionModel());
+			GeometryFactory factory = Osm2XPGeometryFactory.getInstance();
 			return factory.createLinearRing(points);
 		}
 		return null;

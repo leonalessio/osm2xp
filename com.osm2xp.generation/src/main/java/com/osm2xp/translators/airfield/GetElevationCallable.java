@@ -5,7 +5,6 @@ import java.io.IOException;
 import java.io.InputStreamReader;
 import java.net.HttpURLConnection;
 import java.net.URL;
-import java.util.HashMap;
 import java.util.List;
 import java.util.Locale;
 import java.util.Map;
@@ -17,6 +16,7 @@ import org.json.simple.JSONObject;
 import org.json.simple.parser.JSONParser;
 
 import com.osm2xp.core.logging.Osm2xpLogger;
+import com.osm2xp.generation.collections.PointMap;
 
 import math.geom2d.Point2D;
 
@@ -38,7 +38,7 @@ public class GetElevationCallable implements Callable<Map<Point2D, Double>> {
 
 	@Override
 	public Map<Point2D, Double> call() throws Exception {
-		Map<Point2D, Double> elevMap = new HashMap<Point2D, Double>();
+		Map<Point2D, Double> elevMap = new PointMap<Double>();
 		try {
 			String pointsStr = points.stream().map(point -> getPointStr(point)).collect(Collectors.joining(","));
 			URL obj = new URL("https://elevation-api.io/api/elevation?points=" + pointsStr);

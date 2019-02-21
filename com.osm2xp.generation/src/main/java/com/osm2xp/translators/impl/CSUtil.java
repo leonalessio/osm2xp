@@ -16,7 +16,7 @@ public class CSUtil {
      *
      * <p>This method is functionally identical to calling csFactory.create(size,dim) - it contains
      * additional logic to work around a limitation on the commonly used
-     * CoordinateArraySequenceFactory.
+     * NodeCoordinateArraySequenceFactory.
      *
      * @param size the number of coordinates in the sequence
      * @param dimension the dimension of the coordinates in the sequence
@@ -37,7 +37,7 @@ public class CSUtil {
      *
      * <p>This method is functionally identical to calling csFactory.create(size,dim) - it contains
      * additional logic to work around a limitation on the commonly used
-     * CoordinateArraySequenceFactory.
+     * NodeCoordinateArraySequenceFactory.
      *
      * @param size the number of coordinates in the sequence
      * @param dimension the dimension of the coordinates in the sequence
@@ -47,7 +47,7 @@ public class CSUtil {
             CoordinateSequenceFactory csFactory, int size, int dimension, int measures) {
         CoordinateSequence cs;
         if (csFactory instanceof CoordinateArraySequenceFactory && dimension == 1) {
-            // work around JTS 1.14 CoordinateArraySequenceFactory regression ignoring provided
+            // work around JTS 1.14 NodeCoordinateArraySequenceFactory regression ignoring provided
             // dimension
             cs = new CoordinateArraySequence(size, dimension, measures);
         } else {

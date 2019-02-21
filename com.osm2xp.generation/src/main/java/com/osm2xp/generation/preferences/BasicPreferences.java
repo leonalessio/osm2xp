@@ -9,7 +9,7 @@ public class BasicPreferences implements IProgramPreferences {
 	private File prefsFolder;
 
 	public BasicPreferences() {
-		prefsFolder = new File(PathsService.getPathsProvider().getInstallFolder(),".settings");
+		prefsFolder = new File(PathsService.getPathsProvider().getBasicFolder(),".settings");
 		prefsFolder.mkdir();
 	}
 	

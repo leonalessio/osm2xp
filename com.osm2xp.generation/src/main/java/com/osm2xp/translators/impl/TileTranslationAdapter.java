@@ -18,6 +18,8 @@ import com.osm2xp.translators.ITranslator;
 import com.osm2xp.utils.geometry.CoordinateNodeIdPreserver;
 import com.osm2xp.utils.geometry.GeomUtils;
 import com.osm2xp.utils.geometry.NodeCoordinate;
+import com.osm2xp.utils.geometry.Osm2XPGeometryFactory;
+
 import org.locationtech.jts.geom.Coordinate;
 import org.locationtech.jts.geom.Envelope;
 import org.locationtech.jts.geom.Geometry;
@@ -71,7 +73,7 @@ public class TileTranslationAdapter implements ISpecificTranslator{
 		}
 		Coordinate[] points = getCoords(nodeIds);
 		if (points != null && points.length >= 2) {
-			GeometryFactory factory = new GeometryFactory(GeomUtils.getDefaultPrecisionModel());
+			GeometryFactory factory = Osm2XPGeometryFactory.getInstance();
 			return factory.createLineString(points);
 		}
 		return null;	
@@ -80,7 +82,7 @@ public class TileTranslationAdapter implements ISpecificTranslator{
 	protected Polygon getPolygon(List<Long> polyNodeIds) {
 		Coordinate[] points = getCoords(polyNodeIds);
 		if (points != null && points.length >= 4) {
-			GeometryFactory factory = new GeometryFactory(GeomUtils.getDefaultPrecisionModel());
+			GeometryFactory factory = Osm2XPGeometryFactory.getInstance();
 			return factory.createPolygon(points);
 		}
 		return null;
@@ -89,7 +91,7 @@ public class TileTranslationAdapter implements ISpecificTranslator{
 	protected LinearRing getRing(List<Long> nodeIds) {
 		Coordinate[] points = getCoords(nodeIds);
 		if (points != null && points.length >= 4) {
-			GeometryFactory factory = new GeometryFactory(GeomUtils.getDefaultPrecisionModel());
+			GeometryFactory factory = Osm2XPGeometryFactory.getInstance();
 			return factory.createLinearRing(points);
 		}
 		return null;

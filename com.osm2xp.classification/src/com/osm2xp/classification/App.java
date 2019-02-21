@@ -49,7 +49,7 @@ public class App {
 		for (WayBuildingData wayBuildingData : typeWays) {
 			Point2D center = wayBuildingData.getCenter();
 			if (center != null) {
-				geospatialIndex.add(new BuildingPoint(center.x, center.y, wayBuildingData));
+				geospatialIndex.add(new BuildingPoint(center.x(), center.y(), wayBuildingData));
 			} 
 		}
 		System.out.println("App.buildGeoindex() "+ geospatialIndex.getAllWithinDistance(new SimpleGeospatialPoint(55.01, 82.55), 0.001));

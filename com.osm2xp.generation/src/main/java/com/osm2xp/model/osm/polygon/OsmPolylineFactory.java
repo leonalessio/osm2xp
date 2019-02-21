@@ -67,7 +67,7 @@ public class OsmPolylineFactory {
 		List<Node> resList = new ArrayList<Node>();
 		for (int i = 0; i < coords.length; i++) {
 			long newId;
-			if (coords[i] instanceof NodeCoordinate) {
+			if (coords[i] instanceof NodeCoordinate && ((NodeCoordinate) coords[i]).getNodeId() > 0) {
 				newId = ((NodeCoordinate) coords[i]).getNodeId();
 			} else if (i < coords.length - 1) {
 				newId = IDGenerationService.getIncrementId();

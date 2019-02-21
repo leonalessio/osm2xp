@@ -17,6 +17,7 @@ import com.osm2xp.core.exceptions.Osm2xpBusinessException;
 import com.osm2xp.core.logging.Osm2xpLogger;
 import com.osm2xp.core.model.osm.Node;
 import com.osm2xp.core.model.osm.Tag;
+import com.osm2xp.generation.options.XmlHelper;
 import com.osm2xp.model.options.ObjectFile;
 import com.osm2xp.model.options.ObjectTagRule;
 import com.osm2xp.model.options.ObjectsRulesList;
@@ -30,7 +31,6 @@ import com.osm2xp.utils.FilesUtils;
 import com.osm2xp.utils.geometry.GeomUtils;
 import com.osm2xp.utils.helpers.GuiOptionsHelper;
 import com.osm2xp.utils.helpers.WavefrontOptionsHelper;
-import com.osm2xp.utils.helpers.XmlHelper;
 import com.osm2xp.utils.osm.OsmUtils;
 
 import math.geom2d.Box2D;

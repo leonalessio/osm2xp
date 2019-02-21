@@ -12,12 +12,24 @@ public class NodeCoordinate extends Coordinate {
 		this.nodeId = nodeId;
 	}
 
+	public NodeCoordinate() {
+		// Default constructor
+	}
+
 	public long getNodeId() {
 		return nodeId;
 	}
 
 	public void setNodeId(long nodeId) {
 		this.nodeId = nodeId;
+	}
+	
+	@Override
+	public void setCoordinate(Coordinate other) {
+		if (other instanceof NodeCoordinate) {
+			nodeId = ((NodeCoordinate) other).getNodeId();
+		}
+		super.setCoordinate(other);
 	}
 
 }

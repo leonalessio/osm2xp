@@ -1,11 +1,8 @@
 package com.osm2xp.classification;
 
-import com.osm2xp.classification.annotations.Ignore;
 import com.osm2xp.classification.annotations.Positive;
 import com.osm2xp.classification.annotations.Result;
 import com.osm2xp.core.model.osm.BuildingType;
-
-import math.geom2d.Point2D;
 
 public class BuildingData {
 	

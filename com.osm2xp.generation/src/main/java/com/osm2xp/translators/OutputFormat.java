@@ -9,5 +9,6 @@ public class OutputFormat {
 	public static final String OSM = "OSM";
 	public static final String CONSOLE = "CONSOLE";
 	public static final String FLIGHT_GEAR = "FLIGHT_GEAR";
-	public static final Object G2XPL = "G2XPL";
+	public static final String G2XPL = "G2XPL";
+	
 }

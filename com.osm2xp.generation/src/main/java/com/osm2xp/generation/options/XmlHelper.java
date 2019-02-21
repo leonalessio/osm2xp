@@ -1,4 +1,4 @@
-package com.osm2xp.utils.helpers;
+package com.osm2xp.generation.options;
 
 import java.io.File;
 

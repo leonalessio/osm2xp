@@ -18,6 +18,7 @@ import math.geom2d.Point2D;
 
 import com.osm2xp.core.exceptions.Osm2xpBusinessException;
 import com.osm2xp.core.model.osm.Tag;
+import com.osm2xp.generation.collections.PointSet;
 
 
 /**
@@ -28,7 +29,7 @@ import com.osm2xp.core.model.osm.Tag;
  */
 public class PbfTilesLister extends BinaryParser implements TilesLister {
 
-	private Set<Point2D> tilesList = new HashSet<Point2D>();
+	private Set<Point2D> tilesList = new PointSet();
 	private File file;
 
 	public PbfTilesLister(File file) {

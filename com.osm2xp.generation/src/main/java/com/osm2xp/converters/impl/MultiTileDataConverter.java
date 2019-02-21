@@ -3,22 +3,23 @@ package com.osm2xp.converters.impl;
 import java.awt.Color;
 import java.util.ArrayList;
 import java.util.Collections;
-import java.util.HashSet;
 import java.util.List;
 import java.util.Map;
 import java.util.Set;
+
+import org.locationtech.jts.geom.Geometry;
+import org.locationtech.jts.geom.Polygon;
 
 import com.osm2xp.core.exceptions.Osm2xpBusinessException;
 import com.osm2xp.core.logging.Osm2xpLogger;
 import com.osm2xp.core.model.osm.Node;
 import com.osm2xp.core.model.osm.Tag;
 import com.osm2xp.datastore.IDataSink;
+import com.osm2xp.generation.collections.PointSet;
 import com.osm2xp.translators.ISpecificTranslator;
 import com.osm2xp.translators.ITranslatorProvider;
 import com.osm2xp.translators.impl.TileTranslationAdapter;
 import com.osm2xp.utils.osm.OsmUtils;
-import org.locationtech.jts.geom.Geometry;
-import org.locationtech.jts.geom.Polygon;
 
 import math.geom2d.Box2D;
 import math.geom2d.Point2D;
@@ -33,7 +34,7 @@ import math.geom2d.Point2D;
 public class MultiTileDataConverter extends AbstractOSMDataConverter {
 	
 	private List<ISpecificTranslator> translationAdapters = new ArrayList<>();
-	private Set<Point2D> tiles = new HashSet<Point2D>();
+	private Set<Point2D> tiles = new PointSet();
 	private Box2D boundingBox;
 	private ITranslatorProvider translatorProvider;
 
@@ -137,7 +138,7 @@ public class MultiTileDataConverter extends AbstractOSMDataConverter {
 	}
 
 	public int getTilesCount() {
-		return translationAdapters.size();
+		return tiles.size();
 	}
 
 }

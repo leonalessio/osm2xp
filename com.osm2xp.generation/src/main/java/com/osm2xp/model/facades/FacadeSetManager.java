@@ -47,6 +47,8 @@ public class FacadeSetManager {
 	 * @param facadeSetsStr Facade set paths separated with ';'
 	 * @param targetFolder Generation target folder, or <code>null</code> if you need to just check facade set availability
 	 * @return {@link FacadeSetManager} instance
+	 * 
+	 * XXX static stuff is no longer needed here - should refactor this at the end of console/UI refactoring
 	 */
 	public static FacadeSetManager getManager(String facadeSetsStr, File targetFolder) {
 		String id = facadeSetsStr + (targetFolder != null ? targetFolder.getAbsolutePath() : "");
@@ -123,6 +125,7 @@ public class FacadeSetManager {
 	protected void checkCopyFacades(File targetFolder, boolean copySpecFacades) {
 		//Check for non-empty folder was added to avoid copying facades second time for second tile being generated
 		if (targetFolder != null) { // && XPlaneOptionsProvider.getOptions().isPackageFacades() TODO this option is ignored for now, we always copy facades
+			targetFolder.mkdirs();
 			File targetFacadesFolder = new File(targetFolder, FACADES_TARGET_FOLDER_NAME);
 			if (targetFacadesFolder.isDirectory() && targetFacadesFolder.list().length > 0) {
 				return; //Don't copy facades second time
@@ -164,7 +167,7 @@ public class FacadeSetManager {
 
 		try {
 			FilesUtils.copyDirectory(srcFolder, facadesFolder, true);
-			DsfUtils.applyFacadeLod(targetFolder);
+			DsfUtils.applyFacadeLod(facadesFolder);
 			if (!XPlaneOptionsProvider.getOptions().isHardBuildings()) {
 				DsfUtils.removeConcreteRoofsAndWalls(targetFolder);
 			}
@@ -218,8 +221,8 @@ public class FacadeSetManager {
 	}
 	
 	public List<String> getAllFacadeStrings() {
-		List<String> facadeStrings = specialFacades.values().stream().distinct().map(facade -> facade.getFile()).sorted().collect(Collectors.toList());
-		facadeStrings.addAll(buildingFacades.values().stream().distinct().map(facade -> facade.getFile()).sorted().collect(Collectors.toList()));
+		List<String> facadeStrings = specialFacades.values().stream().map(facade -> facade.getFile()).distinct().sorted().collect(Collectors.toList());
+		facadeStrings.addAll(buildingFacades.values().stream().map(facade -> facade.getFile()).distinct().sorted().collect(Collectors.toList()));
 		return facadeStrings;
 	}
 	

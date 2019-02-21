@@ -2,10 +2,7 @@ package com.osm2xp.parsers.tilesLister;
 
 import java.io.File;
 import java.io.IOException;
-import java.util.HashSet;
 import java.util.Set;
-
-import math.geom2d.Point2D;
 
 import org.xml.sax.Attributes;
 import org.xml.sax.ContentHandler;
@@ -15,6 +12,9 @@ import org.xml.sax.XMLReader;
 import org.xml.sax.helpers.XMLReaderFactory;
 
 import com.osm2xp.core.exceptions.Osm2xpBusinessException;
+import com.osm2xp.generation.collections.PointSet;
+
+import math.geom2d.Point2D;
 
 /**
  * Permet de lister les tuiles existantes dans le fichier osm
@@ -24,7 +24,7 @@ import com.osm2xp.core.exceptions.Osm2xpBusinessException;
  */
 public class XmlTilesLister implements ContentHandler, TilesLister {
 
-	private Set<Point2D> tilesList = new HashSet<Point2D>();
+	private Set<Point2D> tilesList = new PointSet();
 	private File file;
 
 	public XmlTilesLister(File file) {

@@ -1,7 +1,6 @@
 package com.osm2xp.translators.airfield;
 
 import java.util.ArrayList;
-import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 import java.util.concurrent.Callable;
@@ -15,7 +14,9 @@ import org.json.simple.JSONObject;
 import org.json.simple.parser.JSONParser;
 import org.json.simple.parser.ParseException;
 
+import com.google.common.util.concurrent.ThreadFactoryBuilder;
 import com.osm2xp.core.logging.Osm2xpLogger;
+import com.osm2xp.generation.collections.PointMap;
 import com.osm2xp.generation.preferences.IProgramPreferenceNode;
 import com.osm2xp.generation.preferences.PreferenceService;
 
@@ -27,8 +28,8 @@ public abstract class GeoMetaProvidingService<T> {
 
 	private static final String LAT_PROP = "lat";
 
-	protected Map<Point2D, T> metaMap = new HashMap<Point2D, T>();
-	protected ExecutorService executor = Executors.newFixedThreadPool(10);
+	protected Map<Point2D, T> metaMap = new PointMap<T>();
+	protected ExecutorService executor = Executors.newFixedThreadPool(10, new ThreadFactoryBuilder().setDaemon(true).build());
 	List<Future<?>> futureList = new ArrayList<>();
 	
 	public GeoMetaProvidingService() {
