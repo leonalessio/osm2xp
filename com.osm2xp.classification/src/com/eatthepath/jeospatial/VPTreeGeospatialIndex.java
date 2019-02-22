@@ -4,6 +4,7 @@ import java.util.ArrayList;
 import java.util.Collection;
 import java.util.List;
 
+import com.eatthepath.jvptree.DistanceFunction;
 import com.eatthepath.jvptree.PointFilter;
 import com.eatthepath.jvptree.VPTree;
 
@@ -20,6 +21,10 @@ public class VPTreeGeospatialIndex<E extends GeospatialPoint> extends VPTree<Geo
 
     public VPTreeGeospatialIndex() {
         super(HAVERSINE_DISTANCE_FUNCTION);
+    }
+    
+    public VPTreeGeospatialIndex(final DistanceFunction<GeospatialPoint> distanceFunction) {
+    	super(distanceFunction);
     }
 
     public VPTreeGeospatialIndex(final Collection<E> points) {

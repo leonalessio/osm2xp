@@ -1,6 +1,7 @@
 package com.osm2xp.translators;
 
 import java.io.File;
+import java.util.ArrayList;
 import java.util.Collection;
 
 public abstract class AbstractTranslatorProvider implements ITranslatorProvider {
@@ -15,7 +16,7 @@ public abstract class AbstractTranslatorProvider implements ITranslatorProvider 
 	
 	@Override
 	public Collection<ISpecificTranslator> createAdditinalAdapters() {
-		return TranslatorBuilder.createAdditinalAdapters(folderPath);
+		return new ArrayList<>();
 	}
 	
 }

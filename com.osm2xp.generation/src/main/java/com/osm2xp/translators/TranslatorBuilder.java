@@ -2,19 +2,15 @@ package com.osm2xp.translators;
 
 import java.io.File;
 import java.util.ArrayList;
-import java.util.Collection;
+import java.util.HashMap;
+import java.util.List;
+import java.util.Map;
+import java.util.stream.Collectors;
 
-import com.osm2xp.translators.impl.ConsoleTranslatorImpl;
-import com.osm2xp.translators.impl.FlightGearTranslatorImpl;
-import com.osm2xp.translators.impl.FlyLegacyTranslatorImpl;
-import com.osm2xp.translators.impl.FsxBgTranslatorImpl;
-import com.osm2xp.translators.impl.G2xplTranslatorImpl;
-import com.osm2xp.translators.impl.OsmTranslatorImpl;
-import com.osm2xp.translators.xplane.XPlane10TranslatorProvider;
-import com.osm2xp.translators.xplane.XPlane9TranslatorProvider;
-import com.osm2xp.writers.IWriter;
-import com.osm2xp.writers.impl.BglWriterImpl;
-import com.osm2xp.writers.impl.OsmWriterImpl;
+import com.osm2xp.core.parsers.IOSMDataVisitor;
+import com.osm2xp.translators.airfield.XPAirfieldGeneratorFactory;
+import com.osm2xp.translators.xplane.XP10TranslatorProviderFactory;
+import com.osm2xp.translators.xplane.XP9TranslatorProviderFactory;
 
 import math.geom2d.Point2D;
 
@@ -22,192 +18,68 @@ import math.geom2d.Point2D;
  * TranslatorBuilder.
  * 
  * @author Benjamin Blanchet
+ * @author Dmitry Karpenko 
  * 
  */
 public class TranslatorBuilder {
+	
+	private static Map<String, ITranslatorProviderFactory> providerFactories = new HashMap<>();
+	private static Map<String, ITranslatorFactory> translatorFactories = new HashMap<>();
+	private static Map<String, IDataVisitorFactory> visitorFactories = new HashMap<>();
+	
+	static {
+		registerTranslatorProviderFactory(new XP10TranslatorProviderFactory());
+		registerTranslatorProviderFactory(new XP9TranslatorProviderFactory());
+		registerVisitorFactory(new XPAirfieldGeneratorFactory());
+		registerTranslatorFactory(new ConsoleTranslatorFactory());
+		registerTranslatorFactory(new G2XPLTranslatorFactory());
+		registerTranslatorFactory(new OSMTranslatorFactory());
+		registerTranslatorFactory(new FlightGearTranslatorFactory());
+		registerTranslatorFactory(new FlyLegacyTranslatorFactory());
+		registerTranslatorFactory(new FSXTranslatorFactory());
+	}
 
+	public static void registerTranslatorProviderFactory(ITranslatorProviderFactory factory) {
+		providerFactories.put(factory.getOutputType(), factory);
+	}
+	
+	public static void registerTranslatorFactory(ITranslatorFactory factory) {
+		translatorFactories.put(factory.getOutputType(), factory);
+	}
+	
+	public static void registerVisitorFactory(IDataVisitorFactory factory) {
+		visitorFactories.put(factory.getOutputType(), factory);
+	}
+	
 	public static ITranslator getTranslator(File currentFile,
 			Point2D currentTile, String folderPath, String outputFormat) {
-		ITranslator result = null;
-		// OSM implementation
-		if (outputFormat
-				.equals(OutputFormat.OSM)) {
-			result = buildOsmTranslator(currentTile, folderPath);
+		ITranslatorFactory factory = translatorFactories.get(outputFormat);
+		if (factory != null) {
+			return factory.getTranslator(currentFile,currentTile, folderPath);
 		}
-		// DEBUG CONSOLE
-		else if (outputFormat
-				.equals(OutputFormat.CONSOLE)) {
-			result = buildConsoleTranslator(currentTile);
-		}
-
-		// WAVEFRONT OBJECT //TODO no console/unit test generation of Wavefront yet
-//		else if (outputFormat
-//				.equals(OutputFormat.PERSPECTIVE_WAVEFRONT)) {
-//			result = buildWavefrontTranslator(currentTile, folderPath);
-//		}
-
-		// FSX TRANSLATOR
-		else if (outputFormat
-				.equals(OutputFormat.FSX)) {
-			result = buildFsxTranslator(currentFile, currentTile, folderPath);
-		}
-
-		// G2XPL TRANSLATOR
-		else if (outputFormat
-				.equals(OutputFormat.G2XPL)) {
-			result = buildG2xplTranslator(currentTile, folderPath);
-		}
-
-		// FLY! LEGACY TRANSLATOR
-		else if (outputFormat
-				.equals(OutputFormat.FLY_LEGACY)) {
-			result = buildFlyLegacyTranslator(currentTile, folderPath);
-		}
-
-		// FLIGHTGEAR TRANSLATOR
-		else if (outputFormat
-				.equals(OutputFormat.FLIGHT_GEAR)) {
-			result = buildFlightGearTranslator(currentTile, folderPath);
-		}
-
-		return result;
+		return null;
 	}
-
-	/**
-	 * @param currentFile
-	 * @param currentTile
-	 * @param folderPath
-	 * @param processor
-	 * @return
-	 */
-	private static ITranslator buildFsxTranslator(File currentFile,
-			Point2D currentTile, String folderPath) {
-		IWriter writer = new BglWriterImpl(folderPath);
-		return new FsxBgTranslatorImpl(writer, currentTile, folderPath);
-	}
-
-	/**
-	 * @param currentTile
-	 * @param folderPath
-	 * @param processor
-	 * @return
-	 */
-//	private static ITranslator buildWavefrontTranslator(Point2D currentTile,
-//			String folderPath) {
-//		return new WavefrontTranslatorImpl(folderPath, currentTile,
-//				WavefrontOptionsHelper.getOptions()
-//						.isWaveFrontExportSingleObject());
-//	}
-
-	/**
-	 * @param currentTile
-	 * @param processor
-	 * @return
-	 */
-	private static ITranslator buildConsoleTranslator(Point2D currentTile) {
-		return new ConsoleTranslatorImpl(currentTile);
-	}
-
-	/**
-	 * @param currentTile
-	 * @param folderPath
-	 * @param processor
-	 * @return
-	 */
-	private static ITranslator buildOsmTranslator(Point2D currentTile,
-			String folderPath) {
-		IWriter writer = new OsmWriterImpl(folderPath);
-		return new OsmTranslatorImpl(writer, currentTile);
-	}
-
-	/**
-	 * @param currentTile
-	 * @param folderPath
-	 * @param processor
-	 * @return
-	 */
-	private static ITranslator buildG2xplTranslator(Point2D currentTile,
-			String folderPath) {
-		return new G2xplTranslatorImpl(currentTile, folderPath);
-	}
-
-	/**
-	 * @param currentTile
-	 * @param folderPath
-	 * @return
-	 */
-	private static ITranslator buildFlyLegacyTranslator(Point2D currentTile,
-			String folderPath) {
-		return new FlyLegacyTranslatorImpl(currentTile, folderPath);
-	}
-
-	/**
-	 * @param currentTile
-	 * @param folderPath
-	 * @return
-	 */
-	private static ITranslator buildFlightGearTranslator(Point2D currentTile,
-			String folderPath) {
-		return new FlightGearTranslatorImpl(currentTile, folderPath);
-	}
-
-//	/**
-//	 * @param currentFile
-//	 * @param currentTile
-//	 * @param folderPath
-//	 * @param processor
-//	 * @return
-//	 * @throws Osm2xpBusinessException
-//	 */
-//	private static ITranslator buildXplane10Translator(File currentFile,
-//			Point2D currentTile, String folderPath) {
-//
-//		String facadeSetsStr = InstanceScope.INSTANCE.getNode(Activator.PLUGIN_ID).get(FacadeSetManager.FACADE_SETS_PROP,FacadeSetHelper.getDefaultFacadePath());
-//		DsfObjectsProvider dsfObjectsProvider = new DsfObjectsProvider(folderPath, FacadeSetManager.getManager(facadeSetsStr, new File(folderPath)));
-//		IHeaderedWriter writer = new DsfWriterImpl(folderPath, currentTile, dsfObjectsProvider);
-//		Xplane10TranslatorImpl translatorImpl = new Xplane10TranslatorImpl(writer, currentTile,
-//				folderPath, dsfObjectsProvider);
-//		if (XPlaneOptionsProvider.getOptions().isGenerateDebugImg()) {
-//			translatorImpl.setTranslationListener(new ImageDebugTranslationListener());
-//		}
-//		return translatorImpl;
-//	}
-//
-//	/**
-//	 * @param currentFile
-//	 * @param currentTile
-//	 * @param folderPath
-//	 * @param processor
-//	 * @return
-//	 * @throws Osm2xpBusinessException
-//	 */
-//	private static ITranslator buildXplane9Translator(File currentFile,
-//			Point2D currentTile, String folderPath) {
-//
-//		String facadeSetsStr = InstanceScope.INSTANCE.getNode(Activator.PLUGIN_ID).get(FacadeSetManager.FACADE_SETS_PROP,FacadeSetHelper.getDefaultFacadePath());
-//		DsfObjectsProvider dsfObjectsProvider = new DsfObjectsProvider(folderPath, FacadeSetManager.getManager(facadeSetsStr, new File(folderPath)));
-//		IHeaderedWriter writer = new DsfWriterImpl(folderPath, currentTile, dsfObjectsProvider);
-//		Xplane9TranslatorImpl xplane9TranslatorImpl = new Xplane9TranslatorImpl(writer, currentTile,
-//				folderPath, dsfObjectsProvider);
-//		if (XPlaneOptionsProvider.getOptions().isGenerateDebugImg()) {
-//			xplane9TranslatorImpl.setTranslationListener(new ImageDebugTranslationListener());
-//		}
-//		return xplane9TranslatorImpl;
-//	}
 	
-	public static ITranslatorProvider getTranslatorProvider(File currentFile, String folderPath, String outputFomat) {
-		// XPLANE 9 DSF translator provider
-		if (outputFomat.equals(OutputFormat.XPLANE9)) {
-			return new XPlane9TranslatorProvider(currentFile, folderPath);
+	public static IOSMDataVisitor getDataVisitor(File currentFile, String folderPath, String outputFomat) {
+		 IDataVisitorFactory factory = visitorFactories.get(outputFomat);
+		 if (factory != null) {
+			return factory.getVisitor(folderPath);
 		}
-		// XPLANE 10 DSF translator provider
-		else if (outputFomat.equals(OutputFormat.XPLANE10)) {
-			return new XPlane10TranslatorProvider(currentFile, folderPath);
-		}
-		return new DefaultTranslatorProvider(currentFile, folderPath, outputFomat);
+		return null;
 	}
 
-	public static Collection<ISpecificTranslator> createAdditinalAdapters(String folderPath) {
-		return new ArrayList<>();
+	public static ITranslatorProvider getTranslatorProvider(File currentFile, String folderPath, String outputFomat) {
+		ITranslatorProviderFactory factory = providerFactories.get(outputFomat);
+		if (factory != null) {
+			return factory.getTranslatorProvider(currentFile, folderPath);
+		}
+		return null;
 	}
+
+	public static String getRegisteredFormatsStr() {
+		List<String> list = new ArrayList<String>(providerFactories.keySet());
+		list.addAll(translatorFactories.keySet());
+		return list.stream().distinct().sorted().collect(Collectors.joining(", "));
+	}
+
 }

@@ -14,6 +14,8 @@ import org.apache.commons.lang.StringUtils;
 
 import com.osm2xp.converters.impl.MultiTileDataConverter;
 import com.osm2xp.core.exceptions.DataSinkException;
+import com.osm2xp.core.parsers.IOSMDataVisitor;
+import com.osm2xp.core.parsers.IParser;
 import com.osm2xp.core.parsers.IVisitingParser;
 import com.osm2xp.generation.options.GlobalOptions;
 import com.osm2xp.generation.options.GlobalOptionsProvider;
@@ -22,7 +24,8 @@ import com.osm2xp.generation.paths.PathsService;
 import com.osm2xp.generation.preferences.BasicPreferences;
 import com.osm2xp.generation.preferences.PreferenceService;
 import com.osm2xp.parsers.builders.ParserBuilder;
-import com.osm2xp.translators.OutputFormat;
+import com.osm2xp.translators.ITranslator;
+import com.osm2xp.translators.ITranslatorProvider;
 import com.osm2xp.translators.TranslatorBuilder;
 
 
@@ -81,7 +84,7 @@ public class App
     		if (modeStr != null) {
 				outputFormat = modeStr.toUpperCase();
 			} else {
-				outputFormat = OutputFormat.XPLANE10;
+				outputFormat = "XPLANE10";
 			}
     		//TODO no validation for outputFormat. Should this be validated or refactored? 
     		//TODO interpret other args
@@ -91,23 +94,48 @@ public class App
     		if (sceneryName == null) {
     			sceneryName = computeDefaultSceneName(inputFile);
 			}
-    		File targetFolder = new File(inputFile.getParent(), sceneryName);
-    		if (targetFolder.exists()) {
-    			System.out.println("Target folder " + sceneryName + " exists and will be deleted.");
-    			try {
-					FileUtils.deleteDirectory(targetFolder);
-				} catch (IOException e) {
-					System.out.println("Target folder " + sceneryName + " deletion failed, this can cause generation to fail. Reason:");
-					e.printStackTrace();
-				}
-    		}
     		GlobalOptionsProvider.setOptions(new GlobalOptions()); //TODO loading actual global options
     		GlobalOptionsProvider.getOptions().setCurrentFilePath(inputFile.getAbsolutePath());
-    		IVisitingParser parser;
+    		File targetFolder = new File(inputFile.getParent(), sceneryName);
+    		if (targetFolder.exists()) { //XXX bad place. Can just delete useful info in case of invalid argument
+    			System.out.println("Target folder " + sceneryName + " exists and will be deleted.");
+    			try {
+    				FileUtils.deleteDirectory(targetFolder);
+    			} catch (IOException e) {
+    				System.out.println("Target folder " + sceneryName + " deletion failed, this can cause generation to fail. Reason:");
+    				e.printStackTrace();
+    			}
+    		}
     		try {
-    			parser = ParserBuilder.getMultiTileParser(inputFile, TranslatorBuilder.getTranslatorProvider(inputFile, targetFolder.getAbsolutePath(), outputFormat));
+    			IParser parser = null;
+    			ITranslatorProvider translatorProvider = TranslatorBuilder.getTranslatorProvider(inputFile, targetFolder.getAbsolutePath(), outputFormat);
+    			if (translatorProvider != null) {
+    				parser = ParserBuilder.getMultiTileParser(inputFile, translatorProvider);
+    			}
+    			if (parser == null) {
+					ITranslator translator = TranslatorBuilder.getTranslator(inputFile, null, targetFolder.getAbsolutePath(), outputFormat);
+					if (translator != null) {
+						parser = ParserBuilder.getParser(inputFile, translator);
+					}
+				}
+    			if (parser == null) {
+    				IOSMDataVisitor dataVisitor = TranslatorBuilder.getDataVisitor(inputFile, sceneryName, outputFormat);
+    				if (dataVisitor != null) {
+						parser = ParserBuilder.getParser(inputFile, dataVisitor);
+					}
+    			}
+    			if (parser == null) {
+    				System.out.println("Output format " + outputFormat + " is invalid. Known formats are: " + TranslatorBuilder.getRegisteredFormatsStr());
+    				return;
+    			}
+    			
     			parser.process();
-    			System.out.println("Finished generation of " +  ((MultiTileDataConverter) parser.getVisitor()).getTilesCount() + " tiles, target folder " + sceneryName);
+    			if (parser instanceof IVisitingParser && ((IVisitingParser) parser).getVisitor() instanceof MultiTileDataConverter) {
+    				System.out.println("Finished generation of " +  ((MultiTileDataConverter) ((IVisitingParser) parser).getVisitor()).getTilesCount() + " tiles, target folder " + sceneryName);
+    			} else {
+    				System.out.println("Generation finished, target folder " + sceneryName);
+    				
+    			}
     		} catch (DataSinkException e) {
     			e.printStackTrace();
     		}

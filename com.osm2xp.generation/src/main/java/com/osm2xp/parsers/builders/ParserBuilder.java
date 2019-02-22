@@ -49,11 +49,25 @@ public class ParserBuilder {
 	 * @throws NumberFormatException
 	 * @throws Exception
 	 */
-	public static IParser getParser(Point2D currentTile, File currentFile,
-			String folderPath, String outputFormat)
-			throws DataSinkException {
-		ITranslator translator = TranslatorBuilder.getTranslator(currentFile,
-				currentTile, folderPath, outputFormat);
+//	public static IParser getParser(Point2D currentTile, File currentFile,
+//			String folderPath, String outputFormat)
+//			throws DataSinkException {
+//		ITranslator translator = TranslatorBuilder.getTranslator(currentFile,
+//				currentTile, folderPath, outputFormat);
+//		// if a roof color file is available, load it into a map and give it to
+//		// the parser
+//		Map<Long, Color> roofsColorMap = null;
+//		if (PathsService.getPathsProvider().getRoofColorFile() != null) {
+//			roofsColorMap = FilesUtils.loadG2xplColorFile(PathsService.getPathsProvider()
+//					.getRoofColorFile());
+//		}
+//		IDataSink processor = DataSinkFactory.getProcessor();
+//		AbstractTranslatingConverter converter = new GeneralTranslatingConverter(translator, processor, roofsColorMap);
+//		return getParser(currentFile, converter);
+//	}
+	public static IParser getParser(File currentFile,
+			ITranslator translator)
+					throws DataSinkException {
 		// if a roof color file is available, load it into a map and give it to
 		// the parser
 		Map<Long, Color> roofsColorMap = null;
@@ -66,7 +80,7 @@ public class ParserBuilder {
 		return getParser(currentFile, converter);
 	}
 
-	private static IParser getParser(File currentFile, IOSMDataVisitor converter) {
+	public static IParser getParser(File currentFile, IOSMDataVisitor converter) {
 		// PBF FILE
 		if (currentFile.getName().toLowerCase().endsWith(".pbf")) {
 			return new TranslatingBinaryParser(currentFile, converter);

@@ -6,6 +6,7 @@ import java.util.List;
 
 import com.eatthepath.jeospatial.SimpleGeospatialPoint;
 import com.eatthepath.jeospatial.VPTreeGeospatialIndex;
+import com.osm2xp.classification.geom.EquiRectDistanceFunction;
 import com.osm2xp.classification.learning.ModelGenerator;
 import com.osm2xp.classification.output.ARFFWriter;
 import com.osm2xp.classification.parsing.LearningDataParser;
@@ -44,15 +45,20 @@ public class App {
 	
 	protected static void buildGeoindex() {
 		LearningDataParser parser = new LearningDataParser(new File("F:/tmp/siberian-fed-district-latest.osm.pbf"));
-		VPTreeGeospatialIndex<BuildingPoint> geospatialIndex = new VPTreeGeospatialIndex<>();
+		VPTreeGeospatialIndex<BuildingPoint> geospatialIndex = new VPTreeGeospatialIndex<>(new EquiRectDistanceFunction());
 		List<WayBuildingData> typeWays = parser.getTypeWays();
+		int i = 0;
 		for (WayBuildingData wayBuildingData : typeWays) {
+			i++;
+			if (i % 50000 == 0) {
+				System.out.println("Added " + i + " points");
+			}
 			Point2D center = wayBuildingData.getCenter();
 			if (center != null) {
 				geospatialIndex.add(new BuildingPoint(center.x(), center.y(), wayBuildingData));
 			} 
 		}
-		System.out.println("App.buildGeoindex() "+ geospatialIndex.getAllWithinDistance(new SimpleGeospatialPoint(55.01, 82.55), 0.001));
+		System.out.println("App.buildGeoindex() "+ geospatialIndex.getNearestNeighbors(new SimpleGeospatialPoint(55.01, 82.55), 3));
 	}	
 
 	protected static void buildClassifier() {
