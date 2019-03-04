@@ -4,7 +4,10 @@ import java.io.PrintStream;
 
 import org.eclipse.core.runtime.IExtension;
 import org.eclipse.swt.graphics.Point;
+import org.eclipse.ui.IPerspectiveDescriptor;
+import org.eclipse.ui.IWorkbenchPage;
 import org.eclipse.ui.IWorkbenchPreferenceConstants;
+import org.eclipse.ui.PerspectiveAdapter;
 import org.eclipse.ui.PlatformUI;
 import org.eclipse.ui.application.ActionBarAdvisor;
 import org.eclipse.ui.application.IActionBarConfigurer;
@@ -18,9 +21,12 @@ import org.eclipse.ui.internal.WorkbenchPlugin;
 import org.eclipse.ui.internal.registry.ActionSetRegistry;
 import org.eclipse.ui.internal.registry.IActionSetDescriptor;
 
-import com.osm2xp.constants.Osm2xpConstants;
+import com.osm2xp.controllers.BuildController;
+import com.osm2xp.core.constants.CoreConstants;
 import com.osm2xp.core.exceptions.Osm2xpBusinessException;
 import com.osm2xp.core.logging.Osm2xpLogger;
+import com.osm2xp.generation.options.GlobalOptionsProvider;
+import com.osm2xp.gui.perspectives.IGenerationModeProvider;
 import com.osm2xp.utils.helpers.FlightGearOptionsProvider;
 import com.osm2xp.utils.helpers.FlyLegacyOptionsHelper;
 import com.osm2xp.utils.helpers.FsxOptionsHelper;
@@ -107,12 +113,22 @@ public class ApplicationWorkbenchWindowAdvisor extends WorkbenchWindowAdvisor {
 //		shell.setMaximized(true);
 		displayWelcomeMessage();
 		// reset last used file
-		GuiOptionsHelper.getOptions().setCurrentFilePath(null);
+		GlobalOptionsProvider.getOptions().setCurrentFilePath(null);
+		PlatformUI.getWorkbench().getActiveWorkbenchWindow().addPerspectiveListener(new PerspectiveAdapter() {
+			@Override
+			public void perspectiveActivated(IWorkbenchPage page, IPerspectiveDescriptor perspective) {
+				if (perspective instanceof IGenerationModeProvider) {
+					String generationMode = ((IGenerationModeProvider) perspective).getGenerationMode();
+					BuildController.setGenerationMode(generationMode);
+				}
+			}
+			
+		});
 	}
 	
 	public static void displayWelcomeMessage() {
 		Osm2xpLogger.info("==================================================");
-		Osm2xpLogger.info("Osm2XP " + Osm2xpConstants.OSM2XP_VERSION
+		Osm2xpLogger.info("Osm2XP " + CoreConstants.OSM2XP_VERSION
 				+ " by Benjamin Blanchet and Dmitry Karpenko");
 		Osm2xpLogger.info("==================================================");
 	}

@@ -1,0 +1,17 @@
+Manifest-Version: 1.0
+Bundle-ManifestVersion: 2
+Bundle-Name: Core
+Bundle-SymbolicName: com.osm2xp.core
+Bundle-Version: 1.0.0.qualifier
+Export-Package: com.osm2xp.core.constants,
+ com.osm2xp.core.exceptions,
+ com.osm2xp.core.logging,
+ com.osm2xp.core.model.osm,
+ com.osm2xp.core.parsers,
+ com.osm2xp.core.parsers.impl,
+ math.geom2d,
+ math.geom2d.point
+Bundle-RequiredExecutionEnvironment: JavaSE-1.8
+Bundle-ClassPath: .,
+ lib/javaGeom.jar,
+ lib/osmosis-pbf.jar

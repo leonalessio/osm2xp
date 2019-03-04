@@ -9,6 +9,6 @@ public interface ITranslatorFactory {
 	public ITranslator getTranslator(File currentFile,
 			Point2D currentTile, String folderPath);
 	
-	public String getOutputType();
+	public String getOutputMode();
 	
 }

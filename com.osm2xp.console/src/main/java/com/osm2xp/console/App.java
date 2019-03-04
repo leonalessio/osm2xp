@@ -2,10 +2,13 @@ package com.osm2xp.console;
 
 import java.io.File;
 import java.io.IOException;
+import java.util.Date;
+import java.util.concurrent.TimeUnit;
 
 import org.apache.commons.cli.CommandLine;
 import org.apache.commons.cli.CommandLineParser;
 import org.apache.commons.cli.DefaultParser;
+import org.apache.commons.cli.HelpFormatter;
 import org.apache.commons.cli.Option;
 import org.apache.commons.cli.Options;
 import org.apache.commons.cli.ParseException;
@@ -35,21 +38,29 @@ import com.osm2xp.translators.TranslatorBuilder;
  */
 public class App 
 {
-    private static final String DBMODE = "dbmode";
+    private static final String HELP = "help";
+	private static final String DBMODE = "dbmode";
 	private static final String FACADE_SETS = "facade-sets";
 	private static final String CONFIG_FOLDER = "config-folder";
 	private static final String SCENERY_NAME = "scenery-name";
 	private static final String MODE = "mode";
+	private static Options options;
 
 	public static void main( String[] args )
     {
-    	if (args.length < 1) {
+		options = createOptions();
+    	if (args.length == 0) {
     		System.out.println("Input file should be specified!");
+    		printHelp();
+    		return;
     	}
     	if (args.length > 0) {
     		CommandLine commandLine = parseCommandLine(args);
     		if (commandLine == null) {
     			return;
+    		}
+    		if (commandLine.hasOption(HELP)) {
+    			printHelp();
     		}
     		if (commandLine.getArgList().size() < 1) {
     			System.out.println("Input file should be specified");
@@ -68,16 +79,6 @@ public class App
     			}
 				PathsService.getPathsProvider().setBasicFolder(dir);
 			}
-    		XPlaneOptionsProvider.loadDefaultOptions(); //TODO support custom options location
-    		PreferenceService.setProgramPreferences(new BasicPreferences());
-    		String[] optionValues = commandLine.getOptionValues(FACADE_SETS);
-    		if (optionValues != null && optionValues.length > 0) {
-				XPlaneOptionsProvider.getOptions().setFacadeSets(StringUtils.join(optionValues,';'));
-			} else if (XPlaneOptionsProvider.getOptions().getFacadeSets() == null) {
-				String defaultFacadeSets = XPlaneOptionsProvider.getDefaultFacadeSets();
-				System.out.println("No facade sets configured, will use default: " + defaultFacadeSets);
-				XPlaneOptionsProvider.getOptions().setFacadeSets(defaultFacadeSets);
-			}
     		
     		String modeStr = commandLine.getOptionValue(MODE);
     		String outputFormat;
@@ -94,10 +95,19 @@ public class App
     		if (sceneryName == null) {
     			sceneryName = computeDefaultSceneName(inputFile);
 			}
-    		GlobalOptionsProvider.setOptions(new GlobalOptions()); //TODO loading actual global options
+    		loadGlobalOptions();
+    		if (commandLine.hasOption(DBMODE) && !GlobalOptionsProvider.getOptions().isDatabaseMode()) {
+    			GlobalOptionsProvider.getOptions().setDatabaseMode(true);
+    		}
     		GlobalOptionsProvider.getOptions().setCurrentFilePath(inputFile.getAbsolutePath());
+    		
+    		if (!TranslatorBuilder.isSupported(outputFormat)) {
+				System.out.println("Output format " + outputFormat + " is invalid. Known formats are: " + TranslatorBuilder.getRegisteredFormatsStr());
+				return;
+			}
+    		
     		File targetFolder = new File(inputFile.getParent(), sceneryName);
-    		if (targetFolder.exists()) { //XXX bad place. Can just delete useful info in case of invalid argument
+    		if (targetFolder.exists()) { //TODO ask for deletion or require special flag ?
     			System.out.println("Target folder " + sceneryName + " exists and will be deleted.");
     			try {
     				FileUtils.deleteDirectory(targetFolder);
@@ -106,7 +116,14 @@ public class App
     				e.printStackTrace();
     			}
     		}
+    		
+    		if (!loadOptions(outputFormat, commandLine)) {
+    			return;
+    		}
+    		
     		try {
+    			long t1 = System.currentTimeMillis();
+    			System.out.println("Generation started at "  + new Date());
     			IParser parser = null;
     			ITranslatorProvider translatorProvider = TranslatorBuilder.getTranslatorProvider(inputFile, targetFolder.getAbsolutePath(), outputFormat);
     			if (translatorProvider != null) {
@@ -124,23 +141,84 @@ public class App
 						parser = ParserBuilder.getParser(inputFile, dataVisitor);
 					}
     			}
-    			if (parser == null) {
-    				System.out.println("Output format " + outputFormat + " is invalid. Known formats are: " + TranslatorBuilder.getRegisteredFormatsStr());
-    				return;
-    			}
+    			
     			
     			parser.process();
     			if (parser instanceof IVisitingParser && ((IVisitingParser) parser).getVisitor() instanceof MultiTileDataConverter) {
     				System.out.println("Finished generation of " +  ((MultiTileDataConverter) ((IVisitingParser) parser).getVisitor()).getTilesCount() + " tiles, target folder " + sceneryName);
     			} else {
     				System.out.println("Generation finished, target folder " + sceneryName);
-    				
     			}
+    			System.out.println("Generation took " + formatTimeDelta(System.currentTimeMillis() - t1));
     		} catch (DataSinkException e) {
     			e.printStackTrace();
     		}
 		}
     }
+
+	protected static void printHelp() {
+		HelpFormatter formatter = new HelpFormatter();
+		formatter.printHelp("osm2xpc [input file] [option1] [option2] ...", options);
+	}
+
+	private static boolean loadOptions(String outputFormat, CommandLine commandLine) {
+		if (outputFormat.toUpperCase().startsWith("XPLANE") || outputFormat.toUpperCase().equals("XP_AIRFIELDS")) {
+			
+			XPlaneOptionsProvider.loadDefaultOptions(); //TODO support custom options location
+			if (XPlaneOptionsProvider.getOptions() == null) {
+				System.out.println("Failed to load X-Plane generation options from file " + XPlaneOptionsProvider.getDefaultOptionsFile());
+				System.out.println("It should be present in {current folder}/xplane, please use -c option to specify another folder");
+				return false;
+			}
+			PreferenceService.setProgramPreferences(new BasicPreferences());
+			String[] optionValues = commandLine.getOptionValues(FACADE_SETS);
+			if (optionValues != null && optionValues.length > 0) {
+				XPlaneOptionsProvider.getOptions().setFacadeSets(StringUtils.join(optionValues,';'));
+			} else if (XPlaneOptionsProvider.getOptions().getFacadeSets() == null) {
+				String defaultFacadeSets = XPlaneOptionsProvider.getDefaultFacadeSets();
+				System.out.println("No facade sets configured, will use default: " + defaultFacadeSets);
+				XPlaneOptionsProvider.getOptions().setFacadeSets(defaultFacadeSets);
+			}
+		}
+		
+		return true;
+	}
+
+	private static Options createOptions() {
+		Options options = new Options();
+		options.addOption( "m", MODE, true, "Generation mode, 'xplane10' by default");
+		options.addOption( "s", SCENERY_NAME, true, "scenery name");
+		options.addOption( "c", CONFIG_FOLDER, true, "use this folder instead of current one when looking for "
+				+ "configuration, resources, tools etc. Can be used to have generation profiles.");
+		Option facadeSetsOption = new Option("f", FACADE_SETS, true, "facade sets for X-Plane scenario generation, one or more paths separated with spaces");
+		facadeSetsOption.setArgs(Option.UNLIMITED_VALUES);				
+		options.addOption(facadeSetsOption);
+//		options.addOption( "o", "options", true, "Generation options file for given mode. Will use default if it's not specified");
+		options.addOption( "d", DBMODE, false, "Use database mode - will store some data during generation on disk, which allows to process larger input files");
+		options.addOption( "h", HELP, false, "Print this information message");
+		return options;
+	}
+
+	private static String formatTimeDelta(long millis) {
+		return String.format("%d min, %d sec", 
+			    TimeUnit.MILLISECONDS.toMinutes(millis),
+			    TimeUnit.MILLISECONDS.toSeconds(millis) - 
+			    TimeUnit.MINUTES.toSeconds(TimeUnit.MILLISECONDS.toMinutes(millis))
+			);
+	}
+
+	protected static void loadGlobalOptions() {
+		File basicFolder = PathsService.getPathsProvider().getBasicFolder();
+		File globalOptionsFile = new File(basicFolder, "GlobalOptions.xml");
+		if (globalOptionsFile.isFile()) {
+			GlobalOptions options = GlobalOptionsProvider.loadOptions(globalOptionsFile);
+			if (options != null) {
+				GlobalOptionsProvider.setOptions(options);
+				return;
+			}
+		}
+		GlobalOptionsProvider.setOptions(new GlobalOptions()); 
+	}
 
 	protected static String computeDefaultSceneName(File inputFile) {
 		String sceneName = inputFile.getName();
@@ -152,16 +230,6 @@ public class App
 	}
 	
 	private static CommandLine parseCommandLine(String[] args) {
-		Options options = new Options();
-		options.addOption( "m", MODE, true, "Generation mode, 'xplane10' by default");
-		options.addOption( "s", SCENERY_NAME, true, "scenery name");
-		options.addOption( "c", CONFIG_FOLDER, true, "use this folder instead of current one when looking for "
-				+ "configuration, resources, tools etc. Can be used to have generation profiles.");
-		Option facadeSetsOption = new Option("f", FACADE_SETS, true, "facade sets for X-Plane scenario generation");
-		facadeSetsOption.setArgs(Option.UNLIMITED_VALUES);				
-		options.addOption( "o", "options", true, "Generation options file for given mode. Will use default if it's not specified");
-		options.addOption(facadeSetsOption);
-		options.addOption( "d", DBMODE, false, "Use database mode - will store some data during generation on disk, which allows to process larger input files");
 		CommandLineParser parser = new DefaultParser();
 		try {
 			return parser.parse(options, args);

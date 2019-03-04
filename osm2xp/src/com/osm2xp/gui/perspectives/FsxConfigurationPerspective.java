@@ -1,20 +1,15 @@
 package com.osm2xp.gui.perspectives;
 
-import org.eclipse.ui.IPageLayout;
-import org.eclipse.ui.IPerspectiveFactory;
-
 /**
  * FsxConfigurationPerspective.
  * 
  * @author Benjamin Blanchet
  * 
  */
-public class FsxConfigurationPerspective implements IPerspectiveFactory {
+public class FsxConfigurationPerspective extends GenerationPerspective {
 
-	@Override
-	public void createInitialLayout(IPageLayout layout) {
-		layout.setEditorAreaVisible(false);
-		layout.setFixed(false);
+	public FsxConfigurationPerspective() {
+		super("FSX");
 	}
 
 }

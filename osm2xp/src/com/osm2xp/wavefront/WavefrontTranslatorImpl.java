@@ -442,7 +442,7 @@ public class WavefrontTranslatorImpl implements ITranslator {
 	@Override
 	public boolean mustStoreNode(Node node) {
 		Boolean result = true;
-		if (!GuiOptionsHelper.getOptions().isSinglePass()) {
+		if (!GlobalOptionsProvider.getOptions().isSinglePass()) {
 			result = GeomUtils.compareCoordinates(currentTile, node);
 		}
 		return result;

@@ -6,8 +6,8 @@ import org.eclipse.core.resources.ResourcesPlugin;
 
 import com.osm2xp.core.exceptions.Osm2xpBusinessException;
 import com.osm2xp.core.logging.Osm2xpLogger;
+import com.osm2xp.generation.options.WavefrontOptions;
 import com.osm2xp.generation.options.XmlHelper;
-import com.osm2xp.model.options.WavefrontOptions;
 
 /**
  * WavefrontOptionsHelper.

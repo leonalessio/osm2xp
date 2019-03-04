@@ -3,8 +3,8 @@ package com.osm2xp.utils.helpers;
 import java.util.ArrayList;
 
 import com.osm2xp.core.model.osm.Tag;
-import com.osm2xp.model.options.ObjectFile;
-import com.osm2xp.model.options.ObjectTagRule;
+import com.osm2xp.generation.options.ObjectFile;
+import com.osm2xp.generation.options.ObjectTagRule;
 
 /**
  * OptionsHelper.

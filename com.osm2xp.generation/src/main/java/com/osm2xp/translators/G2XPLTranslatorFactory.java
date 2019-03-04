@@ -14,7 +14,7 @@ public class G2XPLTranslatorFactory implements ITranslatorFactory {
 	}
 
 	@Override
-	public String getOutputType() {
+	public String getOutputMode() {
 		return "G2XPL";
 	}
 

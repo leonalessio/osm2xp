@@ -11,8 +11,10 @@ import org.eclipse.ui.IWorkbenchWindow;
 import org.eclipse.ui.PlatformUI;
 
 import com.osm2xp.constants.Osm2xpConstants;
+import com.osm2xp.controllers.BuildController;
 import com.osm2xp.core.logging.Osm2xpLogger;
 import com.osm2xp.gui.Activator;
+import com.osm2xp.gui.perspectives.IGenerationModeProvider;
 
 public class UiUtil {
 	public static void setEnabledRecursive(Composite composite, boolean enabled) {
@@ -52,6 +54,9 @@ public class UiUtil {
 							if (!curId.equals(node.get(Osm2xpConstants.LAST_PERSP_PROP, ""))) {
 								node.put(Osm2xpConstants.LAST_PERSP_PROP, curId);
 								node.flush();
+							}
+							if (perspective instanceof IGenerationModeProvider) {
+								BuildController.setGenerationMode(((IGenerationModeProvider) perspective).getGenerationMode());
 							}
 						}
 						

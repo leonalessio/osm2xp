@@ -216,7 +216,7 @@ public class SaxParserImpl implements ContentHandler, IVisitingParser {
 	}
 
 	public void complete() {
-//		if (GuiOptionsHelper.getOptions().isSinglePass()
+//		if (GlobalOptionsProvider.getOptions().isSinglePass()
 //				&& !nodesRefCollectionDone) {
 //			nodesRefCollectionDone = true;
 //			Osm2xpLogger.info("First pass done");

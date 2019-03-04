@@ -6,6 +6,7 @@ import org.eclipse.swt.layout.GridLayout;
 import org.eclipse.swt.widgets.Button;
 import org.eclipse.swt.widgets.Composite;
 
+import com.osm2xp.generation.options.GlobalOptionsProvider;
 import com.osm2xp.gui.views.panels.Osm2xpPanel;
 import com.osm2xp.utils.helpers.GuiOptionsHelper;
 
@@ -61,13 +62,13 @@ public class GeneralOptionsPanel extends Osm2xpPanel {
 
 	@Override
 	protected void bindComponents() {
-		bindComponent(btnDataBaseMode, GuiOptionsHelper.getOptions(),
+		bindComponent(btnDataBaseMode, GlobalOptionsProvider.getOptions(),
 				"databaseMode");
-		bindComponent(btnApdTime, GuiOptionsHelper.getOptions(), "appendHour");
-		bindComponent(btnApdCoords, GuiOptionsHelper.getOptions(), "appendTile");
-		bindComponent(btnSimplifyShapes, GuiOptionsHelper.getOptions(),
+		bindComponent(btnApdTime, GlobalOptionsProvider.getOptions(), "appendHour");
+		bindComponent(btnApdCoords, GlobalOptionsProvider.getOptions(), "appendTile");
+		bindComponent(btnSimplifyShapes, GlobalOptionsProvider.getOptions(),
 				"simplifyShapes");
-		bindComponent(btnSinglePass, GuiOptionsHelper.getOptions(),
+		bindComponent(btnSinglePass, GlobalOptionsProvider.getOptions(),
 				"singlePass");
 
 	}

@@ -21,7 +21,7 @@ import org.eclipse.swt.widgets.Table;
 import org.eclipse.swt.widgets.TableColumn;
 
 import com.osm2xp.core.exceptions.Osm2xpBusinessException;
-import com.osm2xp.model.options.ObjectFile;
+import com.osm2xp.generation.options.ObjectFile;
 
 /**
  * FilesPathsTable.

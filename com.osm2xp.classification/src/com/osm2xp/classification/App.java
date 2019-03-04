@@ -2,16 +2,25 @@ package com.osm2xp.classification;
 
 import java.io.File;
 import java.io.IOException;
+import java.util.ArrayList;
+import java.util.Collection;
 import java.util.List;
+import java.util.stream.Collectors;
 
-import com.eatthepath.jeospatial.SimpleGeospatialPoint;
-import com.eatthepath.jeospatial.VPTreeGeospatialIndex;
+import org.locationtech.jts.geom.Envelope;
+import org.locationtech.jts.index.strtree.ItemDistance;
+import org.locationtech.jts.index.strtree.STRtree;
+
 import com.osm2xp.classification.geom.EquiRectDistanceFunction;
+import com.osm2xp.classification.index.KdTree;
+import com.osm2xp.classification.index.PointData;
 import com.osm2xp.classification.learning.ModelGenerator;
 import com.osm2xp.classification.output.ARFFWriter;
+import com.osm2xp.classification.output.CSVWithAdditionalsWriter;
+import com.osm2xp.classification.output.StringDelimitedWriter;
 import com.osm2xp.classification.parsing.LearningDataParser;
 
-import math.geom2d.Point2D;
+import math.geom2d.Box2D;
 import weka.classifiers.AbstractClassifier;
 import weka.classifiers.bayes.NaiveBayes;
 import weka.classifiers.evaluation.Evaluation;
@@ -24,6 +33,8 @@ import weka.filters.unsupervised.attribute.Normalize;
 
 public class App {
 
+	private static final int NEIGHBOUR_CONT = 2;
+
 	public static void main(String[] args) {
 		buildGeoindex();
 //		buildDataset();
@@ -32,7 +43,7 @@ public class App {
 
 	protected static void buildDataset() {
 		LearningDataParser parser = new LearningDataParser(new File("F:/tmp/siberian-fed-district-latest.osm.pbf"));
-		try (ARFFWriter<WayBuildingData> writer = new ARFFWriter<WayBuildingData>(new File("type_ways.arff"), "type")) {
+		try (StringDelimitedWriter<WayBuildingData> writer = new ARFFWriter<WayBuildingData>(new File("type_ways.arff"), "type")) {
 			List<WayBuildingData> typeWays = parser.getTypeWays();
 			for (WayBuildingData wayBuildingData : typeWays) {
 				writer.write(wayBuildingData);
@@ -45,21 +56,62 @@ public class App {
 	
 	protected static void buildGeoindex() {
 		LearningDataParser parser = new LearningDataParser(new File("F:/tmp/siberian-fed-district-latest.osm.pbf"));
-		VPTreeGeospatialIndex<BuildingPoint> geospatialIndex = new VPTreeGeospatialIndex<>(new EquiRectDistanceFunction());
+//		VPTreeGeospatialIndex<BuildingPoint> geospatialIndex = new VPTreeGeospatialIndex<>(new EquiRectDistanceFunction());
 		List<WayBuildingData> typeWays = parser.getTypeWays();
+//		STRtree tree = new STRtree(typeWays.size());
+//		int i = 0;
+//		for (WayBuildingData wayBuildingData : typeWays) {
+//			i++;
+//			if (i % 50000 == 0) {
+//				System.out.println("Added " + i + " points");
+//			}
+//			Box2D bbox = wayBuildingData.getBoundingBox();
+//			Envelope envelope = new Envelope(bbox.getMinX(), bbox.getMaxX(), bbox.getMinY(), bbox.getMaxY()); 
+//			
+//			tree.insert(envelope, wayBuildingData);
+//		}
+//		tree.build();
+		List<PointData<WayBuildingData>> pointsList = new ArrayList<PointData<WayBuildingData>>();
+		KdTree<PointData<WayBuildingData>> kdTree = new KdTree<>();
 		int i = 0;
 		for (WayBuildingData wayBuildingData : typeWays) {
 			i++;
 			if (i % 50000 == 0) {
 				System.out.println("Added " + i + " points");
 			}
-			Point2D center = wayBuildingData.getCenter();
-			if (center != null) {
-				geospatialIndex.add(new BuildingPoint(center.x(), center.y(), wayBuildingData));
-			} 
+			PointData<WayBuildingData> pointData = new PointData<WayBuildingData>(wayBuildingData.getCenter().x(), wayBuildingData.getCenter().y(), wayBuildingData);
+			kdTree.add(pointData);
+			pointsList.add(pointData);
 		}
-		System.out.println("App.buildGeoindex() "+ geospatialIndex.getNearestNeighbors(new SimpleGeospatialPoint(55.01, 82.55), 3));
+		long t1 = System.currentTimeMillis();
+		System.out.println("Built tree in millis: " + (System.currentTimeMillis() - t1));
+//		ItemDistance itemDistance = new EquiRectDistanceFunction();
+//		for (WayBuildingData wayBuildingData : typeWays) {
+//			t1 = System.currentTimeMillis();
+//			Object[] neighbours = tree.nearestNeighbour(getEnvelope(wayBuildingData.getBoundingBox()),wayBuildingData,itemDistance, 3);
+//			System.out.println("Search took: " + (System.currentTimeMillis() - t1));
+//			i++;
+//			if (i % 50000 == 0) {
+//				System.out.println("Found neighbors for " + i);
+//			}
+//		}
+		List<PointData<WayBuildingData>> classifiedPoints = pointsList.stream().filter(data -> data.getData().getType() != null).collect(Collectors.toList());
+		try (CSVWithAdditionalsWriter<WayBuildingData> writer = new CSVWithAdditionalsWriter<>(new File("type_ways.csv"), "types",NEIGHBOUR_CONT)) {
+			for (PointData<WayBuildingData> pointData : classifiedPoints) {
+				Collection<PointData<WayBuildingData>> neighbours = kdTree.nearestNeighbourSearch(NEIGHBOUR_CONT + 1, pointData);
+				neighbours.remove(pointData);
+				writer.write(pointData.getData(), neighbours.stream().limit(NEIGHBOUR_CONT).map(data -> data.getData()).collect(Collectors.toList()));
+			}
+		} catch (IOException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
+//		System.out.println("App.buildGeoindex() "+ geospatialIndex.getNearestNeighbors(new SimpleGeospatialPoint(55.01, 82.55), 3));
 	}	
+
+	private static Envelope getEnvelope(Box2D boundingBox) {
+		return new Envelope(boundingBox.getMinX(), boundingBox.getMaxX(), boundingBox.getMinY(), boundingBox.getMaxY());
+	}
 
 	protected static void buildClassifier() {
 		try {

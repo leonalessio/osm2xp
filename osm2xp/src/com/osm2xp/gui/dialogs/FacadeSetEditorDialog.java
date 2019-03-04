@@ -62,6 +62,7 @@ import com.osm2xp.core.exceptions.Osm2xpBusinessException;
 import com.osm2xp.core.logging.Osm2xpLogger;
 import com.osm2xp.gui.Activator;
 import com.osm2xp.gui.dialogs.utils.Osm2xpDialogsHelper;
+import com.osm2xp.gui.facades.FacadeImageProvider;
 import com.osm2xp.model.facades.Facade;
 import com.osm2xp.model.facades.FacadeSet;
 import com.osm2xp.model.facades.FacadeSetHelper;
@@ -519,7 +520,7 @@ public class FacadeSetEditorDialog extends Dialog {
 		reloadButton.addSelectionListener(new SelectionAdapter() {
 			@Override
 			public void widgetSelected(SelectionEvent e) {
-				FacadeSetHelper.reloadImgs();
+				FacadeImageProvider.reloadImgs();
 				updateProperties();
 			}
 		});
@@ -707,7 +708,7 @@ public class FacadeSetEditorDialog extends Dialog {
 		tankButton.setSelection(specialType == SpecialFacadeType.TANK);
 		garageButton.setSelection(specialType == SpecialFacadeType.GARAGE);
 		File facadeFile = new File(facadeSetFolder, currentFacade.getFile());
-		previewImage = FacadeSetHelper.getPreviewImage(facadeFile);
+		previewImage = FacadeImageProvider.getPreviewImage(facadeFile);
 		if (previewImage == null) {
 			previewImage = errorPreviewImage;
 		}

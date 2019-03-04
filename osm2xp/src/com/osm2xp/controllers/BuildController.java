@@ -17,21 +17,18 @@ import org.eclipse.ui.PlatformUI;
 import com.osm2xp.constants.Perspectives;
 import com.osm2xp.core.exceptions.Osm2xpBusinessException;
 import com.osm2xp.core.logging.Osm2xpLogger;
+import com.osm2xp.generation.options.GlobalOptionsProvider;
 import com.osm2xp.gui.Activator;
 import com.osm2xp.gui.views.MainSceneryFileView;
 import com.osm2xp.jobs.GenerateMultiTilesJob;
-import com.osm2xp.jobs.GenerateTileJob;
 import com.osm2xp.jobs.MutexRule;
 import com.osm2xp.model.facades.FacadeSetManager;
-import com.osm2xp.model.project.Coordinates;
 import com.osm2xp.stats.StatsProvider;
 import com.osm2xp.utils.FilesUtils;
 import com.osm2xp.utils.helpers.GuiOptionsHelper;
 import com.osm2xp.utils.helpers.Osm2xpProjectHelper;
 import com.osm2xp.utils.helpers.StatsHelper;
 import com.osm2xp.utils.ui.UiUtil;
-
-import math.geom2d.Point2D;
 
 /**
  * Build controller.
@@ -40,6 +37,9 @@ import math.geom2d.Point2D;
  * 
  */
 public class BuildController {
+	
+	private static String mode = "xplane10";
+	
 	private String folderPath;
 	private MutexRule rule = new MutexRule();
 
@@ -66,7 +66,7 @@ public class BuildController {
 	}
 
 	public static File getSelectedFile() {
-		String currentFilePath = GuiOptionsHelper.getOptions()
+		String currentFilePath = GlobalOptionsProvider.getOptions()
 				.getCurrentFilePath();
 		String path = StringUtils.stripToEmpty(currentFilePath).trim();
 		if (path.isEmpty()) {
@@ -94,28 +94,28 @@ public class BuildController {
 	/**
 	 * @throws Osm2xpBusinessException
 	 */
-	public void restartImportedProject() throws Osm2xpBusinessException {
-
-		// switch to build perspective
-		UiUtil.switchPerspective(Perspectives.PERSPECTIVE_BUILD);
-		GuiOptionsHelper.getOptions().setCurrentFilePath(
-				Osm2xpProjectHelper.getOsm2XpProject().getFile());
-		File currentFile = new File(Osm2xpProjectHelper.getOsm2XpProject()
-				.getFile());
-		this.folderPath = Osm2xpProjectHelper.getProjectFile().getParent();
-
-		for (Coordinates coordinates : Osm2xpProjectHelper.getOsm2XpProject()
-				.getCoordinatesList().getCoordinates()) {
-			Point2D tuile = new Point2D(coordinates.getLongitude(),
-					coordinates.getLatitude());
-			try {
-				generateSingleTile(currentFile, tuile, folderPath);
-			} catch (Osm2xpBusinessException e) {
-				Osm2xpLogger.error("Error generating tile", e);
-			}
-		}
-
-	}
+//	public void restartImportedProject() throws Osm2xpBusinessException {
+//
+//		// switch to build perspective
+//		UiUtil.switchPerspective(Perspectives.PERSPECTIVE_BUILD);
+//		GlobalOptionsProvider.getOptions().setCurrentFilePath(
+//				Osm2xpProjectHelper.getOsm2XpProject().getFile());
+//		File currentFile = new File(Osm2xpProjectHelper.getOsm2XpProject()
+//				.getFile());
+//		this.folderPath = Osm2xpProjectHelper.getProjectFile().getParent();
+//
+//		for (Coordinates coordinates : Osm2xpProjectHelper.getOsm2XpProject()
+//				.getCoordinatesList().getCoordinates()) {
+//			Point2D tuile = new Point2D(coordinates.getLongitude(),
+//					coordinates.getLatitude());
+//			try {
+//				generateSingleTile(currentFile, tuile, folderPath);
+//			} catch (Osm2xpBusinessException e) {
+//				Osm2xpLogger.error("Error generating tile", e);
+//			}
+//		}
+//
+//	}
 	
 	public static boolean checkDeleteFolder(File currentFolder) {
 		if (!currentFolder.exists()) {
@@ -145,122 +145,12 @@ public class BuildController {
 		// switch to build perspective
 		UiUtil.switchPerspective(Perspectives.PERSPECTIVE_BUILD);
 		// get user setted cordinates
-		Point2D coordinates = GuiOptionsHelper.getSelectedCoordinates();
-		// launch generation
 		FacadeSetManager.clearCache();
-		if (coordinates == null) {
-			if (GuiOptionsHelper.getOptions().isSinglePass()) {
-				generateWholeFileOnASinglePass(currentFile, folderPath);
-			} else {
-				generateWholeFile(currentFile, folderPath);
-			}
-		} else {
-			generateSingleTile(currentFile, coordinates, folderPath);
-		}
+		generateWholeFile(currentFile, folderPath);
 
 //		new ParsingExperimentJob(currentFile).schedule(); //Experimental to check new osmosis API
 	}
 
-	/**
-	 * @param currentFile
-	 * @param coordinates
-	 * @param folderPath
-	 * @param list
-	 * @throws Osm2xpBusinessException
-	 */
-	private void generateWholeFileOnASinglePass(File currentFile,
-			final String folderPath)
-			throws Osm2xpBusinessException {
-		String jobTitle = "Generate " + currentFile.getName();
-		final GenerateTileJob job = new GenerateTileJob(jobTitle, currentFile,
-				null, folderPath, null, "todoJob");
-		job.setRule(new MutexRule());
-		job.addJobChangeListener(new JobChangeAdapter() {
-
-			@Override
-			public void done(IJobChangeEvent event) {
-				job.setFamily("endedJob");
-				Display.getDefault().asyncExec(new Runnable() {
-					@Override
-					public void run() {
-						if ((Job.getJobManager().find("todoJob")).length == 0
-								&& GuiOptionsHelper
-										.isOutputFormatAFileGenerator()) {
-							try {
-								StatsHelper.RecapStats(folderPath);
-
-							} catch (Osm2xpBusinessException e) {
-								Osm2xpLogger.warning(
-										"Error saving recap stats.", e);
-							}
-							Osm2xpLogger.info("Generation finished.");
-
-							// MiscUtils.switchPerspective(GuiOptionsHelper
-							// .getOptions().getOutputFormat());
-
-						}
-					}
-				});
-
-			}
-
-		});
-
-		job.setRule(rule);
-		job.schedule();
-
-	}
-
-	/**
-	 * @param currentFile
-	 * @param coordinates
-	 * @param folderPath
-	 * @param list
-	 * @throws Osm2xpBusinessException
-	 */
-	private void generateSingleTile(File currentFile, Point2D coordinates,
-			final String folderPath)
-			throws Osm2xpBusinessException {
-		String jobTitle = "Generate tile " + +(int) coordinates.y() + " / "
-				+ (int) coordinates.x() + " of file " + currentFile.getName();
-		final GenerateMultiTilesJob job = new GenerateMultiTilesJob(jobTitle, currentFile, folderPath, "todoJob");
-//		final GenerateTileJob job = new GenerateTileJob(jobTitle, currentFile,
-//				coordinates, folderPath, relationsList, "todoJob");
-		job.setRule(new MutexRule());
-		job.addJobChangeListener(new JobChangeAdapter() {
-
-
-			@Override
-			public void done(IJobChangeEvent event) {
-				job.setFamily("endedJob");
-				Display.getDefault().asyncExec(new Runnable() {
-					@Override
-					public void run() {
-						if ((Job.getJobManager().find("todoJob")).length == 0) {
-							try {
-								StatsHelper.RecapStats(folderPath);
-
-							} catch (Osm2xpBusinessException e) {
-								Osm2xpLogger.warning(
-										"Error saving recap stats.", e);
-							}
-							Osm2xpLogger.info("Generation finished.");
-
-							// MiscUtils.switchPerspective(GuiOptionsHelper
-							// .getOptions().getOutputFormat());
-
-						}
-					}
-				});
-
-			}
-			
-		});
-
-		job.setRule(rule);
-		job.schedule();
-
-	}
 
 	/**
 	 * @param currentFile
@@ -298,13 +188,13 @@ public class BuildController {
 				// generate files
 				if (GuiOptionsHelper.isOutputFormatAFileGenerator()) {
 					try {
-						Osm2xpProjectHelper.initProject(folderPath, GuiOptionsHelper.getOptions()
+						Osm2xpProjectHelper.initProject(folderPath, GlobalOptionsProvider.getOptions()
 								.getCurrentFilePath());
 					} catch (Osm2xpBusinessException e1) {
 						Osm2xpLogger.error("Error creating project file", e1);
 					}
 				}
-				GenerateMultiTilesJob tilesJob = new GenerateMultiTilesJob("Generate several tiles", currentFile, folderPath, "todoJob");
+				GenerateMultiTilesJob tilesJob = new GenerateMultiTilesJob("Generate several tiles", BuildController.getMode(), currentFile, folderPath, "todoJob");
 				tilesJob.setRule(new MutexRule());
 				tilesJob.addJobChangeListener(new JobChangeAdapter() {
 
@@ -341,7 +231,7 @@ public class BuildController {
 				
 //				if (tilesList.isEmpty()) {
 //					try {
-//						GuiOptionsHelper.getOptions().setSinglePass(true);
+//						GlobalOptionsProvider.getOptions().setSinglePass(true);
 //						generateWholeFileOnASinglePass(currentFile, folderPath);
 //					} catch (Osm2xpBusinessException e) {
 //						Osm2xpLogger.error("Error generating tile", e);
@@ -355,5 +245,13 @@ public class BuildController {
 
 		tilesJob.schedule();
 
+	}
+
+	public static String getMode() {
+		return mode;
+	}
+
+	public static void setGenerationMode(String mode) {
+		BuildController.mode = mode;
 	}
 }

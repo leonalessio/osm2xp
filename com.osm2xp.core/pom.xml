@@ -67,10 +67,60 @@
 	    <artifactId>openmap</artifactId>
 	    <version>5.0.3</version>
 	</dependency>
+	<!-- https://mvnrepository.com/artifact/javax.xml.bind/jaxb-api -->
 	<dependency>
 		<groupId>javax.xml.bind</groupId>
 		<artifactId>jaxb-api</artifactId>
 		<version>2.3.1</version>
+	</dependency>
+	<!-- https://mvnrepository.com/artifact/javax.activation/activation -->
+	<dependency>
+	    <groupId>javax.activation</groupId>
+	    <artifactId>activation</artifactId>
+	    <version>1.1</version>
+	</dependency>
+	
+	<!-- https://mvnrepository.com/artifact/org.glassfish.jaxb/jaxb-runtime -->
+	<dependency>
+	    <groupId>org.glassfish.jaxb</groupId>
+	    <artifactId>jaxb-runtime</artifactId>
+	    <version>2.3.0-b170127.1453</version>
 	</dependency>	
   </dependencies>
+  <build>
+    <plugins>
+        <plugin>
+            <groupId>org.apache.maven.plugins</groupId>
+            <artifactId>maven-dependency-plugin</artifactId>
+            <version>2.10</version>
+            <executions>
+                <execution>
+                    <id>copy-libraries</id>
+                    <phase>validate</phase>
+                    <goals>
+                        <goal>copy</goal>
+                    </goals>
+                    <configuration>
+                        <artifactItems>
+							<item>
+								<groupId>org.openstreetmap.osmosis</groupId>
+								<artifactId>osmosis-pbf</artifactId>
+								<version>0.46</version>
+							</item>
+							<dependency>
+							    <groupId>math.geom2d</groupId>
+							    <artifactId>javaGeom</artifactId>
+							    <version>0.11.1</version>
+							</dependency>
+                        </artifactItems>
+                        <outputDirectory>lib</outputDirectory>
+                        <stripVersion>true</stripVersion>
+                        <overWriteReleases>true</overWriteReleases>
+                        <overWriteSnapshots>true</overWriteSnapshots>
+                    </configuration>
+                </execution>
+            </executions>
+        </plugin>
+    </plugins>
+</build>
 </project>

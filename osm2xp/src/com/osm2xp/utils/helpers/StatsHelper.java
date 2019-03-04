@@ -435,7 +435,7 @@ public class StatsHelper {
 //					12, Font.UNDERLINE + Font.BOLD)));
 //			addEmptyLine(preface, 1);
 //			preface.add(new Paragraph("Output mode: "
-//					+ GuiOptionsHelper.getOptions().getOutputFormat(),
+//					+ GlobalOptionsProvider.getOptions().getOutputFormat(),
 //					new Font(Font.TIMES_ROMAN, 12, Font.NORMAL)));
 //			if (XplaneOptionsHelper.getOptions().isGenerateBuildings()) {
 //				preface.add(new Paragraph("Facade sets: "

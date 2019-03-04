@@ -27,7 +27,7 @@ public class XPlaneOptionsProvider {
 		} catch (com.osm2xp.core.exceptions.Osm2xpBusinessException e) {
 			Osm2xpLogger.error("Error initializing Xplane options helper",	e);
 		}
-		return options;
+		return null;
 	}
 	
 	public static File getDefaultOptionsFile() {

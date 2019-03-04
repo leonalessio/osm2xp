@@ -44,7 +44,7 @@ public class TranslatorBuilder {
 	}
 	
 	public static void registerTranslatorFactory(ITranslatorFactory factory) {
-		translatorFactories.put(factory.getOutputType(), factory);
+		translatorFactories.put(factory.getOutputMode(), factory);
 	}
 	
 	public static void registerVisitorFactory(IDataVisitorFactory factory) {
@@ -80,6 +80,10 @@ public class TranslatorBuilder {
 		List<String> list = new ArrayList<String>(providerFactories.keySet());
 		list.addAll(translatorFactories.keySet());
 		return list.stream().distinct().sorted().collect(Collectors.joining(", "));
+	}
+	
+	public static boolean isSupported(String format) {
+		return providerFactories.containsKey(format) || translatorFactories.containsKey(format) || visitorFactories.containsKey(format);
 	}
 
 }

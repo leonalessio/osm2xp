@@ -12,6 +12,8 @@ import com.osm2xp.constants.Perspectives;
 import com.osm2xp.controllers.BuildController;
 import com.osm2xp.core.exceptions.Osm2xpBusinessException;
 import com.osm2xp.core.logging.Osm2xpLogger;
+import com.osm2xp.generation.options.FsxOptionsProvider;
+import com.osm2xp.generation.options.GlobalOptionsProvider;
 import com.osm2xp.gui.Activator;
 import com.osm2xp.gui.dialogs.utils.Osm2xpDialogsHelper;
 import com.osm2xp.model.facades.FacadeSetHelper;
@@ -60,14 +62,12 @@ public class CommandBuildScene extends AbstractHandler{
 		StringBuilder errors = new StringBuilder();
 		StringBuilder warnings = new StringBuilder();
 		// Common validation
-		if (GuiOptionsHelper.getOptions().getCurrentFilePath() == null) {
+		if (GlobalOptionsProvider.getOptions().getCurrentFilePath() == null) {
 			errors.append(" - No osm file selected.\n");
 		}
 		// Xplane validation
-		if (GuiOptionsHelper.getOptions().getOutputFormat()
-				.equals(Perspectives.PERSPECTIVE_XPLANE10)
-				|| GuiOptionsHelper.getOptions().getOutputFormat()
-						.equals(Perspectives.PERSPECTIVE_XPLANE9)) {
+		String mode = BuildController.getMode();
+		if (mode.equalsIgnoreCase("XPLANE10") || mode.equalsIgnoreCase("XPLANE9")) {
 			String facadeSetsStr= InstanceScope.INSTANCE.getNode(Activator.PLUGIN_ID).get(FacadeSetManager.FACADE_SETS_PROP,"");
 			if (facadeSetsStr.isEmpty()) {
 				warnings.append(" - ");
@@ -88,12 +88,9 @@ public class CommandBuildScene extends AbstractHandler{
 			}
 		}
 		// FSX validation
-		if (GuiOptionsHelper.getOptions().getOutputFormat()
-				.equals(Perspectives.PERSPECTIVE_FSX)) {
-			if (StringUtils.isBlank(FsxOptionsHelper.getOptions()
+		else if (mode.equalsIgnoreCase("FSX") && StringUtils.isBlank(FsxOptionsProvider.getOptions()
 					.getBglCompPath())) {
-				errors.append(" - bglComp.exe location not set!\n");
-			}
+			errors.append(" - bglComp.exe location not set!\n");
 		}
 		if (errors.length() > 0) {
 			return new StatusInfo(IStatus.ERROR, errors.toString());

@@ -21,6 +21,4 @@ public class SimpleBuildingData extends BuildingData {
 		this.center = new Point2D(lon, lat);
 	}
 	
-	
-	
 }

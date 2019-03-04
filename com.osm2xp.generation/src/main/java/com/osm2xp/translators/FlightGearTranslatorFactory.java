@@ -14,7 +14,7 @@ public class FlightGearTranslatorFactory implements ITranslatorFactory {
 	}
 
 	@Override
-	public String getOutputType() {
+	public String getOutputMode() {
 		return "FLIGHT_GEAR";
 	}
 

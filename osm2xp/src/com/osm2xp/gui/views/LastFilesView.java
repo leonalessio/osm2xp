@@ -28,6 +28,7 @@ import org.eclipse.ui.part.ViewPart;
 import org.eclipse.wb.swt.ResourceManager;
 
 import com.osm2xp.constants.Osm2xpConstants;
+import com.osm2xp.generation.options.GlobalOptionsProvider;
 import com.osm2xp.gui.Activator;
 import com.osm2xp.utils.helpers.GuiOptionsHelper;
 
@@ -78,11 +79,11 @@ public class LastFilesView extends ViewPart {
 		lastFilesTable.addMouseListener(new MouseAdapter() {
 			@Override
 			public void mouseDoubleClick(MouseEvent e) {
-				ViewerCell cell = lastFilesTableViewer.getCell(new Point(e.x,e.y()));
+				ViewerCell cell = lastFilesTableViewer.getCell(new Point(e.x,e.y));
 				if (cell != null && !lastFilesTableViewer.getSelection().isEmpty()) {
 					IStructuredSelection selection = (IStructuredSelection) lastFilesTableViewer.getSelection();
 					if (!selection.isEmpty()) {
-						GuiOptionsHelper.getOptions().setCurrentFilePath((String) selection.getFirstElement());
+						GlobalOptionsProvider.getOptions().setCurrentFilePath((String) selection.getFirstElement());
 						if (((String) selection.getFirstElement()).toUpperCase().contains(".SHP")) {
 							GuiOptionsHelper.askShapeFileNature(parent.getShell());
 						}

@@ -14,7 +14,7 @@ public class ConsoleTranslatorFactory implements ITranslatorFactory {
 	}
 
 	@Override
-	public String getOutputType() {
+	public String getOutputMode() {
 		return "CONSOLE";
 	}
 

@@ -19,6 +19,7 @@ import com.osm2xp.core.model.osm.Tag;
 import com.osm2xp.core.parsers.impl.TranslatingBinaryParser;
 
 import math.geom2d.Point2D;
+import math.geom2d.ShapeArray2D;
 import math.geom2d.polygon.LinearRing2D;
 
 public class LearningDataParser {
@@ -70,6 +71,8 @@ public class LearningDataParser {
 				.map(node -> new Point2D(node.getLon(), node.getLat()))
 				.collect(Collectors.toList());
 			int n = points.size();
+			ShapeArray2D<Point2D> shapeArray2D = new ShapeArray2D<Point2D>(points);
+			wayData.setBoundingBox(shapeArray2D.boundingBox());
 			if (n > 0 && n == wayData.getNodes().size()) {
 				Point2D base = points.get(0);
 				double coef = Math.cos(base.y());
@@ -87,7 +90,7 @@ public class LearningDataParser {
 					LinearRing2D ring2d = new LinearRing2D(resList);
 					OptionalDouble max = ring2d.edges().stream().mapToDouble(edge -> edge.length()).max();
 					double perimeter = ring2d.length();
-					double area = ring2d.area();
+					double area = Math.abs(ring2d.area());
 					wayData.setSidesCount(resList.size() - 1);
 					wayData.setPerimeter(perimeter);
 					wayData.setArea(area);
@@ -95,6 +98,8 @@ public class LearningDataParser {
 					if (max.isPresent()) {
 						wayData.setMaxSide(max.getAsDouble());
 					}
+				} else {
+					invalid++;
 				}
 			} else {
 				invalid++;
@@ -117,6 +122,9 @@ public class LearningDataParser {
 					continue; //No deep analysis for now
 				}
 				for (List<Long> list : polygonLists) {
+					if (!isClosed(list)) {
+						continue;
+					}
 					WayBuildingData buildingData = new WayBuildingData(list);
 					buildingData.copyProps(relationBuildingData);
 					resultList.add(buildingData);
@@ -187,7 +195,7 @@ public class LearningDataParser {
 	}
 	
 	protected boolean isClosed(List<Long> nodeList) {
-		if (nodeList.size() > 1) {
+		if (nodeList.size() > 3) {
 			return nodeList.get(0).equals(nodeList.get(nodeList.size() - 1));
 		}
 		return false;

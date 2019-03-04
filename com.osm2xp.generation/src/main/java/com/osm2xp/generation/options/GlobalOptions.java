@@ -29,7 +29,7 @@ public class GlobalOptions {
 	protected String currentFilePath;
 	@XmlElement(required = true)
 	protected double levelHeight = 3;
-	protected boolean singlePass;
+//	protected boolean singlePass;
 	protected String allowedHighwayTypes = "motorway;trunk;primary;secondary;tertiary;unclassified;residential";
 	protected String allowedHighwayLinkTypes = "motorway_link;trunk_link;primary_link;secondary_link;tertiary_link";
 	protected String allowedHighwaySurfaceTypes = "paved;asphalt;concrete";
@@ -147,17 +147,17 @@ public class GlobalOptions {
 	 * Gets the value of the singlePass property.
 	 * 
 	 */
-	public boolean isSinglePass() {
-		return singlePass;
-	}
-
-	/**
-	 * Sets the value of the singlePass property.
-	 * 
-	 */
-	public void setSinglePass(boolean value) {
-		this.singlePass = value;
-	}
+//	public boolean isSinglePass() {
+//		return singlePass;
+//	}
+//
+//	/**
+//	 * Sets the value of the singlePass property.
+//	 * 
+//	 */
+//	public void setSinglePass(boolean value) {
+//		this.singlePass = value;
+//	}
 
 	/**
 	 * @return Building level height, 3m by default

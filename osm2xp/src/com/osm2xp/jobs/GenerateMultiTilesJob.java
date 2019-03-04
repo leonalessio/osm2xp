@@ -21,16 +21,19 @@ import com.osm2xp.translators.TranslatorBuilder;
  */
 public class GenerateMultiTilesJob extends GenerateJob {
 
-	public GenerateMultiTilesJob(String name, File currentFile, String folderPath,
-			String family) {
+	private  String generationMode;
+
+	public GenerateMultiTilesJob(String name, String generationMode, File currentFile,
+			String folderPath, String family) {
 		super(name, currentFile, folderPath, family);
+		this.generationMode = generationMode;
 		Osm2xpLogger.info("Starting  generation of several tiles, target folder " + folderPath);
 	}
 
 	@Override
 	protected IStatus run(IProgressMonitor monitor) {
 		try {
-			IVisitingParser parser = ParserBuilder.getMultiTileParser(currentFile, TranslatorBuilder.getTranslatorProvider(currentFile, folderPath));
+			IVisitingParser parser = ParserBuilder.getMultiTileParser(currentFile, TranslatorBuilder.getTranslatorProvider(currentFile, folderPath, generationMode));
 			parser.process();
 			Osm2xpLogger.info("Finished generation of " +  ((MultiTileDataConverter) parser.getVisitor()).getTilesCount() + " tiles, target folder " + folderPath);
 		} catch (DataSinkException e) {

@@ -9,6 +9,7 @@ import java.util.function.Predicate;
 import java.util.stream.Collectors;
 
 import com.osm2xp.classification.WayBuildingData;
+import com.osm2xp.core.model.osm.Nd;
 import com.osm2xp.core.model.osm.Node;
 import com.osm2xp.core.model.osm.Relation;
 import com.osm2xp.core.model.osm.Tag;
@@ -44,10 +45,19 @@ public class LearningWaysCollector extends LearningDataCollector {
 		if (necessaryWays.contains(way.getId())) {
 			wayNds.put(way.getId(), way.getNd().stream().map(nd -> nd.getRef()).collect(Collectors.toList()));
 		} else if (isGoodSample(way.getTags())) {
+			if (!isClosed(way)) {
+				System.out.println("Invalid way " + way.getId() + ", not closed");
+				return;
+			}
 			WayBuildingData data = new WayBuildingData(way.getNd().stream().map(nd -> nd.getRef()).collect(Collectors.toList()));
 			initDataFromTags(data, way.getTags());
 			collectedWayData.add(data);
 		}
+	}
+
+	private boolean isClosed(Way way) {
+		List<Nd> nds = way.getNd();
+		return nds.size() > 3 && nds.get(0).getRef() == nds.get(nds.size() - 1).getRef();
 	}
 
 	@Override

@@ -30,6 +30,7 @@ import org.eclipse.ui.ISelectionListener;
 import org.eclipse.ui.IWorkbenchPartSite;
 
 import com.osm2xp.constants.Osm2xpConstants;
+import com.osm2xp.generation.options.GlobalOptionsProvider;
 import com.osm2xp.gui.views.panels.Osm2xpPanel;
 import com.osm2xp.utils.helpers.GuiOptionsHelper;
 
@@ -96,11 +97,11 @@ public class SceneryFilePanel extends Osm2xpPanel {
 	private String computeSceneName() {
 		StringBuilder sceneName = new StringBuilder();
 		// clean file extension
-		File file = new File(GuiOptionsHelper.getOptions().getCurrentFilePath());
+		File file = new File(GlobalOptionsProvider.getOptions().getCurrentFilePath());
 		String fileName = file.getName().substring(0,
 				file.getName().indexOf("."));
 		sceneName.append(fileName);
-		if (GuiOptionsHelper.getOptions().isAppendHour()) {
+		if (GlobalOptionsProvider.getOptions().isAppendHour()) {
 			DateFormat dateFormat = new SimpleDateFormat("_dd_MM_yy_HH'_'mm");
 			sceneName.append(dateFormat.format(new Date()));
 		}
@@ -112,7 +113,7 @@ public class SceneryFilePanel extends Osm2xpPanel {
 		if (!filenameText.isDisposed()) {
 			filenameText.setText(path);	
 		}
-//		filenameText.setText(GuiOptionsHelper.getOptions()
+//		filenameText.setText(GlobalOptionsProvider.getOptions()
 //				.getCurrentFilePath());
 //		String sceneName = computeSceneName();
 //		GuiOptionsHelper.setSceneName(sceneName);
@@ -135,7 +136,7 @@ public class SceneryFilePanel extends Osm2xpPanel {
 		
 		filenameText = new Text(this, SWT.BORDER);
 		GridDataFactory.fillDefaults().grab(true,false).applyTo(filenameText);
-		String currentFilePath = GuiOptionsHelper.getOptions().getCurrentFilePath();
+		String currentFilePath = GlobalOptionsProvider.getOptions().getCurrentFilePath();
 		filenameText.setText(StringUtils.stripToEmpty(currentFilePath).trim());
 		
 		filenameText.addModifyListener(event -> {
@@ -143,7 +144,7 @@ public class SceneryFilePanel extends Osm2xpPanel {
 			if (new File(text).isFile()) {
 				fileSelected(text);
 			} else {
-				GuiOptionsHelper.getOptions().setCurrentFilePath(null);
+				GlobalOptionsProvider.getOptions().setCurrentFilePath(null);
 			}
 		});
 		

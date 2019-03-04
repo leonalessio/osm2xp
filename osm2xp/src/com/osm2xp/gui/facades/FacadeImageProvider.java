@@ -8,14 +8,18 @@ import java.util.Collection;
 import java.util.Collections;
 import java.util.List;
 
+import org.eclipse.jface.resource.ImageRegistry;
+import org.eclipse.swt.SWT;
+import org.eclipse.swt.graphics.GC;
+import org.eclipse.swt.graphics.Image;
+import org.eclipse.swt.graphics.ImageData;
+import org.eclipse.swt.graphics.ImageLoader;
+import org.eclipse.swt.graphics.Rectangle;
+import org.eclipse.swt.widgets.Display;
+
+import com.osm2xp.core.logging.Osm2xpLogger;
 import com.osm2xp.model.facades.FacadeDefinition;
 import com.osm2xp.model.facades.FacadeDefinitionParser;
-import com.osm2xp.model.facades.GC;
-import com.osm2xp.model.facades.Image;
-import com.osm2xp.model.facades.ImageData;
-import com.osm2xp.model.facades.ImageLoader;
-import com.osm2xp.model.facades.ImageRegistry;
-import com.osm2xp.model.facades.Rectangle;
 import com.osm2xp.model.facades.Wall;
 
 public class FacadeImageProvider {
@@ -64,7 +68,7 @@ public class FacadeImageProvider {
 					commonImg = new Image(Display.getDefault(), data[0]);
 					imageRegistry.put(imgFile.getAbsolutePath(), commonImg);
 				} catch (Exception e) {
-					Activator.log(e);
+					Osm2xpLogger.log(e);
 					return null;
 				} 
 			}

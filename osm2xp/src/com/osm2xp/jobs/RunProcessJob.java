@@ -4,7 +4,6 @@ import org.eclipse.core.runtime.IProgressMonitor;
 import org.eclipse.core.runtime.IStatus;
 import org.eclipse.core.runtime.Status;
 import org.eclipse.core.runtime.jobs.Job;
-import org.eclipse.swt.widgets.Display;
 
 import com.osm2xp.utils.MiscUtils;
 
@@ -29,7 +28,7 @@ public class RunProcessJob extends Job {
 	@Override
 	protected IStatus run(final IProgressMonitor monitor) {
 
-		MiscUtils.execProgramm(this.command);
+		MiscUtils.execProgram(this.command);
 		
 		return Status.OK_STATUS;
 

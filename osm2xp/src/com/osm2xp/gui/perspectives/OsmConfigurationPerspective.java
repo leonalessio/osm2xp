@@ -1,19 +1,15 @@
 package com.osm2xp.gui.perspectives;
 
-import org.eclipse.ui.IPageLayout;
-import org.eclipse.ui.IPerspectiveFactory;
-
 /**
  * OSM configuration perspective.
  * 
  * @author Benjamin Blanchet
  * 
  */
-public class OsmConfigurationPerspective implements IPerspectiveFactory {
+public class OsmConfigurationPerspective extends GenerationPerspective {
 
-	@Override
-	public void createInitialLayout(IPageLayout layout) {
-		layout.setEditorAreaVisible(false);
-		layout.setFixed(false);
+	public OsmConfigurationPerspective() {
+		super("OSM");
 	}
+	
 }

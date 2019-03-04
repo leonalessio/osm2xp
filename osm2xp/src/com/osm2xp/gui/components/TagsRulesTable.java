@@ -20,7 +20,7 @@ import org.eclipse.swt.widgets.Composite;
 import org.eclipse.swt.widgets.Table;
 import org.eclipse.swt.widgets.TableColumn;
 
-import com.osm2xp.model.options.TagsRule;
+import com.osm2xp.generation.options.TagsRule;
 
 /**
  * TagsRulesTable

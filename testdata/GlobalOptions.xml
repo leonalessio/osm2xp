@@ -1,0 +1,9 @@
+<?xml version="1.0" encoding="UTF-8" standalone="yes"?>
+<GuiOptions>
+    <databaseMode>false</databaseMode>
+    <appendHour>false</appendHour>
+    <appendTile>false</appendTile>
+    <simplifyShapes>true</simplifyShapes>
+    <outputFormat>com.osm2xp.xplane10ConfigurationPerspective</outputFormat>
+    <singlePass>false</singlePass>
+</GuiOptions>

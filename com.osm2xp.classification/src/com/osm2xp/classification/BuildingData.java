@@ -1,6 +1,7 @@
 package com.osm2xp.classification;
 
 import com.osm2xp.classification.annotations.Positive;
+import com.osm2xp.classification.annotations.Present;
 import com.osm2xp.classification.annotations.Result;
 import com.osm2xp.core.model.osm.BuildingType;
 
@@ -14,8 +15,10 @@ public class BuildingData {
 	private double area;
 	@Positive
 	private double maxSide;
+	@Present
 	@Positive
 	private double height;
+	@Present
 	@Positive
 	private int levels;
 	@Positive

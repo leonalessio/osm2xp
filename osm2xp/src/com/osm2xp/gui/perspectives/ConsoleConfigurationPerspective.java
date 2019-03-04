@@ -1,19 +1,17 @@
 package com.osm2xp.gui.perspectives;
 
-import org.eclipse.ui.IPageLayout;
-import org.eclipse.ui.IPerspectiveFactory;
-
 /**
  * Console configuration perspective.
  * 
  * @author Benjamin Blanchet
  * 
  */
-public class ConsoleConfigurationPerspective implements IPerspectiveFactory {
+public class ConsoleConfigurationPerspective extends GenerationPerspective{
 
-	@Override
-	public void createInitialLayout(IPageLayout layout) {
-		layout.setEditorAreaVisible(false);
-		layout.setFixed(false);
+	public static final String ID = "com.osm2xp.consoleConfigurationPerspective";
+
+	public ConsoleConfigurationPerspective() {
+		super("CONSOLE");
 	}
+
 }

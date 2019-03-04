@@ -10,6 +10,9 @@ import java.util.logging.Logger;
 import org.eclipse.core.resources.ResourcesPlugin;
 import org.eclipse.core.runtime.IPath;
 
+import com.osm2xp.core.logging.Osm2xpConsoleLoggerFormater;
+import com.osm2xp.core.logging.Osm2xpFileLoggerFormater;
+
 /**
  * didn't have time to look at log4j & rcp , so did this crappy logger.
  * 

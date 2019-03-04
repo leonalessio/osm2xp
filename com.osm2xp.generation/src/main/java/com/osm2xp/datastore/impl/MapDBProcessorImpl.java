@@ -40,9 +40,12 @@ public class MapDBProcessorImpl extends AbstractDataProcessor {
 //		// create directory
 //		jdbmDirectory.mkdirs();
 		db = DBMaker
-		        .tempFileDB()
-		        .fileMmapEnableIfSupported()		        
+		        .memoryDirectDB()
 		        .make();
+//		db = DBMaker
+//				.tempFileDB()
+//				.fileMmapEnableIfSupported()		        
+//				.make();
 //				DBMaker.openFile(
 //				Osm2xpConstants.JDBM_PATH + File.separator + "nodes").make();
 		// dbMaker.disableTransactions();
