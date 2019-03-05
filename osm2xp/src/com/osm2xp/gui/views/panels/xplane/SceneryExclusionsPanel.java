@@ -8,12 +8,10 @@ import org.eclipse.swt.layout.GridData;
 import org.eclipse.swt.layout.GridLayout;
 import org.eclipse.swt.widgets.Button;
 import org.eclipse.swt.widgets.Composite;
-
-import com.osm2xp.constants.Perspectives;
-import com.osm2xp.utils.helpers.GuiOptionsHelper;
-import com.osm2xp.utils.helpers.XplaneOptionsHelper;
-import org.eclipse.swt.widgets.Spinner;
 import org.eclipse.swt.widgets.Label;
+import org.eclipse.swt.widgets.Spinner;
+
+import com.osm2xp.generation.options.XPlaneOptionsProvider;
 
 /**
  * SceneryExclusionsPanel.
@@ -36,7 +34,7 @@ public class SceneryExclusionsPanel extends Composite {
 		btnCheckExcludeLin.setText("Exclude Lines");
 		bindingContext.bindValue(SWTObservables
 				.observeSelection(btnCheckExcludeLin), PojoObservables
-				.observeValue(XplaneOptionsHelper.getOptions(), "excludeLin"));
+				.observeValue(XPlaneOptionsProvider.getOptions(), "excludeLin"));
 
 		Button btnCheckExcludeFor = new Button(this, SWT.CHECK);
 		btnCheckExcludeFor.setLayoutData(new GridData(SWT.FILL, SWT.CENTER,
@@ -44,7 +42,7 @@ public class SceneryExclusionsPanel extends Composite {
 		btnCheckExcludeFor.setText("Exclude Forests");
 		bindingContext.bindValue(SWTObservables
 				.observeSelection(btnCheckExcludeFor), PojoObservables
-				.observeValue(XplaneOptionsHelper.getOptions(), "excludeFor"));
+				.observeValue(XPlaneOptionsProvider.getOptions(), "excludeFor"));
 
 		Button btnCheckExcludeObj = new Button(this, SWT.CHECK);
 		btnCheckExcludeObj.setLayoutData(new GridData(SWT.FILL, SWT.CENTER,
@@ -52,7 +50,7 @@ public class SceneryExclusionsPanel extends Composite {
 		btnCheckExcludeObj.setText("Exclude Objects");
 		bindingContext.bindValue(SWTObservables
 				.observeSelection(btnCheckExcludeObj), PojoObservables
-				.observeValue(XplaneOptionsHelper.getOptions(), "excludeObj"));
+				.observeValue(XPlaneOptionsProvider.getOptions(), "excludeObj"));
 
 		Button btnCheckExcludeStr = new Button(this, SWT.CHECK);
 		btnCheckExcludeStr.setLayoutData(new GridData(SWT.FILL, SWT.CENTER,
@@ -60,7 +58,7 @@ public class SceneryExclusionsPanel extends Composite {
 		btnCheckExcludeStr.setText("Exclude Strings");
 		bindingContext.bindValue(SWTObservables
 				.observeSelection(btnCheckExcludeStr), PojoObservables
-				.observeValue(XplaneOptionsHelper.getOptions(), "excludeStr"));
+				.observeValue(XPlaneOptionsProvider.getOptions(), "excludeStr"));
 
 		Button btnCheckExcludeFac = new Button(this, SWT.CHECK);
 		btnCheckExcludeFac.setLayoutData(new GridData(SWT.FILL, SWT.CENTER,
@@ -68,7 +66,7 @@ public class SceneryExclusionsPanel extends Composite {
 		btnCheckExcludeFac.setText("Exclude Facades");
 		bindingContext.bindValue(SWTObservables
 				.observeSelection(btnCheckExcludeFac), PojoObservables
-				.observeValue(XplaneOptionsHelper.getOptions(), "excludeFac"));
+				.observeValue(XPlaneOptionsProvider.getOptions(), "excludeFac"));
 
 		Button btnCheckExcludeNet = new Button(this, SWT.CHECK);
 		btnCheckExcludeNet.setLayoutData(new GridData(SWT.FILL, SWT.CENTER,
@@ -76,7 +74,7 @@ public class SceneryExclusionsPanel extends Composite {
 		btnCheckExcludeNet.setText("Exclude Network");
 		bindingContext.bindValue(SWTObservables
 				.observeSelection(btnCheckExcludeNet), PojoObservables
-				.observeValue(XplaneOptionsHelper.getOptions(), "excludeNet"));
+				.observeValue(XPlaneOptionsProvider.getOptions(), "excludeNet"));
 
 		Button btnCheckExcludePol = new Button(this, SWT.CHECK);
 		btnCheckExcludePol.setLayoutData(new GridData(SWT.FILL, SWT.CENTER,
@@ -84,14 +82,14 @@ public class SceneryExclusionsPanel extends Composite {
 		btnCheckExcludePol.setText("Exclude Pol");
 		bindingContext.bindValue(SWTObservables
 				.observeSelection(btnCheckExcludePol), PojoObservables
-				.observeValue(XplaneOptionsHelper.getOptions(), "excludePol"));
+				.observeValue(XPlaneOptionsProvider.getOptions(), "excludePol"));
 		Button btnCheckExcludeBch = new Button(this, SWT.CHECK);
 		btnCheckExcludeBch.setLayoutData(new GridData(SWT.FILL, SWT.CENTER,
 				false, false, 1, 1));
 		btnCheckExcludeBch.setText("Exclude Bch");
 		bindingContext.bindValue(SWTObservables
 				.observeSelection(btnCheckExcludeBch), PojoObservables
-				.observeValue(XplaneOptionsHelper.getOptions(), "excludeBch"));
+				.observeValue(XPlaneOptionsProvider.getOptions(), "excludeBch"));
 
 		new Label(this, SWT.NONE);
 		new Label(this, SWT.NONE);
@@ -101,7 +99,7 @@ public class SceneryExclusionsPanel extends Composite {
 		btnCheckSmartExclusions.setText("Smart Obj exclusions");
 		bindingContext.bindValue(SWTObservables
 				.observeSelection(btnCheckSmartExclusions), PojoObservables
-				.observeValue(XplaneOptionsHelper.getOptions(),
+				.observeValue(XPlaneOptionsProvider.getOptions(),
 						"smartExclusions"));
 		new Label(this, SWT.NONE);
 
@@ -111,7 +109,7 @@ public class SceneryExclusionsPanel extends Composite {
 		Spinner spinnerSmartExclusionDistance = new Spinner(this, SWT.BORDER);
 		bindingContext.bindValue(SWTObservables
 				.observeSelection(spinnerSmartExclusionDistance),
-				PojoObservables.observeValue(XplaneOptionsHelper.getOptions(),
+				PojoObservables.observeValue(XPlaneOptionsProvider.getOptions(),
 						"smartExclusionDistance"));
 		Label labelSmartExclusionSize = new Label(this, SWT.NONE);
 		labelSmartExclusionSize.setText("Min Size");
@@ -119,7 +117,7 @@ public class SceneryExclusionsPanel extends Composite {
 		Spinner spinnerSmartExclusionSize = new Spinner(this, SWT.BORDER);
 		bindingContext.bindValue(SWTObservables
 				.observeSelection(spinnerSmartExclusionSize), PojoObservables
-				.observeValue(XplaneOptionsHelper.getOptions(),
+				.observeValue(XPlaneOptionsProvider.getOptions(),
 						"smartExclusionSize"));
 
 	}

@@ -27,7 +27,6 @@ import com.osm2xp.stats.StatsProvider;
 import com.osm2xp.utils.FilesUtils;
 import com.osm2xp.utils.helpers.GuiOptionsHelper;
 import com.osm2xp.utils.helpers.Osm2xpProjectHelper;
-import com.osm2xp.utils.helpers.StatsHelper;
 import com.osm2xp.utils.ui.UiUtil;
 
 /**
@@ -53,7 +52,7 @@ public class BuildController {
 		}
 		// if choosen output mode will generate file, first check that user is
 		// ok to overwrite file is present.
-		if (GuiOptionsHelper.isOutputFormatAFileGenerator()) {
+		if (GuiOptionsHelper.isOutputFormatAFileGenerator(mode)) {
 			folderPath = currentFile.getParent() + File.separator
 					+ GuiOptionsHelper.getSceneName();
 
@@ -137,7 +136,7 @@ public class BuildController {
 	private void startGeneration(File currentFile)
 			throws Osm2xpBusinessException {
 		// delete existing file if exists
-		if (GuiOptionsHelper.isOutputFormatAFileGenerator()
+		if (GuiOptionsHelper.isOutputFormatAFileGenerator(mode)
 				&& new File(folderPath).exists()) {
 			FilesUtils.deleteDirectory(new File(folderPath));
 		}
@@ -186,7 +185,7 @@ public class BuildController {
 //				Osm2xpLogger.info(tilesList.size() + " tile(s) found");
 				// init the current project, only if the output mode will
 				// generate files
-				if (GuiOptionsHelper.isOutputFormatAFileGenerator()) {
+				if (GuiOptionsHelper.isOutputFormatAFileGenerator(mode)) {
 					try {
 						Osm2xpProjectHelper.initProject(folderPath, GlobalOptionsProvider.getOptions()
 								.getCurrentFilePath());
@@ -206,15 +205,9 @@ public class BuildController {
 							@Override
 							public void run() {
 								if ((Job.getJobManager().find("todoJob")).length == 0) {
-									try {
-										StatsHelper.RecapStats(folderPath);
-
-									} catch (Osm2xpBusinessException e) {
-										Osm2xpLogger.warning(
-												"Error saving recap stats.", e);
-									}
+									
 									Osm2xpLogger.info("Generation finished.");
-
+									
 									// MiscUtils.switchPerspective(GuiOptionsHelper
 									// .getOptions().getOutputFormat());
 

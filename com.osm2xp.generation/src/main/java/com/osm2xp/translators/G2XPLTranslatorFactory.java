@@ -6,7 +6,7 @@ import com.osm2xp.translators.impl.G2xplTranslatorImpl;
 
 import math.geom2d.Point2D;
 
-public class G2XPLTranslatorFactory implements ITranslatorFactory {
+public class G2XPLTranslatorFactory implements ITileTranslatorFactory {
 
 	@Override
 	public ITranslator getTranslator(File currentFile, Point2D currentTile, String folderPath) {
@@ -16,6 +16,11 @@ public class G2XPLTranslatorFactory implements ITranslatorFactory {
 	@Override
 	public String getOutputMode() {
 		return "G2XPL";
+	}
+
+	@Override
+	public boolean isFileWriting() {
+		return true;
 	}
 
 }

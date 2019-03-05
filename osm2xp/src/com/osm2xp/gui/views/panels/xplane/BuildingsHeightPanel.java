@@ -9,8 +9,8 @@ import org.eclipse.swt.widgets.Group;
 import org.eclipse.swt.widgets.Label;
 import org.eclipse.swt.widgets.Spinner;
 
+import com.osm2xp.generation.options.XPlaneOptionsProvider;
 import com.osm2xp.gui.views.panels.Osm2xpPanel;
-import com.osm2xp.utils.helpers.XplaneOptionsHelper;
 
 /**
  * BuildingsHeightPanel.
@@ -88,15 +88,15 @@ public class BuildingsHeightPanel extends Osm2xpPanel {
 
 	@Override
 	protected void bindComponents() {
-		bindComponent(spinResMin, XplaneOptionsHelper.getOptions(),
+		bindComponent(spinResMin, XPlaneOptionsProvider.getOptions(),
 				"residentialMin");
-		bindComponent(spinBldMin, XplaneOptionsHelper.getOptions(),
+		bindComponent(spinBldMin, XPlaneOptionsProvider.getOptions(),
 				"buildingMin");
-		bindComponent(spinBldMax, XplaneOptionsHelper.getOptions(),
+		bindComponent(spinBldMax, XPlaneOptionsProvider.getOptions(),
 				"buildingMax");
-		bindComponent(spinResMax, XplaneOptionsHelper.getOptions(),
+		bindComponent(spinResMax, XPlaneOptionsProvider.getOptions(),
 				"residentialMax");
-		bindSpinnerToDouble(spinLevelHeight, XplaneOptionsHelper.getOptions(),
+		bindSpinnerToDouble(spinLevelHeight, XPlaneOptionsProvider.getOptions(),
 				"levelHeight",1);
 
 	}

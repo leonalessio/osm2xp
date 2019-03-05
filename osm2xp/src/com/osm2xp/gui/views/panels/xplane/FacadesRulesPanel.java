@@ -28,12 +28,13 @@ import com.osm2xp.constants.MessagesConstants;
 import com.osm2xp.core.exceptions.Osm2xpBusinessException;
 import com.osm2xp.core.logging.Osm2xpLogger;
 import com.osm2xp.core.model.osm.Tag;
+import com.osm2xp.generation.options.FacadeTagRule;
+import com.osm2xp.generation.options.ObjectFile;
+import com.osm2xp.generation.options.XPlaneOptionsProvider;
 import com.osm2xp.generation.options.XmlHelper;
 import com.osm2xp.gui.components.FilesPathsTable;
 import com.osm2xp.gui.components.TagsRulesTable;
 import com.osm2xp.gui.views.panels.Osm2xpPanel;
-import com.osm2xp.model.options.FacadeTagRule;
-import com.osm2xp.model.options.ObjectFile;
 import com.osm2xp.utils.helpers.XplaneOptionsHelper;
 
 /**
@@ -73,7 +74,7 @@ public class FacadesRulesPanel extends Osm2xpPanel {
 		gridData.widthHint = 329;
 		groupTags.setLayoutData(gridData);
 		groupTags.setLayout(new FillLayout(SWT.HORIZONTAL));
-		tagsTable = new TagsRulesTable(groupTags, SWT.NONE, XplaneOptionsHelper
+		tagsTable = new TagsRulesTable(groupTags, SWT.NONE, XPlaneOptionsProvider
 				.getOptions().getFacadesRules().getRules());
 		tagsTable.setLayout(new FillLayout(SWT.HORIZONTAL));
 		tagsTable.getTable().addListener(SWT.Selection, new Listener() {
@@ -232,7 +233,7 @@ public class FacadesRulesPanel extends Osm2xpPanel {
 			@Override
 			// add a facade rule
 			public void widgetSelected(SelectionEvent e) {
-				XplaneOptionsHelper
+				XPlaneOptionsProvider
 						.getOptions()
 						.getFacadesRules()
 						.getRules()
@@ -254,7 +255,7 @@ public class FacadesRulesPanel extends Osm2xpPanel {
 						.getViewer().getSelection();
 				FacadeTagRule selectedFacadeTagRule = (FacadeTagRule) selection
 						.getFirstElement();
-				XplaneOptionsHelper.getOptions().getFacadesRules().getRules()
+				XPlaneOptionsProvider.getOptions().getFacadesRules().getRules()
 						.remove(selectedFacadeTagRule);
 				compositeRuleDetail.setVisible(false);
 				tagsTable.getViewer().refresh();
@@ -274,7 +275,7 @@ public class FacadesRulesPanel extends Osm2xpPanel {
 				String fn = dlg.open();
 				if (fn != null) {
 					try {
-						XmlHelper.saveToXml(XplaneOptionsHelper.getOptions()
+						XmlHelper.saveToXml(XPlaneOptionsProvider.getOptions()
 								.getFacadesRules(), new File(fn));
 					} catch (Osm2xpBusinessException e1) {
 						Osm2xpLogger.error("Error saving facades rules to file"
@@ -295,7 +296,7 @@ public class FacadesRulesPanel extends Osm2xpPanel {
 				String fn = dlg.open();
 				if (fn != null) {
 					XplaneOptionsHelper.importFacadesRules(new File(fn));
-					tagsTable.updateInput(XplaneOptionsHelper.getOptions()
+					tagsTable.updateInput(XPlaneOptionsProvider.getOptions()
 							.getFacadesRules().getRules());
 
 				}

@@ -31,11 +31,12 @@ import com.osm2xp.constants.MessagesConstants;
 import com.osm2xp.core.exceptions.Osm2xpBusinessException;
 import com.osm2xp.core.logging.Osm2xpLogger;
 import com.osm2xp.core.model.osm.Tag;
+import com.osm2xp.generation.options.FsxOptionsProvider;
+import com.osm2xp.generation.options.ObjectFile;
+import com.osm2xp.generation.options.ObjectTagRule;
 import com.osm2xp.gui.components.FilesPathsTable;
 import com.osm2xp.gui.components.TagsRulesTable;
 import com.osm2xp.gui.views.panels.Osm2xpPanel;
-import com.osm2xp.model.options.ObjectFile;
-import com.osm2xp.model.options.ObjectTagRule;
 import com.osm2xp.utils.helpers.FsxOptionsHelper;
 
 /**
@@ -119,7 +120,7 @@ public class FsxObjectsRulesPanel extends Osm2xpPanel {
 		gridData = new GridData(SWT.FILL, SWT.TOP, false, false, 1, 1);
 		gridData.heightHint = 320;
 		gridData.widthHint = 329;
-		tagsTable = new TagsRulesTable(groupTags, SWT.NONE, FsxOptionsHelper
+		tagsTable = new TagsRulesTable(groupTags, SWT.NONE, FsxOptionsProvider
 				.getOptions().getObjectsRules().getRules());
 
 		compositeRuleDetail = new Composite(this, SWT.NONE);
@@ -177,7 +178,7 @@ public class FsxObjectsRulesPanel extends Osm2xpPanel {
 		tltmAdd.addSelectionListener(new SelectionAdapter() {
 			@Override
 			public void widgetSelected(SelectionEvent e) {
-				FsxOptionsHelper
+				FsxOptionsProvider
 						.getOptions()
 						.getObjectsRules()
 						.getRules()
@@ -198,7 +199,7 @@ public class FsxObjectsRulesPanel extends Osm2xpPanel {
 			public void widgetSelected(SelectionEvent e) {
 				IStructuredSelection selection = (IStructuredSelection) tagsTable
 						.getViewer().getSelection();
-				FsxOptionsHelper.getOptions().getObjectsRules().getRules()
+				FsxOptionsProvider.getOptions().getObjectsRules().getRules()
 						.remove((ObjectTagRule) selection.getFirstElement());
 				compositeRuleDetail.setVisible(false);
 				tagsTable.getViewer().refresh();
@@ -215,7 +216,7 @@ public class FsxObjectsRulesPanel extends Osm2xpPanel {
 				dlg.setFilterExtensions(FILTER_EXTS);
 				String fn = dlg.open();
 				if (fn != null) {
-					FsxOptionsHelper.exportObjectsRules(new File(fn));
+					FsxOptionsProvider.exportObjectsRules(new File(fn));
 
 				}
 			}
@@ -231,8 +232,8 @@ public class FsxObjectsRulesPanel extends Osm2xpPanel {
 				dlg.setFilterExtensions(FILTER_EXTS);
 				String fn = dlg.open();
 				if (fn != null) {
-					FsxOptionsHelper.importObjectsRules(new File(fn));
-					tagsTable.updateInput(FsxOptionsHelper.getOptions()
+					FsxOptionsProvider.importObjectsRules(new File(fn));
+					tagsTable.updateInput(FsxOptionsProvider.getOptions()
 							.getObjectsRules().getRules());
 
 				}

@@ -8,6 +8,7 @@ import org.eclipse.swt.layout.GridLayout;
 import org.eclipse.swt.widgets.Button;
 import org.eclipse.swt.widgets.Composite;
 
+import com.osm2xp.generation.options.XPlaneOptionsProvider;
 import com.osm2xp.gui.views.panels.Osm2xpPanel;
 import com.osm2xp.utils.helpers.XplaneOptionsHelper;
 
@@ -90,43 +91,43 @@ public class GeneratedItemsPanel extends Osm2xpPanel {
 	@Override
 	protected void bindComponents() {
 		bindingContext.bindValue(WidgetProperties.selection().observe(btnGenerateBuildings),		
-				PojoProperties.value("generateBuildings").observe(XplaneOptionsHelper.getOptions()));
+				PojoProperties.value("generateBuildings").observe(XPlaneOptionsProvider.getOptions()));
 		bindingContext.bindValue(WidgetProperties.selection().observe(btnGenerateObjects),		
-				PojoProperties.value("generateObj").observe(XplaneOptionsHelper.getOptions()));
+				PojoProperties.value("generateObj").observe(XPlaneOptionsProvider.getOptions()));
 		bindingContext.bindValue(WidgetProperties.selection().observe(btnGenerateForests),		
-				PojoProperties.value("generateFor").observe(XplaneOptionsHelper.getOptions()));
+				PojoProperties.value("generateFor").observe(XPlaneOptionsProvider.getOptions()));
 		bindingContext.bindValue(WidgetProperties.selection().observe(btnGenerateStreetLights),		
-				PojoProperties.value("generateStreetLights").observe(XplaneOptionsHelper.getOptions()));
+				PojoProperties.value("generateStreetLights").observe(XPlaneOptionsProvider.getOptions()));
 //		bindingContext.bindValue(SWTObservables
 //				.observeSelection(btnGenerateBuildings), PojoObservables
-//				.observeValue(XplaneOptionsHelper.getOptions(),
+//				.observeValue(XPlaneOptionsProvider.getOptions(),
 //						"generateBuildings"));
 //		bindingContext.bindValue(SWTObservables
 //				.observeSelection(btnGenerateObjects), PojoObservables
-//				.observeValue(XplaneOptionsHelper.getOptions(), "generateObj"));
+//				.observeValue(XPlaneOptionsProvider.getOptions(), "generateObj"));
 //		bindingContext.bindValue(SWTObservables
 //				.observeSelection(btnGenerateForests), PojoObservables
-//				.observeValue(XplaneOptionsHelper.getOptions(), "generateFor"));
+//				.observeValue(XPlaneOptionsProvider.getOptions(), "generateFor"));
 //		bindingContext.bindValue(SWTObservables
 //				.observeSelection(btnGenerateStreetLights), PojoObservables
-//				.observeValue(XplaneOptionsHelper.getOptions(),
+//				.observeValue(XPlaneOptionsProvider.getOptions(),
 //						"generateStreetLights"));
 		bindingContext.bindValue(WidgetProperties.selection().observe(btnGenerateRoads),		
-				PojoProperties.value("generateRoads").observe(XplaneOptionsHelper.getOptions()));
+				PojoProperties.value("generateRoads").observe(XPlaneOptionsProvider.getOptions()));
 		bindingContext.bindValue(WidgetProperties.selection().observe(btnGenerateRail),		
-				PojoProperties.value("generateRailways").observe(XplaneOptionsHelper.getOptions()));
+				PojoProperties.value("generateRailways").observe(XPlaneOptionsProvider.getOptions()));
 		bindingContext.bindValue(WidgetProperties.selection().observe(btnGeneratePower),		
-				PojoProperties.value("generatePowerlines").observe(XplaneOptionsHelper.getOptions()));
+				PojoProperties.value("generatePowerlines").observe(XPlaneOptionsProvider.getOptions()));
 		bindingContext.bindValue(WidgetProperties.selection().observe(btnGenerateFence),		
-				PojoProperties.value("generateFence").observe(XplaneOptionsHelper.getOptions()));
+				PojoProperties.value("generateFence").observe(XPlaneOptionsProvider.getOptions()));
 		bindingContext.bindValue(WidgetProperties.selection().observe(btnGenerateTanks),		
-				PojoProperties.value("generateTanks").observe(XplaneOptionsHelper.getOptions()));
+				PojoProperties.value("generateTanks").observe(XPlaneOptionsProvider.getOptions()));
 		bindingContext.bindValue(WidgetProperties.selection().observe(btnGenerateChimneys),		
-				PojoProperties.value("generateChimneys").observe(XplaneOptionsHelper.getOptions()));
+				PojoProperties.value("generateChimneys").observe(XPlaneOptionsProvider.getOptions()));
 		bindingContext.bindValue(WidgetProperties.selection().observe(btnGenerateCoolingTowers),		
-				PojoProperties.value("generateCoolingTowers").observe(XplaneOptionsHelper.getOptions()));
+				PojoProperties.value("generateCoolingTowers").observe(XPlaneOptionsProvider.getOptions()));
 		bindingContext.bindValue(WidgetProperties.selection().observe(btnGenerateBridges),		
-				PojoProperties.value("generateBridges").observe(XplaneOptionsHelper.getOptions()));
+				PojoProperties.value("generateBridges").observe(XPlaneOptionsProvider.getOptions()));
 	}
 
 	@Override

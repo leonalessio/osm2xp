@@ -25,12 +25,12 @@ import org.eclipse.ui.forms.widgets.Section;
 import org.eclipse.ui.plugin.AbstractUIPlugin;
 
 import com.osm2xp.controllers.BuildController;
+import com.osm2xp.generation.options.XPlaneOptionsProvider;
+import com.osm2xp.generation.options.XplaneAirfieldOptions;
 import com.osm2xp.gui.Activator;
 import com.osm2xp.gui.views.panels.Osm2xpPanel;
 import com.osm2xp.jobs.GenerateXPAirfiledsJob;
-import com.osm2xp.model.options.XplaneAirfieldOptions;
 import com.osm2xp.utils.helpers.GuiOptionsHelper;
-import com.osm2xp.utils.helpers.XplaneOptionsHelper;
 import com.osm2xp.utils.ui.UiUtil;
 
 public class AirfieldsPanel extends Osm2xpPanel {
@@ -45,7 +45,7 @@ public class AirfieldsPanel extends Osm2xpPanel {
 		toolkit.adapt(this);
 		Button createAirfieldsCheck = toolkit.createButton(this, "Generate Airfields", SWT.CHECK);
 		GridDataFactory.swtDefaults().applyTo(createAirfieldsCheck);
-		XplaneAirfieldOptions options = XplaneOptionsHelper.getOptions().getAirfieldOptions();
+		XplaneAirfieldOptions options = XPlaneOptionsProvider.getOptions().getAirfieldOptions();
 		bindComponent(createAirfieldsCheck, options, "generateAirfields");
 		Section aptConfigSection = toolkit.createSection(this, Section.TITLE_BAR);
 		aptConfigSection.setText("Airfield generation properties");
@@ -142,7 +142,7 @@ public class AirfieldsPanel extends Osm2xpPanel {
 	}
 
 	private void createExclusionList(Composite parent, FormToolkit toolkit) {
-		ignoredICAOList = XplaneOptionsHelper.getOptions().getAirfieldOptions().getIgnoredAirfields();
+		ignoredICAOList = XPlaneOptionsProvider.getOptions().getAirfieldOptions().getIgnoredAirfields();
 		
 		Label lbl = toolkit.createLabel(parent, "Exclude following airports from generation");
 		GridDataFactory.swtDefaults().span(2,1).applyTo(lbl);
@@ -192,7 +192,7 @@ public class AirfieldsPanel extends Osm2xpPanel {
 			ignoredICAOList.remove(selected);
 			refreshViewer();
 		}
-		XplaneOptionsHelper.getOptions().getAirfieldOptions().setIgnoredAirfields(ignoredICAOList);
+		XPlaneOptionsProvider.getOptions().getAirfieldOptions().setIgnoredAirfields(ignoredICAOList);
 	}
 
 	private void refreshViewer() {
@@ -206,7 +206,7 @@ public class AirfieldsPanel extends Osm2xpPanel {
 			ignoredICAOList.add(value);
 			refreshViewer();
 		}
-		XplaneOptionsHelper.getOptions().getAirfieldOptions().setIgnoredAirfields(ignoredICAOList);
+		XPlaneOptionsProvider.getOptions().getAirfieldOptions().setIgnoredAirfields(ignoredICAOList);
 	}
 
 	private String checkICAO(String input) {

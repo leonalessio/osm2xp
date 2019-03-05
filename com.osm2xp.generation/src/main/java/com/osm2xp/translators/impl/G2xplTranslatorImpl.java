@@ -11,7 +11,6 @@ import com.osm2xp.model.osm.polygon.OsmPolyline;
 import com.osm2xp.translators.ITranslator;
 import com.osm2xp.utils.FilesUtils;
 import com.osm2xp.utils.geometry.GeomUtils;
-import com.osm2xp.generation.options.GlobalOptionsProvider;
 import com.osm2xp.utils.osm.OsmUtils;
 
 import math.geom2d.Box2D;
@@ -94,11 +93,7 @@ public class G2xplTranslatorImpl implements ITranslator {
 
 	@Override
 	public boolean mustStoreNode(Node node) {
-		Boolean result = true;
-		if (!GlobalOptionsProvider.getOptions().isSinglePass()) {
-			result = GeomUtils.compareCoordinates(currentTile, node);
-		}
-		return result;
+		return GeomUtils.compareCoordinates(currentTile, node);
 	}
 
 	@Override

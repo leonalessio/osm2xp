@@ -7,11 +7,11 @@ import com.osm2xp.core.exceptions.Osm2xpBusinessException;
 import com.osm2xp.core.logging.Osm2xpLogger;
 import com.osm2xp.core.model.osm.Node;
 import com.osm2xp.core.model.osm.Tag;
+import com.osm2xp.generation.options.GlobalOptionsProvider;
 import com.osm2xp.model.osm.polygon.OsmPolygon;
 import com.osm2xp.model.osm.polygon.OsmPolyline;
 import com.osm2xp.translators.ITranslator;
 import com.osm2xp.utils.geometry.GeomUtils;
-import com.osm2xp.generation.options.GlobalOptionsProvider;
 import com.osm2xp.utils.osm.OsmUtils;
 import com.osm2xp.writers.IWriter;
 
@@ -19,7 +19,6 @@ import math.geom2d.Box2D;
 import math.geom2d.Point2D;
 import math.geom2d.polygon.LinearCurve2D;
 import math.geom2d.polygon.LinearRing2D;
-import math.geom2d.polygon.Polyline2D;
 
 /**
  * OSM Translator implementation. Generates .osm files. Usefull to split a .pbf
@@ -159,11 +158,7 @@ public class OsmTranslatorImpl implements ITranslator {
 
 	@Override
 	public boolean mustStoreNode(Node node) {
-		Boolean result = true;
-		if (!GlobalOptionsProvider.getOptions().isSinglePass()) {
-			result = GeomUtils.compareCoordinates(currentTile, node);
-		}
-		return result;
+		return GeomUtils.compareCoordinates(currentTile, node);
 	}
 
 	@Override

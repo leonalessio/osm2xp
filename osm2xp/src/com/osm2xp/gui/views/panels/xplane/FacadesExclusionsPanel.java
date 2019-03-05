@@ -19,6 +19,7 @@ import org.eclipse.wb.swt.ResourceManager;
 import com.osm2xp.core.exceptions.Osm2xpBusinessException;
 import com.osm2xp.core.logging.Osm2xpLogger;
 import com.osm2xp.core.model.osm.Tag;
+import com.osm2xp.generation.options.XPlaneOptionsProvider;
 import com.osm2xp.generation.options.XmlHelper;
 import com.osm2xp.gui.components.FacadesExclusionsTable;
 import com.osm2xp.utils.helpers.XplaneOptionsHelper;
@@ -51,7 +52,7 @@ public class FacadesExclusionsPanel extends Composite {
 		tltmAdd.addSelectionListener(new SelectionAdapter() {
 			@Override
 			public void widgetSelected(SelectionEvent e) {
-				XplaneOptionsHelper.getOptions().getBuildingsExclusions()
+				XPlaneOptionsProvider.getOptions().getBuildingsExclusions()
 						.getExclusions().add(new Tag("a key", "a value"));
 				facadesExclusionsTable.getViewer().refresh();
 			}
@@ -67,7 +68,7 @@ public class FacadesExclusionsPanel extends Composite {
 				IStructuredSelection selection = (IStructuredSelection) facadesExclusionsTable
 						.getViewer().getSelection();
 				Tag selectedTag = (Tag) selection.getFirstElement();
-				XplaneOptionsHelper.getOptions().getBuildingsExclusions()
+				XPlaneOptionsProvider.getOptions().getBuildingsExclusions()
 						.getExclusions().remove(selectedTag);
 				facadesExclusionsTable.getViewer().refresh();
 			}
@@ -89,7 +90,7 @@ public class FacadesExclusionsPanel extends Composite {
 				String fn = dlg.open();
 				if (fn != null) {
 					try {
-						XmlHelper.saveToXml(XplaneOptionsHelper.getOptions()
+						XmlHelper.saveToXml(XPlaneOptionsProvider.getOptions()
 								.getBuildingsExclusions(), new File(fn));
 					} catch (Osm2xpBusinessException e1) {
 						Osm2xpLogger.error(

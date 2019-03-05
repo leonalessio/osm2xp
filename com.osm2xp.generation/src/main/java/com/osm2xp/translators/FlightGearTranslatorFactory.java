@@ -6,7 +6,7 @@ import com.osm2xp.translators.impl.FlightGearTranslatorImpl;
 
 import math.geom2d.Point2D;
 
-public class FlightGearTranslatorFactory implements ITranslatorFactory {
+public class FlightGearTranslatorFactory implements ITileTranslatorFactory {
 
 	@Override
 	public ITranslator getTranslator(File currentFile, Point2D currentTile, String folderPath) {
@@ -16,6 +16,11 @@ public class FlightGearTranslatorFactory implements ITranslatorFactory {
 	@Override
 	public String getOutputMode() {
 		return "FLIGHT_GEAR";
+	}
+	
+	@Override
+	public boolean isFileWriting() {
+		return true;
 	}
 
 }

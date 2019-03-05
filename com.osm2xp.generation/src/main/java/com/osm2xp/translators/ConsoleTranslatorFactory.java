@@ -6,7 +6,7 @@ import com.osm2xp.translators.impl.ConsoleTranslatorImpl;
 
 import math.geom2d.Point2D;
 
-public class ConsoleTranslatorFactory implements ITranslatorFactory {
+public class ConsoleTranslatorFactory implements ITileTranslatorFactory {
 
 	@Override
 	public ITranslator getTranslator(File currentFile, Point2D currentTile, String folderPath) {
@@ -16,6 +16,11 @@ public class ConsoleTranslatorFactory implements ITranslatorFactory {
 	@Override
 	public String getOutputMode() {
 		return "CONSOLE";
+	}
+	
+	@Override
+	public boolean isFileWriting() {
+		return true;
 	}
 
 }

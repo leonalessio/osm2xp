@@ -4,6 +4,7 @@ import java.io.File;
 
 import com.osm2xp.core.logging.Osm2xpLogger;
 import com.osm2xp.core.model.osm.Tag;
+import com.osm2xp.generation.paths.PathsService;
 
 public class GlobalOptionsProvider {
 
@@ -12,6 +13,20 @@ public class GlobalOptionsProvider {
 	private static Tag shapefileTag;
 
 	public static GlobalOptions getOptions() {
+		if (options == null) {
+			File basicFolder = PathsService.getPathsProvider().getBasicFolder();
+			File globalOptionsFile = new File(basicFolder, "GlobalOptions.xml");
+			if (globalOptionsFile.isFile()) {
+				GlobalOptions options = GlobalOptionsProvider.loadOptions(globalOptionsFile);
+				if (options != null) {
+					GlobalOptionsProvider.setOptions(options);
+				}
+			}
+			if (options == null) {
+				Osm2xpLogger.error("Failed to fing global options file. Using default options");
+				GlobalOptionsProvider.setOptions(new GlobalOptions()); 
+			}
+		}
 		return options;
 	}
 

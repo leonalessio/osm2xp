@@ -13,8 +13,13 @@ public class XP10TranslatorProviderFactory implements ITranslatorProviderFactory
 	}
 
 	@Override
-	public String getOutputType() {
+	public String getOutputMode() {
 		return "XPLANE10";
+	}
+
+	@Override
+	public boolean isFileWriting() {
+		return true;
 	}
 
 }

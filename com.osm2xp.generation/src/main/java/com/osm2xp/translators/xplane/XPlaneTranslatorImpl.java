@@ -397,23 +397,19 @@ public class XPlaneTranslatorImpl implements ITranslator{
 		// process the node if we're on a single pass mode.
 		// if not on single pass, only process if the node is on the current
 		// lat/long tile
-		if (XPlaneOptionsProvider.getOptions().isGenerateObj()) {
-			if ((!GlobalOptionsProvider.getOptions().isSinglePass() && GeomUtils
-					.compareCoordinates(currentTile, node))
-					|| GlobalOptionsProvider.getOptions().isSinglePass()) {
-				// write a 3D object in the dsf file if this node is in an
-				// object
-				// rule
-				XplaneDsf3DObject object = dsfObjectsProvider
-						.getRandomDsfObjectIndexAndAngle(node.getTags(),
-								node.getId());
-				if (object != null) {
-					List<Node> nodes = new ArrayList<Node>();
-					nodes.add(node);
-					object.setPolygon(new OsmPolygon(node.getId(), node
-							.getTags(), nodes, false));
-					writeObjectToDsf(object);
-				}
+		if (XPlaneOptionsProvider.getOptions().isGenerateObj() && GeomUtils.compareCoordinates(currentTile, node)) {
+			// write a 3D object in the dsf file if this node is in an
+			// object
+			// rule
+			XplaneDsf3DObject object = dsfObjectsProvider
+					.getRandomDsfObjectIndexAndAngle(node.getTags(),
+							node.getId());
+			if (object != null) {
+				List<Node> nodes = new ArrayList<Node>();
+				nodes.add(node);
+				object.setPolygon(new OsmPolygon(node.getId(), node
+						.getTags(), nodes, false));
+				writeObjectToDsf(object);
 			}
 		}
 	}

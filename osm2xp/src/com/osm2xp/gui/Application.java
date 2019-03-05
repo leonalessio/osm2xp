@@ -1,10 +1,13 @@
 package com.osm2xp.gui;
 
+import org.eclipse.core.runtime.Platform;
 import org.eclipse.equinox.app.IApplication;
 import org.eclipse.equinox.app.IApplicationContext;
 import org.eclipse.swt.widgets.Display;
 import org.eclipse.ui.IWorkbench;
 import org.eclipse.ui.PlatformUI;
+
+import com.osm2xp.generation.paths.PathsService;
 
 /**
  * This class controls all aspects of the application's execution.
@@ -21,6 +24,7 @@ public class Application implements IApplication {
 	 */
 	public Object start(IApplicationContext context) {
 		Display display = PlatformUI.createDisplay();
+		PathsService.setPathsProvider(new RCPPathsProvider());
 		try {
 			int returnCode = PlatformUI.createAndRunWorkbench(display,
 					new ApplicationWorkbenchAdvisor());

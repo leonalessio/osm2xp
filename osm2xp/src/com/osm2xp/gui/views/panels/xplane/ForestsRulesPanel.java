@@ -26,11 +26,12 @@ import org.eclipse.wb.swt.ResourceManager;
 import com.osm2xp.core.exceptions.Osm2xpBusinessException;
 import com.osm2xp.core.logging.Osm2xpLogger;
 import com.osm2xp.core.model.osm.Tag;
+import com.osm2xp.generation.options.ForestTagRule;
+import com.osm2xp.generation.options.ObjectFile;
+import com.osm2xp.generation.options.XPlaneOptionsProvider;
 import com.osm2xp.generation.options.XmlHelper;
 import com.osm2xp.gui.components.FilesPathsTable;
 import com.osm2xp.gui.components.TagsRulesTable;
-import com.osm2xp.model.options.ForestTagRule;
-import com.osm2xp.model.options.ObjectFile;
 import com.osm2xp.utils.helpers.XplaneOptionsHelper;
 
 /**
@@ -66,7 +67,7 @@ public class ForestsRulesPanel extends Composite {
 		tltmAdd.addSelectionListener(new SelectionAdapter() {
 			@Override
 			public void widgetSelected(SelectionEvent e) {
-				XplaneOptionsHelper
+				XPlaneOptionsProvider
 						.getOptions()
 						.getForestsRules()
 						.getRules()
@@ -92,7 +93,7 @@ public class ForestsRulesPanel extends Composite {
 						.getViewer().getSelection();
 				ForestTagRule selectedForestTagRule = (ForestTagRule) selection
 						.getFirstElement();
-				XplaneOptionsHelper.getOptions().getForestsRules().getRules()
+				XPlaneOptionsProvider.getOptions().getForestsRules().getRules()
 						.remove(selectedForestTagRule);
 				compositeRuleDetail.setVisible(true);
 				tagsTable.getViewer().refresh();
@@ -116,7 +117,7 @@ public class ForestsRulesPanel extends Composite {
 				// export forests rules to xml file
 				if (fn != null) {
 					try {
-						XmlHelper.saveToXml(XplaneOptionsHelper.getOptions()
+						XmlHelper.saveToXml(XPlaneOptionsProvider.getOptions()
 								.getForestsRules(), new File(fn));
 					} catch (Osm2xpBusinessException e1) {
 						Osm2xpLogger.error("Error exporting forests rules to "
@@ -141,7 +142,7 @@ public class ForestsRulesPanel extends Composite {
 				String fn = dlg.open();
 				if (fn != null) {
 					XplaneOptionsHelper.importForestsRules(new File(fn));
-					tagsTable.updateInput(XplaneOptionsHelper.getOptions()
+					tagsTable.updateInput(XPlaneOptionsProvider.getOptions()
 							.getForestsRules().getRules());
 
 				}
@@ -156,7 +157,7 @@ public class ForestsRulesPanel extends Composite {
 		gridData.widthHint = 329;
 		groupTags.setLayoutData(gridData);
 		groupTags.setLayout(new FillLayout(SWT.HORIZONTAL));
-		tagsTable = new TagsRulesTable(groupTags, SWT.NONE, XplaneOptionsHelper
+		tagsTable = new TagsRulesTable(groupTags, SWT.NONE, XPlaneOptionsProvider
 				.getOptions().getForestsRules().getRules());
 		tagsTable.setLayout(new FillLayout(SWT.HORIZONTAL));
 		tagsTable.getTable().addListener(SWT.Selection, new Listener() {

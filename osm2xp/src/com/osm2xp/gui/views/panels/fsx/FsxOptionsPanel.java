@@ -13,8 +13,8 @@ import org.eclipse.swt.widgets.FileDialog;
 import org.eclipse.swt.widgets.Label;
 import org.eclipse.swt.widgets.Text;
 
+import com.osm2xp.generation.options.FsxOptionsProvider;
 import com.osm2xp.gui.views.panels.Osm2xpPanel;
-import com.osm2xp.utils.helpers.FsxOptionsHelper;
 
 /**
  * FsxOptionsPanel.
@@ -41,11 +41,11 @@ public class FsxOptionsPanel extends Osm2xpPanel {
 
 		bglCompLocationText = new Text(this, SWT.BORDER);
 		// if bglComp location is set and the file exists, set text
-		if ((!StringUtils.isBlank(FsxOptionsHelper.getOptions()
+		if ((!StringUtils.isBlank(FsxOptionsProvider.getOptions()
 				.getBglCompPath()))
-				&& (new File(FsxOptionsHelper.getOptions().getBglCompPath())
+				&& (new File(FsxOptionsProvider.getOptions().getBglCompPath())
 						.exists())) {
-			bglCompLocationText.setText(FsxOptionsHelper.getOptions()
+			bglCompLocationText.setText(FsxOptionsProvider.getOptions()
 					.getBglCompPath());
 		} else {
 			bglCompLocationText.setText("Clic to locate BglComp.exe");
@@ -61,7 +61,7 @@ public class FsxOptionsPanel extends Osm2xpPanel {
 				String fileName = dlg.open();
 				if (fileName != null) {
 					bglCompLocationText.setText(fileName);
-					FsxOptionsHelper.getOptions().setBglCompPath(fileName);
+					FsxOptionsProvider.getOptions().setBglCompPath(fileName);
 				}
 			}
 		});

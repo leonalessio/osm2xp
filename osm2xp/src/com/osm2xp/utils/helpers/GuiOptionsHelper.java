@@ -14,13 +14,12 @@ import org.eclipse.jface.dialogs.MessageDialog;
 import org.eclipse.swt.widgets.Shell;
 import org.osgi.service.prefs.BackingStoreException;
 
-import com.osm2xp.constants.Perspectives;
 import com.osm2xp.core.exceptions.Osm2xpBusinessException;
-import com.osm2xp.core.logging.Osm2xpLogger;
 import com.osm2xp.core.model.osm.Tag;
+import com.osm2xp.generation.options.GlobalOptionsProvider;
 import com.osm2xp.generation.options.XmlHelper;
 import com.osm2xp.gui.Activator;
-import com.osm2xp.model.options.GuiOptions;
+import com.osm2xp.translators.TranslatorBuilder;
 
 import math.geom2d.Point2D;
 
@@ -32,7 +31,6 @@ import math.geom2d.Point2D;
  */
 public class GuiOptionsHelper {
 
-	private static GuiOptions options;
 	public static final String SCENE_NAME = "sceneName";
 	public static final String USED_FILES = "usedFiles";
 	public static final String USE_EXCLUSIONS_FROM_PBF = "useExclusionsFromPBF";
@@ -51,53 +49,18 @@ public class GuiOptionsHelper {
 	private static Point2D selectedCoordinates;
 	private static List<Consumer<String>> selectedFileListeners  = new ArrayList<>();
 
-	static {
-		if (new File(INTERFACE_OPTIONS_FILE_PATH).exists()) {
-			try {
-				options = (GuiOptions) XmlHelper.loadFileFromXml(new File(
-						INTERFACE_OPTIONS_FILE_PATH), GuiOptions.class);
-			} catch (Osm2xpBusinessException e) {
-				Osm2xpLogger.error("Error initializing GUI options helper", e);
-			}
-		} 
-		if (options == null) {
-			options = createNewGuiOptionsBean();
-		}
-	}
+
 
 	/**
 	 * return true if the choosen output mode is generating files
+	 * @param mode 
 	 * 
 	 * @return boolean
 	 */
-	public static boolean isOutputFormatAFileGenerator() {
-		return (getOptions().getOutputFormat().equalsIgnoreCase(
-				Perspectives.PERSPECTIVE_FLY_LEGACY)
-				|| getOptions().getOutputFormat().equalsIgnoreCase(
-						Perspectives.PERSPECTIVE_XPLANE10)
-				|| getOptions().getOutputFormat().equalsIgnoreCase(
-						Perspectives.PERSPECTIVE_XPLANE9)
-				|| getOptions().getOutputFormat().equalsIgnoreCase(
-						Perspectives.PERSPECTIVE_WAVEFRONT)
-				|| getOptions().getOutputFormat().equalsIgnoreCase(
-						Perspectives.PERSPECTIVE_OSM) || getOptions()
-				.getOutputFormat().equalsIgnoreCase(
-						Perspectives.PERSPECTIVE_FLIGHT_GEAR));
+	public static boolean isOutputFormatAFileGenerator(String mode) {
+		return TranslatorBuilder.isFileWriting(mode);
 	}
-
-	/**
-	 * @return
-	 */
-	private static GuiOptions createNewGuiOptionsBean() {
-		GuiOptions result = new GuiOptions(false, false, false, true, null,
-				Perspectives.PERSPECTIVE_XPLANE10, false);
-		return result;
-	}
-
-	public static GuiOptions getOptions() {
-		return options;
-	}
-
+	
 	public static void setSceneName(String sceneName) {
 		putProperty(SCENE_NAME, sceneName);
 	}
@@ -130,7 +93,7 @@ public class GuiOptionsHelper {
 
 	public static void saveOptions() throws Osm2xpBusinessException {
 		XmlHelper
-				.saveToXml(getOptions(), new File(INTERFACE_OPTIONS_FILE_PATH));
+				.saveToXml(GlobalOptionsProvider.getOptions(), new File(INTERFACE_OPTIONS_FILE_PATH));
 	}
 
 	public static void addUsedFile(String fileName) {
@@ -154,7 +117,7 @@ public class GuiOptionsHelper {
 	public static void askShapeFileNature(Shell shell) {
 		MessageDialog messageDialog = new MessageDialog(shell,
 				"shapefile nature", null, "What is the nature of "
-						+ new File(getOptions().getCurrentFilePath()).getName()
+						+ new File(GlobalOptionsProvider.getOptions().getCurrentFilePath()).getName()
 						+ "?", MessageDialog.QUESTION, new String[] {
 						"Buildings", "Forests" }, 1);
 		if (messageDialog.open() == 0) {
@@ -252,14 +215,14 @@ public class GuiOptionsHelper {
 	}
 
 	public static void setCurrentFilePath(String fileName) {
-		getOptions().setCurrentFilePath(fileName);
+		GlobalOptionsProvider.getOptions().setCurrentFilePath(fileName);
 		for (Consumer<String> consumer: selectedFileListeners) {
 			consumer.accept(fileName);
 		}
 	}
 	
 	public String getCurrentFilePath() {
-		return getOptions().getCurrentFilePath();
+		return GlobalOptionsProvider.getOptions().getCurrentFilePath();
 	}
 	
 	public static void addInputFileListener(Consumer<String> listener) {

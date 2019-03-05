@@ -166,11 +166,7 @@ public class FlyLegacyTranslatorImpl implements ITranslator {
 
 	@Override
 	public boolean mustStoreNode(Node node) {
-		Boolean result = true;
-		if (!GlobalOptionsProvider.getOptions().isSinglePass()) {
-			result = GeomUtils.compareCoordinates(currentTile, node);
-		}
-		return result;
+		return GeomUtils.compareCoordinates(currentTile, node);
 	}
 
 	@Override

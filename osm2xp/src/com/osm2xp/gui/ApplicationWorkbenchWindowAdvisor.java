@@ -25,11 +25,12 @@ import com.osm2xp.controllers.BuildController;
 import com.osm2xp.core.constants.CoreConstants;
 import com.osm2xp.core.exceptions.Osm2xpBusinessException;
 import com.osm2xp.core.logging.Osm2xpLogger;
+import com.osm2xp.generation.options.FlightGearOptionsProvider;
+import com.osm2xp.generation.options.FsxOptionsProvider;
 import com.osm2xp.generation.options.GlobalOptionsProvider;
+import com.osm2xp.generation.options.XPlaneOptionsProvider;
 import com.osm2xp.gui.perspectives.IGenerationModeProvider;
-import com.osm2xp.utils.helpers.FlightGearOptionsProvider;
 import com.osm2xp.utils.helpers.FlyLegacyOptionsHelper;
-import com.osm2xp.utils.helpers.FsxOptionsHelper;
 import com.osm2xp.utils.helpers.GuiOptionsHelper;
 import com.osm2xp.utils.helpers.StatsHelper;
 import com.osm2xp.utils.helpers.XplaneOptionsHelper;
@@ -139,14 +140,13 @@ public class ApplicationWorkbenchWindowAdvisor extends WorkbenchWindowAdvisor {
 
 		try {
 			GuiOptionsHelper.saveOptions();
-			XplaneOptionsHelper.saveOptions();
-			FsxOptionsHelper.saveOptions();
+			XPlaneOptionsProvider.saveOptions();
+			FsxOptionsProvider.saveOptions();
 			FlyLegacyOptionsHelper.saveOptions();
 			FlightGearOptionsProvider.saveOptions();
 		} catch (Osm2xpBusinessException e) {
 			Osm2xpLogger.error(e.getMessage());
 		}
-		StatsHelper.getStatsList();
 		super.dispose();
 	}
 }

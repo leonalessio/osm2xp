@@ -17,7 +17,6 @@ import com.osm2xp.model.osm.polygon.OsmPolyline;
 import com.osm2xp.model.stats.GenerationStats;
 import com.osm2xp.translators.ITranslator;
 import com.osm2xp.utils.geometry.GeomUtils;
-import com.osm2xp.generation.options.GlobalOptionsProvider;
 import com.osm2xp.utils.osm.OsmUtils;
 import com.osm2xp.writers.IWriter;
 
@@ -144,11 +143,7 @@ public class FsxTranslatorImpl implements ITranslator {
 
 	@Override
 	public boolean mustStoreNode(Node node) {
-		Boolean result = true;
-		if (!GlobalOptionsProvider.getOptions().isSinglePass()) {
-			result = GeomUtils.compareCoordinates(currentTile, node);
-		}
-		return result;
+		return GeomUtils.compareCoordinates(currentTile, node);
 	}
 
 	@Override

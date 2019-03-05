@@ -95,7 +95,6 @@ public class App
     		if (sceneryName == null) {
     			sceneryName = computeDefaultSceneName(inputFile);
 			}
-    		loadGlobalOptions();
     		if (commandLine.hasOption(DBMODE) && !GlobalOptionsProvider.getOptions().isDatabaseMode()) {
     			GlobalOptionsProvider.getOptions().setDatabaseMode(true);
     		}
@@ -162,6 +161,7 @@ public class App
 	}
 
 	private static boolean loadOptions(String outputFormat, CommandLine commandLine) {
+		PreferenceService.setProgramPreferences(new BasicPreferences());
 		if (outputFormat.toUpperCase().startsWith("XPLANE") || outputFormat.toUpperCase().equals("XP_AIRFIELDS")) {
 			
 			XPlaneOptionsProvider.loadDefaultOptions(); //TODO support custom options location
@@ -170,7 +170,6 @@ public class App
 				System.out.println("It should be present in {current folder}/xplane, please use -c option to specify another folder");
 				return false;
 			}
-			PreferenceService.setProgramPreferences(new BasicPreferences());
 			String[] optionValues = commandLine.getOptionValues(FACADE_SETS);
 			if (optionValues != null && optionValues.length > 0) {
 				XPlaneOptionsProvider.getOptions().setFacadeSets(StringUtils.join(optionValues,';'));
@@ -205,19 +204,6 @@ public class App
 			    TimeUnit.MILLISECONDS.toSeconds(millis) - 
 			    TimeUnit.MINUTES.toSeconds(TimeUnit.MILLISECONDS.toMinutes(millis))
 			);
-	}
-
-	protected static void loadGlobalOptions() {
-		File basicFolder = PathsService.getPathsProvider().getBasicFolder();
-		File globalOptionsFile = new File(basicFolder, "GlobalOptions.xml");
-		if (globalOptionsFile.isFile()) {
-			GlobalOptions options = GlobalOptionsProvider.loadOptions(globalOptionsFile);
-			if (options != null) {
-				GlobalOptionsProvider.setOptions(options);
-				return;
-			}
-		}
-		GlobalOptionsProvider.setOptions(new GlobalOptions()); 
 	}
 
 	protected static String computeDefaultSceneName(File inputFile) {

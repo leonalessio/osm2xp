@@ -8,7 +8,6 @@ import org.eclipse.core.runtime.IStatus;
 import org.eclipse.core.runtime.Status;
 import org.eclipse.core.runtime.preferences.InstanceScope;
 
-import com.osm2xp.constants.Perspectives;
 import com.osm2xp.controllers.BuildController;
 import com.osm2xp.core.exceptions.Osm2xpBusinessException;
 import com.osm2xp.core.logging.Osm2xpLogger;
@@ -19,8 +18,8 @@ import com.osm2xp.gui.dialogs.utils.Osm2xpDialogsHelper;
 import com.osm2xp.model.facades.FacadeSetHelper;
 import com.osm2xp.model.facades.FacadeSetManager;
 import com.osm2xp.utils.StatusInfo;
-import com.osm2xp.utils.helpers.FsxOptionsHelper;
-import com.osm2xp.utils.helpers.GuiOptionsHelper;
+import com.osm2xp.utils.StatusInfo.Severity;
+import com.osm2xp.utils.ui.StatusUtil;
 
 /**
  * CommandBuildScene.
@@ -76,12 +75,12 @@ public class CommandBuildScene extends AbstractHandler{
 				facadeSetsStr = FacadeSetHelper.getDefaultFacadePath();
 			}
 			FacadeSetManager manager = FacadeSetManager.getManager(facadeSetsStr, null);
-			IStatus facadeSetStatus = manager.getFacadeSetStatus();
-			if (facadeSetStatus.getSeverity() == IStatus.ERROR) {
+			StatusInfo facadeSetStatus = manager.getFacadeSetStatus();
+			if (facadeSetStatus.getSeverity() == Severity.ERROR) {
 				errors.append(" - ");
 				errors.append(facadeSetStatus.getMessage());
 				errors.append('\n');
-			} else if  (facadeSetStatus.getSeverity() == IStatus.WARNING) {
+			} else if  (facadeSetStatus.getSeverity() == Severity.WARNING) {
 				warnings.append(" - ");
 				warnings.append(facadeSetStatus.getMessage());
 				warnings.append('\n');
@@ -93,10 +92,10 @@ public class CommandBuildScene extends AbstractHandler{
 			errors.append(" - bglComp.exe location not set!\n");
 		}
 		if (errors.length() > 0) {
-			return new StatusInfo(IStatus.ERROR, errors.toString());
+			return StatusUtil.error(errors.toString());
 		}
 		if (warnings.length() > 0) {
-			return new StatusInfo(IStatus.WARNING, warnings.toString());
+			return StatusUtil.warning(warnings.toString());
 		}
 		return Status.OK_STATUS;
 	}

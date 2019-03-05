@@ -19,7 +19,7 @@ import org.eclipse.swt.widgets.Table;
 import org.eclipse.swt.widgets.TableColumn;
 
 import com.osm2xp.core.model.osm.Tag;
-import com.osm2xp.utils.helpers.XplaneOptionsHelper;
+import com.osm2xp.generation.options.XPlaneOptionsProvider;
 
 /**
  * FacadesExclusionsTable
@@ -41,7 +41,7 @@ public class FacadesExclusionsTable extends Composite {
 	}
 
 	public void updateImportedExclusionsTags() {
-		viewer.setInput(XplaneOptionsHelper.getOptions()
+		viewer.setInput(XPlaneOptionsProvider.getOptions()
 				.getBuildingsExclusions().getExclusions());
 		viewer.refresh();
 	}
@@ -56,7 +56,7 @@ public class FacadesExclusionsTable extends Composite {
 		table.setSize(500, 500);
 
 		viewer.setContentProvider(new ArrayContentProvider());
-		viewer.setInput(XplaneOptionsHelper.getOptions()
+		viewer.setInput(XPlaneOptionsProvider.getOptions()
 				.getBuildingsExclusions().getExclusions());
 
 		GridData gridData = new GridData();

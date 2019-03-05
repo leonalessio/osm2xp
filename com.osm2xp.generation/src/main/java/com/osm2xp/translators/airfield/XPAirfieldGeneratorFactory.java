@@ -19,8 +19,13 @@ public class XPAirfieldGeneratorFactory implements IDataVisitorFactory {
 	}
 
 	@Override
-	public String getOutputType() {
+	public String getOutputMode() {
 		return "XP_AIRFIELDS";
+	}
+
+	@Override
+	public boolean isFileWriting() {
+		return true;
 	}
 
 }

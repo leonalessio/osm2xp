@@ -34,11 +34,11 @@ import com.osm2xp.core.exceptions.Osm2xpBusinessException;
 import com.osm2xp.core.logging.Osm2xpLogger;
 import com.osm2xp.core.model.osm.Tag;
 import com.osm2xp.generation.options.FlightGearObjectTagRule;
+import com.osm2xp.generation.options.FlightGearOptionsProvider;
 import com.osm2xp.generation.options.ObjectFile;
 import com.osm2xp.generation.options.XmlHelper;
 import com.osm2xp.gui.components.FilesPathsTable;
 import com.osm2xp.gui.components.TagsRulesTable;
-import com.osm2xp.utils.helpers.FlightGearOptionsProvider;
 
 /**
  * FlightGearObjectsRulesPanel.

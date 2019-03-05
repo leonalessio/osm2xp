@@ -8,7 +8,7 @@ import com.osm2xp.writers.impl.OsmWriterImpl;
 
 import math.geom2d.Point2D;
 
-public class OSMTranslatorFactory implements ITranslatorFactory {
+public class OSMTranslatorFactory implements ITileTranslatorFactory {
 
 	@Override
 	public ITranslator getTranslator(File currentFile, Point2D currentTile, String folderPath) {
@@ -19,6 +19,11 @@ public class OSMTranslatorFactory implements ITranslatorFactory {
 	@Override
 	public String getOutputMode() {
 		return "OSM";
+	}
+	
+	@Override
+	public boolean isFileWriting() {
+		return true;
 	}
 
 }

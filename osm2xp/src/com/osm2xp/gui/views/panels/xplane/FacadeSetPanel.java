@@ -30,12 +30,12 @@ import org.eclipse.swt.widgets.Spinner;
 import org.eclipse.ui.plugin.AbstractUIPlugin;
 import org.osgi.service.prefs.BackingStoreException;
 
+import com.osm2xp.generation.options.XPlaneOptionsProvider;
 import com.osm2xp.gui.Activator;
 import com.osm2xp.gui.dialogs.FacadeSetEditorDialog;
 import com.osm2xp.gui.views.panels.Osm2xpPanel;
 import com.osm2xp.model.facades.FacadeSetHelper;
 import com.osm2xp.model.facades.FacadeSetManager;
-import com.osm2xp.utils.helpers.XplaneOptionsHelper;
 
 /**
  * FacadeSetPanel.
@@ -159,9 +159,9 @@ public class FacadeSetPanel extends Osm2xpPanel {
 //			Osm2xpLogger.error("Error getting facades sets list", e);
 //		}
 //
-//		if (XplaneOptionsHelper.getOptions().getFacadeSet() != null) {
+//		if (XPlaneOptionsProvider.getOptions().getFacadeSet() != null) {
 //			comboFacade
-//					.setText(XplaneOptionsHelper.getOptions().getFacadeSet());
+//					.setText(XPlaneOptionsProvider.getOptions().getFacadeSet());
 //		}
 		btnSlopedRoofs = new Button(optionsGroup, SWT.CHECK);
 		btnSlopedRoofs.setText("Sloped roofs");
@@ -246,10 +246,10 @@ public class FacadeSetPanel extends Osm2xpPanel {
 
 	@Override
 	protected void bindComponents() {
-		bindComponent(spinnerLod, XplaneOptionsHelper.getOptions(), "facadeLod");
-		bindComponent(btnSlopedRoofs, XplaneOptionsHelper.getOptions(),
+		bindComponent(spinnerLod, XPlaneOptionsProvider.getOptions(), "facadeLod");
+		bindComponent(btnSlopedRoofs, XPlaneOptionsProvider.getOptions(),
 				"generateSlopedRoofs");
-		bindComponent(btnHardBuildings, XplaneOptionsHelper.getOptions(),
+		bindComponent(btnHardBuildings, XPlaneOptionsProvider.getOptions(),
 				"hardBuildings");
 	}
 

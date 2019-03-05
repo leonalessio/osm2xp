@@ -9,7 +9,7 @@ import org.eclipse.swt.widgets.Combo;
 import org.eclipse.swt.widgets.Composite;
 import org.eclipse.swt.widgets.Label;
 
-import com.osm2xp.utils.helpers.XplaneOptionsHelper;
+import com.osm2xp.generation.options.XPlaneOptionsProvider;
 
 /**
  * StreetLightsDensityPanel.
@@ -35,7 +35,7 @@ public class StreetLightsDensityPanel extends Composite {
 		final Combo combo = new Combo(this, SWT.NONE);
 
 		combo.setItems(new String[] { "Minimum", "Normal", "Maximum" });
-		combo.setText(combo.getItem(XplaneOptionsHelper.getOptions()
+		combo.setText(combo.getItem(XPlaneOptionsProvider.getOptions()
 				.getLightsDensity()));
 		final GridData gridData = new GridData(SWT.FILL, SWT.CENTER, false,
 				false, 1, 1);
@@ -43,7 +43,7 @@ public class StreetLightsDensityPanel extends Composite {
 		combo.setLayoutData(gridData);
 		combo.addModifyListener(new ModifyListener() {
 			public void modifyText(final ModifyEvent event) {
-				XplaneOptionsHelper.getOptions().setLightsDensity(
+				XPlaneOptionsProvider.getOptions().setLightsDensity(
 						combo.getSelectionIndex());
 			}
 		});

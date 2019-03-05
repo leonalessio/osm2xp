@@ -17,19 +17,19 @@ import com.osm2xp.core.exceptions.Osm2xpBusinessException;
 import com.osm2xp.core.logging.Osm2xpLogger;
 import com.osm2xp.core.model.osm.Node;
 import com.osm2xp.core.model.osm.Tag;
+import com.osm2xp.generation.options.GlobalOptionsProvider;
+import com.osm2xp.generation.options.ObjectFile;
+import com.osm2xp.generation.options.ObjectTagRule;
+import com.osm2xp.generation.options.ObjectsRulesList;
 import com.osm2xp.generation.options.XmlHelper;
-import com.osm2xp.model.options.ObjectFile;
-import com.osm2xp.model.options.ObjectTagRule;
-import com.osm2xp.model.options.ObjectsRulesList;
 import com.osm2xp.model.osm.polygon.OsmPolygon;
 import com.osm2xp.model.osm.polygon.OsmPolyline;
 import com.osm2xp.translators.ITranslator;
-import com.osm2xp.translators.impl.XPOutputFormat;
+import com.osm2xp.translators.xplane.XPOutputFormat;
 import com.osm2xp.utils.DsfObjectsProvider;
 import com.osm2xp.utils.DsfUtils;
 import com.osm2xp.utils.FilesUtils;
 import com.osm2xp.utils.geometry.GeomUtils;
-import com.osm2xp.utils.helpers.GuiOptionsHelper;
 import com.osm2xp.utils.helpers.WavefrontOptionsHelper;
 import com.osm2xp.utils.osm.OsmUtils;
 
@@ -304,7 +304,7 @@ public class WavefrontTranslatorImpl implements ITranslator {
 		dsfTextFile.deleteOnExit();
 		List<String> objectsList = new ArrayList<String>();
 
-		objectsList.add("objects/" + currentTile.y() + "_" + currentTile.x
+		objectsList.add("objects/" + currentTile.y() + "_" + currentTile.x()
 				+ ".obj");
 		DsfObjectsProvider dsfObjectsProvider = new DsfObjectsProvider(folderPath);
 		dsfObjectsProvider.setObjectsList(objectsList);
@@ -349,7 +349,7 @@ public class WavefrontTranslatorImpl implements ITranslator {
 							+ "objects" + File.separator + currentTile.y() + "_"
 							+ currentTile.x() + ".obj.mtl"))));
 			new File(folderPath + File.separator + "objects files"
-					+ File.separator + currentTile.y() + "_" + currentTile.x
+					+ File.separator + currentTile.y() + "_" + currentTile.x()
 					+ ".obj.mtl").deleteOnExit();
 		} catch (FileNotFoundException e1) {
 		}
@@ -365,7 +365,7 @@ public class WavefrontTranslatorImpl implements ITranslator {
 	@Override
 	public void init() {
 		Osm2xpLogger.info("Starting wavefront (.obj) generation of tile "
-				+ (int) currentTile.y() + "/" + (int) currentTile.x
+				+ (int) currentTile.y() + "/" + (int) currentTile.x()
 				+ " - wavefront export uses osm2world http://osm2world.org/");
 	}
 
@@ -441,11 +441,11 @@ public class WavefrontTranslatorImpl implements ITranslator {
 
 	@Override
 	public boolean mustStoreNode(Node node) {
-		Boolean result = true;
-		if (!GlobalOptionsProvider.getOptions().isSinglePass()) {
-			result = GeomUtils.compareCoordinates(currentTile, node);
-		}
-		return result;
+//		Boolean result = true;
+//		if (!GlobalOptionsProvider.getOptions().isSinglePass()) {
+//			result = GeomUtils.compareCoordinates(currentTile, node);
+//		}
+		return true;
 	}
 
 	@Override

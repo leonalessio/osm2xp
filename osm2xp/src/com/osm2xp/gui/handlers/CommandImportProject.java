@@ -47,7 +47,7 @@ public class CommandImportProject extends AbstractHandler {
 								.getCoordinatesList().getCoordinates().size()
 						+ " tile(s) to process )")) {
 					BuildController bc = new BuildController();
-					bc.restartImportedProject();
+//					bc.restartImportedProject(); //TODO not supported for now
 				}
 
 			} catch (Osm2xpBusinessException e) {

@@ -8,7 +8,7 @@ import com.osm2xp.writers.impl.BglWriterImpl;
 
 import math.geom2d.Point2D;
 
-public class FSXTranslatorFactory implements ITranslatorFactory {
+public class FSXTranslatorFactory implements ITileTranslatorFactory {
 
 	@Override
 	public ITranslator getTranslator(File currentFile, Point2D currentTile, String folderPath) {
@@ -19,6 +19,11 @@ public class FSXTranslatorFactory implements ITranslatorFactory {
 	@Override
 	public String getOutputMode() {
 		return "FSX";
+	}
+	
+	@Override
+	public boolean isFileWriting() {
+		return true;
 	}
 
 }

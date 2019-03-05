@@ -7,11 +7,6 @@ import java.util.Collection;
 import java.util.List;
 import java.util.stream.Collectors;
 
-import org.locationtech.jts.geom.Envelope;
-import org.locationtech.jts.index.strtree.ItemDistance;
-import org.locationtech.jts.index.strtree.STRtree;
-
-import com.osm2xp.classification.geom.EquiRectDistanceFunction;
 import com.osm2xp.classification.index.KdTree;
 import com.osm2xp.classification.index.PointData;
 import com.osm2xp.classification.learning.ModelGenerator;
@@ -20,7 +15,6 @@ import com.osm2xp.classification.output.CSVWithAdditionalsWriter;
 import com.osm2xp.classification.output.StringDelimitedWriter;
 import com.osm2xp.classification.parsing.LearningDataParser;
 
-import math.geom2d.Box2D;
 import weka.classifiers.AbstractClassifier;
 import weka.classifiers.bayes.NaiveBayes;
 import weka.classifiers.evaluation.Evaluation;
@@ -33,7 +27,7 @@ import weka.filters.unsupervised.attribute.Normalize;
 
 public class App {
 
-	private static final int NEIGHBOUR_CONT = 2;
+	private static final int NEIGHBOUR_COUNT = 4;
 
 	public static void main(String[] args) {
 		buildGeoindex();
@@ -96,11 +90,11 @@ public class App {
 //			}
 //		}
 		List<PointData<WayBuildingData>> classifiedPoints = pointsList.stream().filter(data -> data.getData().getType() != null).collect(Collectors.toList());
-		try (CSVWithAdditionalsWriter<WayBuildingData> writer = new CSVWithAdditionalsWriter<>(new File("type_ways.csv"), "types",NEIGHBOUR_CONT)) {
+		try (CSVWithAdditionalsWriter<WayBuildingData> writer = new CSVWithAdditionalsWriter<>(new File("type_ways" + NEIGHBOUR_COUNT + ".csv"), "types",NEIGHBOUR_COUNT)) {
 			for (PointData<WayBuildingData> pointData : classifiedPoints) {
-				Collection<PointData<WayBuildingData>> neighbours = kdTree.nearestNeighbourSearch(NEIGHBOUR_CONT + 1, pointData);
+				Collection<PointData<WayBuildingData>> neighbours = kdTree.nearestNeighbourSearch(NEIGHBOUR_COUNT + 1, pointData);
 				neighbours.remove(pointData);
-				writer.write(pointData.getData(), neighbours.stream().limit(NEIGHBOUR_CONT).map(data -> data.getData()).collect(Collectors.toList()));
+				writer.write(pointData.getData(), neighbours.stream().limit(NEIGHBOUR_COUNT).map(data -> data.getData()).collect(Collectors.toList()));
 			}
 		} catch (IOException e) {
 			// TODO Auto-generated catch block
@@ -108,10 +102,6 @@ public class App {
 		}
 //		System.out.println("App.buildGeoindex() "+ geospatialIndex.getNearestNeighbors(new SimpleGeospatialPoint(55.01, 82.55), 3));
 	}	
-
-	private static Envelope getEnvelope(Box2D boundingBox) {
-		return new Envelope(boundingBox.getMinX(), boundingBox.getMaxX(), boundingBox.getMinY(), boundingBox.getMaxY());
-	}
 
 	protected static void buildClassifier() {
 		try {

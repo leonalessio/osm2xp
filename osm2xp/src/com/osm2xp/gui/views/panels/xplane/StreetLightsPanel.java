@@ -18,9 +18,10 @@ import org.eclipse.wb.swt.ResourceManager;
 
 import com.osm2xp.core.exceptions.Osm2xpBusinessException;
 import com.osm2xp.core.logging.Osm2xpLogger;
+import com.osm2xp.generation.options.ObjectFile;
+import com.osm2xp.generation.options.XPlaneOptionsProvider;
 import com.osm2xp.generation.options.XmlHelper;
 import com.osm2xp.gui.components.FilesPathsTable;
-import com.osm2xp.model.options.ObjectFile;
 import com.osm2xp.utils.helpers.XplaneOptionsHelper;
 
 /**
@@ -51,7 +52,7 @@ public class StreetLightsPanel extends Composite {
 		tltmAdd.addSelectionListener(new SelectionAdapter() {
 			@Override
 			public void widgetSelected(SelectionEvent e) {
-				XplaneOptionsHelper.getOptions().getStreetLightObjects()
+				XPlaneOptionsProvider.getOptions().getStreetLightObjects()
 						.getObjects()
 						.add(new ObjectFile("path to a light object..."));
 
@@ -70,7 +71,7 @@ public class StreetLightsPanel extends Composite {
 						.getViewer().getSelection();
 				ObjectFile selectedFile = (ObjectFile) selection
 						.getFirstElement();
-				XplaneOptionsHelper.getOptions().getStreetLightObjects()
+				XPlaneOptionsProvider.getOptions().getStreetLightObjects()
 						.getObjects().remove(selectedFile);
 				filesPathsTable.getViewer().refresh();
 			}
@@ -92,7 +93,7 @@ public class StreetLightsPanel extends Composite {
 				String fn = dlg.open();
 				if (fn != null) {
 					try {
-						XmlHelper.saveToXml(XplaneOptionsHelper.getOptions()
+						XmlHelper.saveToXml(XPlaneOptionsProvider.getOptions()
 								.getStreetLightObjects(), new File(fn));
 					} catch (Osm2xpBusinessException e1) {
 						Osm2xpLogger.error("Error saving rules to xml file "
@@ -118,7 +119,7 @@ public class StreetLightsPanel extends Composite {
 				if (fn != null) {
 					XplaneOptionsHelper.importStreetLightObjects(new File(fn));
 					try {
-						filesPathsTable.updateSelectedRule(XplaneOptionsHelper
+						filesPathsTable.updateSelectedRule(XPlaneOptionsProvider
 								.getOptions().getStreetLightObjects()
 								.getObjects());
 					} catch (Osm2xpBusinessException e1) {
@@ -139,7 +140,7 @@ public class StreetLightsPanel extends Composite {
 				"StreetLight object path");
 		filesPathsTable.setLayout(new FillLayout(SWT.HORIZONTAL));
 		try {
-			filesPathsTable.updateSelectedRule(XplaneOptionsHelper.getOptions()
+			filesPathsTable.updateSelectedRule(XPlaneOptionsProvider.getOptions()
 					.getStreetLightObjects().getObjects());
 		} catch (Osm2xpBusinessException e1) {
 			Osm2xpLogger.error("Error exporting rules table", e1);

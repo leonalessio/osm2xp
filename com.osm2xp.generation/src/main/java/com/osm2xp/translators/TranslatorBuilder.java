@@ -17,51 +17,65 @@ import math.geom2d.Point2D;
 /**
  * TranslatorBuilder.
  * 
- * @author Benjamin Blanchet
  * @author Dmitry Karpenko 
+ * @author Benjamin Blanchet
  * 
  */
 public class TranslatorBuilder {
 	
-	private static Map<String, ITranslatorProviderFactory> providerFactories = new HashMap<>();
 	private static Map<String, ITranslatorFactory> translatorFactories = new HashMap<>();
-	private static Map<String, IDataVisitorFactory> visitorFactories = new HashMap<>();
 	
 	static {
-		registerTranslatorProviderFactory(new XP10TranslatorProviderFactory());
-		registerTranslatorProviderFactory(new XP9TranslatorProviderFactory());
-		registerVisitorFactory(new XPAirfieldGeneratorFactory());
-		registerTranslatorFactory(new ConsoleTranslatorFactory());
-		registerTranslatorFactory(new G2XPLTranslatorFactory());
-		registerTranslatorFactory(new OSMTranslatorFactory());
-		registerTranslatorFactory(new FlightGearTranslatorFactory());
-		registerTranslatorFactory(new FlyLegacyTranslatorFactory());
-		registerTranslatorFactory(new FSXTranslatorFactory());
+		registerFactory(new XP10TranslatorProviderFactory());
+		registerFactory(new XP9TranslatorProviderFactory());
+		registerFactory(new XPAirfieldGeneratorFactory());
+		registerFactory(new ConsoleTranslatorFactory());
+		registerFactory(new G2XPLTranslatorFactory());
+		registerFactory(new OSMTranslatorFactory());
+		registerFactory(new FlightGearTranslatorFactory());
+		registerFactory(new FlyLegacyTranslatorFactory());
+		registerFactory(new FSXTranslatorFactory());
 	}
 
-	public static void registerTranslatorProviderFactory(ITranslatorProviderFactory factory) {
-		providerFactories.put(factory.getOutputType(), factory);
-	}
-	
-	public static void registerTranslatorFactory(ITranslatorFactory factory) {
+	public static void registerFactory(ITranslatorFactory factory) {
 		translatorFactories.put(factory.getOutputMode(), factory);
-	}
-	
-	public static void registerVisitorFactory(IDataVisitorFactory factory) {
-		visitorFactories.put(factory.getOutputType(), factory);
 	}
 	
 	public static ITranslator getTranslator(File currentFile,
 			Point2D currentTile, String folderPath, String outputFormat) {
-		ITranslatorFactory factory = translatorFactories.get(outputFormat);
+		ITileTranslatorFactory factory = getTileTranslatorFactory(outputFormat);
 		if (factory != null) {
 			return factory.getTranslator(currentFile,currentTile, folderPath);
 		}
 		return null;
 	}
 	
+	private static ITileTranslatorFactory getTileTranslatorFactory(String outputFormat) {
+		ITranslatorFactory translatorFactory = translatorFactories.get(outputFormat);
+		if (translatorFactory instanceof ITileTranslatorFactory) {
+			return (ITileTranslatorFactory) translatorFactory;
+		}
+		return null;
+	}
+	
+	private static ITranslatorProviderFactory getTranslatorProviderFactory(String outputFormat) {
+		ITranslatorFactory translatorFactory = translatorFactories.get(outputFormat);
+		if (translatorFactory instanceof ITranslatorProviderFactory) {
+			return (ITranslatorProviderFactory) translatorFactory;
+		}
+		return null;
+	}
+	
+	private static IDataVisitorFactory getDataVisitorFactory(String outputFormat) {
+		ITranslatorFactory translatorFactory = translatorFactories.get(outputFormat);
+		if (translatorFactory instanceof IDataVisitorFactory) {
+			return (IDataVisitorFactory) translatorFactory;
+		}
+		return null;
+	}
+
 	public static IOSMDataVisitor getDataVisitor(File currentFile, String folderPath, String outputFomat) {
-		 IDataVisitorFactory factory = visitorFactories.get(outputFomat);
+		 IDataVisitorFactory factory = getDataVisitorFactory(outputFomat);
 		 if (factory != null) {
 			return factory.getVisitor(folderPath);
 		}
@@ -69,7 +83,7 @@ public class TranslatorBuilder {
 	}
 
 	public static ITranslatorProvider getTranslatorProvider(File currentFile, String folderPath, String outputFomat) {
-		ITranslatorProviderFactory factory = providerFactories.get(outputFomat);
+		ITranslatorProviderFactory factory = getTranslatorProviderFactory(outputFomat);
 		if (factory != null) {
 			return factory.getTranslatorProvider(currentFile, folderPath);
 		}
@@ -77,13 +91,21 @@ public class TranslatorBuilder {
 	}
 
 	public static String getRegisteredFormatsStr() {
-		List<String> list = new ArrayList<String>(providerFactories.keySet());
+		List<String> list = new ArrayList<String>(translatorFactories.keySet());
 		list.addAll(translatorFactories.keySet());
 		return list.stream().distinct().sorted().collect(Collectors.joining(", "));
 	}
 	
 	public static boolean isSupported(String format) {
-		return providerFactories.containsKey(format) || translatorFactories.containsKey(format) || visitorFactories.containsKey(format);
+		return translatorFactories.containsKey(format);
+	}
+	
+	public static boolean isFileWriting(String format) {
+		ITranslatorFactory factory = translatorFactories.get(format);
+		if (factory != null) {
+			return factory.isFileWriting();
+		}
+		return false;
 	}
 
 }

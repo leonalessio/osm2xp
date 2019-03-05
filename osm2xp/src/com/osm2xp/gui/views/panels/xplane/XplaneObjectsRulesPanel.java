@@ -33,11 +33,12 @@ import com.osm2xp.constants.MessagesConstants;
 import com.osm2xp.core.exceptions.Osm2xpBusinessException;
 import com.osm2xp.core.logging.Osm2xpLogger;
 import com.osm2xp.core.model.osm.Tag;
+import com.osm2xp.generation.options.ObjectFile;
+import com.osm2xp.generation.options.XPlaneOptionsProvider;
 import com.osm2xp.generation.options.XmlHelper;
+import com.osm2xp.generation.options.XplaneObjectTagRule;
 import com.osm2xp.gui.components.FilesPathsTable;
 import com.osm2xp.gui.components.TagsRulesTable;
-import com.osm2xp.model.options.ObjectFile;
-import com.osm2xp.model.options.XplaneObjectTagRule;
 import com.osm2xp.utils.helpers.XplaneOptionsHelper;
 
 /**
@@ -84,7 +85,7 @@ public class XplaneObjectsRulesPanel extends Composite {
 		tltmAdd.addSelectionListener(new SelectionAdapter() {
 			@Override
 			public void widgetSelected(SelectionEvent e) {
-				XplaneOptionsHelper
+				XPlaneOptionsProvider
 						.getOptions()
 						.getObjectsRules()
 						.getRules()
@@ -112,7 +113,7 @@ public class XplaneObjectsRulesPanel extends Composite {
 						.getViewer().getSelection();
 				XplaneObjectTagRule selectedXplaneObjectTagRule = (XplaneObjectTagRule) selection
 						.getFirstElement();
-				XplaneOptionsHelper.getOptions().getObjectsRules().getRules()
+				XPlaneOptionsProvider.getOptions().getObjectsRules().getRules()
 						.remove(selectedXplaneObjectTagRule);
 				compositeRuleDetail.setVisible(false);
 				tagsTable.getViewer().refresh();
@@ -135,7 +136,7 @@ public class XplaneObjectsRulesPanel extends Composite {
 				String fn = dlg.open();
 				if (fn != null) {
 					try {
-						XmlHelper.saveToXml(XplaneOptionsHelper.getOptions()
+						XmlHelper.saveToXml(XPlaneOptionsProvider.getOptions()
 								.getObjectsRules(), new File(fn));
 					} catch (Osm2xpBusinessException e1) {
 						Osm2xpLogger.error("Error saving rules to xml file "
@@ -160,7 +161,7 @@ public class XplaneObjectsRulesPanel extends Composite {
 				String fn = dlg.open();
 				if (fn != null) {
 					XplaneOptionsHelper.importObjectsRules(new File(fn));
-					tagsTable.updateInput(XplaneOptionsHelper.getOptions()
+					tagsTable.updateInput(XPlaneOptionsProvider.getOptions()
 							.getObjectsRules().getRules());
 
 				}
@@ -175,7 +176,7 @@ public class XplaneObjectsRulesPanel extends Composite {
 		gridData.widthHint = 329;
 		groupTags.setLayoutData(gridData);
 		groupTags.setLayout(new FillLayout(SWT.HORIZONTAL));
-		tagsTable = new TagsRulesTable(groupTags, SWT.NONE, XplaneOptionsHelper
+		tagsTable = new TagsRulesTable(groupTags, SWT.NONE, XPlaneOptionsProvider
 				.getOptions().getObjectsRules().getRules());
 		tagsTable.setLayout(new FillLayout(SWT.HORIZONTAL));
 		tagsTable.getTable().addListener(SWT.Selection, new Listener() {

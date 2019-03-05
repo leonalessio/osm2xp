@@ -8,8 +8,8 @@ import org.eclipse.swt.widgets.Composite;
 import org.eclipse.swt.widgets.Label;
 import org.eclipse.swt.widgets.Spinner;
 
+import com.osm2xp.generation.options.XPlaneOptionsProvider;
 import com.osm2xp.gui.views.panels.Osm2xpPanel;
-import com.osm2xp.utils.helpers.XplaneOptionsHelper;
 
 /**
  * SceneryOptionsPanel.
@@ -96,13 +96,13 @@ public class SceneryOptionsPanel extends Osm2xpPanel {
 
 	@Override
 	protected void bindComponents() {
-		bindComponent(btnPackageFacades, XplaneOptionsHelper.getOptions(),
+		bindComponent(btnPackageFacades, XPlaneOptionsProvider.getOptions(),
 				"packageFacades");
-		bindComponent(spinnerMinSegment, XplaneOptionsHelper.getOptions(),
+		bindComponent(spinnerMinSegment, XPlaneOptionsProvider.getOptions(),
 				"minHouseSegment");
-		bindComponent(spinnerMaxSegment, XplaneOptionsHelper.getOptions(),
+		bindComponent(spinnerMaxSegment, XPlaneOptionsProvider.getOptions(),
 				"maxHouseSegment");
-		bindComponent(spinnerMinArea, XplaneOptionsHelper.getOptions(),
+		bindComponent(spinnerMinArea, XPlaneOptionsProvider.getOptions(),
 				"minHouseArea");
 
 	}
