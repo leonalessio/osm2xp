@@ -2,12 +2,14 @@ package com.osm2xp.generation.options;
 
 import java.io.File;
 
+import com.osm2xp.core.exceptions.Osm2xpBusinessException;
 import com.osm2xp.core.logging.Osm2xpLogger;
 import com.osm2xp.core.model.osm.Tag;
 import com.osm2xp.generation.paths.PathsService;
 
 public class GlobalOptionsProvider {
 
+	private static final String GLOBAL_OPTIONS_XML_FILE = "GlobalOptions.xml";
 	private static GlobalOptions options;
 	private static String sceneName;
 	private static Tag shapefileTag;
@@ -15,7 +17,7 @@ public class GlobalOptionsProvider {
 	public static GlobalOptions getOptions() {
 		if (options == null) {
 			File basicFolder = PathsService.getPathsProvider().getBasicFolder();
-			File globalOptionsFile = new File(basicFolder, "GlobalOptions.xml");
+			File globalOptionsFile = new File(basicFolder, GLOBAL_OPTIONS_XML_FILE);
 			if (globalOptionsFile.isFile()) {
 				GlobalOptions options = GlobalOptionsProvider.loadOptions(globalOptionsFile);
 				if (options != null) {
@@ -32,6 +34,10 @@ public class GlobalOptionsProvider {
 
 	public static void setOptions(GlobalOptions options) {
 		GlobalOptionsProvider.options = options;
+	}
+	
+	public static void saveOptions() throws Osm2xpBusinessException {
+		XmlHelper.saveToXml(GlobalOptionsProvider.getOptions(), new File(PathsService.getPathsProvider().getBasicFolder(), GLOBAL_OPTIONS_XML_FILE));
 	}
 
 	public static GlobalOptions loadOptions(File optionsFile) {

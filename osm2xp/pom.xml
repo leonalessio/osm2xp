@@ -28,6 +28,9 @@
 		<build.folder.fullpath>${build.folder.target.bin}/${build.folder.application}/${build.folder.type}</build.folder.fullpath>
 		<build.file.win32.fullpath>${build.folder.target.bin}/${build.folder.application}/${build.folder.type}/${build.file}.zip</build.file.win32.fullpath>
 		<build.file.linux.fullpath>${build.folder.target.bin}/${build.folder.application}/${build.folder.type}/${build.file}.tar.gz</build.file.linux.fullpath>
+		<project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
+		<maven.compiler.source>1.8</maven.compiler.source>
+    	<maven.compiler.target>1.8</maven.compiler.target>
 	</properties>
 
 	<build>

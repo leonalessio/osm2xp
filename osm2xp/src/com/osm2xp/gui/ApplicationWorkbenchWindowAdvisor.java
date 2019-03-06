@@ -31,9 +31,6 @@ import com.osm2xp.generation.options.GlobalOptionsProvider;
 import com.osm2xp.generation.options.XPlaneOptionsProvider;
 import com.osm2xp.gui.perspectives.IGenerationModeProvider;
 import com.osm2xp.utils.helpers.FlyLegacyOptionsHelper;
-import com.osm2xp.utils.helpers.GuiOptionsHelper;
-import com.osm2xp.utils.helpers.StatsHelper;
-import com.osm2xp.utils.helpers.XplaneOptionsHelper;
 
 /**
  * ApplicationWorkbenchWindowAdvisor
@@ -139,7 +136,7 @@ public class ApplicationWorkbenchWindowAdvisor extends WorkbenchWindowAdvisor {
 	public void dispose() {
 
 		try {
-			GuiOptionsHelper.saveOptions();
+			GlobalOptionsProvider.saveOptions();
 			XPlaneOptionsProvider.saveOptions();
 			FsxOptionsProvider.saveOptions();
 			FlyLegacyOptionsHelper.saveOptions();

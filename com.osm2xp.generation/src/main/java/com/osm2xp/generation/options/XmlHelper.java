@@ -28,6 +28,7 @@ public class XmlHelper {
 	public static void saveToXml(Object bean, File file)
 			throws Osm2xpBusinessException {
 		try {
+			file.getParentFile().mkdirs();
 			JAXBContext jc = JAXBContext.newInstance(bean.getClass()
 					.getPackage().getName());
 			Marshaller marshaller = jc.createMarshaller();

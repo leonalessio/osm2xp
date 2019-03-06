@@ -35,3 +35,13 @@ Export-Package: com.osm2xp.converters.impl,
  com.osm2xp.writers.impl
 Require-Bundle: com.osm2xp.core;bundle-version="1.0.0"
 Bundle-RequiredExecutionEnvironment: JavaSE-1.8
+Bundle-ClassPath: .,
+ lib/commons-io.jar,
+ lib/geonames-ws-client.jar,
+ lib/h2.jar,
+ lib/json-simple.jar,
+ lib/jts-core.jar,
+ lib/mapdb.jar,
+ lib/jaxb-core.jar,
+ lib/jaxb-impl.jar
+Import-Package: com.google.common.collect

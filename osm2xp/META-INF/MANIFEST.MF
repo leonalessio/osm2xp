@@ -96,5 +96,6 @@ Export-Package: com.osm2xp.constants,
  com.osm2xp.jobs,
  com.osm2xp.utils.comparators,
  com.osm2xp.utils.helpers,
+ net.kotek.jdbm,
  org.eclipse.wb.swt
 Import-Package: org.apache.commons.lang

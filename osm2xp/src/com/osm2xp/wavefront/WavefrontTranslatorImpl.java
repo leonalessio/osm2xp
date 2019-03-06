@@ -17,7 +17,6 @@ import com.osm2xp.core.exceptions.Osm2xpBusinessException;
 import com.osm2xp.core.logging.Osm2xpLogger;
 import com.osm2xp.core.model.osm.Node;
 import com.osm2xp.core.model.osm.Tag;
-import com.osm2xp.generation.options.GlobalOptionsProvider;
 import com.osm2xp.generation.options.ObjectFile;
 import com.osm2xp.generation.options.ObjectTagRule;
 import com.osm2xp.generation.options.ObjectsRulesList;
@@ -29,9 +28,11 @@ import com.osm2xp.translators.xplane.XPOutputFormat;
 import com.osm2xp.utils.DsfObjectsProvider;
 import com.osm2xp.utils.DsfUtils;
 import com.osm2xp.utils.FilesUtils;
+import com.osm2xp.utils.ProcessExecutor;
 import com.osm2xp.utils.geometry.GeomUtils;
 import com.osm2xp.utils.helpers.WavefrontOptionsHelper;
 import com.osm2xp.utils.osm.OsmUtils;
+import com.osm2xp.writers.impl.DsfConversionRunnable;
 
 import math.geom2d.Box2D;
 import math.geom2d.Point2D;
@@ -281,9 +282,9 @@ public class WavefrontTranslatorImpl implements ITranslator {
 			FilesUtils.writeTextToFile(dsfTextFile, sb.toString(), true);
 
 		}
-		DsfUtils.textToDsf(dsfTextFile, new File(folderPath
+		ProcessExecutor.getExecutor().execute(new DsfConversionRunnable(dsfTextFile, new File(folderPath
 				+ File.separatorChar + "Earth nav data" + File.separatorChar
-				+ folderName + File.separatorChar + fileName + ".dsf"));
+				+ folderName + File.separatorChar + fileName + ".dsf")));
 	}
 
 	/**
@@ -324,10 +325,9 @@ public class WavefrontTranslatorImpl implements ITranslator {
 		sb.append("OBJECT 0" + " " + center.y() + " " + center.x() + " " + 0);
 		sb.append(System.getProperty("line.separator"));
 		FilesUtils.writeTextToFile(dsfTextFile, sb.toString(), true);
-
-		DsfUtils.textToDsf(dsfTextFile, new File(folderPath
+		ProcessExecutor.getExecutor().execute(new DsfConversionRunnable(dsfTextFile, new File(folderPath
 				+ File.separatorChar + "Earth nav data" + File.separatorChar
-				+ folderName + File.separatorChar + fileName + ".dsf"));
+				+ folderName + File.separatorChar + fileName + ".dsf")));
 	}
 
 	/**

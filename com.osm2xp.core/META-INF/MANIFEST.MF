@@ -3,7 +3,8 @@ Bundle-ManifestVersion: 2
 Bundle-Name: Core
 Bundle-SymbolicName: com.osm2xp.core
 Bundle-Version: 1.0.0.qualifier
-Export-Package: com.osm2xp.core.constants,
+Export-Package: com.bbn.openmap.layer.vpf,
+ com.osm2xp.core.constants,
  com.osm2xp.core.exceptions,
  com.osm2xp.core.logging,
  com.osm2xp.core.model.osm,
@@ -11,8 +12,20 @@ Export-Package: com.osm2xp.core.constants,
  com.osm2xp.core.parsers.impl,
  math.geom2d,
  math.geom2d.point,
- math.geom2d.polygon
+ math.geom2d.polygon,
+ org.apache.commons.lang
 Bundle-RequiredExecutionEnvironment: JavaSE-1.8
 Bundle-ClassPath: .,
  lib/javaGeom.jar,
- lib/osmosis-pbf.jar
+ lib/osmosis-pbf.jar,
+ lib/activation.jar,
+ lib/commons-lang.jar,
+ lib/eclipse-collections-api.jar,
+ lib/eclipse-collections.jar,
+ lib/jaxb-api.jar,
+ lib/jaxb-runtime.jar,
+ lib/openmap.jar,
+ lib/osmosis-core.jar,
+ lib/osmosis-osm-binary.jar,
+ lib/osmosis-xml.jar,
+ lib/protobuf-java.jar

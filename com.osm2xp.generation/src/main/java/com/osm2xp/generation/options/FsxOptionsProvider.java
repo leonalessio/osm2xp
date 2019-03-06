@@ -188,9 +188,7 @@ public class FsxOptionsProvider {
 
 	public static void saveOptions() throws Osm2xpBusinessException {
 		XmlHelper.saveToXml(getOptions(), FSX_OPTIONS_FILE);
-
 	}
-
 
 	public static FsxOptions getOptions() {
 		return options;

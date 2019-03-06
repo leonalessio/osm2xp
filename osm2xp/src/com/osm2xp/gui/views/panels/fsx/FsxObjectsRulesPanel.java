@@ -1,6 +1,5 @@
 package com.osm2xp.gui.views.panels.fsx;
 
-import java.io.File;
 import java.text.MessageFormat;
 import java.util.ArrayList;
 
@@ -37,7 +36,6 @@ import com.osm2xp.generation.options.ObjectTagRule;
 import com.osm2xp.gui.components.FilesPathsTable;
 import com.osm2xp.gui.components.TagsRulesTable;
 import com.osm2xp.gui.views.panels.Osm2xpPanel;
-import com.osm2xp.utils.helpers.FsxOptionsHelper;
 
 /**
  * FsxObjectsRulesPanel.
@@ -216,7 +214,7 @@ public class FsxObjectsRulesPanel extends Osm2xpPanel {
 				dlg.setFilterExtensions(FILTER_EXTS);
 				String fn = dlg.open();
 				if (fn != null) {
-					FsxOptionsProvider.exportObjectsRules(new File(fn));
+//					FsxOptionsProvider.exportObjectsRules(new File(fn)); //TODO not supported yet
 
 				}
 			}
@@ -232,7 +230,7 @@ public class FsxObjectsRulesPanel extends Osm2xpPanel {
 				dlg.setFilterExtensions(FILTER_EXTS);
 				String fn = dlg.open();
 				if (fn != null) {
-					FsxOptionsProvider.importObjectsRules(new File(fn));
+//					FsxOptionsProvider.importObjectsRules(new File(fn)); //TODO not supported yet
 					tagsTable.updateInput(FsxOptionsProvider.getOptions()
 							.getObjectsRules().getRules());
 

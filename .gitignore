@@ -1,6 +1,7 @@
 *.class
 target/
 bin/
+*.jar
 
 # Mobile Tools for Java (J2ME)
 .mtj.tmp/

@@ -6,7 +6,6 @@ import java.util.Date;
 import java.util.List;
 
 import org.apache.commons.lang.StringUtils;
-import org.apache.commons.logging.LogFactory;
 
 import com.osm2xp.core.exceptions.Osm2xpBusinessException;
 import com.osm2xp.core.logging.Osm2xpLogger;
@@ -497,7 +496,7 @@ public class XPlaneTranslatorImpl implements ITranslator{
 					StatsProvider.getTileStats(currentTile, true).incCount("object");
 					return true;
 				} catch (Osm2xpBusinessException e) {
-					LogFactory.getLog(getClass()).error(e.getMessage(), e);
+					Osm2xpLogger.error(e.getMessage(), e);
 				}
 
 			}

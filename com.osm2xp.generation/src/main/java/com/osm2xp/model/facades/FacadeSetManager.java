@@ -12,7 +12,6 @@ import java.util.Random;
 import java.util.stream.Collectors;
 
 import org.apache.commons.lang.StringUtils;
-import org.apache.commons.logging.LogFactory;
 
 import com.google.common.collect.HashMultimap;
 import com.google.common.collect.Multimap;
@@ -232,7 +231,7 @@ public class FacadeSetManager {
 		}
 		Collection<Facade> facades = specialFacades.get(specialType);
 		if (facades.isEmpty()) {
-			LogFactory.getLog(getClass()).error("No facade registered for type " + specialType);
+			Osm2xpLogger.error("No facade registered for type " + specialType);
 			return null;
 		}
 		Facade[] facadeArray = facades.toArray(new Facade[0]);

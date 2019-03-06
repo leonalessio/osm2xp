@@ -4,6 +4,7 @@ import java.io.File;
 import java.util.ArrayList;
 import java.util.List;
 
+import com.osm2xp.core.exceptions.Osm2xpBusinessException;
 import com.osm2xp.core.logging.Osm2xpLogger;
 import com.osm2xp.core.model.osm.Tag;
 import com.osm2xp.generation.osm.OsmConstants;
@@ -39,6 +40,10 @@ public class XPlaneOptionsProvider {
 			Osm2xpLogger.error("Error initializing Xplane options helper",	e);
 		}
 		return null;
+	}
+	
+	public static void saveOptions() throws Osm2xpBusinessException {
+		XmlHelper.saveToXml(getOptions(), getDefaultOptionsFile());
 	}
 	
 	public static File getDefaultOptionsFile() {

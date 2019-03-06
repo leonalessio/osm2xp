@@ -1,13 +1,17 @@
 package com.osm2xp.gui;
 
-import org.eclipse.core.runtime.Platform;
+import java.io.File;
+
 import org.eclipse.equinox.app.IApplication;
 import org.eclipse.equinox.app.IApplicationContext;
 import org.eclipse.swt.widgets.Display;
 import org.eclipse.ui.IWorkbench;
 import org.eclipse.ui.PlatformUI;
 
+import com.osm2xp.application.preferences.EclipsePreferences;
+import com.osm2xp.generation.paths.DefaultPathsProvider;
 import com.osm2xp.generation.paths.PathsService;
+import com.osm2xp.generation.preferences.PreferenceService;
 
 /**
  * This class controls all aspects of the application's execution.
@@ -24,7 +28,12 @@ public class Application implements IApplication {
 	 */
 	public Object start(IApplicationContext context) {
 		Display display = PlatformUI.createDisplay();
-		PathsService.setPathsProvider(new RCPPathsProvider());
+		if (System.getProperty("folder") != null) {
+			PathsService.setPathsProvider(new DefaultPathsProvider(new File(System.getProperty("folder"))));
+		} else {
+			PathsService.setPathsProvider(new RCPPathsProvider());
+		}
+		PreferenceService.setProgramPreferences(new EclipsePreferences());
 		try {
 			int returnCode = PlatformUI.createAndRunWorkbench(display,
 					new ApplicationWorkbenchAdvisor());

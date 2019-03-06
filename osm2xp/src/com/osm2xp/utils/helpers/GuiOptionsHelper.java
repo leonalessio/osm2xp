@@ -7,17 +7,14 @@ import java.util.List;
 import java.util.function.Consumer;
 import java.util.stream.Collectors;
 
-import org.eclipse.core.resources.ResourcesPlugin;
 import org.eclipse.core.runtime.preferences.IEclipsePreferences;
 import org.eclipse.core.runtime.preferences.InstanceScope;
 import org.eclipse.jface.dialogs.MessageDialog;
 import org.eclipse.swt.widgets.Shell;
 import org.osgi.service.prefs.BackingStoreException;
 
-import com.osm2xp.core.exceptions.Osm2xpBusinessException;
 import com.osm2xp.core.model.osm.Tag;
 import com.osm2xp.generation.options.GlobalOptionsProvider;
-import com.osm2xp.generation.options.XmlHelper;
 import com.osm2xp.gui.Activator;
 import com.osm2xp.translators.TranslatorBuilder;
 
@@ -43,9 +40,6 @@ public class GuiOptionsHelper {
 	private static File roofColorFile;
 	private static List<String> lastFiles;
 
-	private static final String INTERFACE_OPTIONS_FILE_PATH = ResourcesPlugin
-			.getWorkspace().getRoot().getLocation()
-			+ File.separator + "GuiOptions.xml";
 	private static Point2D selectedCoordinates;
 	private static List<Consumer<String>> selectedFileListeners  = new ArrayList<>();
 
@@ -89,11 +83,6 @@ public class GuiOptionsHelper {
 
 	public static String getSceneName() {
 		return getStringProperty(SCENE_NAME);
-	}
-
-	public static void saveOptions() throws Osm2xpBusinessException {
-		XmlHelper
-				.saveToXml(GlobalOptionsProvider.getOptions(), new File(INTERFACE_OPTIONS_FILE_PATH));
 	}
 
 	public static void addUsedFile(String fileName) {

@@ -13,6 +13,15 @@ public class DefaultPathsProvider implements IPathsProvider {
 	private File xPlaneToolsFolder;
 	private File roofColorFile = null;
 
+	
+	public DefaultPathsProvider() {
+		
+	}
+	
+	public DefaultPathsProvider(File basicFolder) {
+		this.basicFolder = basicFolder;
+	}
+	
 	@Override
 	public File getBasicFolder() {
 		if (basicFolder == null) {
