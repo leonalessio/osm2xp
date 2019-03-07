@@ -19,6 +19,7 @@ import com.osm2xp.core.exceptions.Osm2xpBusinessException;
 import com.osm2xp.core.logging.Osm2xpLogger;
 import com.osm2xp.generation.options.GlobalOptionsProvider;
 import com.osm2xp.gui.Activator;
+import com.osm2xp.gui.perspectives.Xplane10ConfigurationPerspective;
 import com.osm2xp.gui.views.MainSceneryFileView;
 import com.osm2xp.jobs.GenerateMultiTilesJob;
 import com.osm2xp.jobs.MutexRule;
@@ -37,7 +38,7 @@ import com.osm2xp.utils.ui.UiUtil;
  */
 public class BuildController {
 	
-	private static String mode = "xplane10";
+	private static String mode = Xplane10ConfigurationPerspective.MODE;
 	
 	private String folderPath;
 	private MutexRule rule = new MutexRule();
@@ -193,7 +194,7 @@ public class BuildController {
 						Osm2xpLogger.error("Error creating project file", e1);
 					}
 				}
-				GenerateMultiTilesJob tilesJob = new GenerateMultiTilesJob("Generate several tiles", BuildController.getMode(), currentFile, folderPath, "todoJob");
+				GenerateMultiTilesJob tilesJob = new GenerateMultiTilesJob("Generate several tiles", BuildController.getGenerationMode(), currentFile, folderPath, "todoJob");
 				tilesJob.setRule(new MutexRule());
 				tilesJob.addJobChangeListener(new JobChangeAdapter() {
 
@@ -240,7 +241,7 @@ public class BuildController {
 
 	}
 
-	public static String getMode() {
+	public static String getGenerationMode() {
 		return mode;
 	}
 

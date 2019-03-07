@@ -8,8 +8,10 @@ package com.osm2xp.gui.perspectives;
  */
 public class Xplane10ConfigurationPerspective extends GenerationPerspective {
 
+	public static final String MODE = "XPLANE10";
+
 	public Xplane10ConfigurationPerspective() {
-		super("XPLANE10");
+		super(MODE);
 	}
 
 }

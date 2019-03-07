@@ -3,7 +3,6 @@ package com.osm2xp.gui.views.panels.xplane;
 import org.eclipse.swt.SWT;
 import org.eclipse.swt.layout.GridData;
 import org.eclipse.swt.layout.GridLayout;
-import org.eclipse.swt.widgets.Button;
 import org.eclipse.swt.widgets.Composite;
 import org.eclipse.swt.widgets.Label;
 import org.eclipse.swt.widgets.Spinner;
@@ -18,7 +17,6 @@ import com.osm2xp.gui.views.panels.Osm2xpPanel;
  * 
  */
 public class SceneryOptionsPanel extends Osm2xpPanel {
-	private Button btnPackageFacades;
 	private Spinner spinnerMinSegment;
 	private Label lblMinSegment;
 	private Spinner spinnerMaxSegment;
@@ -31,7 +29,6 @@ public class SceneryOptionsPanel extends Osm2xpPanel {
 
 	public SceneryOptionsPanel(final Composite parent, final int style) {
 		super(parent, style);
-
 	}
 
 	@Override
@@ -40,9 +37,6 @@ public class SceneryOptionsPanel extends Osm2xpPanel {
 		gridLayout.horizontalSpacing = 15;
 		gridLayout.verticalSpacing = 15;
 		setLayout(gridLayout);
-		btnPackageFacades.setLayoutData(new GridData(SWT.FILL, SWT.FILL, false,
-				false, 1, 1));
-
 		GridData gd_lblMinSegment = new GridData(SWT.LEFT, SWT.CENTER, false,
 				false, 1, 1);
 		gd_lblMinSegment.widthHint = 279;
@@ -63,8 +57,6 @@ public class SceneryOptionsPanel extends Osm2xpPanel {
 	@Override
 	protected void initComponents() {
 
-		btnPackageFacades = new Button(this, SWT.CHECK);
-		btnPackageFacades.setText("package facades");
 		new Label(this, SWT.NONE);
 		new Label(this, SWT.NONE);
 		new Label(this, SWT.NONE);
@@ -96,8 +88,6 @@ public class SceneryOptionsPanel extends Osm2xpPanel {
 
 	@Override
 	protected void bindComponents() {
-		bindComponent(btnPackageFacades, XPlaneOptionsProvider.getOptions(),
-				"packageFacades");
 		bindComponent(spinnerMinSegment, XPlaneOptionsProvider.getOptions(),
 				"minHouseSegment");
 		bindComponent(spinnerMaxSegment, XPlaneOptionsProvider.getOptions(),

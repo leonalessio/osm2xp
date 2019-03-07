@@ -16,7 +16,9 @@ import com.osm2xp.generation.options.XPlaneOptionsProvider;
  * 
  * @author Benjamin Blanchet
  * 
+ * @deprecated In ver 3.5.x and greater - replaced with simple numeric stats
  */
+@Deprecated
 public class StatsOptionsPanel extends Composite {
 
 	public StatsOptionsPanel(final Composite parent, final int style) {

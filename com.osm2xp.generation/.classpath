@@ -12,6 +12,7 @@
 			<attribute name="maven.pomderived" value="true"/>
 		</attributes>
 	</classpathentry>
+	<classpathentry exported="true" kind="lib" path="lib/guava.jar"/>
 	<classpathentry exported="true" kind="lib" path="lib/jaxb-core.jar"/>
 	<classpathentry exported="true" kind="lib" path="lib/jaxb-impl.jar"/>
 	<classpathentry exported="true" kind="lib" path="lib/commons-io.jar"/>

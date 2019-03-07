@@ -1,5 +1,6 @@
 package com.osm2xp.classification;
 
+import com.osm2xp.classification.annotations.Ignore;
 import com.osm2xp.classification.annotations.Positive;
 import com.osm2xp.classification.annotations.Present;
 import com.osm2xp.classification.annotations.Result;
@@ -15,10 +16,11 @@ public class BuildingData {
 	private double area;
 	@Positive
 	private double maxSide;
-	@Present
-	@Positive
+//	@Present
+//	@Positive
+	@Ignore
 	private double height;
-	@Present
+//	@Present
 	@Positive
 	private int levels;
 	@Positive

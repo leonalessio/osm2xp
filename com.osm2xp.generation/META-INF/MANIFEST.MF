@@ -3,7 +3,9 @@ Bundle-ManifestVersion: 2
 Bundle-Name: Generation
 Bundle-SymbolicName: com.osm2xp.generation
 Bundle-Version: 1.0.0.qualifier
-Export-Package: com.osm2xp.converters.impl,
+Export-Package: com.google.common.collect,
+ com.google.common.io,
+ com.osm2xp.converters.impl,
  com.osm2xp.datastore,
  com.osm2xp.datastore.impl,
  com.osm2xp.generation.collections,
@@ -43,5 +45,7 @@ Bundle-ClassPath: .,
  lib/jts-core.jar,
  lib/mapdb.jar,
  lib/jaxb-core.jar,
- lib/jaxb-impl.jar
-Import-Package: com.google.common.collect
+ lib/jaxb-impl.jar,
+ lib/guava.jar
+Import-Package: com.google.common.collect,
+ com.google.common.util.concurrent;version="21.0.0"

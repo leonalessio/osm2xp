@@ -30,7 +30,8 @@ public class App {
 	private static final int NEIGHBOUR_COUNT = 4;
 
 	public static void main(String[] args) {
-		buildGeoindex();
+//		buildWithGeoindex(new File("F:/tmp/siberian-fed-district-latest.osm.pbf"));
+		buildWithGeoindex(new File("f:\\util\\xplane\\austria-latest.osm.pbf"));
 //		buildDataset();
 //		buildClassifier();
 	}
@@ -48,8 +49,8 @@ public class App {
 		}
 	}
 	
-	protected static void buildGeoindex() {
-		LearningDataParser parser = new LearningDataParser(new File("F:/tmp/siberian-fed-district-latest.osm.pbf"));
+	protected static void buildWithGeoindex(File file) {
+		LearningDataParser parser = new LearningDataParser(file);
 //		VPTreeGeospatialIndex<BuildingPoint> geospatialIndex = new VPTreeGeospatialIndex<>(new EquiRectDistanceFunction());
 		List<WayBuildingData> typeWays = parser.getTypeWays();
 //		STRtree tree = new STRtree(typeWays.size());
@@ -90,7 +91,7 @@ public class App {
 //			}
 //		}
 		List<PointData<WayBuildingData>> classifiedPoints = pointsList.stream().filter(data -> data.getData().getType() != null).collect(Collectors.toList());
-		try (CSVWithAdditionalsWriter<WayBuildingData> writer = new CSVWithAdditionalsWriter<>(new File("type_ways" + NEIGHBOUR_COUNT + ".csv"), "types",NEIGHBOUR_COUNT)) {
+		try (CSVWithAdditionalsWriter<WayBuildingData> writer = new CSVWithAdditionalsWriter<>(new File(getName(file) + "_" + NEIGHBOUR_COUNT + ".csv"), "types",NEIGHBOUR_COUNT)) {
 			for (PointData<WayBuildingData> pointData : classifiedPoints) {
 				Collection<PointData<WayBuildingData>> neighbours = kdTree.nearestNeighbourSearch(NEIGHBOUR_COUNT + 1, pointData);
 				neighbours.remove(pointData);
@@ -101,6 +102,15 @@ public class App {
 			e.printStackTrace();
 		}
 //		System.out.println("App.buildGeoindex() "+ geospatialIndex.getNearestNeighbors(new SimpleGeospatialPoint(55.01, 82.55), 3));
+	}
+
+	protected static String getName(File file) {
+		String name = file.getName();
+		int idx = name.indexOf('.');
+		if (idx > 0) {
+			return name.substring(0, idx);
+		}
+		return name;
 	}	
 
 	protected static void buildClassifier() {

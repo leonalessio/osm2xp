@@ -6,16 +6,14 @@ import org.eclipse.core.commands.ExecutionEvent;
 import org.eclipse.core.commands.ExecutionException;
 import org.eclipse.core.runtime.IStatus;
 import org.eclipse.core.runtime.Status;
-import org.eclipse.core.runtime.preferences.InstanceScope;
 
 import com.osm2xp.controllers.BuildController;
 import com.osm2xp.core.exceptions.Osm2xpBusinessException;
 import com.osm2xp.core.logging.Osm2xpLogger;
 import com.osm2xp.generation.options.FsxOptionsProvider;
 import com.osm2xp.generation.options.GlobalOptionsProvider;
-import com.osm2xp.gui.Activator;
+import com.osm2xp.generation.options.XPlaneOptionsProvider;
 import com.osm2xp.gui.dialogs.utils.Osm2xpDialogsHelper;
-import com.osm2xp.model.facades.FacadeSetHelper;
 import com.osm2xp.model.facades.FacadeSetManager;
 import com.osm2xp.utils.StatusInfo;
 import com.osm2xp.utils.StatusInfo.Severity;
@@ -65,14 +63,14 @@ public class CommandBuildScene extends AbstractHandler{
 			errors.append(" - No osm file selected.\n");
 		}
 		// Xplane validation
-		String mode = BuildController.getMode();
+		String mode = BuildController.getGenerationMode();
 		if (mode.equalsIgnoreCase("XPLANE10") || mode.equalsIgnoreCase("XPLANE9")) {
-			String facadeSetsStr= InstanceScope.INSTANCE.getNode(Activator.PLUGIN_ID).get(FacadeSetManager.FACADE_SETS_PROP,"");
-			if (facadeSetsStr.isEmpty()) {
+			String facadeSetsStr= XPlaneOptionsProvider.getOptions().getFacadeSets();
+			if (StringUtils.isEmpty(facadeSetsStr)) {
 				warnings.append(" - ");
 				warnings.append("No facade sets was configured. Proceed using built-in facades?");
 				warnings.append('\n');
-				facadeSetsStr = FacadeSetHelper.getDefaultFacadePath();
+				facadeSetsStr = XPlaneOptionsProvider.getDefaultFacadeSets();
 			}
 			FacadeSetManager manager = FacadeSetManager.getManager(facadeSetsStr, null);
 			StatusInfo facadeSetStatus = manager.getFacadeSetStatus();

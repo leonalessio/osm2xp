@@ -66,19 +66,19 @@ public class XplaneAdvancedOptionsView extends AbstractOptionsView implements
 		toolkit.adapt(sceneryOptionsPanel, true, true);
 		sectionSceneryOptions.setClient(sceneryOptionsPanel);
 		/**
-		 * Stats options
+		 * Stats options - deprecated
 		 */
-
-		Section statsOptionsSection = toolkit.createSection(form.getBody(),
-				Section.TWISTIE | Section.TITLE_BAR);
-		statsOptionsSection.setLayoutData(new TableWrapData(
-				TableWrapData.FILL_GRAB, TableWrapData.TOP, 1, 1));
-		statsOptionsSection.setText("Stats and Debug options");
-		StatsOptionsPanel statsOptionsPanel = new StatsOptionsPanel(
-				statsOptionsSection, SWT.BORDER);
-
-		toolkit.adapt(statsOptionsPanel, true, true);
-		statsOptionsSection.setClient(statsOptionsPanel);
+//
+//		Section statsOptionsSection = toolkit.createSection(form.getBody(),
+//				Section.TWISTIE | Section.TITLE_BAR);
+//		statsOptionsSection.setLayoutData(new TableWrapData(
+//				TableWrapData.FILL_GRAB, TableWrapData.TOP, 1, 1));
+//		statsOptionsSection.setText("Stats and Debug options");
+//		StatsOptionsPanel statsOptionsPanel = new StatsOptionsPanel(
+//				statsOptionsSection, SWT.BORDER);
+//
+//		toolkit.adapt(statsOptionsPanel, true, true);
+//		statsOptionsSection.setClient(statsOptionsPanel);
 	}
 	
 	@Override

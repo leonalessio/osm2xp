@@ -6,8 +6,7 @@ import java.util.Arrays;
 import java.util.List;
 import java.util.stream.Collectors;
 
-import org.eclipse.core.runtime.preferences.IEclipsePreferences;
-import org.eclipse.core.runtime.preferences.InstanceScope;
+import org.apache.commons.lang.StringUtils;
 import org.eclipse.jface.layout.GridDataFactory;
 import org.eclipse.jface.layout.PixelConverter;
 import org.eclipse.jface.viewers.ArrayContentProvider;
@@ -28,14 +27,11 @@ import org.eclipse.swt.widgets.Group;
 import org.eclipse.swt.widgets.Label;
 import org.eclipse.swt.widgets.Spinner;
 import org.eclipse.ui.plugin.AbstractUIPlugin;
-import org.osgi.service.prefs.BackingStoreException;
 
 import com.osm2xp.generation.options.XPlaneOptionsProvider;
 import com.osm2xp.gui.Activator;
 import com.osm2xp.gui.dialogs.FacadeSetEditorDialog;
 import com.osm2xp.gui.views.panels.Osm2xpPanel;
-import com.osm2xp.model.facades.FacadeSetHelper;
-import com.osm2xp.model.facades.FacadeSetManager;
 
 /**
  * FacadeSetPanel.
@@ -202,24 +198,25 @@ public class FacadeSetPanel extends Osm2xpPanel {
 
 	protected void persistFacadeSets() {
 		String facadesStr = facadeSets.stream().collect(Collectors.joining(File.pathSeparator));
-		IEclipsePreferences node = InstanceScope.INSTANCE.getNode(Activator.PLUGIN_ID);
-		node.put(FacadeSetManager.FACADE_SETS_PROP, facadesStr);
-		try {
-			node.flush();
-		} catch (BackingStoreException e) {
-			Activator.log(e);
-		}
+		XPlaneOptionsProvider.getOptions().setFacadeSets(facadesStr);
+//		IEclipsePreferences node = InstanceScope.INSTANCE.getNode(Activator.PLUGIN_ID);
+//		node.put(FacadeSetManager.FACADE_SETS_PROP, facadesStr);
+//		try {
+//			node.flush();
+//		} catch (BackingStoreException e) {
+//			Activator.log(e);
+//		}
 	}
 
 	protected void loadSets() {
-		String[] facades = InstanceScope.INSTANCE.getNode(Activator.PLUGIN_ID).get(FacadeSetManager.FACADE_SETS_PROP,"").split(File.pathSeparator);
-		facadeSets = new ArrayList<>();
-		if (facades.length == 0 || facades[0].trim().isEmpty()) {
-			facadeSets.add(FacadeSetHelper.getDefaultFacadePath());
-			persistFacadeSets();
-		} else {
-			facadeSets.addAll(Arrays.asList(facades).stream().filter(str -> !str.trim().isEmpty()).collect(Collectors.toList()));
+		String setsStr = XPlaneOptionsProvider.getOptions().getFacadeSets();
+		if (StringUtils.isEmpty(setsStr)) {
+			setsStr = XPlaneOptionsProvider.getDefaultFacadeSets();
+			XPlaneOptionsProvider.getOptions().setFacadeSets(setsStr);
 		}
+		String[] facades = setsStr.split(File.pathSeparator);
+		facadeSets = new ArrayList<>();
+		facadeSets.addAll(Arrays.asList(facades).stream().filter(str -> !str.trim().isEmpty()).collect(Collectors.toList()));
 		refreshViewer();
 	}
 

@@ -21,7 +21,7 @@ public class GeneralOptionsPanel extends Osm2xpPanel {
 	private Button btnApdTime;
 	private Button btnApdCoords;
 	private Button btnSimplifyShapes;
-	private Button btnSinglePass;
+//	private Button btnSinglePass;
 
 	public GeneralOptionsPanel(final Composite parent, final int style) {
 		super(parent, style);
@@ -40,8 +40,8 @@ public class GeneralOptionsPanel extends Osm2xpPanel {
 				1, 1));
 		btnApdCoords.setLayoutData(new GridData(SWT.FILL, SWT.FILL, false,
 				false, 1, 1));
-		btnSinglePass.setLayoutData(new GridData(SWT.FILL, SWT.FILL, false,
-				false, 1, 1));
+//		btnSinglePass.setLayoutData(new GridData(SWT.FILL, SWT.FILL, false,
+//				false, 1, 1));
 
 	}
 
@@ -55,8 +55,8 @@ public class GeneralOptionsPanel extends Osm2xpPanel {
 		btnApdTime.setText("Add time to scene name");
 		btnApdCoords = new Button(this, SWT.CHECK);
 		btnApdCoords.setText("Add coordinates to scene name");
-		btnSinglePass = new Button(this, SWT.CHECK);
-		btnSinglePass.setText("Single pass mode");
+//		btnSinglePass = new Button(this, SWT.CHECK);
+//		btnSinglePass.setText("Single pass mode");
 
 	}
 
@@ -68,8 +68,8 @@ public class GeneralOptionsPanel extends Osm2xpPanel {
 		bindComponent(btnApdCoords, GlobalOptionsProvider.getOptions(), "appendTile");
 		bindComponent(btnSimplifyShapes, GlobalOptionsProvider.getOptions(),
 				"simplifyShapes");
-		bindComponent(btnSinglePass, GlobalOptionsProvider.getOptions(),
-				"singlePass");
+//		bindComponent(btnSinglePass, GlobalOptionsProvider.getOptions(),
+//				"singlePass");
 
 	}
 

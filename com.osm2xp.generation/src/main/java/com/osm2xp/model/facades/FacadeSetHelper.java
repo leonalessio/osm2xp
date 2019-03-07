@@ -188,12 +188,5 @@ public class FacadeSetHelper {
 		}
 		return result;
 	}
-	
-	
-	
-	public static String getDefaultFacadePath() {
-		File installFolder = PathsService.getPathsProvider().getBasicFolder();
-		return new File(installFolder, "facades").getAbsolutePath();
-	}
 
 }

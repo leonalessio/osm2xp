@@ -6,6 +6,7 @@ import org.eclipse.core.runtime.IExtension;
 import org.eclipse.swt.graphics.Point;
 import org.eclipse.ui.IPerspectiveDescriptor;
 import org.eclipse.ui.IWorkbenchPage;
+import org.eclipse.ui.IWorkbenchPartReference;
 import org.eclipse.ui.IWorkbenchPreferenceConstants;
 import org.eclipse.ui.PerspectiveAdapter;
 import org.eclipse.ui.PlatformUI;
@@ -84,7 +85,6 @@ public class ApplicationWorkbenchWindowAdvisor extends WorkbenchWindowAdvisor {
 	/**
 	 * 
 	 */
-	@SuppressWarnings("restriction")
 	private void removeUnwantedToolItems() {
 		ActionSetRegistry reg = WorkbenchPlugin.getDefault()
 				.getActionSetRegistry();
@@ -113,8 +113,10 @@ public class ApplicationWorkbenchWindowAdvisor extends WorkbenchWindowAdvisor {
 		// reset last used file
 		GlobalOptionsProvider.getOptions().setCurrentFilePath(null);
 		PlatformUI.getWorkbench().getActiveWorkbenchWindow().addPerspectiveListener(new PerspectiveAdapter() {
+			
 			@Override
-			public void perspectiveActivated(IWorkbenchPage page, IPerspectiveDescriptor perspective) {
+			public void perspectiveChanged(IWorkbenchPage page, IPerspectiveDescriptor perspective,
+					IWorkbenchPartReference partRef, String changeId) {
 				if (perspective instanceof IGenerationModeProvider) {
 					String generationMode = ((IGenerationModeProvider) perspective).getGenerationMode();
 					BuildController.setGenerationMode(generationMode);
@@ -130,7 +132,6 @@ public class ApplicationWorkbenchWindowAdvisor extends WorkbenchWindowAdvisor {
 				+ " by Benjamin Blanchet and Dmitry Karpenko");
 		Osm2xpLogger.info("==================================================");
 	}
-
 
 	@Override
 	public void dispose() {
