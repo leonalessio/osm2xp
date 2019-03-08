@@ -17,10 +17,6 @@ public class FlightGearOptionsProvider {
 	private static FlightGearOptions options;
 
 	public static FlightGearOptions getOptions() {
-		return options;
-	}
-
-	public static void setOptions(FlightGearOptions options) {
 		if (options == null) {
 			if (FLIGHTGEAR_OPTIONS_FILE.isFile()) {
 				try {
@@ -36,6 +32,10 @@ public class FlightGearOptionsProvider {
 				options = createNewFlightGearOptionsBean();
 			}
 		}
+		return options;
+	}
+
+	public static void setOptions(FlightGearOptions options) {
 		FlightGearOptionsProvider.options = options;
 	}
 

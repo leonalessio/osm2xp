@@ -8,8 +8,4 @@ package com.osm2xp.gui.perspectives;
  */
 public class OsmConfigurationPerspective extends GenerationPerspective {
 
-	public OsmConfigurationPerspective() {
-		super("OSM");
-	}
-	
 }

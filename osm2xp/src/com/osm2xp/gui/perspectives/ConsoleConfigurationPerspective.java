@@ -8,10 +8,4 @@ package com.osm2xp.gui.perspectives;
  */
 public class ConsoleConfigurationPerspective extends GenerationPerspective{
 
-	public static final String ID = "com.osm2xp.consoleConfigurationPerspective";
-
-	public ConsoleConfigurationPerspective() {
-		super("CONSOLE");
-	}
-
 }

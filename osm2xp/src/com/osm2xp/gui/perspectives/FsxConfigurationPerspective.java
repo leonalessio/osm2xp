@@ -8,8 +8,5 @@ package com.osm2xp.gui.perspectives;
  */
 public class FsxConfigurationPerspective extends GenerationPerspective {
 
-	public FsxConfigurationPerspective() {
-		super("FSX");
-	}
 
 }

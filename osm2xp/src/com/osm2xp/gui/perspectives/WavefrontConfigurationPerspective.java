@@ -8,8 +8,4 @@ package com.osm2xp.gui.perspectives;
  */
 public class WavefrontConfigurationPerspective extends GenerationPerspective {
 
-	public WavefrontConfigurationPerspective() {
-		super("WAVEFRONT");
-	}
-
 }

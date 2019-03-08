@@ -8,10 +8,5 @@ package com.osm2xp.gui.perspectives;
  */
 public class FlightGearConfigurationPerspective extends GenerationPerspective {
 	
-	public static final String ID = "com.osm2xp.flightGearConfigurationPerspective";
-	
-	public FlightGearConfigurationPerspective() {
-		super("FLIGHT_GEAR");
-	}
 
 }

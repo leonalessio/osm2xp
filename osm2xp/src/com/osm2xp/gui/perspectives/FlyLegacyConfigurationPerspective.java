@@ -8,8 +8,5 @@ package com.osm2xp.gui.perspectives;
  */
 public class FlyLegacyConfigurationPerspective extends GenerationPerspective{
 
-	public FlyLegacyConfigurationPerspective() {
-		super("FLY_LEGACY");
-	}
 
 }

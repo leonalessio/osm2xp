@@ -9,7 +9,7 @@ package com.osm2xp.gui.handlers.modes;
 public class CommandFlyLegacyMode extends ModeCommand {
 	
 	public CommandFlyLegacyMode() {
-		super("com.osm2xp.flyLegacyConfigurationPerspective","flyLegacy");
+		super("com.osm2xp.flyLegacyConfigurationPerspective","flyLegacy", "FLY_LEGACY");
 	}
 
 }

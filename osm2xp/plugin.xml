@@ -15,11 +15,11 @@
          point="org.eclipse.ui.perspectives">
       <perspective
             name="Xplane 9 autogen Configuration"
-            class="com.osm2xp.gui.perspectives.Xplane9ConfigurationPerspective"
+            class="com.osm2xp.gui.perspectives.GenerationPerspective"
             id="com.osm2xp.xplane9ConfigurationPerspective">
       </perspective>
       <perspective
-            class="com.osm2xp.gui.perspectives.Xplane9ConfigurationPerspective"
+            class="com.osm2xp.gui.perspectives.GenerationPerspective"
             id="com.osm2xp.xplane10ConfigurationPerspective"
             name="Xplane 10 autogen Configuration">
       </perspective>
@@ -29,12 +29,12 @@
             name="Build">
       </perspective>
       <perspective
-            class="com.osm2xp.gui.perspectives.FsxConfigurationPerspective"
+            class="com.osm2xp.gui.perspectives.GenerationPerspective"
             id="com.osm2xp.fsxConfigurationPerspective"
             name="Fsx scenery configuration">
       </perspective>
       <perspective
-            class="com.osm2xp.gui.perspectives.WavefrontConfigurationPerspective"
+            class="com.osm2xp.gui.perspectives.GenerationPerspective"
             id="com.osm2xp.wavefrontConfigurationPerspective"
             name="Wavefront configuration">
       </perspective>
@@ -44,24 +44,24 @@
             name="startup perspective">
       </perspective>
       <perspective
-            class="com.osm2xp.gui.perspectives.FlyLegacyConfigurationPerspective"
+            class="com.osm2xp.gui.perspectives.GenerationPerspective"
             id="com.osm2xp.flyLegacyConfigurationPerspective"
             name="Fly Legacy configuration">
       </perspective>
       <perspective
-            class="com.osm2xp.gui.perspectives.OsmConfigurationPerspective"
+            class="com.osm2xp.gui.perspectives.GenerationPerspective"
             id="com.osm2xp.osmConfigurationPerspective"
             name="osm configuration">
       </perspective>
       <perspective
-            class="com.osm2xp.gui.perspectives.ConsoleConfigurationPerspective"
+            class="com.osm2xp.gui.perspectives.GenerationPerspective"
             id="com.osm2xp.consoleConfigurationPerspective"
             name="console configuration">
       </perspective>
       <perspective
-            class="com.osm2xp.gui.perspectives.FlightGearConfigurationPerspective"
+            class="com.osm2xp.gui.perspectives.GenerationPerspective"
             id="com.osm2xp.flightGearConfigurationPerspective"
-            name="flight gear configuration">
+            name="Flight Gear configuration">
       </perspective>
    </extension>
    <extension

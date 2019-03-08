@@ -82,8 +82,8 @@ public class TranslatorBuilder {
 		return null;
 	}
 
-	public static ITranslatorProvider getTranslatorProvider(File currentFile, String folderPath, String outputFomat) {
-		ITranslatorProviderFactory factory = getTranslatorProviderFactory(outputFomat);
+	public static ITranslatorProvider getTranslatorProvider(File currentFile, String folderPath, String generationMode) {
+		ITranslatorProviderFactory factory = getTranslatorProviderFactory(generationMode);
 		if (factory != null) {
 			return factory.getTranslatorProvider(currentFile, folderPath);
 		}

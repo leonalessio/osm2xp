@@ -9,6 +9,6 @@ package com.osm2xp.gui.handlers.modes;
 public class CommandFsxMode extends ModeCommand {
 
 	public CommandFsxMode() {
-		super("com.osm2xp.fsxConfigurationPerspective","fsx");
+		super("com.osm2xp.fsxConfigurationPerspective", "fsx", "FSX");
 	}
 }

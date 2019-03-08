@@ -8,8 +8,4 @@ package com.osm2xp.gui.perspectives;
  */
 public class Xplane9ConfigurationPerspective extends GenerationPerspective {
 
-	public Xplane9ConfigurationPerspective() {
-		super("XPLANE9");
-	}
-
 }

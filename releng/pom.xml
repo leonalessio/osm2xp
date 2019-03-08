@@ -41,11 +41,13 @@
 		<target.platform.name.default>mavenTychoDemo</target.platform.name.default>
 	</properties>
 
+
 	<modules>
-		<module>com.osm2xp.core</module>
-		<module>com.osm2xp.generation</module>
-		<module>com.osm2xp.console</module>
-		<module>com.osm2xp.application</module>
+		<module>../com.osm2xp.core</module>
+		<module>../com.osm2xp.generation</module>
+		<module>../com.osm2xp.console</module>
+		<module>../osm2xp</module>
+		<module>../com.osm2xp.product</module>
 	</modules>
 
 	<profiles>

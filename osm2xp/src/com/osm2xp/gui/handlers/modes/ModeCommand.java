@@ -5,6 +5,7 @@ import org.eclipse.core.commands.ExecutionEvent;
 import org.eclipse.core.commands.ExecutionException;
 import org.eclipse.core.runtime.Platform;
 
+import com.osm2xp.controllers.BuildController;
 import com.osm2xp.gui.views.panels.generic.OutPutFormatPanel;
 import com.osm2xp.utils.ui.UiUtil;
 
@@ -18,9 +19,12 @@ public class ModeCommand extends AbstractHandler {
 
 	private String docFolder;
 
-	public ModeCommand(String perspectiveId, String docFolder) {
+	private String modeId;
+
+	public ModeCommand(String perspectiveId, String docFolder, String modeId) {
 		super();
 		this.perspectiveId = perspectiveId;
+		this.modeId = modeId;
 		this.docFolder = docFolder;
 	}
 
@@ -29,7 +33,7 @@ public class ModeCommand extends AbstractHandler {
 //		GlobalOptionsProvider.getOptions().setOutputFormat( //TODO
 //				Perspectives.PERSPECTIVE_XPLANE10);
 		UiUtil.switchPerspective(perspectiveId);
-		
+		BuildController.setGenerationMode(modeId);
 		OutPutFormatPanel.updateBrowserUrl(HTML_FILE_PREFFIX + docFolder + HTML_FILE);
 		return null;
 	}
