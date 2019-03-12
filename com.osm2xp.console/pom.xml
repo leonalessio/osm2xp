@@ -4,7 +4,7 @@
 
 	<groupId>com.osm2xp</groupId>
 	<artifactId>console</artifactId>
-	<version>0.0.1-SNAPSHOT</version>
+	<version>1.0.0-SNAPSHOT</version>
 	<packaging>jar</packaging>
 	<name>console</name>
 	<url>https://sourceforge.net/projects/osm2xp</url>
@@ -71,8 +71,8 @@
 	<dependencies>
 		<dependency>
 			<groupId>com.osm2xp</groupId>
-			<artifactId>generation</artifactId>
-			<version>0.0.1-SNAPSHOT</version>
+			<artifactId>com.osm2xp.generation</artifactId>
+			<version>1.0.0-SNAPSHOT</version>
 		</dependency>
 		<dependency>
 			<groupId>commons-cli</groupId>

@@ -3,6 +3,7 @@ package com.osm2xp.classification;
 import java.io.File;
 import java.io.IOException;
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.Collection;
 import java.util.List;
 import java.util.stream.Collectors;
@@ -31,7 +32,7 @@ public class App {
 
 	public static void main(String[] args) {
 //		buildWithGeoindex(new File("F:/tmp/siberian-fed-district-latest.osm.pbf"));
-		buildWithGeoindex(new File("f:\\util\\xplane\\austria-latest.osm.pbf"));
+		buildWithGeoindex(Arrays.asList(new File("f:\\tmp\\osm\\").listFiles()));
 //		buildDataset();
 //		buildClassifier();
 	}
@@ -49,25 +50,34 @@ public class App {
 		}
 	}
 	
-	protected static void buildWithGeoindex(File file) {
-		LearningDataParser parser = new LearningDataParser(file);
-//		VPTreeGeospatialIndex<BuildingPoint> geospatialIndex = new VPTreeGeospatialIndex<>(new EquiRectDistanceFunction());
-		List<WayBuildingData> typeWays = parser.getTypeWays();
-//		STRtree tree = new STRtree(typeWays.size());
-//		int i = 0;
-//		for (WayBuildingData wayBuildingData : typeWays) {
-//			i++;
-//			if (i % 50000 == 0) {
-//				System.out.println("Added " + i + " points");
-//			}
-//			Box2D bbox = wayBuildingData.getBoundingBox();
-//			Envelope envelope = new Envelope(bbox.getMinX(), bbox.getMaxX(), bbox.getMinY(), bbox.getMaxY()); 
-//			
-//			tree.insert(envelope, wayBuildingData);
-//		}
-//		tree.build();
-		List<PointData<WayBuildingData>> pointsList = new ArrayList<PointData<WayBuildingData>>();
+	protected static void buildWithGeoindex(List<File> files) {
+		try (CSVWithAdditionalsWriter<WayBuildingData> writer = new CSVWithAdditionalsWriter<>(new File(getName(files.get(0)) + "_" + NEIGHBOUR_COUNT + ".csv"), "types",NEIGHBOUR_COUNT)) {
+			for (File curFile : files) {
+				processCurFile(writer, curFile);
+			}
+		} catch (IOException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
+//		System.out.println("App.buildGeoindex() "+ geospatialIndex.getNearestNeighbors(new SimpleGeospatialPoint(55.01, 82.55), 3));
+	}
+
+	protected static void processCurFile(CSVWithAdditionalsWriter<WayBuildingData> writer, File curFile) {
+		System.out.println("Processing " + curFile.getAbsolutePath());
 		KdTree<PointData<WayBuildingData>> kdTree = new KdTree<>();
+		List<PointData<WayBuildingData>> classifiedPoints = getPointData(curFile, kdTree);
+		for (PointData<WayBuildingData> pointData : classifiedPoints) {
+			Collection<PointData<WayBuildingData>> neighbours = kdTree.nearestNeighbourSearch(NEIGHBOUR_COUNT + 1, pointData);
+			neighbours.remove(pointData);
+			writer.write(pointData.getData(), neighbours.stream().limit(NEIGHBOUR_COUNT).map(data -> data.getData()).collect(Collectors.toList()));
+		}
+	}
+
+	protected static List<PointData<WayBuildingData>> getPointData(File file,
+			KdTree<PointData<WayBuildingData>> kdTree) {
+		LearningDataParser parser = new LearningDataParser(file);
+		List<WayBuildingData> typeWays = parser.getTypeWays();
+		List<PointData<WayBuildingData>> pointsList = new ArrayList<PointData<WayBuildingData>>();
 		int i = 0;
 		for (WayBuildingData wayBuildingData : typeWays) {
 			i++;
@@ -78,30 +88,8 @@ public class App {
 			kdTree.add(pointData);
 			pointsList.add(pointData);
 		}
-		long t1 = System.currentTimeMillis();
-		System.out.println("Built tree in millis: " + (System.currentTimeMillis() - t1));
-//		ItemDistance itemDistance = new EquiRectDistanceFunction();
-//		for (WayBuildingData wayBuildingData : typeWays) {
-//			t1 = System.currentTimeMillis();
-//			Object[] neighbours = tree.nearestNeighbour(getEnvelope(wayBuildingData.getBoundingBox()),wayBuildingData,itemDistance, 3);
-//			System.out.println("Search took: " + (System.currentTimeMillis() - t1));
-//			i++;
-//			if (i % 50000 == 0) {
-//				System.out.println("Found neighbors for " + i);
-//			}
-//		}
 		List<PointData<WayBuildingData>> classifiedPoints = pointsList.stream().filter(data -> data.getData().getType() != null).collect(Collectors.toList());
-		try (CSVWithAdditionalsWriter<WayBuildingData> writer = new CSVWithAdditionalsWriter<>(new File(getName(file) + "_" + NEIGHBOUR_COUNT + ".csv"), "types",NEIGHBOUR_COUNT)) {
-			for (PointData<WayBuildingData> pointData : classifiedPoints) {
-				Collection<PointData<WayBuildingData>> neighbours = kdTree.nearestNeighbourSearch(NEIGHBOUR_COUNT + 1, pointData);
-				neighbours.remove(pointData);
-				writer.write(pointData.getData(), neighbours.stream().limit(NEIGHBOUR_COUNT).map(data -> data.getData()).collect(Collectors.toList()));
-			}
-		} catch (IOException e) {
-			// TODO Auto-generated catch block
-			e.printStackTrace();
-		}
-//		System.out.println("App.buildGeoindex() "+ geospatialIndex.getNearestNeighbors(new SimpleGeospatialPoint(55.01, 82.55), 3));
+		return classifiedPoints;
 	}
 
 	protected static String getName(File file) {

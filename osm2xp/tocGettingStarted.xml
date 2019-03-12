@@ -1,9 +1,0 @@
-<?xml version="1.0" encoding="UTF-8"?>
-<?NLS TYPE="org.eclipse.help.toc"?>
-
-<toc label="Getting Started" link_to="toc.xml#gettingstarted"> 
-	<topic label="Getting OSM data"  href="html/gettingstarted/gettingOsmData.html"> 
-	</topic>
- <topic href="html/gettingstarted/installingOsm2xpScene.html" label="Installing an osm2xp scene into xplane">
- </topic>
-</toc>

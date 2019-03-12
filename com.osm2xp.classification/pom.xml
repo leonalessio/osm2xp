@@ -34,7 +34,7 @@
      </dependency>
   	<dependency>
   		<groupId>com.osm2xp</groupId>
-  		<artifactId>core</artifactId>
+  		<artifactId>com.osm2xp.core</artifactId>
   		<version>[0.0.0,)</version>
   	</dependency>
   </dependencies>

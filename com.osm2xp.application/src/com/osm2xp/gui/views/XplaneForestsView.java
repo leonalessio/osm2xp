@@ -1,0 +1,56 @@
+package com.osm2xp.gui.views;
+
+import org.eclipse.help.HelpSystem;
+import org.eclipse.help.IContext;
+import org.eclipse.help.IContextProvider;
+import org.eclipse.swt.SWT;
+import org.eclipse.ui.forms.widgets.Section;
+import org.eclipse.ui.forms.widgets.TableWrapData;
+
+import com.osm2xp.gui.views.panels.xplane.ForestsRulesPanel;
+
+/**
+ * XplaneForestsView.
+ * 
+ * @author Benjamin Blanchet
+ * 
+ */
+
+public class XplaneForestsView extends AbstractOptionsView implements IContextProvider {
+
+	public XplaneForestsView() {
+		super("Forests options","images/toolbarsIcons/leaf_32.png");
+	}
+	
+	@Override
+	protected void createFormControls() {
+		/**
+		 * Forests Rules
+		 */
+
+		Section sectionForestRules = toolkit.createSection(form.getBody(),
+				Section.TWISTIE | Section.EXPANDED | Section.TITLE_BAR);
+		sectionForestRules.setLayoutData(new TableWrapData(
+				TableWrapData.FILL_GRAB, TableWrapData.TOP, 1, 1));
+		sectionForestRules.setText("Forests rules");
+		ForestsRulesPanel forestsRulesPanel = new ForestsRulesPanel(
+				sectionForestRules, SWT.BORDER);
+		toolkit.adapt(forestsRulesPanel, true, true);
+		sectionForestRules.setClient(forestsRulesPanel);
+	}
+
+	@Override
+	public int getContextChangeMask() {
+		return 0;
+	}
+
+	@Override
+	public IContext getContext(Object target) {
+		return HelpSystem.getContext("com.osm2xp.forestsHelpContext");
+	}
+
+	@Override
+	public String getSearchExpression(Object target) {
+		return "forest";
+	}
+}

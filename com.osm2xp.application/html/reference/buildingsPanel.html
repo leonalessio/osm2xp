@@ -1,0 +1,103 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN" "http://www.w3.org/TR/html4/loose.dtd">
+<html>
+  <head>
+
+    <meta http-equiv="content-type" content="text/html; charset=ISO-8859-1">
+    <title>Buildings panel reference</title>
+  </head>
+  <body>
+    <h1> Buildings panel reference </h1>
+    <p> The buildings panel lets you choose some options to customize
+      the look of generated buildings.<br>
+      It's composed of 4 sections:<br>
+    </p>
+    <ol>
+      <li><a href="#1._Facade_set">Facade set</a></li>
+      <li><a href="#2.Buildings_minmax_height">Buildings height</a></li>
+      <li><a href="#3.Buildings_exclusions">Buildings exclusions</a></li>
+      <li><a href="#4.Facades_rules_section">Facades rules</a><br>
+      </li>
+    </ol>
+    <p><br>
+    </p>
+    <h2 style="font-weight: normal;"><a name="1._Facade_set"></a>1.
+      Facade set</h2>
+    <p><img style=" width: 369px; height: 155px;" alt="facade set"
+        title="facade set"
+        src="../img/buildingsPanel_facadeSetSection.jpg"><br>
+    </p>
+    <p><span style="font-weight: bold;">-Facade set :</span> the facade
+      set used for the generation (the textures of buildings).<br>
+    </p>
+    <p><span style="font-weight: bold;">-L.O.D :</span> the level of
+      details of buildings. the higher the lod, the farthest you'll see
+      the buildings (it also has an impact on fps).</p>
+    <p><span style="font-weight: bold;">-Sloped roofs :</span> if
+      checked, osm2xp will put sloped roofs on buildings. Please note
+      that the xplane engine has limitations on this point, so not all
+      buildings will be able to have sloped roofs, and some buildings
+      will just have a small sloped section.<br>
+      If your generated scene is crashing in xplane, try to disable
+      sloped roofs, it may be possible that a building with a very weird
+      shape has a sloped roof, and that a geometry problem is making
+      xplane crashes.<br>
+    </p>
+    <p><span style="font-weight: bold;">-Hard buildings : </span>if
+      checked , buildings will be hard, meaning planes will crashes on
+      them (minor fps impact)<br>
+    </p>
+    <p><br>
+      <br>
+    </p>
+    <h2><a name="2.Buildings_minmax_height"></a><span
+        style="font-weight: normal;">2.Buildings min/max height</span><br>
+    </h2>
+    <br>
+    <p><img style=" width: 458px; height: 142px;" alt="Buildings height"
+        title="Buildings height"
+        src="../img/buildingsPanel_buildingsHeightSection.jpg"><br>
+    </p>
+    <p>This section lets you choose minimum and maximum height for
+      houses and commercial/industrial buildings.<br>
+      Please note that if a height value is specified for a building in
+      the open street map data you're using, this value will be used
+      prior to your values.<br>
+      You can have a look at <a
+href="http://wiki.openstreetmap.org/wiki/Proposed_features/Building_attributes">this
+        page on the openStreetMap wiki</a> for more information about
+      height tags in osm data.<br>
+    </p>
+    <p><br>
+      <br>
+    </p>
+    <h2 style="font-weight: normal;"><a name="3.Buildings_exclusions"></a>3.Buildings
+      exclusions</h2>
+    <br>
+    <img style=" width: 548px; height: 148px;" alt="Buildings
+      exclusions" title="Buildings exclusions"
+      src="../img/buildingsPanel_buildingsExclusionsSection.jpg"><br>
+    <br>
+    This section lets you specify openStreetMap tags that will be used
+    as an exclusion list for buildings.<br>
+    With this feature you can prevent the generation of airport
+    buildings for exemple.<br>
+    <br>
+    <br>
+    <br>
+    <h2 style="font-weight: normal;"><a name="4.Facades_rules_section"></a>4.Facades
+      rules section</h2>
+    <br>
+    <img style=" width: 622px; height: 213px;" alt="facades rules"
+      title="facades rules"
+      src="../img/buildingsPanel_facadesRulesSection.jpg"><br>
+    <br>
+    The facades rules section is one of the place of osm2xp where you
+    can create advanced generation rules.<br>
+    In this section, you can choose a tag, and link some facades files
+    and a min/max height to this tag.<br>
+    It will let you place a specific facade file for some specifics
+    buildings, like a supermarket , an hospital, an airport terminal for
+    exemple.<br>
+    <br>
+  </body>
+</html>
