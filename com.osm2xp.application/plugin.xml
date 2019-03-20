@@ -3,7 +3,7 @@
 <plugin>
 
    <extension
-         id="application"
+         id="app"
          point="org.eclipse.core.runtime.applications">
       <application>
          <run
@@ -708,10 +708,10 @@
       </menuContribution>
    </extension>
    <extension
-         id="osm2xp"
+         id="product"
          point="org.eclipse.core.runtime.products">
       <product
-            application="com.osm2xp.application"
+            application="com.osm2xp.application.app"
             name="OSM2XP">
          <property
                name="appName"

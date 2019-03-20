@@ -161,6 +161,10 @@ public class FacadeSetManager {
 		if (srcFolder.isFile()) {
 			srcFolder = srcFolder.getParentFile();
 		}
+		if (!srcFolder.isDirectory()) {
+			Osm2xpLogger.error("Invalid facades folder " + srcFolder.getAbsolutePath() + " , unable to proceed. Please check your configuration.");
+		}
+		
 		File facadesFolder = new File(targetFolder, FACADES_TARGET_FOLDER_NAME);
 		facadesFolder.mkdirs();
 
@@ -171,6 +175,7 @@ public class FacadeSetManager {
 				DsfUtils.removeConcreteRoofsAndWalls(targetFolder);
 			}
 		} catch (FileNotFoundException e) {
+			
 			throw new Osm2xpTechnicalException(e);
 		} catch (IOException e) {
 			throw new Osm2xpTechnicalException(e);

@@ -11,8 +11,6 @@ import org.apache.commons.lang.ArrayUtils;
 import org.junit.Test;
 
 import com.google.common.io.Files;
-import com.osm2xp.generation.paths.DefaultPathsProvider;
-
 import junit.framework.TestCase;
 
 public class ConsoleAppIntegrationTest extends TestCase {
@@ -21,8 +19,8 @@ public class ConsoleAppIntegrationTest extends TestCase {
 
 	@Test
 	public void testGeneration() throws Exception {
-		File basicFolder = new File(DefaultPathsProvider.class.getProtectionDomain().getCodeSource().getLocation().toURI());
-		while (basicFolder != null && !isGitFolder(basicFolder)) {
+		File basicFolder = new File(new File("").getAbsolutePath()); 
+		while (basicFolder != null && !isTestRootFolder(basicFolder)) {
 			basicFolder = basicFolder.getParentFile();
 		}
 		assertNotNull(basicFolder);
@@ -38,7 +36,7 @@ public class ConsoleAppIntegrationTest extends TestCase {
 		argList.add(basicFolder.getAbsolutePath());
 		argList.add("-s");
 		argList.add(TESTSCENERY_NAME);
-		App.main(argList.toArray(new String[0]));
+		com.osm2xp.console.App.main(argList.toArray(new String[0]));
 		assertTrue(targetDir.isDirectory());
 		String[] subdirs = targetDir.list();
 		assertTrue(ArrayUtils.contains(subdirs, "facades"));
@@ -113,8 +111,8 @@ public class ConsoleAppIntegrationTest extends TestCase {
 		assertEquals(0, stack);
 	}
 
-	private boolean isGitFolder(File basicFolder) {
-		return new File(basicFolder,".git").isDirectory();
+	private boolean isTestRootFolder(File basicFolder) {
+		return new File(basicFolder.getAbsolutePath(),"testdata").isDirectory();
 	}
 	
 }

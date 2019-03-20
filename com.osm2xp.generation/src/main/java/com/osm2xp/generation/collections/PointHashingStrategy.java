@@ -1,7 +1,6 @@
 package com.osm2xp.generation.collections;
 
-import org.eclipse.collections.api.block.HashingStrategy;
-
+import gnu.trove.strategy.HashingStrategy;
 import math.geom2d.Point2D;
 
 public class PointHashingStrategy implements HashingStrategy<Point2D> {

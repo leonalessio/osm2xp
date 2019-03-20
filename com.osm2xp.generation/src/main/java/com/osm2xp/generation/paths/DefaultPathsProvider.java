@@ -27,6 +27,12 @@ public class DefaultPathsProvider implements IPathsProvider {
 		if (basicFolder == null) {
 			try {
 				basicFolder = new File(DefaultPathsProvider.class.getProtectionDomain().getCodeSource().getLocation().toURI());
+				while (!basicFolder.isDirectory()) {
+					basicFolder = basicFolder.getParentFile();
+				}
+				if (basicFolder == null) {
+					basicFolder = new File(new File("").getAbsolutePath());
+				}
 			} catch (URISyntaxException e) { //Shouldn't happen
 				e.printStackTrace();
 				return new File(".");

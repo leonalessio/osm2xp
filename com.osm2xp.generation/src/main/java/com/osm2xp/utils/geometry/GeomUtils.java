@@ -9,8 +9,8 @@ import java.util.Iterator;
 import java.util.List;
 import java.util.stream.Collectors;
 
-import org.locationtech.jts.algorithm.CGAlgorithms;
 import org.locationtech.jts.algorithm.Centroid;
+import org.locationtech.jts.algorithm.Orientation;
 import org.locationtech.jts.geom.Coordinate;
 import org.locationtech.jts.geom.CoordinateArrays;
 import org.locationtech.jts.geom.CoordinateSequence;
@@ -200,7 +200,7 @@ public class GeomUtils {
 
 		int meterConversion = 1609;
 
-		return new Double(dist * meterConversion);
+		return Double.valueOf(dist * meterConversion);
 	}
 
 //	private static double deg2rad(double deg) {
@@ -227,9 +227,9 @@ public class GeomUtils {
 					segment.firstPoint().x(), segment.lastPoint().y(),
 					segment.lastPoint().x());
 			if (minVector == null || minVector > distance)
-				minVector = new Double(distance);
+				minVector = Double.valueOf(distance);
 			if (maxVector == null || maxVector < distance)
-				maxVector = new Double(distance);
+				maxVector = Double.valueOf(distance);
 		}
 		return new Double[] { minVector, maxVector };
 	}
@@ -251,11 +251,11 @@ public class GeomUtils {
 //					segment.lastPoint() .x, segment.lastPoint() .y());
 //			double distance = lineSegment.getLength() * 100000;
 //			if (minVector == null || minVector > distance)
-//				minVector = new Double(distance);
+//				minVector = Double.valueOf(distance);
 //			if (maxVector == null || maxVector < distance)
-//				maxVector = new Double(distance);
+//				maxVector = Double.valueOf(distance);
 //		}
-//		return new Double[] { minVector, maxVector };
+//		return Double.valueOf[] { minVector, maxVector };
 //	}
 
 	/**
@@ -695,7 +695,7 @@ public class GeomUtils {
 						ring2d.vertex(i).y());
 			}
 
-			if (CGAlgorithms.isCCW(coords)) {
+			if (Orientation.isCCW(coords)) {
 				result = ring2d;
 			} else {
 				Collection<Point2D> clockwiseVectors = new ArrayList<Point2D>();
@@ -726,7 +726,7 @@ public class GeomUtils {
 //				coords[i] = new Coordinate(ring2d.vertex(i).x,
 //						ring2d.vertex(i).y());
 //			}
-			if (CGAlgorithms.isCCW(coords.toArray(new Coordinate[0]))) {
+			if (Orientation.isCCW(coords.toArray(new Coordinate[0]))) {
 				Collection<Point2D> clockwiseVectors = new ArrayList<Point2D>();
 				for (int i = ring2d.vertices().size() - 1; i > -1; i--) {
 					clockwiseVectors.add(ring2d.vertex(i));
@@ -762,7 +762,7 @@ public class GeomUtils {
 		if (!lineString.isClosed()) {
 			return lineString;
 		}
-		if (CGAlgorithms.isCCW(lineString.getCoordinates()) != ccw) {
+		if (Orientation.isCCW(lineString.getCoordinates()) != ccw) {
 			return (LineString) lineString.reverse();
 		}
 		return lineString;

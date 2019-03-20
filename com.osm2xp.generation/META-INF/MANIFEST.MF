@@ -46,6 +46,5 @@ Bundle-ClassPath: .,
  lib/mapdb.jar,
  lib/jaxb-core.jar,
  lib/jaxb-impl.jar,
- lib/guava.jar
-Import-Package: com.google.common.collect,
- com.google.common.util.concurrent;version="21.0.0"
+ lib/guava.jar,
+ lib/trove4j.jar

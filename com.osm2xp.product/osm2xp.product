@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <?pde version="3.5"?>
 
-<product name="OSM2XP" uid="osm2xp" id="com.osm2xp.osm2xp" application="com.osm2xp.application" version="4.0.0.qualifier" useFeatures="false" includeLaunchers="true">
+<product name="OSM2XP" uid="com.osm2xp.product" id="com.osm2xp.application.product" application="com.osm2xp.application.app" version="4.0.0.qualifier" useFeatures="false" includeLaunchers="true">
 
    <aboutInfo>
       <text>
@@ -58,7 +58,7 @@ Icons by Open Icon Library http://http://openiconlibrary.sourceforge.net/
 
    <plugins>
       <plugin id="com.ibm.icu"/>
-      <plugin id="com.osm2xp"/>
+      <plugin id="com.osm2xp.application"/>
       <plugin id="com.osm2xp.core"/>
       <plugin id="com.osm2xp.generation"/>
       <plugin id="javax.annotation"/>
@@ -68,6 +68,7 @@ Icons by Open Icon Library http://http://openiconlibrary.sourceforge.net/
       <plugin id="org.apache.batik.util"/>
       <plugin id="org.apache.commons.jxpath"/>
       <plugin id="org.apache.commons.lang"/>
+      <plugin id="org.apache.felix.scr"/>
       <plugin id="org.apache.lucene.analyzers-common"/>
       <plugin id="org.apache.lucene.analyzers-smartcn"/>
       <plugin id="org.apache.lucene.core"/>
@@ -118,6 +119,8 @@ Icons by Open Icon Library http://http://openiconlibrary.sourceforge.net/
       <plugin id="org.eclipse.emf.ecore.xmi"/>
       <plugin id="org.eclipse.equinox.app"/>
       <plugin id="org.eclipse.equinox.common"/>
+      <plugin id="org.eclipse.equinox.ds"/>
+      <plugin id="org.eclipse.equinox.event"/>
       <plugin id="org.eclipse.equinox.preferences"/>
       <plugin id="org.eclipse.equinox.region" fragment="true"/>
       <plugin id="org.eclipse.equinox.registry"/>

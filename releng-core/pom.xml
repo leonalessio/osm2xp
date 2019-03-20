@@ -1,0 +1,100 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!-- ******************************************************************************* 
+	* Copyright (c) 2008-2019 German Aerospace Center (DLR), Simulation and Software 
+	Technology, Germany. * * This program and the accompanying materials are 
+	made available under the * terms of the Eclipse Public License 2.0 which 
+	is available at * http://www.eclipse.org/legal/epl-2.0. * * SPDX-License-Identifier: 
+	EPL-2.0 ******************************************************************************* -->
+<project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+	xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
+
+	<modelVersion>4.0.0</modelVersion>
+	<groupId>com.osm2xp</groupId>
+	<artifactId>com.osm2xp.core.parent</artifactId>
+	<version>4.0.0-SNAPSHOT</version>
+	<packaging>pom</packaging>
+	<name>OSM2XP</name>
+	<organization>
+		<name>OnPositive</name>
+	</organization>
+
+	<modules>
+		<module>../com.osm2xp.core</module>
+		<module>../com.osm2xp.generation</module>
+	</modules>
+	
+	<properties>
+		<project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
+		<maven.compiler.source>1.8</maven.compiler.source>
+		<maven.compiler.target>1.8</maven.compiler.target>
+		<tycho-version>1.2.0</tycho-version>
+		<tycho-extras-version>1.2.0</tycho-extras-version>
+		<project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
+		<build.version>0.3.0</build.version>
+		<build.qualifier>'t'yyyyMMddHHmm</build.qualifier>
+		<build.folder.target>../builds</build.folder.target>
+		<build.folder.p2>p2</build.folder.p2>
+		<build.folder.bin>bin</build.folder.bin>
+		<build.folder.target.secured>../deploy/secured</build.folder.target.secured>
+		<build.folder.target.unsecured>../deploy/unsecured</build.folder.target.unsecured>
+		<build.folder.target.bin>../builds/${build.folder.bin}</build.folder.target.bin>
+		<build.folder.target.p2>../builds/${build.folder.p2}</build.folder.target.p2>
+		<build.folder.type>test</build.folder.type>
+		<build.file.zip>osm2xp.zip</build.file.zip>
+		<build.deploy.release>false</build.deploy.release>
+		<!-- <target.platform.name.default>mavenTychoDemo</target.platform.name.default>  -->
+	</properties>
+
+
+	<build>
+		<plugins>
+			<plugin>
+				<groupId>org.eclipse.tycho</groupId>
+				<artifactId>tycho-maven-plugin</artifactId>
+				<version>${tycho-version}</version>
+				<extensions>true</extensions>
+			</plugin>
+	
+			<plugin>
+				<groupId>org.eclipse.tycho</groupId>
+				<artifactId>tycho-compiler-plugin</artifactId>
+				<version>${tycho-version}</version>
+				<configuration>
+					<showWarnings>true</showWarnings>
+					<useProjectSettings>true</useProjectSettings>
+				</configuration>
+			</plugin>
+	
+			<!-- The surefire plugin enables the unit test runs -->
+			<plugin>
+				<groupId>org.eclipse.tycho</groupId>
+				<artifactId>tycho-surefire-plugin</artifactId>
+				<version>${tycho-version}</version>
+				<configuration>
+					<testFailureIgnore>true</testFailureIgnore>
+					<!-- <argLine>-ea -Xms256m -Xmx512m -javaagent:%USERPROFILE%\.m2\repository\org\jacoco\org.jacoco.agent\0.7.4.201502262128\org.jacoco.agent-0.7.4.201502262128-runtime.jar=destfile='${sonar.jacoco.reportPath}',append=true</argLine> -->
+					<useUIHarness>false</useUIHarness>
+				</configuration>
+			</plugin>
+	
+			<plugin>
+				<groupId>org.eclipse.tycho</groupId>
+				<artifactId>tycho-packaging-plugin</artifactId>
+				<version>${tycho-version}</version>
+				<configuration>
+					<format>${build.qualifier}</format>
+					<archive>
+						<addMavenDescriptor>false</addMavenDescriptor>
+					</archive>
+				</configuration>
+			</plugin>
+	
+			<plugin>
+				<artifactId>maven-antrun-plugin</artifactId>
+				<version>1.8</version>
+			</plugin>
+		</plugins>
+		<!-- <sourceDirectory>src</sourceDirectory> -->
+	
+	</build>
+</project>

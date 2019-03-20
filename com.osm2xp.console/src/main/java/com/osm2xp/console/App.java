@@ -20,7 +20,6 @@ import com.osm2xp.core.exceptions.DataSinkException;
 import com.osm2xp.core.parsers.IOSMDataVisitor;
 import com.osm2xp.core.parsers.IParser;
 import com.osm2xp.core.parsers.IVisitingParser;
-import com.osm2xp.generation.options.GlobalOptions;
 import com.osm2xp.generation.options.GlobalOptionsProvider;
 import com.osm2xp.generation.options.XPlaneOptionsProvider;
 import com.osm2xp.generation.paths.PathsService;

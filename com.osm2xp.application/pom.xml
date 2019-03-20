@@ -13,7 +13,7 @@
 	xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
 	<modelVersion>4.0.0</modelVersion>
 	<artifactId>com.osm2xp.application</artifactId>
-	<name>OSM2XP - Product</name>
+	<name>OSM2XP - Application</name>
 	<parent>
 		<groupId>com.osm2xp</groupId>
 		<artifactId>com.osm2xp.parent</artifactId>
@@ -133,5 +133,4 @@
 		      </plugin>
 		</plugins>
 	</build>
-	<groupId>com.osm2xp</groupId>
-</project> 
+	</project> 

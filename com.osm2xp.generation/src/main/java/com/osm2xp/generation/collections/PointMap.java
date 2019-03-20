@@ -1,7 +1,6 @@
 package com.osm2xp.generation.collections;
 
-import org.eclipse.collections.impl.map.strategy.mutable.UnifiedMapWithHashingStrategy;
-
+import gnu.trove.map.hash.TCustomHashMap;
 import math.geom2d.Point2D;
 
 /**
@@ -11,7 +10,7 @@ import math.geom2d.Point2D;
  *
  * @param <T> value type
  */
-public class PointMap<T> extends UnifiedMapWithHashingStrategy<Point2D, T> {
+public class PointMap<T> extends TCustomHashMap<Point2D, T> {
 	
 	public PointMap() {
 		super(new PointHashingStrategy());
