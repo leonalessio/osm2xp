@@ -9,18 +9,10 @@
 		<groupId>com.osm2xp</groupId>
 		<artifactId>com.osm2xp.parent</artifactId>
 		<version>4.0.0-SNAPSHOT</version>
-		<relativePath>../releng/pom.xml</relativePath>
+		<relativePath>../releng-app/pom.xml</relativePath>
 	</parent>
 
 	<packaging>eclipse-repository</packaging>
-
-	<properties>
-		<project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
-		<build.folder.application>DLRMavenTychoDemoBinary</build.folder.application>
-		<build.folder.fullpath>${build.folder.target.bin}/${build.folder.application}/${build.folder.type}</build.folder.fullpath>
-		<build.file.win32.fullpath>${build.folder.target.bin}/${build.folder.application}/${build.folder.type}/${build.file}.zip</build.file.win32.fullpath>
-		<build.file.linux.fullpath>${build.folder.target.bin}/${build.folder.application}/${build.folder.type}/${build.file}.tar.gz</build.file.linux.fullpath>
-	</properties>
 
 	<build>
 		<plugins>
@@ -67,13 +59,13 @@
 									<tarfileset
 										dir="./target/products/${project.artifactId}/linux/gtk/x86_64"
 										filemode="755" username="root" group="root">
-										<include name="DLRMavenTychoDemo" />
+										<include name="OSM2XP" />
 									</tarfileset>
 									<tarfileset
 										dir="./target/products/${project.artifactId}/linux/gtk/x86_64"
 										username="root" group="root">
 										<include name="**" />
-										<exclude name="DLRMavenTychoDemo" />
+										<exclude name="OSM2XP" />
 									</tarfileset>
 								</tar>
 								<!-- ANT Script Stop -->

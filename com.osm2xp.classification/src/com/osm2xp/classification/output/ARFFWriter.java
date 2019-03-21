@@ -36,7 +36,7 @@ public class ARFFWriter<T> extends StringDelimitedWriter<T> {
 			}
 		}
 		
-		Object[] enumConstants = classField.getType().getEnumConstants();
+		Object[] enumConstants = resultField.getType().getEnumConstants();
 		String constList = Arrays.asList(enumConstants).stream().map(constant -> constant.toString()).collect(Collectors.joining(","));
 		writer.println("@ATTRIBUTE class {" + constList + "}");
 		writer.println("");

@@ -13,6 +13,10 @@ public class CSVWriter<T> extends StringDelimitedWriter<T> {
 		super(file, id);
 	}
 
+	public CSVWriter(File file, String id, String resultFieldName) throws IOException {
+		super(file, id, resultFieldName);
+	}
+
 	@Override
 	protected void writeHeader() {
 		writer.println(buildString(analyzedFields));

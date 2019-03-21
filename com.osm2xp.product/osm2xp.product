@@ -38,6 +38,11 @@ Icons by Open Icon Library http://http://openiconlibrary.sourceforge.net/
    </configIni>
 
    <launcherArgs>
+      <vmArgs>-Dosgi.requiredJavaVersion=1.8
+-Xms40m 
+-Xmx4096m
+--add-modules=ALL-SYSTEM
+      </vmArgs>
       <vmArgsMac>-XstartOnFirstThread -Dorg.eclipse.swt.internal.carbon.smallFonts
       </vmArgsMac>
    </launcherArgs>
@@ -46,7 +51,7 @@ Icons by Open Icon Library http://http://openiconlibrary.sourceforge.net/
 
    <splash
       startupProgressRect="5,275,445,15" />
-   <launcher>
+   <launcher name="osm2xp">
       <win useIco="false">
          <bmp/>
       </win>
@@ -160,5 +165,12 @@ Icons by Open Icon Library http://http://openiconlibrary.sourceforge.net/
       <plugin id="org.w3c.css.sac"/>
    </plugins>
 
+   <configurations>
+      <plugin id="org.eclipse.core.runtime" autoStart="true" startLevel="0" />
+      <plugin id="org.eclipse.equinox.common" autoStart="true" startLevel="2" />
+      <plugin id="org.eclipse.equinox.ds" autoStart="true" startLevel="2" />
+      <plugin id="org.eclipse.equinox.event" autoStart="true" startLevel="2" />
+      <plugin id="org.eclipse.equinox.simpleconfigurator" autoStart="true" startLevel="1" />
+   </configurations>
 
 </product>

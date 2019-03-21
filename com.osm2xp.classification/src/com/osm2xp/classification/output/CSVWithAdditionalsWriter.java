@@ -11,6 +11,11 @@ public class CSVWithAdditionalsWriter<T> extends CSVWriter<T> {
 
 	private int additionalsCount;
 
+	public CSVWithAdditionalsWriter(File file, String id, String resultFieldName, int additionalsCount) throws IOException {
+		super(file, id, resultFieldName);
+		this.additionalsCount = additionalsCount;
+	}
+
 	public CSVWithAdditionalsWriter(File file, String id, int additionalsCount) throws IOException {
 		super(file, id);
 		this.additionalsCount = additionalsCount;
@@ -46,14 +51,14 @@ public class CSVWithAdditionalsWriter<T> extends CSVWriter<T> {
 	@Override
 	protected void writeHeader() {
 		List<Field> basic = new ArrayList<Field>(analyzedFields);
-		basic.remove(classField);
+		basic.remove(resultField);
 		StringBuilder builder = new StringBuilder(buildString(basic));
 		for (int i = 1; i <= additionalsCount; i++) {
 			builder.append(',');
 			builder.append(buildHeaderString(analyzedFields,i));
 		}
 		builder.append(',');
-		builder.append(classField.getName());
+		builder.append(resultField.getName());
 		writer.println(builder.toString());
 	}
 

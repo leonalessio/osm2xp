@@ -1,7 +1,10 @@
 *.class
 target/
 bin/
+/builds/
+Earth nav data/
 *.jar
+*.csv
 
 # Mobile Tools for Java (J2ME)
 .mtj.tmp/

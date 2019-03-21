@@ -17,8 +17,8 @@ public class BuildingData {
 	@Positive
 	private double maxSide;
 //	@Present
-//	@Positive
-	@Ignore
+	@Positive
+//	@Ignore
 	private double height;
 //	@Present
 	@Positive

@@ -6,6 +6,7 @@ import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Collection;
 import java.util.List;
+import java.util.function.Predicate;
 import java.util.stream.Collectors;
 
 import com.osm2xp.classification.index.KdTree;
@@ -15,6 +16,7 @@ import com.osm2xp.classification.output.ARFFWriter;
 import com.osm2xp.classification.output.CSVWithAdditionalsWriter;
 import com.osm2xp.classification.output.StringDelimitedWriter;
 import com.osm2xp.classification.parsing.LearningDataParser;
+import com.osm2xp.core.model.osm.Tag;
 
 import weka.classifiers.AbstractClassifier;
 import weka.classifiers.bayes.NaiveBayes;
@@ -32,13 +34,14 @@ public class App {
 
 	public static void main(String[] args) {
 //		buildWithGeoindex(new File("F:/tmp/siberian-fed-district-latest.osm.pbf"));
-		buildWithGeoindex(Arrays.asList(new File("f:\\tmp\\osm\\").listFiles()));
+		buildWithGeoindex(Arrays.asList(new File("f:\\tmp\\osm\\").listFiles(file -> file.getName().endsWith(".pbf") || file.getName().endsWith(".osm"))), data -> data.getData().getHeight() > 0 && data.getData().getHeight() < 100);
+//		buildWithGeoindex(Arrays.asList(new File("f:\\tmp\\osm\\").listFiles()), data -> data.getData().getType() != null);
 //		buildDataset();
 //		buildClassifier();
 	}
 
 	protected static void buildDataset() {
-		LearningDataParser parser = new LearningDataParser(new File("F:/tmp/siberian-fed-district-latest.osm.pbf"));
+		LearningDataParser parser = new LearningDataParser(new File("F:/tmp/siberian-fed-district-latest.osm.pbf"), getBuildingPredicate());
 		try (StringDelimitedWriter<WayBuildingData> writer = new ARFFWriter<WayBuildingData>(new File("type_ways.arff"), "type")) {
 			List<WayBuildingData> typeWays = parser.getTypeWays();
 			for (WayBuildingData wayBuildingData : typeWays) {
@@ -50,10 +53,10 @@ public class App {
 		}
 	}
 	
-	protected static void buildWithGeoindex(List<File> files) {
-		try (CSVWithAdditionalsWriter<WayBuildingData> writer = new CSVWithAdditionalsWriter<>(new File(getName(files.get(0)) + "_" + NEIGHBOUR_COUNT + ".csv"), "types",NEIGHBOUR_COUNT)) {
+	protected static void buildWithGeoindex(List<File> files, Predicate<? super PointData<WayBuildingData>> classifiedPredicate) {
+		try (CSVWithAdditionalsWriter<WayBuildingData> writer = new CSVWithAdditionalsWriter<>(new File(getName(files.get(0)) + "_" + NEIGHBOUR_COUNT + ".csv"), "types", "height", NEIGHBOUR_COUNT)) {
 			for (File curFile : files) {
-				processCurFile(writer, curFile);
+				processCurFile(writer, curFile, classifiedPredicate);
 			}
 		} catch (IOException e) {
 			// TODO Auto-generated catch block
@@ -62,10 +65,10 @@ public class App {
 //		System.out.println("App.buildGeoindex() "+ geospatialIndex.getNearestNeighbors(new SimpleGeospatialPoint(55.01, 82.55), 3));
 	}
 
-	protected static void processCurFile(CSVWithAdditionalsWriter<WayBuildingData> writer, File curFile) {
+	protected static void processCurFile(CSVWithAdditionalsWriter<WayBuildingData> writer, File curFile, Predicate<? super PointData<WayBuildingData>> classifiedPredicate) {
 		System.out.println("Processing " + curFile.getAbsolutePath());
 		KdTree<PointData<WayBuildingData>> kdTree = new KdTree<>();
-		List<PointData<WayBuildingData>> classifiedPoints = getPointData(curFile, kdTree);
+		List<PointData<WayBuildingData>> classifiedPoints = getPointData(curFile, kdTree, classifiedPredicate);
 		for (PointData<WayBuildingData> pointData : classifiedPoints) {
 			Collection<PointData<WayBuildingData>> neighbours = kdTree.nearestNeighbourSearch(NEIGHBOUR_COUNT + 1, pointData);
 			neighbours.remove(pointData);
@@ -74,8 +77,8 @@ public class App {
 	}
 
 	protected static List<PointData<WayBuildingData>> getPointData(File file,
-			KdTree<PointData<WayBuildingData>> kdTree) {
-		LearningDataParser parser = new LearningDataParser(file);
+			KdTree<PointData<WayBuildingData>> kdTree, Predicate<? super PointData<WayBuildingData>> classifiedPredicate) {
+		LearningDataParser parser = new LearningDataParser(file, getBuildingPredicate());
 		List<WayBuildingData> typeWays = parser.getTypeWays();
 		List<PointData<WayBuildingData>> pointsList = new ArrayList<PointData<WayBuildingData>>();
 		int i = 0;
@@ -88,8 +91,12 @@ public class App {
 			kdTree.add(pointData);
 			pointsList.add(pointData);
 		}
-		List<PointData<WayBuildingData>> classifiedPoints = pointsList.stream().filter(data -> data.getData().getType() != null).collect(Collectors.toList());
+		List<PointData<WayBuildingData>> classifiedPoints = pointsList.stream().filter(classifiedPredicate).collect(Collectors.toList());
 		return classifiedPoints;
+	}
+	
+	private static Predicate<List<Tag>> getBuildingPredicate() {
+		return (tags) -> TypeProvider.isBuilding(tags);
 	}
 
 	protected static String getName(File file) {

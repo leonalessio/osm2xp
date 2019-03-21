@@ -44,12 +44,19 @@ public abstract class StringDelimitedWriter<T> implements Closeable{
 	protected List<Field> boolFields;
 	protected List<Field> stringFields;
 	protected List<Field> analyzedFields = new ArrayList<>();
-	protected Field classField;
+	protected Field resultField;
 
 	protected String id;
+
+	private String resultFieldName;
 	
 	public StringDelimitedWriter(File file, String id) throws IOException {
+		this(file, id, null);
+	}
+	
+	public StringDelimitedWriter(File file, String id, String resultFieldName) throws IOException {
 		this.id = id;
+		this.resultFieldName = resultFieldName;
 		writer = new PrintWriter(new BufferedWriter(new FileWriter(file)));
 	}
 	
@@ -128,7 +135,7 @@ public abstract class StringDelimitedWriter<T> implements Closeable{
 		}
 		try {
 			builder.append(',');
-			Object value = classField.get(data);
+			Object value = resultField.get(data);
 			builder.append(value != null?value.toString():"?");
 		} catch (IllegalArgumentException e) {
 			// TODO Auto-generated catch block
@@ -151,26 +158,29 @@ public abstract class StringDelimitedWriter<T> implements Closeable{
 			fld.setAccessible(true);
 		}
 		allFields = allFields.stream().filter(field -> !isIgnored(field)).collect(Collectors.toList());
+		Optional<Field> classFieldOp = allFields.stream().filter(field -> isResult(field)).findFirst();
+		if (!classFieldOp.isPresent()) {
+			if (resultFieldName != null) {
+				throw new IllegalArgumentException("Result field " + resultFieldName + " not found in " + clazz.getSimpleName() + ".");
+			}
+			throw new IllegalArgumentException("No resulting class field specified in type " + clazz.getSimpleName() + ". Use @Result annotation on Enum value");
+		}
+		resultField = classFieldOp.get();
+		allFields.remove(resultField);
+		
 		numFields = allFields.stream().filter(field -> isNumeric(field)).collect(Collectors.toList());
 		positiveFields = numFields.stream().filter(field -> isPoistive(field)).collect(Collectors.toSet());
 		boolFields = allFields.stream().filter(field -> isBool(field)).collect(Collectors.toList());
-		Optional<Field> classFieldOp = allFields.stream().filter(field -> isResult(field)).findFirst();
-		if (!classFieldOp.isPresent()) {
-			throw new IllegalArgumentException("No resulting class field specified in type " + clazz.getSimpleName() + ". Use @Result annotation on Enum value");
-		}
-		classField = classFieldOp.get();
-		if (!classField.getType().isEnum()) {
-			throw new IllegalArgumentException("Resulting class field (" + clazz.getSimpleName() + ") should be an enum.");
-		}
+//		if (!resultField.getType().isEnum()) {
+//			throw new IllegalArgumentException("Resulting class field (" + clazz.getSimpleName() + ") should be an enum.");
+//		}
 		stringFields = new ArrayList<>(allFields);
 		stringFields.removeAll(numFields);
 		stringFields.removeAll(boolFields);
-		stringFields.remove(classField);
 		analyzedFields.addAll(numFields);
 		analyzedFields.addAll(boolFields);
 		analyzedFields.addAll(stringFields);
-		analyzedFields.add(classField);
-		
+		analyzedFields.add(resultField);
 		writeHeader();
 	}
 	
@@ -190,6 +200,9 @@ public abstract class StringDelimitedWriter<T> implements Closeable{
 	}
 
 	protected boolean isResult(Field field) {
+		if (resultFieldName != null) {
+			return field.getName().equals(resultFieldName);
+		}
 		return field.isAnnotationPresent(Result.class);
 	}
 	

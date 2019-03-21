@@ -12,7 +12,6 @@ import java.util.function.Predicate;
 import java.util.stream.Collectors;
 
 import com.osm2xp.classification.RelationBuildingData;
-import com.osm2xp.classification.TypeProvider;
 import com.osm2xp.classification.WayBuildingData;
 import com.osm2xp.core.model.osm.Node;
 import com.osm2xp.core.model.osm.Tag;
@@ -25,41 +24,28 @@ import math.geom2d.polygon.LinearRing2D;
 public class LearningDataParser {
 	
 	private static final int WGS_TO_METERS_COEF = 111000;
-	private List<WayBuildingData> typeWays;
-	private List<WayBuildingData> heightWays;
+	private List<WayBuildingData> collectedWays;
 
-	public LearningDataParser(File inputFile) {
-		LearningRelationsCollector typeRelationsCollector = new LearningRelationsCollector(getTypePredicate());
-		LearningRelationsCollector heightRelationsCollector = new LearningRelationsCollector(getHeightPredicate());
-		TranslatingBinaryParser binaryParser = new TranslatingBinaryParser(inputFile, new CompositeVisitor(typeRelationsCollector, heightRelationsCollector));
+	public LearningDataParser(File inputFile, Predicate<List<Tag>> wayCollectionPredicate) {
+		LearningRelationsCollector typeRelationsCollector = new LearningRelationsCollector(wayCollectionPredicate);
+		TranslatingBinaryParser binaryParser = new TranslatingBinaryParser(inputFile, typeRelationsCollector);
 		binaryParser.process();
 		
 		List<RelationBuildingData> typeRelationsList = typeRelationsCollector.getCollectedRelationData();
 		Set<Long> necessaryTypeWays = typeRelationsList.stream().flatMap(data -> data.getOuterWayIds().stream()).collect(Collectors.toSet());
 		necessaryTypeWays.addAll(typeRelationsList.stream().flatMap(data -> data.getInnerWayIds().stream()).collect(Collectors.toSet()));
-		List<RelationBuildingData> heightRelationsList = heightRelationsCollector.getCollectedRelationData();
-		Set<Long> necessaryHeightWays = heightRelationsList.stream().flatMap(data -> data.getOuterWayIds().stream()).collect(Collectors.toSet());
-		necessaryHeightWays.addAll(heightRelationsList.stream().flatMap(data -> data.getInnerWayIds().stream()).collect(Collectors.toSet()));
+		LearningWaysCollector typeWaysCollector = new LearningWaysCollector(wayCollectionPredicate, necessaryTypeWays);
+		binaryParser = new TranslatingBinaryParser(inputFile, typeWaysCollector);
+		binaryParser.process();
 		
-		LearningWaysCollector typeWaysCollector = new LearningWaysCollector(getTypePredicate(), necessaryTypeWays);
-		LearningWaysCollector heightWaysCollector = new LearningWaysCollector(getHeightPredicate(), necessaryHeightWays);
-		new TranslatingBinaryParser(inputFile, new CompositeVisitor(typeWaysCollector, heightWaysCollector)).process();
+		collectedWays = typeWaysCollector.getCollectedWayData();
+		collectedWays.addAll(createBuildings(typeRelationsList, typeWaysCollector.getWayNds()));
 		
-		typeWays = typeWaysCollector.getCollectedWayData();
-		typeWays.addAll(createBuildings(typeRelationsList, typeWaysCollector.getWayNds()));
-		
-		heightWays = heightWaysCollector.getCollectedWayData();
-		heightWays.addAll(createBuildings(heightRelationsList, heightWaysCollector.getWayNds()));
-		
-		Set<Long> typeNds = typeWays.stream().flatMap(way -> way.getNodes().stream()).collect(Collectors.toSet());
-		Set<Long> heightNds = heightWays.stream().flatMap(way -> way.getNodes().stream()).collect(Collectors.toSet());
-		
-		LearningNodesCollector typeNdCollector = new LearningNodesCollector(getTypePredicate(), typeNds);
-		LearningNodesCollector heightNdCollector = new LearningNodesCollector(getHeightPredicate(), heightNds);		
-		new TranslatingBinaryParser(inputFile, new CompositeVisitor(typeNdCollector, heightNdCollector)).process();
-		
-		computeGeometryData(typeWays, typeNdCollector.getCollectedNodes());
-		computeGeometryData(heightWays, heightNdCollector.getCollectedNodes());
+		Set<Long> typeNds = collectedWays.stream().flatMap(way -> way.getNodes().stream()).collect(Collectors.toSet());
+		LearningNodesCollector typeNdCollector = new LearningNodesCollector(wayCollectionPredicate, typeNds);
+		binaryParser = new TranslatingBinaryParser(inputFile, typeNdCollector);
+		binaryParser.process();
+		computeGeometryData(collectedWays, typeNdCollector.getCollectedNodes());
 	}
 	
 	private void computeGeometryData(List<WayBuildingData> ways, Map<Long, Node> collectedNodes) {
@@ -143,15 +129,6 @@ public class LearningDataParser {
 		
 	}
 	
-	private Predicate<List<Tag>> getTypePredicate() {
-		return (tags) -> TypeProvider.isBuilding(tags);
-//		return (tags) -> TypeProvider.getBuildingType(tags) != null;
-	}
-	private Predicate<List<Tag>> getHeightPredicate() {
-		return (tags) -> false;
-//		return (tags) ->HeightProvider.getHeight(tags) > 0 && TypeProvider.isBuilding(tags);
-	}
-	
 	protected List<List<Long>> getPolygonsFrom(List<List<Long>> input) {
 		List<List<Long>> curves = new ArrayList<>(input);
 		List<List<Long>> result = new ArrayList<List<Long>>();
@@ -202,10 +179,7 @@ public class LearningDataParser {
 	}
 
 	public List<WayBuildingData> getTypeWays() {
-		return typeWays;
+		return collectedWays;
 	}
 
-	public List<WayBuildingData> getHeightWays() {
-		return heightWays;
-	}
 }
