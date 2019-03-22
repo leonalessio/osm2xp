@@ -34,7 +34,6 @@
 	</licenses>
 	<build>
 		<finalName>osm2xpc</finalName>		
-		<outputDirectory>${basedir}/target/jar</outputDirectory>
 		<plugins>
 			<plugin>
 				<artifactId>maven-compiler-plugin</artifactId>
@@ -52,6 +51,7 @@
 		          <excludes>
 		            <exclude>**/lib/*</exclude>
 		          </excludes>
+		          <outputDirectory>${basedir}/target/jar</outputDirectory>
 		        </configuration>
 		    </plugin>
 		     <plugin>
