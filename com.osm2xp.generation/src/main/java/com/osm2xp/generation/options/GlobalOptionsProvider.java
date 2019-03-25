@@ -25,8 +25,13 @@ public class GlobalOptionsProvider {
 				}
 			}
 			if (options == null) {
-				Osm2xpLogger.error("Failed to fing global options file. Using default options");
+				Osm2xpLogger.error("Failed to find global options file. Using default options");
 				GlobalOptionsProvider.setOptions(new GlobalOptions()); 
+				try {
+					saveOptions();
+				} catch (Osm2xpBusinessException e) {
+					Osm2xpLogger.error("Error saving global options file");
+				}
 			}
 		}
 		return options;
@@ -44,7 +49,7 @@ public class GlobalOptionsProvider {
 		try {
 			return (GlobalOptions) XmlHelper.loadFileFromXml(optionsFile, GlobalOptions.class);
 		} catch (com.osm2xp.core.exceptions.Osm2xpBusinessException e) {
-			Osm2xpLogger.error("Error initializing Xplane options helper",	e);
+			Osm2xpLogger.error("Error initializing Global options helper",	e);
 		}
 		return null;
 	}

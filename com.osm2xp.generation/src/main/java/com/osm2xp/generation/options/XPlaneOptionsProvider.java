@@ -19,7 +19,7 @@ public class XPlaneOptionsProvider {
 			loadDefaultOptions();
 		}
 		if (options == null) {
-			Osm2xpLogger.warning("Unable to find X-Plane options file at " + getDefaultOptionsFile().getAbsolutePath() + ". Will use default options.");
+			Osm2xpLogger.warning("Will use default X-Plane options.");
 			options = createNewXplaneOptionsBean();
 		}
 		return options;
@@ -29,15 +29,15 @@ public class XPlaneOptionsProvider {
 		XPlaneOptionsProvider.options = options;
 	}
 	
-	public static void loadDefaultOptions() {
+	private static void loadDefaultOptions() {
 		options = loadOptions(getDefaultOptionsFile());
 	}
 	
-	public static XplaneOptions loadOptions(File optionsFile) {
+	private static XplaneOptions loadOptions(File optionsFile) {
 		try {
 			return (XplaneOptions) XmlHelper.loadFileFromXml(optionsFile, XplaneOptions.class);
 		} catch (com.osm2xp.core.exceptions.Osm2xpBusinessException e) {
-			Osm2xpLogger.error("Error initializing Xplane options helper",	e);
+			Osm2xpLogger.warning("Unable to find X-Plane options file at " + optionsFile.getAbsolutePath()); 
 		}
 		return null;
 	}

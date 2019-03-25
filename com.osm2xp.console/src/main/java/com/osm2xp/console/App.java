@@ -29,6 +29,7 @@ import com.osm2xp.parsers.builders.ParserBuilder;
 import com.osm2xp.translators.ITranslator;
 import com.osm2xp.translators.ITranslatorProvider;
 import com.osm2xp.translators.TranslatorBuilder;
+import com.osm2xp.utils.ProcessExecutor;
 
 
 /**
@@ -147,6 +148,7 @@ public class App
     			} else {
     				System.out.println("Generation finished, target folder " + sceneryName);
     			}
+    			ProcessExecutor.getExecutor().shutdown();
     			System.out.println("Generation took " + formatTimeDelta(System.currentTimeMillis() - t1));
     		} catch (DataSinkException e) {
     			e.printStackTrace();
@@ -163,7 +165,7 @@ public class App
 		PreferenceService.setProgramPreferences(new BasicPreferences());
 		if (outputFormat.toUpperCase().startsWith("XPLANE") || outputFormat.toUpperCase().equals("XP_AIRFIELDS")) {
 			
-			XPlaneOptionsProvider.loadDefaultOptions(); //TODO support custom options location
+//			XPlaneOptionsProvider.loadDefaultOptions(); //TODO support custom options location
 			if (XPlaneOptionsProvider.getOptions() == null) {
 				System.out.println("Failed to load X-Plane generation options from file " + XPlaneOptionsProvider.getDefaultOptionsFile());
 				System.out.println("It should be present in {current folder}/xplane, please use -c option to specify another folder");

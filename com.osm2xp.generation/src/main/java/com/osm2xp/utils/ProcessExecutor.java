@@ -11,7 +11,7 @@ public class ProcessExecutor {
 	
 	private static ProcessExecutor instance;
 	
-	private ExecutorService service = Executors.newFixedThreadPool(10, new ThreadFactoryBuilder().setDaemon(true).build());
+	private ExecutorService service = Executors.newFixedThreadPool(10, new ThreadFactoryBuilder().build());
 	
 	public static synchronized ProcessExecutor getExecutor() {
 		if (instance == null) {
@@ -30,6 +30,10 @@ public class ProcessExecutor {
 	
 	public Future<?> execute(Callable<?> callable) {
 		return service.submit(callable);
+	}
+	
+	public void shutdown() {
+		service.shutdown();
 	}
 
 }

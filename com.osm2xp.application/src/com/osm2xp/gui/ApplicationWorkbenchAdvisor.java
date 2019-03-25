@@ -13,6 +13,7 @@ import com.osm2xp.constants.Perspectives;
 import com.osm2xp.core.logging.Osm2xpLogger;
 import com.osm2xp.generation.options.XPlaneOptionsProvider;
 import com.osm2xp.model.facades.FacadeSetManager;
+import com.osm2xp.utils.ProcessExecutor;
 
 /**
  * ApplicationWorkbenchAdvisor
@@ -51,5 +52,11 @@ public class ApplicationWorkbenchAdvisor extends WorkbenchAdvisor {
 				Osm2xpLogger.log(e);
 			}
 		}
+	}
+	
+	@Override
+	public boolean preShutdown() {
+		ProcessExecutor.getExecutor().shutdown();
+		return super.preShutdown();
 	}
 }

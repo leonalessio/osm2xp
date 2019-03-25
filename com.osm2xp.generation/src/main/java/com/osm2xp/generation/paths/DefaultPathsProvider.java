@@ -104,7 +104,7 @@ public class DefaultPathsProvider implements IPathsProvider {
 	@Override
 	public File getXPlaneToolsFolder() {
 		if (xPlaneToolsFolder == null) {
-			return new File(getBasicFolder(),"/xplane/tools");
+			return new File(getBasicFolder(),"/xplane/utils");
 		}
 		return xPlaneToolsFolder;
 	}
