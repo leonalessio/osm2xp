@@ -10,11 +10,13 @@ Export-Package: com.bbn.openmap.layer.vpf,
  com.osm2xp.core.model.osm,
  com.osm2xp.core.parsers,
  com.osm2xp.core.parsers.impl,
+ javax.xml.bind.annotation,
  math.geom2d,
  math.geom2d.curve,
  math.geom2d.line,
  math.geom2d.point,
  math.geom2d.polygon,
+ math.geom3d,
  org.apache.commons.lang
 Bundle-RequiredExecutionEnvironment: JavaSE-1.8
 Bundle-ClassPath: .,

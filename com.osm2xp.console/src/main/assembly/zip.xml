@@ -10,17 +10,17 @@
     <fileSets>
         <fileSet>
             <directory>${project.basedir}/../osm2xp_additions/xplane</directory>
-            <outputDirectory>/xplane</outputDirectory>
+            <outputDirectory>xplane</outputDirectory>
         </fileSet>
     </fileSets>
     <files>
         <file>
             <source> ${project.basedir}/target/jar/osm2xpc.jar</source>
-            <outputDirectory>/</outputDirectory>
+            <outputDirectory>./</outputDirectory>
         </file>
         <file>
         	<source>${project.basedir}/../osm2xp_additions/utils/DSFTool.exe</source>
-        	<outputDirectory>/xplane/utils</outputDirectory>
+        	<outputDirectory>xplane/utils</outputDirectory>
         </file>
     </files>
 </assembly>

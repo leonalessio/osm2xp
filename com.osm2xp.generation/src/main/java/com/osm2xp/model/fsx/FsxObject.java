@@ -6,11 +6,11 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.Locale;
 
-import math.geom3d.Vector3D;
-
 import com.osm2xp.core.model.osm.Node;
 import com.osm2xp.model.geom.Lod13Location;
 import com.osm2xp.utils.geometry.GeomUtils;
+
+import math.geom3d.Vector3D;
 
 /**
  * FsxObject.

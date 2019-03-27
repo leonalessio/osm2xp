@@ -3,7 +3,7 @@
 	<modelVersion>4.0.0</modelVersion>
 
 	<artifactId>com.osm2xp.console</artifactId>
-	<version>1.0.0</version>
+	<version>4.0.0</version>
 	<packaging>jar</packaging>
 	<name>console</name>
 	<url>https://sourceforge.net/projects/osm2xp</url>
@@ -50,6 +50,7 @@
 		        <configuration>
 		          <excludes>
 		            <exclude>**/lib/*</exclude>
+		            <exclude>**/staticlib/*</exclude>
 		          </excludes>
 		          <outputDirectory>${basedir}/target/jar</outputDirectory>
 		        </configuration>
@@ -80,6 +81,7 @@
 	                        <artifact>*:*</artifact>
 	                        <excludes>
 	                            <exclude>lib/*.jar</exclude>
+	                            <exclude>staticlib/*.jar</exclude>
 	                            <exclude>META-INF/*.SF</exclude>
 				                <exclude>META-INF/*.DSA</exclude>
 				                <exclude>META-INF/*.RSA</exclude>
