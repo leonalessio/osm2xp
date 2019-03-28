@@ -93,7 +93,7 @@ public class GuiOptionsHelper {
 		putProperty(USED_FILES, lastFiles.stream().collect(Collectors.joining(File.pathSeparator)));
 	}
 
-	private static void checkGetLastFiles() {
+	private static synchronized void checkGetLastFiles() {
 		if (lastFiles == null) {
 			lastFiles = new ArrayList<>();
 			String filesStr = getStringProperty(USED_FILES);

@@ -41,7 +41,7 @@ public class TagsRule {
 	 */
 	public TagsRule(final Tag tag, final List<ObjectFile> objectsFiles) {
 		this.tag = tag;
-		this.objectsFiles = objectsFiles;
+		this.objectsFiles = new ArrayList<>(objectsFiles);
 	}
 
 	/**

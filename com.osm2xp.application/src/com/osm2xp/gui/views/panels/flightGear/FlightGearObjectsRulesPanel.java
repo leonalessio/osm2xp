@@ -2,7 +2,7 @@ package com.osm2xp.gui.views.panels.flightGear;
 
 import java.io.File;
 import java.text.MessageFormat;
-import java.util.ArrayList;
+import java.util.Collections;
 
 import org.eclipse.jface.viewers.IStructuredSelection;
 import org.eclipse.swt.SWT;
@@ -91,12 +91,9 @@ public class FlightGearObjectsRulesPanel extends Composite {
 						.getObjectsRules()
 						.getRules()
 						.add(new FlightGearObjectTagRule(new Tag("a tag key",
-								"a tag value"), new ArrayList<ObjectFile>() {
-							{
-								add(new ObjectFile("the path to an Object file"));
+								"a tag value"), Collections.singletonList(new ObjectFile("the path to an Object file"))
 
-							}
-						}, 0, true, false, false, 0, 0, 0, 0, false, 0,
+						, 0, true, false, false, 0, 0, 0, 0, false, 0,
 								0, false, false));
 				tagsTable.getViewer().refresh();
 

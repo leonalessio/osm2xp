@@ -1,7 +1,6 @@
 package com.osm2xp.gui.views.panels.fsx;
 
 import java.text.MessageFormat;
-import java.util.ArrayList;
 
 import org.eclipse.jface.viewers.IStructuredSelection;
 import org.eclipse.swt.SWT;
@@ -26,6 +25,7 @@ import org.eclipse.swt.widgets.ToolBar;
 import org.eclipse.swt.widgets.ToolItem;
 import org.eclipse.wb.swt.ResourceManager;
 
+import com.google.common.collect.Lists;
 import com.osm2xp.constants.MessagesConstants;
 import com.osm2xp.core.exceptions.Osm2xpBusinessException;
 import com.osm2xp.core.logging.Osm2xpLogger;
@@ -181,12 +181,7 @@ public class FsxObjectsRulesPanel extends Osm2xpPanel {
 						.getObjectsRules()
 						.getRules()
 						.add(new ObjectTagRule(new Tag("a tag key",
-								"a tag value"), new ArrayList<ObjectFile>() {
-							{
-								add(new ObjectFile("object GUID"));
-
-							}
-						}, 0, true));
+								"a tag value"), Lists.newArrayList(new ObjectFile("object GUID")), 0, true));
 				tagsTable.getViewer().refresh();
 
 			}

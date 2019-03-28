@@ -14,14 +14,11 @@ import javax.xml.bind.Unmarshaller;
 
 import org.apache.commons.lang.StringUtils;
 
-import com.google.common.collect.HashMultimap;
-import com.google.common.collect.Multimap;
 import com.google.common.io.Files;
 import com.osm2xp.core.exceptions.Osm2xpBusinessException;
 import com.osm2xp.core.exceptions.Osm2xpTechnicalException;
 import com.osm2xp.core.logging.Osm2xpLogger;
 import com.osm2xp.generation.options.GlobalOptionsProvider;
-import com.osm2xp.generation.paths.PathsService;
 import com.osm2xp.utils.FilesUtils;
 
 /**
@@ -90,8 +87,7 @@ public class FacadeSetHelper {
 		FacadeSet result = new FacadeSet();
 		File facadeSetFile = new File(filePath);
 		try {
-			JAXBContext jc = JAXBContext.newInstance(FacadeSet.class
-					.getPackage().getName());
+			JAXBContext jc = JAXBContext.newInstance(FacadeSet.class);
 			Unmarshaller u = jc.createUnmarshaller();
 			result = (FacadeSet) u.unmarshal(facadeSetFile);
 		} catch (JAXBException e) {
@@ -168,25 +164,25 @@ public class FacadeSetHelper {
 		return result;
 	}
 	
-	private static Multimap<String, String> getMultiValuesFromFac(File facadeFile) {
-		Multimap<String, String> result = HashMultimap.create();
-		try {
-			List<String> lines = Files.readLines(facadeFile, Charset.forName("utf-8"));
-			for (String string : lines) {
-				string = string.trim();
-				int idx = string.indexOf(' ');
-				if (idx > 0) {
-					String key = string.substring(0, idx).trim();
-					String value = string.substring(idx, string.length()).trim();
-					if (!key.isEmpty() && !value.isEmpty()) {
-						result.put(key, value);
-					}
-				}
-			}
-		} catch (IOException e) {
-			Osm2xpLogger.log(e);
-		}
-		return result;
-	}
+//	private static Multimap<String, String> getMultiValuesFromFac(File facadeFile) {
+//		Multimap<String, String> result = HashMultimap.create();
+//		try {
+//			List<String> lines = Files.readLines(facadeFile, Charset.forName("utf-8"));
+//			for (String string : lines) {
+//				string = string.trim();
+//				int idx = string.indexOf(' ');
+//				if (idx > 0) {
+//					String key = string.substring(0, idx).trim();
+//					String value = string.substring(idx, string.length()).trim();
+//					if (!key.isEmpty() && !value.isEmpty()) {
+//						result.put(key, value);
+//					}
+//				}
+//			}
+//		} catch (IOException e) {
+//			Osm2xpLogger.log(e);
+//		}
+//		return result;
+//	}
 
 }

@@ -29,8 +29,7 @@ public class XmlHelper {
 			throws Osm2xpBusinessException {
 		try {
 			file.getParentFile().mkdirs();
-			JAXBContext jc = JAXBContext.newInstance(bean.getClass()
-					.getPackage().getName());
+			JAXBContext jc = JAXBContext.newInstance(bean.getClass());
 			Marshaller marshaller = jc.createMarshaller();
 			marshaller.setProperty(Marshaller.JAXB_ENCODING, "UTF-8");
 			marshaller.setProperty(Marshaller.JAXB_FORMATTED_OUTPUT,
@@ -51,8 +50,7 @@ public class XmlHelper {
 			throws Osm2xpBusinessException {
 		Object result = new Object();
 		try {
-			JAXBContext jc = JAXBContext.newInstance(type.getPackage()
-					.getName());
+			JAXBContext jc = JAXBContext.newInstance(type);
 			Unmarshaller u = jc.createUnmarshaller();
 
 			JAXBElement<?> root = u.unmarshal(new StreamSource(file), type);

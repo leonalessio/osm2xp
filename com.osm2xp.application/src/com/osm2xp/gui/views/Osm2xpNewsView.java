@@ -27,7 +27,7 @@ public class Osm2xpNewsView extends ViewPart implements IContextProvider {
 	@Override
 	public void createPartControl(Composite parent) {
 		parent.setBackground(SWTResourceManager.getColor(SWT.COLOR_WHITE));
-		FormToolkit toolkit = new FormToolkit(parent.getDisplay());
+		toolkit = new FormToolkit(parent.getDisplay());
 		form = toolkit.createComposite(parent);
 		form.setLayout(new FillLayout(SWT.HORIZONTAL));
 
@@ -36,7 +36,6 @@ public class Osm2xpNewsView extends ViewPart implements IContextProvider {
 		toolkit.adapt(browser);
 		toolkit.paintBordersFor(browser);
 
-		toolkit = new FormToolkit(parent.getDisplay());
 		FillLayout fl_parent = new FillLayout(SWT.HORIZONTAL);
 		fl_parent.marginWidth = 5;
 		fl_parent.spacing = 5;

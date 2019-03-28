@@ -247,14 +247,6 @@
                visible="true">
          </view>
          <view
-               id="biz.junginger.freemem.FreeMemView"
-               minimized="false"
-               moveable="true"
-               ratio="0.60f"
-               relationship="right"
-               relative="org.eclipse.ui.console.ConsoleView">
-         </view>
-         <view
                id="org.eclipse.ui.views.ProgressView"
                minimized="false"
                ratio="0.80F"
@@ -319,14 +311,6 @@
                relative="com.osm2xp.viewSceneryTab"
                standalone="true"
                visible="true">
-         </view>
-         <view
-               id="biz.junginger.freemem.FreeMemView"
-               minimized="false"
-               moveable="true"
-               ratio="0.60f"
-               relationship="stack"
-               relative="org.eclipse.ui.console.ConsoleView">
          </view>
          <view
                closeable="true"
@@ -585,14 +569,7 @@
                   label="Build"
                   style="push"
                   tooltip="Build">
-            </command>
-            <command
-                  commandId="osm2xp.command.importProject"
-                  icon="images/toolbarsIcons/importProject_32.png"
-                  label="import project"
-                  style="push"
-                  tooltip="import project">
-            </command>
+            </command>           
             <separator
                   name="osm2xp.separator"
                   visible="true">
@@ -727,7 +704,7 @@
          </property>
          <property
                name="windowImages"
-               value="images/plane_16.png,images/plane_32.png,images/plane_48.png">
+               value="icons/plane_16.png,icons/plane_32.png,icons/plane_48.png">
          </property>
          <property
                name="preferenceCustomization"
@@ -752,12 +729,7 @@
             defaultHandler="com.osm2xp.gui.handlers.CommandBuildScene"
             id="osm2xp.command.buildScene"
             name="buildScene">
-      </command>
-      <command
-            defaultHandler="com.osm2xp.gui.handlers.CommandImportProject"
-            id="osm2xp.command.importProject"
-            name="importProject">
-      </command>
+      </command>     
       <command
             defaultHandler="com.osm2xp.gui.handlers.CommandFacadeSetEditor"
             id="osm2xp.command.facadeSetEditor"

@@ -2,7 +2,6 @@ package com.osm2xp.gui.views.panels.xplane;
 
 import java.io.File;
 import java.text.MessageFormat;
-import java.util.ArrayList;
 
 import org.eclipse.jface.viewers.IStructuredSelection;
 import org.eclipse.swt.SWT;
@@ -26,6 +25,7 @@ import org.eclipse.swt.widgets.ToolBar;
 import org.eclipse.swt.widgets.ToolItem;
 import org.eclipse.wb.swt.ResourceManager;
 
+import com.google.common.collect.Lists;
 import com.osm2xp.constants.MessagesConstants;
 import com.osm2xp.core.exceptions.Osm2xpBusinessException;
 import com.osm2xp.core.logging.Osm2xpLogger;
@@ -78,13 +78,8 @@ public class XplaneLightsRulesPanel extends Composite {
 						.getLightsRules()
 						.getRules()
 						.add(new XplaneLightTagRule(new Tag("a tag key",
-								"a tag value"), new ArrayList<ObjectFile>() {
-							{
-								add(new ObjectFile(
-										"the path to a light Object file"));
-
-							}
-						}, 5, 0, 20));
+								"a tag value"),Lists.newArrayList(new ObjectFile(
+										"the path to a light Object file")), 5, 0, 20));
 				tagsTable.getViewer().refresh();
 
 			}

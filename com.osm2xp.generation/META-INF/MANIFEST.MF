@@ -34,7 +34,8 @@ Export-Package: com.google.common.collect,
  com.osm2xp.utils.osm,
  com.osm2xp.utils.xplane,
  com.osm2xp.writers,
- com.osm2xp.writers.impl
+ com.osm2xp.writers.impl,
+ org.apache.commons.io
 Require-Bundle: com.osm2xp.core;bundle-version="1.0.0"
 Bundle-RequiredExecutionEnvironment: JavaSE-1.8
 Bundle-ClassPath: .,
@@ -44,8 +45,6 @@ Bundle-ClassPath: .,
  lib/json-simple.jar,
  lib/jts-core.jar,
  lib/mapdb.jar,
- lib/jaxb-core.jar,
- lib/jaxb-impl.jar,
  lib/guava.jar,
  lib/trove4j.jar,
  staticlib/animal-sniffer-annotations-1.17.jar,
@@ -63,4 +62,5 @@ Bundle-ClassPath: .,
  staticlib/kotlin-stdlib-common-1.2.71.jar,
  staticlib/listenablefuture-9999.0-empty-to-avoid-conflict-with-guava.jar,
  staticlib/lz4-1.3.0.jar,
- staticlib/mapdb-3.0.7.jar
+ staticlib/mapdb-3.0.7.jar,
+ lib/jdom.jar

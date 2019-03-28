@@ -13,6 +13,7 @@ import org.osm2world.core.ConversionFacade;
 import org.osm2world.core.target.Target;
 import org.osm2world.core.target.obj.ObjTarget;
 
+import com.google.common.collect.Lists;
 import com.osm2xp.core.exceptions.Osm2xpBusinessException;
 import com.osm2xp.core.logging.Osm2xpLogger;
 import com.osm2xp.core.model.osm.Node;
@@ -155,16 +156,8 @@ public class WavefrontTranslatorImpl implements ITranslator {
 						targets);
 				ObjectTagRule objectTagRule = new ObjectTagRule(new Tag("id",
 						String.valueOf(osmPolygon.getId())),
-						new ArrayList<ObjectFile>() {
-							
-							private static final long serialVersionUID = 1L;
-
-							{
-								add(new ObjectFile("objects/"
-										+ osmPolygon.getId() + ".obj"));
-
-							}
-						}, 0, true);
+						Lists.newArrayList(new ObjectFile("objects/"
+										+ osmPolygon.getId() + ".obj")), 0, true);
 
 				objectsTagRules.add(objectTagRule);
 				objectsMap
@@ -209,12 +202,12 @@ public class WavefrontTranslatorImpl implements ITranslator {
 				try {
 					fileName = OsmUtils.CreateTempFile(folderPath,
 							globalWayList, currentTile.y() + "_" + currentTile.x());
+					File osmFile = new File(fileName);
+					exportOsmFileToObject(osmFile);
+					osmFile.deleteOnExit();
 				} catch (IOException e) {
 					e.printStackTrace();
 				}
-				File osmFile = new File(fileName);
-				exportOsmFileToObject(osmFile);
-				osmFile.deleteOnExit();
 			}
 		} else {
 			try {

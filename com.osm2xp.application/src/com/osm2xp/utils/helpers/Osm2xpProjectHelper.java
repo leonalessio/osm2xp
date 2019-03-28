@@ -20,8 +20,11 @@ import com.osm2xp.model.project.Osm2XpProject;
  * Osm2xpProjectHelper.
  * 
  * @author Benjamin Blanchet
+ * @deprecated
  * 
+ * Projects contain no useful info currently, this will be left for some time in case we'll decide to take back projects concept for OSM2XP
  */
+@Deprecated
 public class Osm2xpProjectHelper {
 
 	private static Osm2XpProject osm2XpProject;
@@ -36,8 +39,7 @@ public class Osm2xpProjectHelper {
 		Osm2XpProject result = new Osm2XpProject();
 		projectFile = new File(filePath);
 		try {
-			JAXBContext jc = JAXBContext.newInstance(Osm2XpProject.class
-					.getPackage().getName());
+			JAXBContext jc = JAXBContext.newInstance(Osm2XpProject.class);
 			Unmarshaller u = jc.createUnmarshaller();
 			result = (Osm2XpProject) u.unmarshal(projectFile);
 		} catch (JAXBException e) {
@@ -53,8 +55,7 @@ public class Osm2xpProjectHelper {
 	 */
 	public static void saveProject() throws Osm2xpBusinessException {
 		try {
-			JAXBContext jc = JAXBContext.newInstance(Osm2XpProject.class
-					.getPackage().getName());
+			JAXBContext jc = JAXBContext.newInstance(Osm2XpProject.class);
 			Marshaller marshaller = jc.createMarshaller();
 			marshaller.setProperty(Marshaller.JAXB_ENCODING, "UTF-8");
 			marshaller.setProperty(Marshaller.JAXB_FORMATTED_OUTPUT,

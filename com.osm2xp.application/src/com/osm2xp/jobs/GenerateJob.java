@@ -1,11 +1,8 @@
 package com.osm2xp.jobs;
 
 import java.io.File;
-import java.util.List;
 
 import org.eclipse.core.runtime.jobs.Job;
-
-import com.osm2xp.core.model.osm.Relation;
 
 public abstract class GenerateJob extends Job {
 
@@ -22,7 +19,7 @@ public abstract class GenerateJob extends Job {
 	}
 
 	public boolean belongsTo(Object family) {
-		return family.equals(family);
+		return this.family.equals(family);
 	}
 
 	public String getFamily() {

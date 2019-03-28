@@ -20,7 +20,11 @@ import com.osm2xp.utils.helpers.Osm2xpProjectHelper;
  * 
  * @author Benjamin Blanchet
  * 
+ * Deprecated. Project contains no useful metadata currently. 
+ * Some data like heights and geonames are saved in global prefs for now
+ * 
  */
+@Deprecated
 public class CommandImportProject extends AbstractHandler {
 	private static final String[] FILTER_NAMES = { "osm2xp project (*.project)" };
 	private static final String[] FILTER_EXTS = { "*.project" };

@@ -32,7 +32,6 @@ import com.osm2xp.translators.ITranslatorProvider;
 import com.osm2xp.translators.TranslatorBuilder;
 import com.osm2xp.utils.FilesUtils;
 import com.osm2xp.utils.helpers.GuiOptionsHelper;
-import com.osm2xp.utils.helpers.Osm2xpProjectHelper;
 import com.osm2xp.utils.ui.UiUtil;
 
 /**
@@ -191,14 +190,14 @@ public class BuildController {
 //				Osm2xpLogger.info(tilesList.size() + " tile(s) found");
 				// init the current project, only if the output mode will
 				// generate files
-				if (GuiOptionsHelper.isOutputFormatAFileGenerator(mode)) {
-					try {
-						Osm2xpProjectHelper.initProject(folderPath, GlobalOptionsProvider.getOptions()
-								.getCurrentFilePath());
-					} catch (Osm2xpBusinessException e1) {
-						Osm2xpLogger.error("Error creating project file", e1);
-					}
-				}
+//				if (GuiOptionsHelper.isOutputFormatAFileGenerator(mode)) {
+//					try {
+//						Osm2xpProjectHelper.initProject(folderPath, GlobalOptionsProvider.getOptions()
+//								.getCurrentFilePath());
+//					} catch (Osm2xpBusinessException e1) {
+//						Osm2xpLogger.error("Error creating project file", e1);
+//					}
+//				}
 				
 				GenerateJob tilesJob = getGenerationJob(currentFile, folderPath);
 				

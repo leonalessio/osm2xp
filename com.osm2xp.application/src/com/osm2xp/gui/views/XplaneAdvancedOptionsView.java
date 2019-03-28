@@ -10,7 +10,6 @@ import org.eclipse.ui.forms.widgets.TableWrapData;
 import com.osm2xp.gui.views.panels.xplane.GeneratedItemsPanel;
 import com.osm2xp.gui.views.panels.xplane.SceneryExclusionsPanel;
 import com.osm2xp.gui.views.panels.xplane.SceneryOptionsPanel;
-import com.osm2xp.gui.views.panels.xplane.StatsOptionsPanel;
 
 /**
  * XplaneAdvancedOptionsView.

@@ -20,7 +20,7 @@ public class WaveFrontExportOptionsPanel extends Osm2xpPanel {
 	private Spinner spinnerPoints;
 	private Spinner spinnerMeters;
 	private Button btnGenerateSingleObject;
-	private Button btnGeneratedsfPlaceHolder;
+//	private Button btnGeneratedsfPlaceHolder;
 
 	public WaveFrontExportOptionsPanel(final Composite parent, final int style) {
 		super(parent, style);
@@ -68,9 +68,9 @@ public class WaveFrontExportOptionsPanel extends Osm2xpPanel {
 		bindComponent(btnGenerateSingleObject,
 				WavefrontOptionsHelper.getOptions(),
 				"waveFrontExportSingleObject");
-		bindComponent(btnGeneratedsfPlaceHolder,
-				WavefrontOptionsHelper.getOptions(),
-				"generateWaveFrontDsfPlaceholder");
+//		bindComponent(btnGeneratedsfPlaceHolder,
+//				WavefrontOptionsHelper.getOptions(),
+//				"generateWaveFrontDsfPlaceholder");
 
 	}
 

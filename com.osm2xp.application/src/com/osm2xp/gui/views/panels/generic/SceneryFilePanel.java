@@ -50,7 +50,6 @@ public class SceneryFilePanel extends Osm2xpPanel {
 	private Spinner spinnerLongitude;
 	private Button btnBrowse;
 	private Label lblSceneName;
-	private GridData gridInputSceneName;
 	private Group grpCoordinates;
 	private GridData gridCoordinates;
 	private IWorkbenchPartSite partSite;
@@ -157,7 +156,6 @@ public class SceneryFilePanel extends Osm2xpPanel {
 //		gridInputSceneName.widthHint = 300;
 		// scene text edit
 		textInputSceneName = new Text(this, SWT.BORDER);
-		textInputSceneName.setLayoutData(gridInputSceneName);
 		GridDataFactory.fillDefaults().grab(true,false).applyTo(textInputSceneName);
 		
 		

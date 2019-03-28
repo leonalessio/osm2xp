@@ -4,6 +4,7 @@ import java.io.File;
 import java.util.ArrayList;
 import java.util.List;
 
+import com.google.common.collect.Lists;
 import com.osm2xp.core.exceptions.Osm2xpBusinessException;
 import com.osm2xp.core.logging.Osm2xpLogger;
 import com.osm2xp.core.model.osm.Tag;
@@ -119,48 +120,24 @@ public class XPlaneOptionsProvider {
 	/**
 	 * @return
 	 */
-	@SuppressWarnings("serial")
 	private static XplaneObjectsRulesList createNewObjectsRules() {
 		List<XplaneObjectTagRule> XplaneObjectTagRules = new ArrayList<XplaneObjectTagRule>();
 		XplaneObjectTagRules.add(new XplaneObjectTagRule(new Tag(
-				"power_source", "wind"), new ArrayList<ObjectFile>() {
-			{
-				add(new ObjectFile(
-						"objects/wind_turbine.obj"));
-			}
-		}, 0, true, false, false, 0, 0, 0, 0, false, 0, 0, false, false));
+				"power_source", "wind"), Lists.newArrayList(new ObjectFile(
+						"objects/wind_turbine.obj")), 0, true, false, false, 0, 0, 0, 0, false, 0, 0, false, false));
 		XplaneObjectTagRules.add(new XplaneObjectTagRule(new Tag(OsmConstants.MAN_MADE_TAG,
-				"lighthouse"), new ArrayList<ObjectFile>() {
-			{
-				add(new ObjectFile(
-						"objects/capemay.obj"));
-			}
-		}, 0, true, false, false, 0, 0, 0, 0, false, 0, 0, false, false));
+				"lighthouse"), Lists.newArrayList(new ObjectFile(
+						"objects/capemay.obj")), 0, true, false, false, 0, 0, 0, 0, false, 0, 0, false, false));
 		XplaneObjectTagRules.add(new XplaneObjectTagRule(new Tag(OsmConstants.MAN_MADE_TAG,
-				"water_tower"), new ArrayList<ObjectFile>() {
-			{
-				add(new ObjectFile(
-						"objects/watertower-3.obj"));
-				add(new ObjectFile(
-						"objects/watertower-3.obj"));
-			}
-		}, 0, true, false, false, 0, 0, 0, 0, false, 0, 0, false, false));
+				"water_tower"), Lists.newArrayList(new ObjectFile("objects/watertower-3.obj"),new ObjectFile(
+						"objects/watertower-3.obj")), 0, true, false, false, 0, 0, 0, 0, false, 0, 0, false, false));
 		XplaneObjectTagRules.add(new XplaneObjectTagRule(new Tag(OsmConstants.MAN_MADE_TAG,
-				"tower"), new ArrayList<ObjectFile>() {
-			{
-				add(new ObjectFile(
-						"objects/watertower-3.obj"));
-				add(new ObjectFile(
-						"objects/watertower-3.obj"));
-			}
-		}, 0, true, false, false, 0, 0, 0, 0, false, 0, 0, false, false));
+				"tower"), Lists.newArrayList(new ObjectFile(
+						"objects/watertower-3.obj"),new ObjectFile(
+						"objects/watertower-3.obj")), 0, true, false, false, 0, 0, 0, 0, false, 0, 0, false, false));
 		XplaneObjectTagRules.add(new XplaneObjectTagRule(new Tag(OsmConstants.MAN_MADE_TAG,
-				"crane"), new ArrayList<ObjectFile>() {
-			{
-				add(new ObjectFile(
-						"objects/crane.obj"));
-			}
-		}, 0, true, false, false, 0, 0, 0, 0, false, 0, 0, false, false));
+				"crane"), Lists.newArrayList(new ObjectFile(
+						"objects/crane.obj")), 0, true, false, false, 0, 0, 0, 0, false, 0, 0, false, false));
 		XplaneObjectsRulesList result = new XplaneObjectsRulesList(
 				XplaneObjectTagRules);
 		return result;
@@ -184,53 +161,20 @@ public class XPlaneOptionsProvider {
 	/**
 	 * @return
 	 */
-	@SuppressWarnings("serial")
 	private static ForestsRulesList createNewForestRules() {
 		List<ForestTagRule> forestsRules = new ArrayList<ForestTagRule>();
-		forestsRules.add(new ForestTagRule(new Tag("landuse", "forest"),
-				new ArrayList<ObjectFile>() {
-					{
-						add(new ObjectFile(
-								"forests/mixed.for"));
-						add(new ObjectFile(
-								"forests/conifer.for"));
-						add(new ObjectFile(
-								"forests/broad_leaf.for"));
-					}
-				}, 255));
+		forestsRules.add(
+				new ForestTagRule(new Tag("landuse", "forest"), Lists.newArrayList(new ObjectFile("forests/mixed.for"),
+						new ObjectFile("forests/conifer.for"), new ObjectFile("forests/broad_leaf.for")), 255));
 		forestsRules.add(new ForestTagRule(new Tag("natural", "wood"),
-				new ArrayList<ObjectFile>() {
-					{
-						add(new ObjectFile(
-								"forests/mixed.for"));
-						add(new ObjectFile(
-								"forests/conifer.for"));
-						add(new ObjectFile(
-								"forests/broad_leaf.for"));
-					}
-				}, 255));
+				Lists.newArrayList(new ObjectFile("forests/mixed.for"),
+						new ObjectFile("forests/conifer.for"), new ObjectFile("forests/broad_leaf.for")), 255));
 		forestsRules.add(new ForestTagRule(new Tag("leisure", "garden"),
-				new ArrayList<ObjectFile>() {
-					{
-						add(new ObjectFile(
-								"forests/heathland.for"));
-						add(new ObjectFile(
-								"forests/sclerophyllous.for"));
-						add(new ObjectFile(
-								"forests/conifer.for"));
-					}
-				}, 255));
+				Lists.newArrayList(new ObjectFile("forests/heathland.for"),
+						new ObjectFile("forests/sclerophyllous.for"), new ObjectFile("forests/conifer.for")), 255));
 		forestsRules.add(new ForestTagRule(new Tag("leisure", "park"),
-				new ArrayList<ObjectFile>() {
-					{
-						add(new ObjectFile(
-								"forests/heathland.for"));
-						add(new ObjectFile(
-								"forests/sclerophyllous.for"));
-						add(new ObjectFile(
-								"forests/conifer.for"));
-					}
-				}, 255));
+				Lists.newArrayList(new ObjectFile("forests/heathland.for"),
+						new ObjectFile("forests/sclerophyllous.for"), new ObjectFile("forests/conifer.for")), 255));
 		ForestsRulesList result = new ForestsRulesList(forestsRules);
 		return result;
 

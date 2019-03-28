@@ -1,7 +1,6 @@
 package com.osm2xp.gui.views.panels.xplane;
 
 import java.io.File;
-import java.util.ArrayList;
 
 import org.eclipse.jface.viewers.IStructuredSelection;
 import org.eclipse.swt.SWT;
@@ -23,6 +22,7 @@ import org.eclipse.swt.widgets.ToolBar;
 import org.eclipse.swt.widgets.ToolItem;
 import org.eclipse.wb.swt.ResourceManager;
 
+import com.google.common.collect.Lists;
 import com.osm2xp.core.exceptions.Osm2xpBusinessException;
 import com.osm2xp.core.logging.Osm2xpLogger;
 import com.osm2xp.core.model.osm.Tag;
@@ -72,13 +72,7 @@ public class ForestsRulesPanel extends Composite {
 						.getForestsRules()
 						.getRules()
 						.add(new ForestTagRule(new Tag("a tag key", "a value"),
-								new ArrayList<ObjectFile>() {
-									{
-										add(new ObjectFile(
-												"path to a forest file"));
-									}
-								}, 255));
-
+								Lists.newArrayList(new ObjectFile("path to a forest file")), 255));
 			}
 		});
 

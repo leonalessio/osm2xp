@@ -9,6 +9,7 @@ import org.eclipse.swt.widgets.Group;
 import org.eclipse.swt.widgets.Label;
 import org.eclipse.swt.widgets.Spinner;
 
+import com.osm2xp.generation.options.GlobalOptionsProvider;
 import com.osm2xp.generation.options.XPlaneOptionsProvider;
 import com.osm2xp.gui.views.panels.Osm2xpPanel;
 
@@ -96,7 +97,7 @@ public class BuildingsHeightPanel extends Osm2xpPanel {
 				"buildingMax");
 		bindComponent(spinResMax, XPlaneOptionsProvider.getOptions(),
 				"residentialMax");
-		bindSpinnerToDouble(spinLevelHeight, XPlaneOptionsProvider.getOptions(),
+		bindSpinnerToDouble(spinLevelHeight, GlobalOptionsProvider.getOptions(),
 				"levelHeight",1);
 
 	}
