@@ -2,8 +2,10 @@ package com.osm2xp.model.facades;
 
 import java.io.File;
 import java.nio.charset.Charset;
+import java.util.ArrayList;
 import java.util.List;
 
+import org.apache.commons.io.FileUtils;
 import org.apache.commons.lang.ArrayUtils;
 
 import com.google.common.collect.HashMultimap;
@@ -20,6 +22,38 @@ public class FacadeDefinitionParser {
 			"LEFT",
 			"CENTER",
 			"RIGHT"};
+	
+	public static void setMaxLod(File facadeFile, int maxMeters) {
+		try {
+			List<String> lines = Files.readLines(facadeFile, Charset.forName("utf-8"));
+			List<String> resList = new ArrayList<>(lines.size());
+			boolean write = true;
+			for (String string : lines) {
+				string = string.trim();
+				if (string.startsWith("LOD ")) {
+					String[] tokens = string.split(" ");
+					if (tokens.length > 2) {
+						double near = Double.parseDouble(tokens[1]);
+						double far = Double.parseDouble(tokens[2]);
+						if (far <= maxMeters) {
+							write = true;
+						} else if (near < maxMeters) {
+							string = "LOD " + tokens[1] + " " + maxMeters + ".000000";
+							write = true;
+						} else {
+							write = false;
+						}
+					}
+				}
+				if (write) {
+					resList.add(string);
+				}
+			}
+			FileUtils.writeLines(facadeFile,"UTF-8", resList, false);
+		} catch (Exception e) {
+			Osm2xpLogger.log(e);
+		}
+	}
 	
 	public static FacadeDefinition parse(File facadeFile) {
 		FacadeDefinition definition = new FacadeDefinition();

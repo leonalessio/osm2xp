@@ -170,7 +170,7 @@ public class FacadeSetManager {
 
 		try {
 			FilesUtils.copyDirectory(srcFolder, facadesFolder, true);
-			DsfUtils.applyFacadeLod(facadesFolder);
+			FacadeSetHelper.applyFacadeLod(facadesFolder);
 			if (!XPlaneOptionsProvider.getOptions().isHardBuildings()) {
 				DsfUtils.removeConcreteRoofsAndWalls(targetFolder);
 			}

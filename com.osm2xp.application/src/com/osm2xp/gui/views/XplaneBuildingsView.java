@@ -7,6 +7,7 @@ import org.eclipse.swt.SWT;
 import org.eclipse.ui.forms.widgets.Section;
 import org.eclipse.ui.forms.widgets.TableWrapData;
 
+import com.osm2xp.gui.views.panels.Osm2xpPanel;
 import com.osm2xp.gui.views.panels.xplane.BuildingsHeightPanel;
 import com.osm2xp.gui.views.panels.xplane.FacadeSetPanel;
 import com.osm2xp.gui.views.panels.xplane.FacadesExclusionsPanel;
@@ -35,7 +36,7 @@ public class XplaneBuildingsView extends AbstractOptionsView implements IContext
 		sectionFacadeSet.setLayoutData(new TableWrapData(
 				TableWrapData.FILL_GRAB, TableWrapData.TOP, 1, 1));
 		sectionFacadeSet.setText("Facade sets");
-		FacadeSetPanel facadeSetPanel = new FacadeSetPanel(sectionFacadeSet,
+		Osm2xpPanel facadeSetPanel = new FacadeSetPanel(sectionFacadeSet,
 				SWT.BORDER);
 
 		// display error if there is no facade set found

@@ -20,7 +20,7 @@ import javax.xml.bind.annotation.XmlType;
 		"minHouseSegment", "maxHouseSegment", "minHouseArea", "generateObj",
 		"generateFor", "generateBuildings","generatePowerlines","generateRailways","generateRoads","generateFence",
 		"generateTanks","generateChimneys","generateCoolingTowers","generateBridges","generateSlopedRoofs", "generateStreetLights", 
-		"lightsDensity", "packageFacades","hardBuildings", "lightObject", "facadeSets", "facadeLod", 
+		"lightsDensity", "packageFacades","hardBuildings", "lightObject", "facadeSets", "restrictFacadeLod", "facadeLod", 
 		"generateXmlStats", "generatePdfStats", "generateDebugImg", "generateComments", 		
 		"roadBridgeRampLen","railBridgeRampLen","buildingsExclusions",
 		"forestsRules", "objectsRules", "lightsRules", "facadesRules",
@@ -66,6 +66,7 @@ public class XplaneOptions {
 	@XmlElement(required = true)
 	protected String lightObject;
 	protected String facadeSets;
+	protected boolean restrictFacadeLod = false;
 	protected int facadeLod;
 //	@XmlElement(required = true)
 //	protected String facadeSet;
@@ -894,6 +895,14 @@ public class XplaneOptions {
 	 */
 	public void setFacadeSets(String facadeSets) {
 		this.facadeSets = facadeSets;
+	}
+
+	public boolean isRestrictFacadeLod() {
+		return restrictFacadeLod;
+	}
+
+	public void setRestrictFacadeLod(boolean restrictFacadeLod) {
+		this.restrictFacadeLod = restrictFacadeLod;
 	}
 
 }

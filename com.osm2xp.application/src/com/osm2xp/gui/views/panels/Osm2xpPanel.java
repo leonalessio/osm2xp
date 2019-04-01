@@ -1,5 +1,6 @@
 package com.osm2xp.gui.views.panels;
 
+
 import org.eclipse.core.databinding.DataBindingContext;
 import org.eclipse.core.databinding.UpdateValueStrategy;
 import org.eclipse.core.databinding.beans.PojoProperties;
@@ -8,6 +9,7 @@ import org.eclipse.jface.databinding.swt.WidgetProperties;
 import org.eclipse.swt.widgets.Button;
 import org.eclipse.swt.widgets.Combo;
 import org.eclipse.swt.widgets.Composite;
+import org.eclipse.swt.widgets.Control;
 import org.eclipse.swt.widgets.Spinner;
 import org.eclipse.swt.widgets.Widget;
 
@@ -86,4 +88,10 @@ public abstract class Osm2xpPanel extends Composite {
 	 * Components action listeners .
 	 */
 	protected abstract void addComponentsListeners();
+
+	protected void enableComponents(boolean enable, Control... controls) {
+		for (Control control : controls) {
+			control.setEnabled(enable);
+		}
+	}
 }

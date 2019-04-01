@@ -1304,4 +1304,8 @@ public class GeomUtils {
 		return (p);
 	}
 
+	public static double latLonDistance(Point2D p1, Point2D p2) {
+		return latLonDistance(p1.y(),p1.x(),p2.y(),p2.x());
+	}
+
 }

@@ -54,7 +54,7 @@ public class App {
 	}
 	
 	protected static void buildWithGeoindex(List<File> files, Predicate<? super PointData<WayBuildingData>> classifiedPredicate) {
-		try (CSVWithAdditionalsWriter<WayBuildingData> writer = new CSVWithAdditionalsWriter<>(new File(getName(files.get(0)) + "_" + NEIGHBOUR_COUNT + ".csv"), "types", "height", NEIGHBOUR_COUNT)) {
+		try (CSVWithAdditionalsWriter<WayBuildingData> writer = new CSVWithAdditionalsWriter<>(new File(getName(files.get(0)) + "_" + NEIGHBOUR_COUNT + ".csv"), "levels", "levels", NEIGHBOUR_COUNT)) {
 			for (File curFile : files) {
 				processCurFile(writer, curFile, classifiedPredicate);
 			}

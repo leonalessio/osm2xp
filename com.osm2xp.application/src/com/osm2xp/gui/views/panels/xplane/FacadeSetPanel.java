@@ -45,6 +45,7 @@ public class FacadeSetPanel extends Osm2xpPanel {
 //	private Label lblFacadeSet;
 //	private GridData gridFacade;
 	private Spinner spinnerLod;
+	private Button btnLod;
 	private Button btnSlopedRoofs;
 	private Button btnHardBuildings;
 	private ListViewer facadeListViewer;
@@ -62,8 +63,7 @@ public class FacadeSetPanel extends Osm2xpPanel {
 		gridLayout.verticalSpacing = 15;
 		setLayout(gridLayout);
 		GridDataFactory.fillDefaults().applyTo(this);
-		spinnerLod.setLayoutData(new GridData(SWT.LEFT, SWT.CENTER, true, true,
-				1, 1));
+		
 //		btnSlopedRoofs.setLayoutData(new GridData(SWT.FILL, SWT.FILL, false,
 //				true, 1, 1));
 //		btnHardBuildings.setLayoutData(new GridData(SWT.LEFT, SWT.CENTER, true,
@@ -140,6 +140,11 @@ public class FacadeSetPanel extends Osm2xpPanel {
 		optionsGroup.setLayoutData(GridDataFactory.fillDefaults().span(2,1). create());
 		optionsGroup.setLayout(new GridLayout(2,false));
 		
+		btnLod = new Button(optionsGroup, SWT.CHECK);
+		GridDataFactory.swtDefaults().span(2,1).applyTo(btnLod);
+		btnLod.setText("Restrict Facade LOD");
+		
+		
 		final Label lblLod = new Label(optionsGroup, SWT.NONE);
 		lblLod.setLayoutData(new GridData(SWT.LEFT, SWT.CENTER, false, true, 1,
 				1));
@@ -147,6 +152,23 @@ public class FacadeSetPanel extends Osm2xpPanel {
 
 		spinnerLod = new Spinner(optionsGroup, SWT.BORDER);
 		spinnerLod.setMaximum(100000);
+		spinnerLod.setLayoutData(new GridData(SWT.LEFT, SWT.CENTER, true, true,
+				1, 1));
+		
+		boolean restrict = XPlaneOptionsProvider.getOptions().isRestrictFacadeLod();
+		enableComponents(restrict, lblLod, spinnerLod);
+		spinnerLod.setEnabled(restrict);
+		lblLod.setEnabled(restrict);
+		
+		btnLod.addSelectionListener(new SelectionAdapter() {
+			
+			@Override
+			public void widgetSelected(SelectionEvent e) {
+				enableComponents(btnLod.getSelection(), lblLod, spinnerLod);
+			}
+			
+		});
+		
 //		String[] items = null;
 //		try {
 //			items = FilesUtils.listFacadesSets().toArray(new String[] {});
@@ -243,6 +265,7 @@ public class FacadeSetPanel extends Osm2xpPanel {
 
 	@Override
 	protected void bindComponents() {
+		bindComponent(btnLod, XPlaneOptionsProvider.getOptions(), "restrictFacadeLod");
 		bindComponent(spinnerLod, XPlaneOptionsProvider.getOptions(), "facadeLod");
 		bindComponent(btnSlopedRoofs, XPlaneOptionsProvider.getOptions(),
 				"generateSlopedRoofs");

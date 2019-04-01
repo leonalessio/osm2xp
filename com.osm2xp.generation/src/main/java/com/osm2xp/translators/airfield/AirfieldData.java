@@ -18,6 +18,7 @@ import math.geom2d.line.LineSegment2D;
 import math.geom2d.polygon.LinearRing2D;
 
 public abstract class AirfieldData extends AerowayData {
+	private static final int MIN_IFFERENT_RUNWAYS_DISTANCE = 100;
 	private List<RunwayData> runways = new ArrayList<>();
 	private List<OsmPolygon> apronAreas = new ArrayList<>();
 	private List<TaxiLane> taxiLanes = new ArrayList<>();
@@ -61,6 +62,33 @@ public abstract class AirfieldData extends AerowayData {
 	}
 	
 	public List<RunwayData> getRunways() {
+		return runways;
+	}
+	
+	public List<RunwayData> getUniqueRunways() {
+		List<RunwayData> toRemove = new ArrayList<RunwayData>();
+		for (int i = 0; i < runways.size(); i++) {
+			RunwayData current = runways.get(i);
+			for (int j = i+1; j < runways.size(); j++) {
+				RunwayData checked = runways.get(j);
+				if (toRemove.contains(checked)) {
+					continue;
+				}
+				Line2D curLine = current.getRunwayLine();
+				Line2D checkedLine = checked.getRunwayLine();
+				
+				double l1 = GeomUtils.latLonDistance(curLine.p1, checkedLine.p1);
+				double l2 = GeomUtils.latLonDistance(curLine.p2, checkedLine.p2);
+				
+				double l01 = GeomUtils.latLonDistance(curLine.p1, checkedLine.p2);
+				double l02 = GeomUtils.latLonDistance(curLine.p2, checkedLine.p1);
+				if ((l1 < MIN_IFFERENT_RUNWAYS_DISTANCE && l2 < MIN_IFFERENT_RUNWAYS_DISTANCE) || 
+						(l01 < MIN_IFFERENT_RUNWAYS_DISTANCE && l02 < MIN_IFFERENT_RUNWAYS_DISTANCE)) {
+					toRemove.add(checked);
+				}
+			}
+		}
+		runways.removeAll(toRemove);
 		return runways;
 	}
 	

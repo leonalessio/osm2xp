@@ -71,7 +71,7 @@ public class XPAirfieldOutput {
 	}
 
 	public void writeAirfield(AirfieldData airfieldData) {
-		List<RunwayData> runways = airfieldData.getRunways();
+		List<RunwayData> runways = airfieldData.getUniqueRunways();
 		List<HelipadData> helipads = airfieldData.getHelipads();
 		if (runways.isEmpty() && helipads.isEmpty()) {
 			return; // Do nothing, if no runways/helipads assigned for airport
@@ -243,9 +243,9 @@ public class XPAirfieldOutput {
 	}
 
 	private String getOrientation(AirfieldData airfieldData) {
-		List<RunwayData> runways = airfieldData.getRunways();
-		if (runways.size() > 0) {
-			return String.format(Locale.ROOT, "%1.2f", runways.get(0).getTrueCourse());
+		RunwayData longest = airfieldData.getLongestRunway();
+		if (longest != null) {
+			return String.format(Locale.ROOT, "%1.2f", longest.getTrueCourse());
 		}
 		return "0.00";
 	}

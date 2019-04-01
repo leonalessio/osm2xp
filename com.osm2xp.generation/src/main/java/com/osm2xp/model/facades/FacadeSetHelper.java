@@ -1,6 +1,7 @@
 package com.osm2xp.model.facades;
 
 import java.io.File;
+import java.io.FileNotFoundException;
 import java.io.IOException;
 import java.nio.charset.Charset;
 import java.util.HashMap;
@@ -19,6 +20,7 @@ import com.osm2xp.core.exceptions.Osm2xpBusinessException;
 import com.osm2xp.core.exceptions.Osm2xpTechnicalException;
 import com.osm2xp.core.logging.Osm2xpLogger;
 import com.osm2xp.generation.options.GlobalOptionsProvider;
+import com.osm2xp.generation.options.XPlaneOptionsProvider;
 import com.osm2xp.utils.FilesUtils;
 
 /**
@@ -56,11 +58,22 @@ public class FacadeSetHelper {
 		}
 	}
 
+	public static void applyFacadeLod(File directory) throws FileNotFoundException, IOException {
+		if (!XPlaneOptionsProvider.getOptions().isRestrictFacadeLod()) {
+			return;
+		}
+		int facadeLod = XPlaneOptionsProvider.getOptions().getFacadeLod();
+		File[] filesList = directory.listFiles(file -> file.getName().endsWith(".fac"));
+		for (File curFile : filesList) {
+			FacadeDefinitionParser.setMaxLod(curFile, facadeLod);
+		}
+	}
+	
 	public static FacadeSet getFacadeSet(String facadeSetPath) {
 		if (new File(facadeSetPath).isFile()) {
 			return loadFacadeSet(facadeSetPath);
 		}
-		File facadeSetFile =  new File(facadeSetPath + File.separator
+		File facadeSetFile = new File(facadeSetPath + File.separator
 				+ FACADE_SET_DESCRIPTOR_FILE_NAME);
 		if (facadeSetFile.exists()) {
 			return loadFacadeSet(facadeSetFile.getPath());

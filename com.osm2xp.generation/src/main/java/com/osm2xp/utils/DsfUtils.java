@@ -83,37 +83,6 @@ public class DsfUtils {
 		return dsfTool;
 	}
 
-	public static void applyFacadeLod(File to) throws FileNotFoundException,
-			IOException {
-//XXX this needs to be fully rewritten taking into account existing LOD values
-//		File[] filesList = to.listFiles();
-//		if (filesList != null) {
-//			for (int cpt = 0; cpt < filesList.length; cpt++) {
-//				if (filesList[cpt].getName().toLowerCase().contains(".fac")) {
-//					File facade = filesList[cpt];
-//					String line = null;
-//					String facadeContent = new String();
-//					try (RandomAccessFile reader = new RandomAccessFile(facade, "rw");FileWriter writer = new FileWriter(facade.getAbsolutePath());) {
-//						
-//						while ((line = reader.readLine()) != null) {
-//							facadeContent += line + "\r\n";
-//						}
-//						facadeContent = facadeContent.replaceAll(
-//								DEFAULT_FACADE_LOD, "LOD 0.000000 "
-//										+ XPlaneOptionsProvider.getOptions()
-//										.getFacadeLod() + ".000000");
-//						
-//						writer.write(facadeContent);
-//						writer.close();
-//					} catch (IOException e) {
-//						throw e;
-//					}
-//
-//				}
-//			}
-//		}
-	}
-
 	/**
 	 * @param to
 	 * @throws FileNotFoundException
