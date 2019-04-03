@@ -12,6 +12,11 @@ public class Polygon {
 	@XmlAttribute
 	protected String path;
 
+	public Polygon(String path) {
+		super();
+		this.path = path;
+	}
+
 	public String getPath() {
 		return path;
 	}

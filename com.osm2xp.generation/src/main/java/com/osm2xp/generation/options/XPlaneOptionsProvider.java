@@ -154,6 +154,7 @@ public class XPlaneOptionsProvider {
 
 	private static PolygonRulesList createNewPolygonRules() {
 		List<PolygonTagsRule> list = new ArrayList<>();
+		list.add(new PolygonTagsRule(new Tag("amenity", "parking"), Lists.newArrayList(new Polygon("lib/airport/pavement/asphalt_1L.pol"))));
 		return new PolygonRulesList(list);
 	}
 

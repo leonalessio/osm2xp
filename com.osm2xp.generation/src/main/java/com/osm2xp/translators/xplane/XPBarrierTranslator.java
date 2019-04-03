@@ -29,9 +29,9 @@ public class XPBarrierTranslator extends XPWritingTranslator {
 		if (!XPlaneOptionsProvider.getOptions().isGenerateFence()) {
 			return false;
 		}
-		String barrierType = osmPolyline.getTagValue("barrier");
+		SpecialFacadeType barrierType = getBarrierType(osmPolyline.getTagValue("barrier"));
 		if (barrierType != null && GeomUtils.computeEdgesLength(osmPolyline.getPolyline()) > MIN_BARRIER_PERIMETER && osmPolyline.isValid()) {
-			Integer facade = dsfObjectsProvider.computeSpecialFacadeDsfIndex(getBarrierType(barrierType),osmPolyline);
+			Integer facade = dsfObjectsProvider.computeSpecialFacadeDsfIndex(barrierType,osmPolyline);
 			if (facade != null && facade >= 0) {
 				StringBuffer sb = new StringBuffer();
 				if (XPlaneOptionsProvider.getOptions().isGenerateComments()) {
@@ -52,10 +52,17 @@ public class XPBarrierTranslator extends XPWritingTranslator {
 	}
 
 	private SpecialFacadeType getBarrierType(String barrierTypeStr) {
+		if (barrierTypeStr == null) {
+			return null;
+		}
 		if ("wall".equalsIgnoreCase(barrierTypeStr)) {
 			return SpecialFacadeType.WALL;
+		} else if ("fence".equalsIgnoreCase(barrierTypeStr) ||
+				   "cable_barrier".equalsIgnoreCase(barrierTypeStr) ||
+				   "yes".equalsIgnoreCase(barrierTypeStr)) {
+			return SpecialFacadeType.FENCE;
 		}
-		return SpecialFacadeType.FENCE;
+		return null;
 	}
 
 	@Override
