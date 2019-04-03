@@ -211,8 +211,9 @@ public class FacadeSetManager {
 					.filter(facade -> !simple ? !facade.isSimpleBuildingOnly() : true)
 					.collect(Collectors.toList());
 			if (matching.size() > 0) {
-				Collections.shuffle(matching);
-				return matching.get(0);
+				 Random rnd = new Random();
+				 int i = rnd.nextInt(matching.size());
+				return matching.get(i);
 			}
 		}
 		Osm2xpLogger.warning( "Unable to find proper facade for building type " + type + " height= " + height + " simple= " + simple);

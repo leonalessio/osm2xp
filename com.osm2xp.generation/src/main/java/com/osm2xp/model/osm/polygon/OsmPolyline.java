@@ -114,6 +114,18 @@ public class OsmPolyline implements IHasTags{
 	public List<Node> getNodes() {
 		return nodes;
 	}
+	
+	public boolean hasTag(Tag tag) {
+		for (Tag curTag : tags) {
+			if (curTag.getKey().equalsIgnoreCase(tag.getKey())) {
+				if (tag.getValue().length() == 0 || "*".equals(tag.getValue())) {
+					return true;
+				}
+				return curTag.getValue().equalsIgnoreCase(tag.getValue());
+			}
+		}
+		return false;
+	}
 
 	public Double getMinVectorSize() {
 		Double result = null;

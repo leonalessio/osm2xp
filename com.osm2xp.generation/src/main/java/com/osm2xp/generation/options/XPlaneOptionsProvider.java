@@ -8,6 +8,14 @@ import com.google.common.collect.Lists;
 import com.osm2xp.core.exceptions.Osm2xpBusinessException;
 import com.osm2xp.core.logging.Osm2xpLogger;
 import com.osm2xp.core.model.osm.Tag;
+import com.osm2xp.generation.options.rules.FacadesRulesList;
+import com.osm2xp.generation.options.rules.ForestTagRule;
+import com.osm2xp.generation.options.rules.ForestsRulesList;
+import com.osm2xp.generation.options.rules.PolygonRulesList;
+import com.osm2xp.generation.options.rules.PolygonTagsRule;
+import com.osm2xp.generation.options.rules.XplaneLightTagRule;
+import com.osm2xp.generation.options.rules.XplaneObjectTagRule;
+import com.osm2xp.generation.options.rules.XplaneObjectsRulesList;
 import com.osm2xp.generation.osm.OsmConstants;
 import com.osm2xp.generation.paths.PathsService;
 
@@ -89,6 +97,7 @@ public class XPlaneOptionsProvider {
 		result.setBuildingsExclusions(createNewXplaneExclusions());
 		result.setForestsRules(createNewForestRules());
 		result.setObjectsRules(createNewObjectsRules());
+		result.setPolygonRules(createNewPolygonRules());
 		result.setLightsRules(createNewLightsRules());
 		result.setStreetLightObjects(createNewStreetLightsObjects());
 		result.setFacadesRules(new FacadesRulesList());
@@ -141,6 +150,11 @@ public class XPlaneOptionsProvider {
 		XplaneObjectsRulesList result = new XplaneObjectsRulesList(
 				XplaneObjectTagRules);
 		return result;
+	}
+
+	private static PolygonRulesList createNewPolygonRules() {
+		List<PolygonTagsRule> list = new ArrayList<>();
+		return new PolygonRulesList(list);
 	}
 
 	/**

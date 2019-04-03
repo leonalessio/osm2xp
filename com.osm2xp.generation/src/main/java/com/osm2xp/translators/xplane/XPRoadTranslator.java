@@ -16,7 +16,7 @@ public class XPRoadTranslator extends XPPathTranslator {
 	private String[] allowedHighwayTypes = GlobalOptionsProvider.getOptions().getAllowedHighwayTypesArray();
 	private String[] allowedHighwayLinkTypes = GlobalOptionsProvider.getOptions().getAllowedHighwayLinkTypesArray();
 	private String[] allowedHighwaySurfaceTypes = GlobalOptionsProvider.getOptions().getAllowedHighwaySurfaceTypesArray();
-	public XPRoadTranslator(IWriter writer, XPOutputFormat outputFormat, IDRenumbererService idProvider) {
+	public XPRoadTranslator(IWriter writer, IDRenumbererService idProvider, XPOutputFormat outputFormat) {
 		super(writer, outputFormat, idProvider);
 	}
 

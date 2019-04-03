@@ -6,6 +6,9 @@ import javax.xml.bind.annotation.XmlElement;
 import javax.xml.bind.annotation.XmlRootElement;
 import javax.xml.bind.annotation.XmlType;
 
+import com.osm2xp.generation.options.rules.FlightGearObjectsRulesList;
+import com.osm2xp.generation.options.rules.ObjectsRulesList;
+
 /**
  * FlightGearOptions.
  * 

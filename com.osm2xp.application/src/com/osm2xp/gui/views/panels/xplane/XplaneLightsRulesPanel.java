@@ -33,7 +33,7 @@ import com.osm2xp.core.model.osm.Tag;
 import com.osm2xp.generation.options.ObjectFile;
 import com.osm2xp.generation.options.XPlaneOptionsProvider;
 import com.osm2xp.generation.options.XmlHelper;
-import com.osm2xp.generation.options.XplaneLightTagRule;
+import com.osm2xp.generation.options.rules.XplaneLightTagRule;
 import com.osm2xp.gui.components.FilesPathsTable;
 import com.osm2xp.gui.components.TagsRulesTable;
 import com.osm2xp.utils.helpers.XplaneOptionsHelper;

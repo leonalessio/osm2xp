@@ -1,4 +1,4 @@
-package com.osm2xp.generation.options;
+package com.osm2xp.generation.options.rules;
 
 import java.util.List;
 
@@ -7,19 +7,21 @@ import javax.xml.bind.annotation.XmlAccessorType;
 import javax.xml.bind.annotation.XmlType;
 
 import com.osm2xp.core.model.osm.Tag;
+import com.osm2xp.generation.options.ObjectFile;
 
 /**
- * XplaneBuildingObjectTagRule.
+ * XplaneObjectTagRule.
  * 
  * @author Benjamin Blanchet
  * 
  */
 @XmlAccessorType(XmlAccessType.FIELD)
-@XmlType(name = "XplaneBuildingObjectTagRule", propOrder = { "angle", "randomAngle",
-		"polygonAngle", "sizeCheck", "xVectorMinLength","xVectorMaxLength", "yVectorMinLength","yVectorMaxLength",
-		"areaCheck", "minArea", "maxArea", "simplePolygonOnly",
-		"usePolygonAngle", "rotationPointX", "rotationPointY" })
-public class XplaneBuildingObjectTagRule extends TagsRule {
+@XmlType(name = "XplaneObjectTagRule", propOrder = { "angle", "randomAngle",
+		"polygonAngle", "sizeCheck", "xVectorMinLength", "xVectorMaxLength",
+		"yVectorMinLength", "yVectorMaxLength", "areaCheck", "minArea",
+		"maxArea", "simplePolygonOnly", "usePolygonAngle", "rotationPointX",
+		"rotationPointY" })
+public class XplaneObjectTagRule extends TagsRule {
 
 	protected int angle;
 	protected boolean randomAngle;
@@ -41,7 +43,7 @@ public class XplaneBuildingObjectTagRule extends TagsRule {
 	 * Default no-arg constructor
 	 * 
 	 */
-	public XplaneBuildingObjectTagRule() {
+	public XplaneObjectTagRule() {
 		super();
 	}
 
@@ -49,11 +51,12 @@ public class XplaneBuildingObjectTagRule extends TagsRule {
 	 * Fully-initialising value constructor
 	 * 
 	 */
-	public XplaneBuildingObjectTagRule(final Tag tag,
+	public XplaneObjectTagRule(final Tag tag,
 			final List<ObjectFile> objectsFiles, final int angle,
 			final boolean randomAngle, final boolean polygonAngle,
-			final boolean sizeCheck, final int xVectorMinLength,final int xVectorMaxLength,
-			final int yVectorMinLength,final int yVectorMaxLength,  final boolean areaCheck,
+			final boolean sizeCheck, final int xVectorMaxLength,
+			final int xVectorMinLength, final int yVectorMinLength,
+			final int yVectorMaxLength, final boolean areaCheck,
 			final int minArea, final int maxArea,
 			final boolean simplePolygonOnly, final boolean usePolygonAngle) {
 		super(tag, objectsFiles);
@@ -62,9 +65,9 @@ public class XplaneBuildingObjectTagRule extends TagsRule {
 		this.polygonAngle = polygonAngle;
 		this.sizeCheck = sizeCheck;
 		this.xVectorMinLength = xVectorMinLength;
-		this.yVectorMinLength = yVectorMinLength;
-		this.xVectorMaxLength = xVectorMaxLength;
 		this.yVectorMaxLength = yVectorMaxLength;
+		this.xVectorMaxLength = xVectorMaxLength;
+		this.yVectorMinLength = yVectorMinLength;
 		this.areaCheck = areaCheck;
 		this.minArea = minArea;
 		this.maxArea = maxArea;
@@ -265,6 +268,5 @@ public class XplaneBuildingObjectTagRule extends TagsRule {
 	public void setyVectorMaxLength(int yVectorMaxLength) {
 		this.yVectorMaxLength = yVectorMaxLength;
 	}
-
 
 }

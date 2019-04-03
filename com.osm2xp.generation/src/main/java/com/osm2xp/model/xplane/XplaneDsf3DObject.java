@@ -1,7 +1,7 @@
 package com.osm2xp.model.xplane;
 
 import com.osm2xp.core.exceptions.Osm2xpBusinessException;
-import com.osm2xp.generation.options.XplaneObjectTagRule;
+import com.osm2xp.generation.options.rules.XplaneObjectTagRule;
 import com.osm2xp.model.osm.polygon.OsmPolygon;
 import com.osm2xp.utils.MiscUtils;
 import com.osm2xp.utils.geometry.GeomUtils;

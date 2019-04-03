@@ -11,13 +11,15 @@ import java.util.Random;
 import com.osm2xp.core.exceptions.Osm2xpBusinessException;
 import com.osm2xp.core.logging.Osm2xpLogger;
 import com.osm2xp.core.model.osm.Tag;
-import com.osm2xp.generation.options.FacadeTagRule;
-import com.osm2xp.generation.options.ForestTagRule;
 import com.osm2xp.generation.options.ObjectFile;
-import com.osm2xp.generation.options.TagsRule;
+import com.osm2xp.generation.options.Polygon;
 import com.osm2xp.generation.options.XPlaneOptionsProvider;
-import com.osm2xp.generation.options.XplaneLightTagRule;
-import com.osm2xp.generation.options.XplaneObjectTagRule;
+import com.osm2xp.generation.options.rules.FacadeTagRule;
+import com.osm2xp.generation.options.rules.ForestTagRule;
+import com.osm2xp.generation.options.rules.PolygonTagsRule;
+import com.osm2xp.generation.options.rules.TagsRule;
+import com.osm2xp.generation.options.rules.XplaneLightTagRule;
+import com.osm2xp.generation.options.rules.XplaneObjectTagRule;
 import com.osm2xp.generation.paths.PathsService;
 import com.osm2xp.model.facades.Facade;
 import com.osm2xp.model.facades.FacadeSetManager;
@@ -48,6 +50,7 @@ public class DsfObjectsProvider {
 	private List<String> singlesFacadesList = new ArrayList<String>();
 	private List<String> facadesList = new ArrayList<String>();
 	private List<String> forestsList = new ArrayList<String>();
+	private List<String> drapedPolysList = new ArrayList<String>();
 	private List<String> polygonsList = new ArrayList<String>();
 	private List<String> lightsObjectsList = new ArrayList<String>();
 	private List<FacadeTagRule> facadesRules = XPlaneOptionsProvider.getOptions().getFacadesRules().getRules();
@@ -156,23 +159,40 @@ public class DsfObjectsProvider {
 
 		facadesList.clear();
 		forestsList.clear();
+		drapedPolysList.clear();
 		polygonsList.clear();
 		singlesFacadesList.clear();
 
 		// FORESTS RULES
 		if (XPlaneOptionsProvider.getOptions().isGenerateFor()) {
-
+			
 			for (ForestTagRule forest : XPlaneOptionsProvider.getOptions()
 					.getForestsRules().getRules()) {
 				for (ObjectFile file : forest.getObjectsFiles()) {
 					if (!forestsList.contains(file.getPath())) {
 						forestsList.add(file.getPath());
 					}
-
+					
 				}
 			}
 			copyForestFiles();
 			polygonsList.addAll(forestsList);
+			
+		}
+		// DRAPED POLYGONS RULES
+		if (XPlaneOptionsProvider.getOptions().isGeneratePolys()) {
+
+			for (PolygonTagsRule forest : XPlaneOptionsProvider.getOptions()
+					.getPolygonRules().getRules()) {
+				for (Polygon poly : forest.getPolygons()) {
+					if (!drapedPolysList.contains(poly.getPath())) {
+						drapedPolysList.add(poly.getPath());
+					}
+
+				}
+			}
+			//TODO actual copying polygons
+			polygonsList.addAll(drapedPolysList);
 			
 		}
 		// FACADES RULES
@@ -275,8 +295,9 @@ public class DsfObjectsProvider {
 	 * @return
 	 */
 	public Integer getRandomObject(TagsRule tagRule) {
-		Collections.shuffle(tagRule.getObjectsFiles());
-		String objectFile = tagRule.getObjectsFiles().get(0).getPath();
+		Random rnd = new Random();
+		int i = rnd.nextInt(tagRule.getObjectsFiles().size());
+		String objectFile = tagRule.getObjectsFiles().get(i).getPath();
 		return objectsList.indexOf(objectFile);
 	}
 	
@@ -293,9 +314,15 @@ public class DsfObjectsProvider {
 	 * @return
 	 */
 	public Integer getRandomForest(ForestTagRule forestTagRule) {
-		Collections.shuffle(forestTagRule.getObjectsFiles());
-		String forestFile = forestTagRule.getObjectsFiles().get(0).getPath();
+		List<ObjectFile> objectsFiles = forestTagRule.getObjectsFiles();
+		Random rnd = new Random();
+		int i = rnd.nextInt(objectsFiles.size());
+		String forestFile = objectsFiles.get(i).getPath();
 		return polygonsList.indexOf(forestFile);
+	}
+	
+	public int getStringIndex(String str) {
+		return polygonsList.indexOf(str);
 	}
 
 	/**

@@ -2,10 +2,11 @@ package com.osm2xp.utils;
 
 import java.util.Collections;
 import java.util.List;
+import java.util.Random;
 
 import com.osm2xp.core.model.osm.Tag;
 import com.osm2xp.generation.options.FsxOptionsProvider;
-import com.osm2xp.generation.options.ObjectTagRule;
+import com.osm2xp.generation.options.rules.ObjectTagRule;
 import com.osm2xp.utils.osm.OsmUtils;
 
 /**
@@ -30,8 +31,9 @@ public class BglUtils {
 						.getTag().getValue()
 						.equalsIgnoreCase(String.valueOf(id)))
 						|| (OsmUtils.compareTags(objectTagRule.getTag(), tag))) {
-					Collections.shuffle(objectTagRule.getObjectsFiles());
-					String result = objectTagRule.getObjectsFiles().get(0)
+					Random rnd = new Random();
+					int i = rnd.nextInt(objectTagRule.getObjectsFiles().size());
+					String result = objectTagRule.getObjectsFiles().get(i)
 							.getPath();
 					return result;
 				}

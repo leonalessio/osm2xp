@@ -3,7 +3,7 @@ package com.osm2xp.utils.helpers;
 import com.google.common.collect.Lists;
 import com.osm2xp.core.model.osm.Tag;
 import com.osm2xp.generation.options.ObjectFile;
-import com.osm2xp.generation.options.ObjectTagRule;
+import com.osm2xp.generation.options.rules.ObjectTagRule;
 
 /**
  * OptionsHelper.

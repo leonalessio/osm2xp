@@ -1,4 +1,4 @@
-package com.osm2xp.generation.options;
+package com.osm2xp.generation.options.rules;
 
 import java.util.ArrayList;
 import java.util.List;

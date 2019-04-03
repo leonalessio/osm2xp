@@ -56,10 +56,10 @@ public abstract class XPPathTranslator extends XPWritingTranslator {
 		if (!bridgeNodeIds.isEmpty()) {
 			resultSegmentList = new ArrayList<>(segmentList.size());
 			for (XPPathSegment pathSegment : segmentList) {
-				if (bridgeNodeIds.contains(new Integer((int) pathSegment.getStartId()))) {
+				if (bridgeNodeIds.contains(Integer.valueOf((int) pathSegment.getStartId()))) {
 					pathSegment.setStartHeight(1);
 				}
-				if (bridgeNodeIds.contains(new Integer((int) pathSegment.getEndId()))) {
+				if (bridgeNodeIds.contains(Integer.valueOf((int) pathSegment.getEndId()))) {
 					pathSegment.setEndHeight(1);
 				}
 				if (!pathSegment.isBridge() && 

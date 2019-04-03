@@ -11,7 +11,7 @@ import javax.xml.bind.annotation.XmlType;
 @XmlType(name="XplaneAirfieldOptions", propOrder = {"generateAirfields","useSingleAptAsMain","generateApron","generateMarks","flatten","preferEnglish",
 		"tryGetElev","tryGetName","defaultHardRunwayWidth","defaultGrassRunwayWidth","defaultHardTaxiwayWidth", "defaultGrassTaxiwayWidth", "defaultHelipadSize", "ignoredAirfields"})
 public class XplaneAirfieldOptions {
-	protected boolean generateAirfields = false;
+	protected boolean generateAirfields = true;
 	protected boolean useSingleAptAsMain = true;
 	protected boolean generateApron = true;
 	protected boolean generateMarks = true;

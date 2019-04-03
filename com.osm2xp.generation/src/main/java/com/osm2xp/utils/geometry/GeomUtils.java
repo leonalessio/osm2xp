@@ -656,25 +656,61 @@ public class GeomUtils {
 	}
 	
 	/**
+	 * Set counter-clockwise point order for given {@link LinearRing} if necessary
+	 * X-Plane needs facades to be defined in counter-clockwise order, see <a href="https://developer.x-plane.com/2010/07/facade-tuning-and-tips/">this article</a> 
+	 * @param linearRing
+	 * @return counter-clockwise {@link LinearRing}
+	 */
+	public static LineString setCCW(LineString ring) {
+		if (!ring.isClosed()) {
+			return ring;
+		}
+		if (!Orientation.isCCW(ring.getCoordinates())) {
+			return (LinearRing) ring.reverse();
+		}
+		return ring;
+	}
+	
+	/**
+	 * Set clockwise point order for given {@link LinearRing} if necessary
+	 * X-Plane needs facades to be defined in counter-clockwise order, see <a href="https://developer.x-plane.com/2010/07/facade-tuning-and-tips/">this article</a> 
+	 * @param linearRing
+	 * @return clockwise {@link LinearRing}
+	 */
+	public static LineString setCW(LineString ring) {
+		if (!ring.isClosed()) {
+			return ring;
+		}
+		if (Orientation.isCCW(ring.getCoordinates())) {
+			return (LinearRing) ring.reverse();
+		}
+		return ring;
+	}
+	
+	/**
 	 * Set specified point order for given {@link LinearRing2D} if necessary
 	 * @param linearRing2D
 	 * @param clockwise <code>true</code> to set clockwise point order, <code>false</code> - for counter-clockwise one
 	 * @return
 	 */
 	public static LinearRing2D setDirection(LinearRing2D linearRing2D, boolean clockwise) {
-		double edgeSum = 0;
-		for (int i = 0; i < linearRing2D.vertices().size() - 1; i++) {
-			double a = (linearRing2D.vertex(i + 1).x() - linearRing2D
-					.vertex(i).x());
-			double b = (linearRing2D.vertex(i + 1).y() + linearRing2D
-					.vertex(i).y());
-			edgeSum = edgeSum + (a * b);
-		}
-		if ((edgeSum < 0 && clockwise) || (edgeSum > 0 && !clockwise)) {
-			Collection<Point2D> newVectors = linearRing2D
-					.reverse().vertices();
-			linearRing2D.clearVertices();
-			linearRing2D.vertices().addAll(newVectors);
+//		double edgeSum = 0;
+//		for (int i = 0; i < linearRing2D.vertices().size() - 1; i++) {
+//			double a = (linearRing2D.vertex(i + 1).x() - linearRing2D
+//					.vertex(i).x());
+//			double b = (linearRing2D.vertex(i + 1).y() + linearRing2D
+//					.vertex(i).y());
+//			edgeSum = edgeSum + (a * b);
+//		}
+//		if ((edgeSum < 0 && clockwise) || (edgeSum > 0 && !clockwise)) {
+//			return linearRing2D.reverse();
+//		}
+//		return linearRing2D;
+		double area = linearRing2D.area();
+		if ((area > 0 && clockwise) || (area < 0 && !clockwise)) {
+			List<Point2D> list = new ArrayList<Point2D>(linearRing2D.vertices()); 
+			Collections.reverse(list);
+			return new LinearRing2D(list);
 		}
 		return linearRing2D;
 	}
@@ -937,6 +973,7 @@ public class GeomUtils {
 	 * @param geom
 	 * @return a geometry 
 	 */
+	@SuppressWarnings("unchecked")
 	public static Geometry fix(Geometry geom){
 		try {
 		    if(geom instanceof Polygon){

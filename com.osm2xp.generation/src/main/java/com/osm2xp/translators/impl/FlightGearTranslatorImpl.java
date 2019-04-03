@@ -18,7 +18,7 @@ import com.osm2xp.utils.geometry.GeomUtils;
 import com.osm2xp.generation.options.FlightGearOptionsProvider;
 import com.osm2xp.generation.options.GlobalOptionsProvider;
 import com.osm2xp.generation.options.ObjectFile;
-import com.osm2xp.generation.options.TagsRule;
+import com.osm2xp.generation.options.rules.TagsRule;
 import com.osm2xp.utils.osm.OsmUtils;
 
 import math.geom2d.Box2D;

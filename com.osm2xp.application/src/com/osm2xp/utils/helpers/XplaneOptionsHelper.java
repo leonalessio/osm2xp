@@ -5,13 +5,13 @@ import java.io.File;
 import com.osm2xp.core.exceptions.Osm2xpBusinessException;
 import com.osm2xp.core.logging.Osm2xpLogger;
 import com.osm2xp.generation.options.BuildingsExclusionsList;
-import com.osm2xp.generation.options.FacadesRulesList;
-import com.osm2xp.generation.options.ForestsRulesList;
 import com.osm2xp.generation.options.ObjectsList;
-import com.osm2xp.generation.options.ObjectsRulesList;
 import com.osm2xp.generation.options.XPlaneOptionsProvider;
 import com.osm2xp.generation.options.XmlHelper;
-import com.osm2xp.generation.options.XplaneObjectsRulesList;
+import com.osm2xp.generation.options.rules.FacadesRulesList;
+import com.osm2xp.generation.options.rules.ForestsRulesList;
+import com.osm2xp.generation.options.rules.ObjectsRulesList;
+import com.osm2xp.generation.options.rules.XplaneObjectsRulesList;
 
 /**
  * XplaneOptionsHelper.

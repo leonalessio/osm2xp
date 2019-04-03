@@ -101,11 +101,12 @@ public class XPlaneTranslatorImpl implements ITranslator{
 		IDRenumbererService idProvider = new IDRenumbererService();
 		
 		polyHandlers.add(new XPBarrierTranslator(writer, dsfObjectsProvider, outputFormat));
-		polyHandlers.add(new XPRoadTranslator(writer, outputFormat, idProvider));
-		polyHandlers.add(new XPRailTranslator(writer, outputFormat, idProvider));
-		polyHandlers.add(new XPPowerlineTranslator(writer, outputFormat, idProvider));
+		polyHandlers.add(new XPRoadTranslator(writer, idProvider, outputFormat));
+		polyHandlers.add(new XPRailTranslator(writer, idProvider, outputFormat));
+		polyHandlers.add(new XPPowerlineTranslator(writer, idProvider, outputFormat));
 		polyHandlers.add(new XPCoolingTowerTranslator(writer, dsfObjectsProvider));
 		polyHandlers.add(new XPChimneyTranslator(writer, dsfObjectsProvider));
+		polyHandlers.add(new XPDrapedPolyTranslator(writer, dsfObjectsProvider, outputFormat));
 		forestTranslator = new XPForestTranslator(writer, dsfObjectsProvider, outputFormat);
 		
 	}
@@ -152,12 +153,12 @@ public class XPlaneTranslatorImpl implements ITranslator{
 	 */
 	protected void writeBuildingToDsf(OsmPolygon osmPolygon, Integer facade) {
 		if (facade != null && osmPolygon.getHeight() != null) {
-			osmPolygon.setPolygon(GeomUtils.setCCW(osmPolygon
-					.getPolygon()));
-			if (osmPolygon.getPolygon().area() * 100000000 > 0.1
-					&& osmPolygon.getPolygon().vertexNumber() > 3) {
-				writer.write(outputFormat.getPolygonString(osmPolygon, facade +"", osmPolygon.getHeight() + ""));
-				}
+			osmPolygon.setPolygon(GeomUtils.setCCW(osmPolygon.getPolygon()));
+			double area = osmPolygon.getPolygon().area();
+			if (area < 0) {
+				Osm2xpLogger.error("Building polygon winding is incorrect! Polygon:" + osmPolygon.getId());
+			}
+			writer.write(outputFormat.getPolygonString(osmPolygon, facade + "", osmPolygon.getHeight() + ""));
 		}
 	}
 
@@ -581,7 +582,9 @@ public class XPlaneTranslatorImpl implements ITranslator{
 					translationListener.polyProcessed(poly, handler);
 				}
 				StatsProvider.getTileStats(currentTile,true).incCount(handler.getId());
-				return true;
+				if (handler.isTerminating()) {
+					return true;
+				}
 			}
 		}
 		return false;

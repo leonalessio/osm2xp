@@ -26,6 +26,7 @@
     <generateRoads>true</generateRoads>
     <generateFence>true</generateFence>
     <generateTanks>true</generateTanks>
+    <generatePolys>true</generatePolys>
     <generateChimneys>true</generateChimneys>
     <generateCoolingTowers>true</generateCoolingTowers>
     <generateBridges>true</generateBridges>

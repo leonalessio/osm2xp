@@ -1,4 +1,4 @@
-package com.osm2xp.generation.options;
+package com.osm2xp.generation.options.rules;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -8,26 +8,24 @@ import javax.xml.bind.annotation.XmlAccessorType;
 import javax.xml.bind.annotation.XmlElement;
 import javax.xml.bind.annotation.XmlType;
 
-import com.osm2xp.generation.options.rules.XplaneLightTagRule;
-
 /**
- * LightsRulesList.
+ * ForestsRulesList.
  * 
  * @author Benjamin Blanchet
  * 
  */
 @XmlAccessorType(XmlAccessType.FIELD)
-@XmlType(name = "LightsRulesList", propOrder = { "rules" })
-public class LightsRulesList {
+@XmlType(name = "ForestsRulesList", propOrder = { "rules" })
+public class ForestsRulesList {
 
 	@XmlElement(required = true)
-	protected List<XplaneLightTagRule> rules;
+	protected List<ForestTagRule> rules;
 
 	/**
 	 * Default no-arg constructor
 	 * 
 	 */
-	public LightsRulesList() {
+	public ForestsRulesList() {
 		super();
 	}
 
@@ -35,7 +33,7 @@ public class LightsRulesList {
 	 * Fully-initialising value constructor
 	 * 
 	 */
-	public LightsRulesList(final List<XplaneLightTagRule> rules) {
+	public ForestsRulesList(final List<ForestTagRule> rules) {
 		this.rules = rules;
 	}
 
@@ -58,13 +56,13 @@ public class LightsRulesList {
 	 * 
 	 * <p>
 	 * Objects of the following type(s) are allowed in the list
-	 * {@link XplaneLightTagRule }
+	 * {@link ForestTagRule }
 	 * 
 	 * 
 	 */
-	public List<XplaneLightTagRule> getRules() {
+	public List<ForestTagRule> getRules() {
 		if (rules == null) {
-			rules = new ArrayList<XplaneLightTagRule>();
+			rules = new ArrayList<ForestTagRule>();
 		}
 		return this.rules;
 	}

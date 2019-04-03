@@ -1,4 +1,4 @@
-package com.osm2xp.generation.options;
+package com.osm2xp.generation.options.rules;
 
 import java.util.List;
 
@@ -7,20 +7,21 @@ import javax.xml.bind.annotation.XmlAccessorType;
 import javax.xml.bind.annotation.XmlType;
 
 import com.osm2xp.core.model.osm.Tag;
+import com.osm2xp.generation.options.ObjectFile;
 
 /**
- * XplaneObjectTagRule.
+ * FlightGearObjectTagRule.
  * 
  * @author Benjamin Blanchet
  * 
  */
 @XmlAccessorType(XmlAccessType.FIELD)
-@XmlType(name = "XplaneObjectTagRule", propOrder = { "angle", "randomAngle",
+@XmlType(name = "FlightGearObjectTagRule", propOrder = { "angle", "randomAngle",
 		"polygonAngle", "sizeCheck", "xVectorMinLength", "xVectorMaxLength",
 		"yVectorMinLength", "yVectorMaxLength", "areaCheck", "minArea",
 		"maxArea", "simplePolygonOnly", "usePolygonAngle", "rotationPointX",
 		"rotationPointY" })
-public class XplaneObjectTagRule extends TagsRule {
+public class FlightGearObjectTagRule extends TagsRule {
 
 	protected int angle;
 	protected boolean randomAngle;
@@ -42,7 +43,7 @@ public class XplaneObjectTagRule extends TagsRule {
 	 * Default no-arg constructor
 	 * 
 	 */
-	public XplaneObjectTagRule() {
+	public FlightGearObjectTagRule() {
 		super();
 	}
 
@@ -50,7 +51,7 @@ public class XplaneObjectTagRule extends TagsRule {
 	 * Fully-initialising value constructor
 	 * 
 	 */
-	public XplaneObjectTagRule(final Tag tag,
+	public FlightGearObjectTagRule(final Tag tag,
 			final List<ObjectFile> objectsFiles, final int angle,
 			final boolean randomAngle, final boolean polygonAngle,
 			final boolean sizeCheck, final int xVectorMaxLength,

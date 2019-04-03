@@ -1,4 +1,4 @@
-package com.osm2xp.generation.options;
+package com.osm2xp.generation.options.rules;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -9,23 +9,23 @@ import javax.xml.bind.annotation.XmlElement;
 import javax.xml.bind.annotation.XmlType;
 
 /**
- * ObjectsRulesList.
+ * ForestsRulesList.
  * 
  * @author Benjamin Blanchet
  * 
  */
 @XmlAccessorType(XmlAccessType.FIELD)
-@XmlType(name = "ObjectsRulesList", propOrder = { "rules" })
-public class ObjectsRulesList {
+@XmlType(name = "ForestsRulesList", propOrder = { "rules" })
+public class PolygonRulesList {
 
 	@XmlElement(required = true)
-	protected List<ObjectTagRule> rules;
+	protected List<PolygonTagsRule> rules;
 
 	/**
 	 * Default no-arg constructor
 	 * 
 	 */
-	public ObjectsRulesList() {
+	public PolygonRulesList() {
 		super();
 	}
 
@@ -33,7 +33,7 @@ public class ObjectsRulesList {
 	 * Fully-initialising value constructor
 	 * 
 	 */
-	public ObjectsRulesList(final List<ObjectTagRule> rules) {
+	public PolygonRulesList(final List<PolygonTagsRule> rules) {
 		this.rules = rules;
 	}
 
@@ -56,13 +56,13 @@ public class ObjectsRulesList {
 	 * 
 	 * <p>
 	 * Objects of the following type(s) are allowed in the list
-	 * {@link ObjectTagRule }
+	 * {@link ForestTagRule }
 	 * 
 	 * 
 	 */
-	public List<ObjectTagRule> getRules() {
+	public List<PolygonTagsRule> getRules() {
 		if (rules == null) {
-			rules = new ArrayList<ObjectTagRule>();
+			rules = new ArrayList<PolygonTagsRule>();
 		}
 		return this.rules;
 	}

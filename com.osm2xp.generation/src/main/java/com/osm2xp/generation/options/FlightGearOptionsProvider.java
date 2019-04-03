@@ -7,6 +7,9 @@ import java.util.List;
 import com.osm2xp.core.exceptions.Osm2xpBusinessException;
 import com.osm2xp.core.logging.Osm2xpLogger;
 import com.osm2xp.core.model.osm.Tag;
+import com.osm2xp.generation.options.rules.FlightGearObjectTagRule;
+import com.osm2xp.generation.options.rules.FlightGearObjectsRulesList;
+import com.osm2xp.generation.options.rules.ObjectsRulesList;
 import com.osm2xp.generation.osm.OsmConstants;
 import com.osm2xp.generation.paths.PathsService;
 

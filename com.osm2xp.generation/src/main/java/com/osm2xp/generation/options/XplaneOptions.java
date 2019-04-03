@@ -6,6 +6,12 @@ import javax.xml.bind.annotation.XmlElement;
 import javax.xml.bind.annotation.XmlRootElement;
 import javax.xml.bind.annotation.XmlType;
 
+import com.osm2xp.generation.options.rules.FacadesRulesList;
+import com.osm2xp.generation.options.rules.ForestsRulesList;
+import com.osm2xp.generation.options.rules.ObjectsRulesList;
+import com.osm2xp.generation.options.rules.PolygonRulesList;
+import com.osm2xp.generation.options.rules.XplaneObjectsRulesList;
+
 /**
  * XplaneOptions.
  * 
@@ -58,6 +64,7 @@ public class XplaneOptions {
 	protected boolean generateChimneys = true;
 	protected boolean generateCoolingTowers= true;
 	protected boolean generateBridges = true;
+	protected boolean generatePolys = true;
 	protected boolean generateStreetLights;
 	protected boolean generateSlopedRoofs;
 	protected int lightsDensity;
@@ -88,6 +95,8 @@ public class XplaneOptions {
 	protected FacadesRulesList facadesRules;
 	@XmlElement(name = "StreetLightObjects", required = true)
 	protected ObjectsList streetLightObjects;
+	@XmlElement(name="Polygons")
+	protected PolygonRulesList polygonRules;
 	@XmlElement(name="AirfieldOptions", required=true) 
 	protected XplaneAirfieldOptions airfieldOptions;
 	/**
@@ -903,6 +912,22 @@ public class XplaneOptions {
 
 	public void setRestrictFacadeLod(boolean restrictFacadeLod) {
 		this.restrictFacadeLod = restrictFacadeLod;
+	}
+
+	public PolygonRulesList getPolygonRules() {
+		return polygonRules;
+	}
+
+	public void setPolygonRules(PolygonRulesList polygonRules) {
+		this.polygonRules = polygonRules;
+	}
+
+	public boolean isGeneratePolys() {
+		return generatePolys;
+	}
+
+	public void setGeneratePolys(boolean generatePolys) {
+		this.generatePolys = generatePolys;
 	}
 
 }

@@ -227,10 +227,10 @@ public class XPAirfieldOutput {
 		String roughness = airfieldData.isHard() ? "0.2" : "0.3";
 		resList.add("110 " + surface + " " + roughness + " " + getOrientation(airfieldData) + " Sample");
 		resList.addAll(getAreaString(
-				GeomUtils.setCCW(getRing(GeomUtils.jtsToGeom2dLocal(polygon.getExteriorRing(), centerPoint)))));
+				getRing(GeomUtils.jtsToGeom2dLocal(GeomUtils.setCCW(polygon.getExteriorRing()), centerPoint))));
 		for (int i = 0; i < polygon.getNumInteriorRing(); i++) {
-			resList.addAll(getAreaString(GeomUtils
-					.setClockwise(getRing(GeomUtils.jtsToGeom2dLocal(polygon.getInteriorRingN(i), centerPoint)))));
+			resList.addAll(getAreaString(
+				getRing(GeomUtils.jtsToGeom2dLocal(GeomUtils.setCW(polygon.getInteriorRingN(i)), centerPoint))));
 		}
 		return resList;
 	}

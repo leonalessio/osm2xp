@@ -8,4 +8,6 @@ public interface IPolyHandler {
 	public void translationComplete();
 	
 	public String getId();
+	
+	public boolean isTerminating();
 }

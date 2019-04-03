@@ -7,7 +7,7 @@ import com.osm2xp.writers.IWriter;
 
 public class XPPowerlineTranslator extends XPPathTranslator {
 
-	public XPPowerlineTranslator(IWriter writer, XPOutputFormat outputFormat, IDRenumbererService idProvider) {
+	public XPPowerlineTranslator(IWriter writer, IDRenumbererService idProvider, XPOutputFormat outputFormat) {
 		super(writer, outputFormat, idProvider);
 	}
 

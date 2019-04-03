@@ -64,4 +64,8 @@ public class XPForestTranslator extends XPWritingTranslator {
 		return "forest";
 	}
 
+	@Override
+	public boolean isTerminating() {
+		return false;
+	}
 }

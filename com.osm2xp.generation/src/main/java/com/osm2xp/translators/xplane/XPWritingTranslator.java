@@ -11,6 +11,9 @@ public abstract class XPWritingTranslator implements IPolyHandler{
 		this.writer = writer;
 	}
 	
-	
+	@Override
+	public boolean isTerminating() {
+		return true;
+	}
 
 }

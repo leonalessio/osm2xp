@@ -1,4 +1,4 @@
-package com.osm2xp.generation.options;
+package com.osm2xp.generation.options.rules;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -6,32 +6,32 @@ import java.util.List;
 import javax.xml.bind.annotation.XmlAccessType;
 import javax.xml.bind.annotation.XmlAccessorType;
 import javax.xml.bind.annotation.XmlElement;
-import javax.xml.bind.annotation.XmlSeeAlso;
 import javax.xml.bind.annotation.XmlType;
 
 import com.osm2xp.core.model.osm.Tag;
+import com.osm2xp.generation.options.ObjectFile;
+import com.osm2xp.generation.options.Polygon;
 
 /**
- * TagsRules.
+ * Tags => Polygons rules
  * 
  * @author Benjamin Blanchet
  * 
  */
 @XmlAccessorType(XmlAccessType.FIELD)
-@XmlType(name = "TagsRule", propOrder = { "tag", "objectsFiles" })
-@XmlSeeAlso({ ForestTagRule.class, FacadeTagRule.class, ObjectTagRule.class })
-public class TagsRule {
+@XmlType(name = "PolygonTagRules", propOrder = { "tag", "polygons" })
+public class PolygonTagsRule {
 
 	@XmlElement(required = true)
 	protected Tag tag;
 	@XmlElement(required = true)
-	protected List<ObjectFile> objectsFiles;
+	protected List<Polygon> polygons;
 
 	/**
 	 * Default no-arg constructor
 	 * 
 	 */
-	public TagsRule() {
+	public PolygonTagsRule() {
 		super();
 	}
 
@@ -39,9 +39,9 @@ public class TagsRule {
 	 * Fully-initialising value constructor
 	 * 
 	 */
-	public TagsRule(final Tag tag, final List<ObjectFile> objectsFiles) {
+	public PolygonTagsRule(final Tag tag, final List<Polygon> polygons) {
 		this.tag = tag;
-		this.objectsFiles = new ArrayList<>(objectsFiles);
+		this.polygons = new ArrayList<>(polygons);
 	}
 
 	/**
@@ -78,7 +78,7 @@ public class TagsRule {
 	 * For example, to add a new item, do as follows:
 	 * 
 	 * <pre>
-	 * getObjectsFiles().add(newItem);
+	 * getPolygons().add(newItem);
 	 * </pre>
 	 * 
 	 * 
@@ -88,11 +88,11 @@ public class TagsRule {
 	 * 
 	 * 
 	 */
-	public List<ObjectFile> getObjectsFiles() {
-		if (objectsFiles == null) {
-			objectsFiles = new ArrayList<ObjectFile>();
+	public List<Polygon> getPolygons() {
+		if (polygons == null) {
+			polygons = new ArrayList<Polygon>();
 		}
-		return this.objectsFiles;
+		return this.polygons;
 	}
 
 }

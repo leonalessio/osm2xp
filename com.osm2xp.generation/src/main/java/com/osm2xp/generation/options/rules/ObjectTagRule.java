@@ -1,4 +1,4 @@
-package com.osm2xp.generation.options;
+package com.osm2xp.generation.options.rules;
 
 import java.util.List;
 
@@ -7,6 +7,7 @@ import javax.xml.bind.annotation.XmlAccessorType;
 import javax.xml.bind.annotation.XmlType;
 
 import com.osm2xp.core.model.osm.Tag;
+import com.osm2xp.generation.options.ObjectFile;
 
 /**
  * ObjectTagRule.

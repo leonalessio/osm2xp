@@ -3,6 +3,15 @@ package com.osm2xp.generation.options;
 import javax.xml.bind.annotation.XmlRegistry;
 
 import com.osm2xp.core.model.osm.Tag;
+import com.osm2xp.generation.options.rules.FacadeTagRule;
+import com.osm2xp.generation.options.rules.FacadesRulesList;
+import com.osm2xp.generation.options.rules.ForestTagRule;
+import com.osm2xp.generation.options.rules.ForestsRulesList;
+import com.osm2xp.generation.options.rules.ObjectTagRule;
+import com.osm2xp.generation.options.rules.ObjectsRulesList;
+import com.osm2xp.generation.options.rules.TagsRule;
+import com.osm2xp.generation.options.rules.XplaneObjectTagRule;
+import com.osm2xp.generation.options.rules.XplaneObjectsRulesList;
 
 /**
  * ObjectFactory.
