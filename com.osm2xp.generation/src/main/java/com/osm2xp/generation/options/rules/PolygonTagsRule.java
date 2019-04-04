@@ -24,7 +24,7 @@ public class PolygonTagsRule {
 
 	@XmlElement(required = true)
 	protected Tag tag;
-	@XmlElement(required = true)
+	@XmlElement(name="polygon", required = true)
 	protected List<Polygon> polygons;
 
 	/**

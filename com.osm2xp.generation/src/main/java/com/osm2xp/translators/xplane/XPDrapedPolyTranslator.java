@@ -10,6 +10,7 @@ import com.osm2xp.utils.DsfObjectsProvider;
 import com.osm2xp.utils.geometry.GeomUtils;
 import com.osm2xp.generation.options.Polygon;
 import com.osm2xp.generation.options.XPlaneOptionsProvider;
+import com.osm2xp.generation.options.XplaneOptions;
 import com.osm2xp.generation.options.rules.PolygonRulesList;
 import com.osm2xp.generation.options.rules.PolygonTagsRule;
 import com.osm2xp.writers.IWriter;
@@ -29,9 +30,10 @@ public class XPDrapedPolyTranslator extends XPWritingTranslator {
 
 	@Override
 	public boolean handlePoly(OsmPolyline osmPolyline) {
-		if (osmPolyline instanceof OsmPolygon && XPlaneOptionsProvider.getOptions().isGeneratePolys()) {
-			PolygonRulesList polygonRules = XPlaneOptionsProvider.getOptions().getPolygonRules();
-			if (GeomUtils.computeEdgesLength(osmPolyline.getPolyline()) > 200) {
+		XplaneOptions options = XPlaneOptionsProvider.getOptions();
+		if (osmPolyline instanceof OsmPolygon && options.isGeneratePolys()) {
+			PolygonRulesList polygonRules = options.getPolygonRules();
+			if (GeomUtils.computeEdgesLength(osmPolyline.getPolyline()) > options.getPolygonRules().getMinPerimeter()) {
 				List<PolygonTagsRule> matchingRules = getMatchingRules(osmPolyline, polygonRules);
 				for (PolygonTagsRule matchingRule : matchingRules) {
 					List<Polygon> polygons = matchingRule.getPolygons();

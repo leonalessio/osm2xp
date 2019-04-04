@@ -11,6 +11,7 @@
     <excludeLin>false</excludeLin>
     <excludePol>false</excludePol>
     <excludeStr>false</excludeStr>
+    <exclusionsFromInput>true</exclusionsFromInput>
     <residentialMin>3</residentialMin>
     <residentialMax>15</residentialMax>
     <buildingMin>6</buildingMin>
@@ -26,21 +27,21 @@
     <generateRoads>true</generateRoads>
     <generateFence>true</generateFence>
     <generateTanks>true</generateTanks>
-    <generatePolys>true</generatePolys>
     <generateChimneys>true</generateChimneys>
     <generateCoolingTowers>true</generateCoolingTowers>
     <generateBridges>true</generateBridges>
     <generateSlopedRoofs>true</generateSlopedRoofs>
+    <generatePolys>true</generatePolys>
     <generateStreetLights>false</generateStreetLights>
     <lightsDensity>0</lightsDensity>
     <packageFacades>true</packageFacades>
     <hardBuildings>false</hardBuildings>
+    <restrictFacadeLod>false</restrictFacadeLod>
     <facadeLod>25000</facadeLod>
     <generateXmlStats>false</generateXmlStats>
     <generatePdfStats>true</generatePdfStats>
     <generateDebugImg>false</generateDebugImg>
     <generateComments>false</generateComments>
-    <levelHeight>3.0</levelHeight>
     <roadBridgeRampLen>100</roadBridgeRampLen>
     <railBridgeRampLen>200</railBridgeRampLen>
     <BuildingsExclusions>
@@ -57,33 +58,33 @@
                 <path>forests/mixed.for</path>
             </objectsFiles>
             <objectsFiles>
-                <path>forests/broad_leaf.for</path>
+                <path>forests/conifer.for</path>
             </objectsFiles>
             <objectsFiles>
-                <path>forests/conifer.for</path>
+                <path>forests/broad_leaf.for</path>
             </objectsFiles>
             <forestDensity>255</forestDensity>
         </rules>
         <rules>
             <tag value="wood" key="natural"/>
             <objectsFiles>
+                <path>forests/mixed.for</path>
+            </objectsFiles>
+            <objectsFiles>
                 <path>forests/conifer.for</path>
             </objectsFiles>
             <objectsFiles>
                 <path>forests/broad_leaf.for</path>
-            </objectsFiles>
-            <objectsFiles>
-                <path>forests/mixed.for</path>
             </objectsFiles>
             <forestDensity>255</forestDensity>
         </rules>
         <rules>
             <tag value="garden" key="leisure"/>
             <objectsFiles>
-                <path>forests/sclerophyllous.for</path>
+                <path>forests/heathland.for</path>
             </objectsFiles>
             <objectsFiles>
-                <path>forests/heathland.for</path>
+                <path>forests/sclerophyllous.for</path>
             </objectsFiles>
             <objectsFiles>
                 <path>forests/conifer.for</path>
@@ -93,13 +94,13 @@
         <rules>
             <tag value="park" key="leisure"/>
             <objectsFiles>
+                <path>forests/heathland.for</path>
+            </objectsFiles>
+            <objectsFiles>
                 <path>forests/sclerophyllous.for</path>
             </objectsFiles>
             <objectsFiles>
                 <path>forests/conifer.for</path>
-            </objectsFiles>
-            <objectsFiles>
-                <path>forests/heathland.for</path>
             </objectsFiles>
             <forestDensity>255</forestDensity>
         </rules>
@@ -219,6 +220,21 @@
     </ObjectsRules>
     <LightsRules/>
     <FacadesRules/>
+    <Polygons minPerimeter="200">
+        <rules>
+            <tag value="parking" key="amenity"/>
+            <polygon path="lib/airport/pavement/asphalt_1L.pol"/>
+            <polygon path="lib/airport/pavement/asphalt_1D.pol"/>
+            <polygon path="lib/airport/pavement/asphalt_2L.pol"/>
+            <polygon path="lib/airport/pavement/asphalt_2D.pol"/>
+            <polygon path="lib/airport/pavement/asphalt_3L.pol"/>
+            <polygon path="lib/airport/pavement/asphalt_3D.pol"/>
+            <polygon path="lib/airport/pavement/concrete_3L.pol"/>
+            <polygon path="lib/airport/pavement/concrete_3D.pol"/>
+            <polygon path="lib/airport/pavement/concrete_4L.pol"/>
+            <polygon path="lib/airport/pavement/concrete_4D.pol"/>
+        </rules>
+    </Polygons>
     <StreetLightObjects>
         <objects>
             <path>opensceneryx/objects/furniture/lights/street/3.obj</path>

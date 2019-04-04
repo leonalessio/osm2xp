@@ -21,11 +21,15 @@ import com.osm2xp.core.exceptions.Osm2xpBusinessException;
 public class XmlHelper {
 
 	/**
-	 * @param file
-	 * @param bean
+	 * Saves settings bean to XML 
+	 * @param <T> bean type
+	 * @param file File to save to 
+	 * @param bean Settings bean to save
+	 * 
 	 * @throws Osm2xpBusinessException
 	 */
-	public static void saveToXml(Object bean, File file)
+	@SuppressWarnings("unchecked")
+	public static <T> void saveToXml(T bean, File file)
 			throws Osm2xpBusinessException {
 		try {
 			file.getParentFile().mkdirs();
@@ -34,8 +38,8 @@ public class XmlHelper {
 			marshaller.setProperty(Marshaller.JAXB_ENCODING, "UTF-8");
 			marshaller.setProperty(Marshaller.JAXB_FORMATTED_OUTPUT,
 					Boolean.TRUE);
-			JAXBElement<?> jaxbElement = new JAXBElement(new QName("", bean
-					.getClass().getSimpleName()), bean.getClass(), bean);
+			JAXBElement<T> jaxbElement = new JAXBElement<T>(new QName("", bean
+					.getClass().getSimpleName()), (Class<T>) bean.getClass(), bean);
 			marshaller.marshal(jaxbElement, file);
 		} catch (JAXBException e) {
 			throw new Osm2xpBusinessException(e.getMessage());

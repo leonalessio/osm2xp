@@ -16,6 +16,9 @@ public class Polygon {
 		super();
 		this.path = path;
 	}
+	
+	public Polygon() {
+	}
 
 	public String getPath() {
 		return path;

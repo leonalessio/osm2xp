@@ -216,9 +216,9 @@
 			<version>2.4.1</version>
 		</dependency>								
 		<dependency>
-			<groupId>com.bbn.openmap</groupId>
-			<artifactId>openmap</artifactId>
-			<version>5.0.3</version>
+		    <groupId>com.bbn</groupId>
+		    <artifactId>openmap</artifactId>
+		    <version>5.1.15</version>
 		</dependency>
 		<!-- https://mvnrepository.com/artifact/javax.xml.bind/jaxb-api -->
 		<dependency>

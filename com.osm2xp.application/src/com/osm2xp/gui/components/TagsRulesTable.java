@@ -103,8 +103,7 @@ public class TagsRulesTable extends Composite {
 		colKey.setLabelProvider(new ColumnLabelProvider() {
 			@Override
 			public String getText(Object element) {
-				TagsRule p = ((TagsRule) element);
-				return p.getTag().getKey();
+				return getKey(element);
 			}
 		});
 
@@ -121,12 +120,13 @@ public class TagsRulesTable extends Composite {
 
 			@Override
 			protected Object getValue(Object element) {
-				return ((TagsRule) element).getTag().getKey();
+				return getKey(element);
 			}
 
 			@Override
 			protected void setValue(Object element, Object value) {
-				((TagsRule) element).getTag().setKey((String) value);
+				String str = (String)value;
+				setKey(element, str);
 				getViewer().refresh();
 			}
 		});
@@ -139,8 +139,7 @@ public class TagsRulesTable extends Composite {
 		colValue.setLabelProvider(new ColumnLabelProvider() {
 			@Override
 			public String getText(Object element) {
-				TagsRule p = (TagsRule) element;
-				return p.getTag().getValue();
+				return getValue(element);
 			}
 		});
 
@@ -157,12 +156,13 @@ public class TagsRulesTable extends Composite {
 
 			@Override
 			protected Object getValue(Object element) {
-				return ((TagsRule) element).getTag().getValue();
+				return getValue(element);
 			}
 
 			@Override
 			protected void setValue(Object element, Object value) {
-				((TagsRule) element).getTag().setValue((String) value);
+				String str = (String) value;
+				setValue(element, str);
 				getViewer().refresh();
 			}
 		});
@@ -184,6 +184,22 @@ public class TagsRulesTable extends Composite {
 
 	public Table getTable() {
 		return table;
+	}
+
+	protected String getKey(Object element) {
+		return ((TagsRule) element).getTag().getKey();
+	}
+
+	protected void setKey(Object element, String key) {
+		((TagsRule) element).getTag().setKey(key);
+	}
+
+	protected String getValue(Object element) {
+		return ((TagsRule) element).getTag().getValue();
+	}
+
+	protected void setValue(Object element, String value) {
+		((TagsRule) element).getTag().setValue(value);
 	}
 
 }

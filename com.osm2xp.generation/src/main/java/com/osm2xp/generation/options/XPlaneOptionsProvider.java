@@ -92,6 +92,7 @@ public class XPlaneOptionsProvider {
 		result.setGeneratePdfStats(true);
 		result.setGenerateDebugImg(false);
 		result.setGenerateSlopedRoofs(true);
+		result.setGeneratePolys(true);
 		result.setGenerateObj(true);
 		result.setPackageFacades(true);
 		result.setBuildingsExclusions(createNewXplaneExclusions());
@@ -154,7 +155,18 @@ public class XPlaneOptionsProvider {
 
 	private static PolygonRulesList createNewPolygonRules() {
 		List<PolygonTagsRule> list = new ArrayList<>();
-		list.add(new PolygonTagsRule(new Tag("amenity", "parking"), Lists.newArrayList(new Polygon("lib/airport/pavement/asphalt_1L.pol"))));
+		list.add(new PolygonTagsRule(new Tag("amenity", "parking"), Lists.newArrayList(
+				new Polygon("lib/airport/pavement/asphalt_1L.pol"),
+				new Polygon("lib/airport/pavement/asphalt_1D.pol"),
+				new Polygon("lib/airport/pavement/asphalt_2L.pol"),
+				new Polygon("lib/airport/pavement/asphalt_2D.pol"),
+				new Polygon("lib/airport/pavement/asphalt_3L.pol"),
+				new Polygon("lib/airport/pavement/asphalt_3D.pol"),
+				new Polygon("lib/airport/pavement/concrete_3L.pol"),
+				new Polygon("lib/airport/pavement/concrete_3D.pol"),
+				new Polygon("lib/airport/pavement/concrete_4L.pol"),
+				new Polygon("lib/airport/pavement/concrete_4D.pol")
+		)));
 		return new PolygonRulesList(list);
 	}
 

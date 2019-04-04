@@ -5,6 +5,7 @@ import java.util.List;
 
 import javax.xml.bind.annotation.XmlAccessType;
 import javax.xml.bind.annotation.XmlAccessorType;
+import javax.xml.bind.annotation.XmlAttribute;
 import javax.xml.bind.annotation.XmlElement;
 import javax.xml.bind.annotation.XmlType;
 
@@ -15,9 +16,12 @@ import javax.xml.bind.annotation.XmlType;
  * 
  */
 @XmlAccessorType(XmlAccessType.FIELD)
-@XmlType(name = "ForestsRulesList", propOrder = { "rules" })
+@XmlType(name = "PolygonRulesList", propOrder = { "minPerimeter", "rules" })
 public class PolygonRulesList {
 
+	@XmlAttribute
+	protected int minPerimeter = 200;
+	
 	@XmlElement(required = true)
 	protected List<PolygonTagsRule> rules;
 
@@ -65,6 +69,14 @@ public class PolygonRulesList {
 			rules = new ArrayList<PolygonTagsRule>();
 		}
 		return this.rules;
+	}
+
+	public int getMinPerimeter() {
+		return minPerimeter;
+	}
+
+	public void setMinPerimeter(int minPerimeter) {
+		this.minPerimeter = minPerimeter;
 	}
 
 }

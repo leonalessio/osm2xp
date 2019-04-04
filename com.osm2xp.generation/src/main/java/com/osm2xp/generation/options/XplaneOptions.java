@@ -25,11 +25,11 @@ import com.osm2xp.generation.options.rules.XplaneObjectsRulesList;
 		"residentialMin", "residentialMax", "buildingMin", "buildingMax",
 		"minHouseSegment", "maxHouseSegment", "minHouseArea", "generateObj",
 		"generateFor", "generateBuildings","generatePowerlines","generateRailways","generateRoads","generateFence",
-		"generateTanks","generateChimneys","generateCoolingTowers","generateBridges","generateSlopedRoofs", "generateStreetLights", 
+		"generateTanks","generateChimneys","generateCoolingTowers","generateBridges","generateSlopedRoofs", "generatePolys", "generateStreetLights", 
 		"lightsDensity", "packageFacades","hardBuildings", "lightObject", "facadeSets", "restrictFacadeLod", "facadeLod", 
 		"generateXmlStats", "generatePdfStats", "generateDebugImg", "generateComments", 		
 		"roadBridgeRampLen","railBridgeRampLen","buildingsExclusions",
-		"forestsRules", "objectsRules", "lightsRules", "facadesRules",
+		"forestsRules", "objectsRules", "lightsRules", "facadesRules", "polygonRules",
 		"streetLightObjects", "airfieldOptions" })
 @XmlRootElement(name = "XplaneOptions")
 public class XplaneOptions {
@@ -915,6 +915,9 @@ public class XplaneOptions {
 	}
 
 	public PolygonRulesList getPolygonRules() {
+		if (polygonRules == null) {
+			polygonRules = new PolygonRulesList();
+		}
 		return polygonRules;
 	}
 
