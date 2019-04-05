@@ -65,34 +65,7 @@ public class XPOutputFormat {
 		sb.append("PROPERTY sim/north " + (latitude + 1) + "\n");
 		sb.append("PROPERTY sim/south " + latitude + "\n\n");
 
-		// forests files
-		if (dsfObjectsProvider.getForestsList() != null) {
-			for (String forest : dsfObjectsProvider.getForestsList()) {
-				sb.append("POLYGON_DEF " + forest + "\n");
-			}
-		}
-
-		// facades rules
-		if (dsfObjectsProvider.getSinglesFacadesList() != null) {
-			for (String facadeTagRule : dsfObjectsProvider.getSinglesFacadesList()) {
-				sb.append("POLYGON_DEF " + facadeTagRule + "\n");
-			}
-		}
-
-		// facades files
-		if (dsfObjectsProvider.getFacadesList() != null) {
-			for (String facade : dsfObjectsProvider.getFacadesList()) {
-				String facadeDeclaration = null;
-				if (!XPlaneOptionsProvider.getOptions().isPackageFacades()) {
-
-					facadeDeclaration = "POLYGON_DEF /lib/osm2xp/facades/" + facade + "\n";
-				} else {
-					facadeDeclaration = "POLYGON_DEF facades/" + facade + "\n";
-				}
-				sb.append(facadeDeclaration);
-			}
-			sb.append("\n");
-		}
+		dsfObjectsProvider.getPolygonsList().stream().map(str -> "POLYGON_DEF " + str + "\n").forEach(str -> sb.append(str));
 
 		if (dsfObjectsProvider.getObjectsList() != null) {
 			for (String objectPath : dsfObjectsProvider.getObjectsList()) {

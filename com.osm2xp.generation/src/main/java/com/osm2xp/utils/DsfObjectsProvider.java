@@ -493,15 +493,7 @@ public class DsfObjectsProvider {
 	 * @return the polygonsList
 	 */
 	public List<String> getPolygonsList() {
-		return polygonsList;
-	}
-
-	/**
-	 * @param polygonsList
-	 *            the polygonsList to set
-	 */
-	public void setPolygonsList(List<String> polygonsList) {
-		this.polygonsList = polygonsList;
+		return Collections.unmodifiableList(polygonsList);
 	}
 
 	public XplaneDsfObject getRandomDsfLightObject(OsmPolygon osmPolygon) {

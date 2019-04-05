@@ -35,7 +35,7 @@ public class XPBarrierTranslator extends XPWritingTranslator {
 			if (facade != null && facade >= 0) {
 				StringBuffer sb = new StringBuffer();
 				if (XPlaneOptionsProvider.getOptions().isGenerateComments()) {
-					sb.append("#Barrier " + barrierType + " facade " + facade);
+					sb.append("#Barrier " + barrierType + " facade " + facade + " line " + osmPolyline.getId());
 					sb.append(LINE_SEP);
 				}
 				if (osmPolyline instanceof OsmPolygon) {

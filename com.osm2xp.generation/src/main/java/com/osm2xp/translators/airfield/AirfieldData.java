@@ -18,8 +18,10 @@ import math.geom2d.line.LineSegment2D;
 import math.geom2d.polygon.LinearRing2D;
 
 public abstract class AirfieldData extends AerowayData {
+	
+	protected List<RunwayData> runways = new ArrayList<>();
+	
 	private static final int MIN_IFFERENT_RUNWAYS_DISTANCE = 100;
-	private List<RunwayData> runways = new ArrayList<>();
 	private List<OsmPolygon> apronAreas = new ArrayList<>();
 	private List<TaxiLane> taxiLanes = new ArrayList<>();
 	private List<HelipadData> helipads = new ArrayList<>();

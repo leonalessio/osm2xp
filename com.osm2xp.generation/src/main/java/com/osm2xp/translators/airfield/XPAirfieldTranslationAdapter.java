@@ -4,8 +4,11 @@ import java.io.File;
 import java.util.ArrayList;
 import java.util.Iterator;
 import java.util.List;
+import java.util.Set;
 import java.util.stream.Collectors;
 
+import com.google.common.collect.Lists;
+import com.google.common.collect.Sets;
 import com.osm2xp.core.exceptions.Osm2xpBusinessException;
 import com.osm2xp.core.model.osm.IHasTags;
 import com.osm2xp.core.model.osm.Node;
@@ -16,7 +19,13 @@ import com.osm2xp.model.osm.polygon.OsmPolylineFactory;
 import com.osm2xp.translators.ISpecificTranslator;
 import com.osm2xp.generation.options.XPlaneOptionsProvider;
 import com.osm2xp.utils.osm.OsmUtils;
+
+import org.apache.commons.lang.StringUtils;
+import org.locationtech.jts.geom.Coordinate;
+import org.locationtech.jts.geom.Envelope;
 import org.locationtech.jts.geom.Geometry;
+import org.locationtech.jts.index.kdtree.KdNode;
+import org.locationtech.jts.index.kdtree.KdTree;
 
 import math.geom2d.Box2D;
 import math.geom2d.Point2D;
@@ -35,6 +44,7 @@ public class XPAirfieldTranslationAdapter implements ISpecificTranslator {
 	private List<OsmPolygon> heliAreasList = new ArrayList<>();
 	private List<Node> helipadsList = new ArrayList<>();
 	private File workFolder;
+	private KdTree orphanRunwaysTree = new KdTree();
 
 	public XPAirfieldTranslationAdapter(String outputFolder) {
 		workFolder = new File(outputFolder); 
@@ -74,6 +84,11 @@ public class XPAirfieldTranslationAdapter implements ISpecificTranslator {
 				((PointAirfieldData) data).setMaxRadius(500);
 			}
 		}
+		checkGetAdditinalInfo(data);
+		airfieldList.add(data);
+	}
+
+	protected void checkGetAdditinalInfo(AirfieldData data) {
 		Point2D areaCenter = data.getAreaCenter();
 		if (!data.hasActualElevation() &&  XPlaneOptionsProvider.getOptions().getAirfieldOptions().isTryGetElev()) {
 			Double elevation = ElevationProvidingService.getInstance().getElevation(areaCenter, true);
@@ -87,7 +102,6 @@ public class XPAirfieldTranslationAdapter implements ISpecificTranslator {
 				data.setName(name);
 			}
 		}
-		airfieldList.add(data);
 	}
 
 	@Override
@@ -113,6 +127,34 @@ public class XPAirfieldTranslationAdapter implements ISpecificTranslator {
 	public void complete() {
 		bindAirways(airfieldList.stream().filter(data -> data instanceof PolyAirfieldData).collect(Collectors.toList())); //Poly-based airfileds should be processed first - they are more precise, than point-based ones
 		bindAirways(airfieldList.stream().filter(data -> data instanceof PointAirfieldData).collect(Collectors.toList()));
+		for (OsmPolyline line : runwayList) {
+			Point2D center = line.getCenter();
+			orphanRunwaysTree.insert(new Coordinate(center.x(), center.y()), line);
+		}
+		
+		Set<OsmPolyline> added = Sets.newHashSet();
+		
+		List<AirfieldData> synteticAirfields = Lists.newArrayList();
+		for (OsmPolyline line : runwayList) {
+			if (added.contains(line)) {
+				continue;
+			}
+			Point2D center = line.getCenter();
+			double xDist = 2.0 / (111 * Math.cos(center.y())); //2km in each direction for now
+			double yDist = 2.0 / 111;
+			Envelope envelope = new Envelope(center.x() - xDist, center.x() + xDist, center.y() - yDist, center.y() + yDist);
+			List<KdNode> result =  Lists.newArrayList();
+			orphanRunwaysTree.query(envelope, result);
+			if (result.size() > 1) { //1 means this line itself was found
+				List<OsmPolyline> nearRunways = result.stream().map(node -> (OsmPolyline) node.getData()).collect(Collectors.toList());
+				synteticAirfields.add(createSyntheticAirfield(nearRunways));
+				added.addAll(nearRunways);
+			}
+		}
+		runwayList.removeAll(added);
+		bindAdditions(synteticAirfields);
+		airfieldList.addAll(synteticAirfields);
+		
 		if (XPlaneOptionsProvider.getOptions().getAirfieldOptions().isTryGetElev()) {		
 			ElevationProvidingService.getInstance().finish();
 			airfieldList.stream().filter(data -> !data.hasActualElevation()).forEach(data -> {
@@ -164,6 +206,11 @@ public class XPAirfieldTranslationAdapter implements ISpecificTranslator {
 				}
 			}
 		}
+		bindAdditions(airfieldList);
+		
+	}
+
+	protected void bindAdditions(List<AirfieldData> airfieldList) {
 		for (Iterator<OsmPolyline> iterator = apronAreasList.iterator(); iterator.hasNext();) { //Check apron areas matching airports
 			OsmPolyline area = (OsmPolyline) iterator.next();
 			for (AirfieldData airfieldData : airfieldList) {
@@ -204,6 +251,37 @@ public class XPAirfieldTranslationAdapter implements ISpecificTranslator {
 				}
 			}
 		}
+	}
+
+	protected AirfieldData createSyntheticAirfield(List<OsmPolyline> nearRunways) {
+		double length = 0;
+		OsmPolyline longest = null;
+		String name = null;
+		List<RunwayData> rwyList = Lists.newArrayList();
+		for (OsmPolyline osmPolyline : nearRunways) {
+			RunwayData runwayData = new RunwayData(osmPolyline);
+			if (osmPolyline.getPolyline().length() > length) {
+				length = osmPolyline.getPolyline().length();
+				longest = osmPolyline;
+				rwyList.add(runwayData);
+			}
+			if (runwayData.getName() != null && !runwayData.getName().equals(runwayData.getId())) {
+				name = runwayData.getName();
+			}
+		}
+		PointAirfieldData airfieldData = new PointAirfieldData(longest.getCenter(), longest);
+		if (!StringUtils.isEmpty(name)) {
+			airfieldData.setName(name);
+		}
+		for (RunwayData runwayData : rwyList) {
+			if (runwayData.hasActualElevation()) {
+				airfieldData.setElevation(runwayData.getElevation());
+				break;
+			}
+		}
+		airfieldData.addRunways(rwyList);
+		checkGetAdditinalInfo(airfieldData);
+		return airfieldData;
 	}
 
 	@Override
