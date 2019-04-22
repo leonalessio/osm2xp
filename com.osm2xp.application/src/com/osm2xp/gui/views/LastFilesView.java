@@ -66,7 +66,7 @@ public class LastFilesView extends ViewPart {
 		ScrolledForm scrldfrmLastOsmFiles = formToolkit
 				.createScrolledForm(parent);
 		scrldfrmLastOsmFiles.setImage(ResourceManager.getPluginImage(
-				"com.osm2xp", "images/toolbarsIcons/lastFiles_32.png"));
+				Activator.PLUGIN_ID, "images/toolbarsIcons/lastFiles_32.png"));
 
 		formToolkit.paintBordersFor(scrldfrmLastOsmFiles);
 		scrldfrmLastOsmFiles.setText("Last osm files");
@@ -108,10 +108,10 @@ public class LastFilesView extends ViewPart {
 			lastFilesTableViewer.setLabelProvider(new LabelProvider() {
 				public Image getImage(Object element) {
 					if (element.toString().toUpperCase().indexOf(".PBF") != -1) {
-						return ResourceManager.getPluginImage("com.osm2xp",
+						return ResourceManager.getPluginImage(Activator.PLUGIN_ID,
 								"images/toolbarsIcons/file_16.png");
 					} else {
-						return ResourceManager.getPluginImage("com.osm2xp",
+						return ResourceManager.getPluginImage(Activator.PLUGIN_ID,
 								"images/toolbarsIcons/fileBlank_16.png");
 					}
 

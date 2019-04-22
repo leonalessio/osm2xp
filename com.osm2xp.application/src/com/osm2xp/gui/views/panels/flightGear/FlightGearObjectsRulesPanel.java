@@ -37,7 +37,10 @@ import com.osm2xp.generation.options.FlightGearOptionsProvider;
 import com.osm2xp.generation.options.ObjectFile;
 import com.osm2xp.generation.options.XmlHelper;
 import com.osm2xp.generation.options.rules.FlightGearObjectTagRule;
+import com.osm2xp.gui.Activator;
+import com.osm2xp.gui.components.AbstractPathsTable;
 import com.osm2xp.gui.components.FilesPathsTable;
+import com.osm2xp.gui.components.RulesTable;
 import com.osm2xp.gui.components.TagsRulesTable;
 
 /**
@@ -48,8 +51,8 @@ import com.osm2xp.gui.components.TagsRulesTable;
  */
 public class FlightGearObjectsRulesPanel extends Composite {
 
-	final TagsRulesTable tagsTable;
-	final FilesPathsTable ObjectsFilesTable;
+	final RulesTable tagsTable;
+	final AbstractPathsTable ObjectsFilesTable;
 	final Group grpFiles;
 	private static final String[] FILTER_NAMES = { "XML objects rules file (*.xml)" };
 	private static final String[] FILTER_EXTS = { "*.xml" };
@@ -81,7 +84,7 @@ public class FlightGearObjectsRulesPanel extends Composite {
 
 		ToolItem tltmAdd = new ToolItem(toolBar, SWT.NONE);
 		tltmAdd.setToolTipText("add");
-		tltmAdd.setImage(ResourceManager.getPluginImage("com.osm2xp",
+		tltmAdd.setImage(ResourceManager.getPluginImage(Activator.PLUGIN_ID,
 				"images/toolbarsIcons/add_16.ico"));
 		tltmAdd.addSelectionListener(new SelectionAdapter() {
 			@Override
@@ -102,7 +105,7 @@ public class FlightGearObjectsRulesPanel extends Composite {
 
 		ToolItem tltmDelete = new ToolItem(toolBar, SWT.NONE);
 		tltmDelete.setToolTipText("delete");
-		tltmDelete.setImage(ResourceManager.getPluginImage("com.osm2xp",
+		tltmDelete.setImage(ResourceManager.getPluginImage(Activator.PLUGIN_ID,
 				"images/toolbarsIcons/delete_16.ico"));
 		tltmDelete.addSelectionListener(new SelectionAdapter() {
 			@Override
@@ -123,7 +126,7 @@ public class FlightGearObjectsRulesPanel extends Composite {
 
 		ToolItem tltmExport = new ToolItem(toolBar, SWT.NONE);
 		tltmExport.setToolTipText("Export");
-		tltmExport.setImage(ResourceManager.getPluginImage("com.osm2xp",
+		tltmExport.setImage(ResourceManager.getPluginImage(Activator.PLUGIN_ID,
 				"images/toolbarsIcons/export_16.ico"));
 		tltmExport.addSelectionListener(new SelectionAdapter() {
 			@Override
@@ -148,7 +151,7 @@ public class FlightGearObjectsRulesPanel extends Composite {
 
 		ToolItem tltmImport = new ToolItem(toolBar, SWT.NONE);
 		tltmImport.setToolTipText("Import");
-		tltmImport.setImage(ResourceManager.getPluginImage("com.osm2xp",
+		tltmImport.setImage(ResourceManager.getPluginImage(Activator.PLUGIN_ID,
 				"images/toolbarsIcons/import_16.ico"));
 		tltmImport.addSelectionListener(new SelectionAdapter() {
 			@Override
@@ -213,7 +216,7 @@ public class FlightGearObjectsRulesPanel extends Composite {
 
 		ToolItem tltmAddObjectFile = new ToolItem(toolBarObjectFiles, SWT.NONE);
 		tltmAddObjectFile.setToolTipText("add");
-		tltmAddObjectFile.setImage(ResourceManager.getPluginImage("com.osm2xp",
+		tltmAddObjectFile.setImage(ResourceManager.getPluginImage(Activator.PLUGIN_ID,
 				"images/toolbarsIcons/add_16.ico"));
 		tltmAddObjectFile.addSelectionListener(new SelectionAdapter() {
 			@Override
@@ -229,7 +232,7 @@ public class FlightGearObjectsRulesPanel extends Composite {
 				SWT.NONE);
 		tltmDeleteObjectFile.setToolTipText("delete");
 		tltmDeleteObjectFile.setImage(ResourceManager.getPluginImage(
-				"com.osm2xp", "images/toolbarsIcons/delete_16.ico"));
+				Activator.PLUGIN_ID, "images/toolbarsIcons/delete_16.ico"));
 		tltmDeleteObjectFile.addSelectionListener(new SelectionAdapter() {
 			@Override
 			public void widgetSelected(SelectionEvent e) {
@@ -245,7 +248,7 @@ public class FlightGearObjectsRulesPanel extends Composite {
 		});
 
 		ObjectsFilesTable = new FilesPathsTable(grpFiles, SWT.NONE, "Object ID");
-		ObjectsFilesTable.setLayout(new FillLayout(SWT.HORIZONTAL));
+//		ObjectsFilesTable.setLayout(new FillLayout(SWT.HORIZONTAL));
 		new Label(grpFiles, SWT.NONE);
 
 		TabItem tabAngle = new TabItem(tabFolder, SWT.NONE);
@@ -549,7 +552,7 @@ public class FlightGearObjectsRulesPanel extends Composite {
 				.isUsePolygonAngle()));
 		try {
 			ObjectsFilesTable
-					.updateSelectedRule(selectedFlightGearObjectTagRule
+					.updateSelectedItem(selectedFlightGearObjectTagRule
 							.getObjectsFiles());
 		} catch (Osm2xpBusinessException e) {
 			Osm2xpLogger.error("Error updating rules table", e);

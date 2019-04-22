@@ -30,7 +30,10 @@ import com.osm2xp.generation.options.ObjectFile;
 import com.osm2xp.generation.options.XPlaneOptionsProvider;
 import com.osm2xp.generation.options.XmlHelper;
 import com.osm2xp.generation.options.rules.ForestTagRule;
+import com.osm2xp.gui.Activator;
+import com.osm2xp.gui.components.AbstractPathsTable;
 import com.osm2xp.gui.components.FilesPathsTable;
+import com.osm2xp.gui.components.RulesTable;
 import com.osm2xp.gui.components.TagsRulesTable;
 import com.osm2xp.utils.helpers.XplaneOptionsHelper;
 
@@ -42,8 +45,8 @@ import com.osm2xp.utils.helpers.XplaneOptionsHelper;
  */
 public class ForestsRulesPanel extends Composite {
 
-	final TagsRulesTable tagsTable;
-	final FilesPathsTable ForestsFilesTable;
+	final RulesTable tagsTable;
+	final AbstractPathsTable ForestsFilesTable;
 	final Group grpForestsFilesFor;
 	final Group grpDensity;
 	private static final String[] FILTER_NAMES = { "XML Forests rules file (*.xml)" };
@@ -62,7 +65,7 @@ public class ForestsRulesPanel extends Composite {
 
 		ToolItem tltmAdd = new ToolItem(toolBar, SWT.NONE);
 		tltmAdd.setToolTipText("add");
-		tltmAdd.setImage(ResourceManager.getPluginImage("com.osm2xp",
+		tltmAdd.setImage(ResourceManager.getPluginImage(Activator.PLUGIN_ID,
 				"images/toolbarsIcons/add_16.ico"));
 		tltmAdd.addSelectionListener(new SelectionAdapter() {
 			@Override
@@ -78,7 +81,7 @@ public class ForestsRulesPanel extends Composite {
 
 		ToolItem tltmDelete = new ToolItem(toolBar, SWT.NONE);
 		tltmDelete.setToolTipText("delete");
-		tltmDelete.setImage(ResourceManager.getPluginImage("com.osm2xp",
+		tltmDelete.setImage(ResourceManager.getPluginImage(Activator.PLUGIN_ID,
 				"images/toolbarsIcons/delete_16.ico"));
 		tltmDelete.addSelectionListener(new SelectionAdapter() {
 			@Override
@@ -99,7 +102,7 @@ public class ForestsRulesPanel extends Composite {
 
 		ToolItem tltmExport = new ToolItem(toolBar, SWT.NONE);
 		tltmExport.setToolTipText("Export");
-		tltmExport.setImage(ResourceManager.getPluginImage("com.osm2xp",
+		tltmExport.setImage(ResourceManager.getPluginImage(Activator.PLUGIN_ID,
 				"images/toolbarsIcons/export_16.ico"));
 		tltmExport.addSelectionListener(new SelectionAdapter() {
 			@Override
@@ -125,7 +128,7 @@ public class ForestsRulesPanel extends Composite {
 
 		ToolItem tltmImport = new ToolItem(toolBar, SWT.NONE);
 		tltmImport.setToolTipText("Import");
-		tltmImport.setImage(ResourceManager.getPluginImage("com.osm2xp",
+		tltmImport.setImage(ResourceManager.getPluginImage(Activator.PLUGIN_ID,
 				"images/toolbarsIcons/import_16.ico"));
 		tltmImport.addSelectionListener(new SelectionAdapter() {
 			@Override
@@ -166,7 +169,7 @@ public class ForestsRulesPanel extends Composite {
 				spinnerForestDensity.setSelection(selectedForestTagRule
 						.getForestDensity());
 				try {
-					ForestsFilesTable.updateSelectedRule(selectedForestTagRule
+					ForestsFilesTable.updateSelectedItem(selectedForestTagRule
 							.getObjectsFiles());
 				} catch (Osm2xpBusinessException e) {
 					Osm2xpLogger.error("Error updating rules table", e);
@@ -221,7 +224,7 @@ public class ForestsRulesPanel extends Composite {
 
 		ToolItem tltmAddForestFile = new ToolItem(toolBarForestFiles, SWT.NONE);
 		tltmAddForestFile.setToolTipText("add");
-		tltmAddForestFile.setImage(ResourceManager.getPluginImage("com.osm2xp",
+		tltmAddForestFile.setImage(ResourceManager.getPluginImage(Activator.PLUGIN_ID,
 				"images/toolbarsIcons/add_16.ico"));
 		tltmAddForestFile.addSelectionListener(new SelectionAdapter() {
 			@Override
@@ -237,7 +240,7 @@ public class ForestsRulesPanel extends Composite {
 				SWT.NONE);
 		tltmDeleteForestFile.setToolTipText("delete");
 		tltmDeleteForestFile.setImage(ResourceManager.getPluginImage(
-				"com.osm2xp", "images/toolbarsIcons/delete_16.ico"));
+				Activator.PLUGIN_ID, "images/toolbarsIcons/delete_16.ico"));
 		tltmDeleteForestFile.addSelectionListener(new SelectionAdapter() {
 			@Override
 			public void widgetSelected(SelectionEvent e) {
@@ -253,7 +256,7 @@ public class ForestsRulesPanel extends Composite {
 
 		ForestsFilesTable = new FilesPathsTable(grpForestsFilesFor, SWT.NONE,
 				"Forest file path");
-		ForestsFilesTable.setLayout(new FillLayout(SWT.HORIZONTAL));
+//		ForestsFilesTable.setLayout(new FillLayout(SWT.HORIZONTAL));
 		new Label(grpForestsFilesFor, SWT.NONE);
 
 	}

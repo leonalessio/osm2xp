@@ -32,7 +32,10 @@ import com.osm2xp.generation.options.ObjectFile;
 import com.osm2xp.generation.options.XPlaneOptionsProvider;
 import com.osm2xp.generation.options.XmlHelper;
 import com.osm2xp.generation.options.rules.FacadeTagRule;
+import com.osm2xp.gui.Activator;
+import com.osm2xp.gui.components.AbstractPathsTable;
 import com.osm2xp.gui.components.FilesPathsTable;
+import com.osm2xp.gui.components.RulesTable;
 import com.osm2xp.gui.components.TagsRulesTable;
 import com.osm2xp.gui.views.panels.Osm2xpPanel;
 import com.osm2xp.utils.helpers.XplaneOptionsHelper;
@@ -45,8 +48,8 @@ import com.osm2xp.utils.helpers.XplaneOptionsHelper;
  */
 public class FacadesRulesPanel extends Osm2xpPanel {
 
-	final TagsRulesTable tagsTable;
-	final FilesPathsTable facadesFilesTable;
+	final RulesTable tagsTable;
+	final AbstractPathsTable facadesFilesTable;
 	final Group grpFiles;
 	final Group grpSize;
 	private static final String[] FILTER_NAMES = { "XML facades rules file (*.xml)" };
@@ -90,7 +93,7 @@ public class FacadesRulesPanel extends Osm2xpPanel {
 				spinnerMinSize.setSelection(selectedFacadeTagRule.getSizeMin());
 				spinnerMaxSize.setSelection(selectedFacadeTagRule.getSizeMax());
 				try {
-					facadesFilesTable.updateSelectedRule(selectedFacadeTagRule
+					facadesFilesTable.updateSelectedItem(selectedFacadeTagRule
 							.getObjectsFiles());
 				} catch (Osm2xpBusinessException e) {
 					Osm2xpLogger.error("Error updating rules table.", e);
@@ -156,7 +159,7 @@ public class FacadesRulesPanel extends Osm2xpPanel {
 
 		ToolItem tltmAddFacadeFile = new ToolItem(toolBarFacadeFiles, SWT.NONE);
 		tltmAddFacadeFile.setToolTipText("add");
-		tltmAddFacadeFile.setImage(ResourceManager.getPluginImage("com.osm2xp",
+		tltmAddFacadeFile.setImage(ResourceManager.getPluginImage(Activator.PLUGIN_ID,
 				"images/toolbarsIcons/add_16.ico"));
 		tltmAddFacadeFile.addSelectionListener(new SelectionAdapter() {
 			@Override
@@ -172,7 +175,7 @@ public class FacadesRulesPanel extends Osm2xpPanel {
 				SWT.NONE);
 		tltmDeleteFacadeFile.setToolTipText("delete");
 		tltmDeleteFacadeFile.setImage(ResourceManager.getPluginImage(
-				"com.osm2xp", "images/toolbarsIcons/delete_16.ico"));
+				Activator.PLUGIN_ID, "images/toolbarsIcons/delete_16.ico"));
 		tltmDeleteFacadeFile.addSelectionListener(new SelectionAdapter() {
 			@Override
 			public void widgetSelected(SelectionEvent e) {
@@ -188,7 +191,7 @@ public class FacadesRulesPanel extends Osm2xpPanel {
 
 		facadesFilesTable = new FilesPathsTable(grpFiles, SWT.NONE,
 				"Facade path");
-		facadesFilesTable.setLayout(new FillLayout(SWT.HORIZONTAL));
+//		facadesFilesTable.setLayout(new FillLayout(SWT.HORIZONTAL));
 		new Label(grpFiles, SWT.NONE);
 
 	}
@@ -207,11 +210,11 @@ public class FacadesRulesPanel extends Osm2xpPanel {
 		toolBar = new ToolBar(this, SWT.FLAT | SWT.RIGHT);
 		tltmAdd = new ToolItem(toolBar, SWT.NONE);
 		tltmAdd.setToolTipText("add");
-		tltmAdd.setImage(ResourceManager.getPluginImage("com.osm2xp",
+		tltmAdd.setImage(ResourceManager.getPluginImage(Activator.PLUGIN_ID,
 				"images/toolbarsIcons/add_16.ico"));
 		tltmDelete = new ToolItem(toolBar, SWT.NONE);
 		tltmDelete.setToolTipText("delete");
-		tltmDelete.setImage(ResourceManager.getPluginImage("com.osm2xp",
+		tltmDelete.setImage(ResourceManager.getPluginImage(Activator.PLUGIN_ID,
 				"images/toolbarsIcons/delete_16.ico"));
 
 		tltmSeparator = new ToolItem(toolBar, SWT.SEPARATOR);
@@ -219,11 +222,11 @@ public class FacadesRulesPanel extends Osm2xpPanel {
 
 		tltmExport = new ToolItem(toolBar, SWT.NONE);
 		tltmExport.setToolTipText("Export");
-		tltmExport.setImage(ResourceManager.getPluginImage("com.osm2xp",
+		tltmExport.setImage(ResourceManager.getPluginImage(Activator.PLUGIN_ID,
 				"images/toolbarsIcons/export_16.ico"));
 		tltmImport = new ToolItem(toolBar, SWT.NONE);
 		tltmImport.setToolTipText("Import");
-		tltmImport.setImage(ResourceManager.getPluginImage("com.osm2xp",
+		tltmImport.setImage(ResourceManager.getPluginImage(Activator.PLUGIN_ID,
 				"images/toolbarsIcons/import_16.ico"));
 	}
 

@@ -19,9 +19,6 @@ import javax.xml.bind.annotation.XmlType;
 @XmlType(name = "PolygonRulesList", propOrder = { "minPerimeter", "rules" })
 public class PolygonRulesList {
 
-	@XmlAttribute
-	protected int minPerimeter = 200;
-	
 	@XmlElement(required = true)
 	protected List<PolygonTagsRule> rules;
 
@@ -69,14 +66,6 @@ public class PolygonRulesList {
 			rules = new ArrayList<PolygonTagsRule>();
 		}
 		return this.rules;
-	}
-
-	public int getMinPerimeter() {
-		return minPerimeter;
-	}
-
-	public void setMinPerimeter(int minPerimeter) {
-		this.minPerimeter = minPerimeter;
 	}
 
 }

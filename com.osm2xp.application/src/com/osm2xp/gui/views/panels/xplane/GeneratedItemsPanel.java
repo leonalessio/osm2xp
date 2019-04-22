@@ -10,7 +10,6 @@ import org.eclipse.swt.widgets.Composite;
 
 import com.osm2xp.generation.options.XPlaneOptionsProvider;
 import com.osm2xp.gui.views.panels.Osm2xpPanel;
-import com.osm2xp.utils.helpers.XplaneOptionsHelper;
 
 /**
  * GeneratedItemsPanel.
@@ -23,6 +22,7 @@ public class GeneratedItemsPanel extends Osm2xpPanel {
 	private Button btnGenerateBuildings;
 	private Button btnGenerateObjects;
 	private Button btnGenerateForests;
+	private Button btnGeneratePolys;
 	private Button btnGenerateStreetLights;
 	private Button btnGenerateRoads;
 	private Button btnGenerateRail;
@@ -40,7 +40,7 @@ public class GeneratedItemsPanel extends Osm2xpPanel {
 	@Override
 	protected void initComponents() {
 		btnGenerateBuildings = new Button(this, SWT.CHECK);
-		btnGenerateBuildings.setText("Generate facades buildings");
+		btnGenerateBuildings.setText("Generate Buildings(facades)");
 		GridDataFactory.fillDefaults().applyTo(btnGenerateBuildings);
 		btnGenerateObjects = new Button(this, SWT.CHECK);
 		btnGenerateObjects.setText("Generate 3D objects");
@@ -48,6 +48,10 @@ public class GeneratedItemsPanel extends Osm2xpPanel {
 		btnGenerateForests = new Button(this, SWT.CHECK);
 		btnGenerateForests.setText("Generate Forests");
 		GridDataFactory.fillDefaults().applyTo(btnGenerateForests);
+		btnGeneratePolys= new Button(this, SWT.CHECK);
+		btnGeneratePolys.setText("Generate Draped Polygons");
+		btnGeneratePolys.setToolTipText("Generate draped polygons - for items like parking areas and other paved surfaces");
+		GridDataFactory.fillDefaults().applyTo(btnGeneratePolys);
 		btnGenerateRoads = new Button(this, SWT.CHECK);
 		btnGenerateRoads.setText("Generate Roads");
 		GridDataFactory.fillDefaults().applyTo(btnGenerateRoads);
@@ -96,6 +100,8 @@ public class GeneratedItemsPanel extends Osm2xpPanel {
 				PojoProperties.value("generateObj").observe(XPlaneOptionsProvider.getOptions()));
 		bindingContext.bindValue(WidgetProperties.selection().observe(btnGenerateForests),		
 				PojoProperties.value("generateFor").observe(XPlaneOptionsProvider.getOptions()));
+		bindingContext.bindValue(WidgetProperties.selection().observe(btnGeneratePolys),		
+				PojoProperties.value("generatePolys").observe(XPlaneOptionsProvider.getOptions()));
 		bindingContext.bindValue(WidgetProperties.selection().observe(btnGenerateStreetLights),		
 				PojoProperties.value("generateStreetLights").observe(XPlaneOptionsProvider.getOptions()));
 //		bindingContext.bindValue(SWTObservables

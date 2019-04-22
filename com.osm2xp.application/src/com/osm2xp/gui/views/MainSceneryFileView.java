@@ -17,6 +17,7 @@ import org.eclipse.ui.part.ViewPart;
 import org.eclipse.wb.swt.ResourceManager;
 import org.eclipse.wb.swt.SWTResourceManager;
 
+import com.osm2xp.gui.Activator;
 import com.osm2xp.gui.views.panels.generic.GeneralOptionsPanel;
 import com.osm2xp.gui.views.panels.generic.OutPutFormatPanel;
 import com.osm2xp.gui.views.panels.generic.SceneryFilePanel;
@@ -43,7 +44,7 @@ public class MainSceneryFileView extends ViewPart implements IContextProvider {
 		parent.setBackground(SWTResourceManager.getColor(SWT.COLOR_WHITE));
 		FormToolkit toolkit = new FormToolkit(parent.getDisplay());
 		form = toolkit.createScrolledForm(parent);
-		form.setImage(ResourceManager.getPluginImage("com.osm2xp",
+		form.setImage(ResourceManager.getPluginImage(Activator.PLUGIN_ID,
 				"images/toolbarsIcons/prefs_32.png"));
 		form.setText("Scenery options");
 		toolkit.decorateFormHeading(form.getForm());

@@ -11,6 +11,7 @@ import com.osm2xp.generation.options.XmlHelper;
 import com.osm2xp.generation.options.rules.FacadesRulesList;
 import com.osm2xp.generation.options.rules.ForestsRulesList;
 import com.osm2xp.generation.options.rules.ObjectsRulesList;
+import com.osm2xp.generation.options.rules.PolygonRulesList;
 import com.osm2xp.generation.options.rules.XplaneObjectsRulesList;
 
 /**
@@ -76,6 +77,20 @@ public class XplaneOptionsHelper extends OptionsHelper {
 			Osm2xpLogger.error("Error importing objects rules file", e);
 		}
 
+	}
+	
+	/**
+	 * @param file
+	 */
+	public static void importPolyRules(File file) {
+		try {
+			Object result = XmlHelper.loadFileFromXml(file,
+					ObjectsRulesList.class);
+			XPlaneOptionsProvider.getOptions().setPolygonRules((PolygonRulesList) result);
+		} catch (Osm2xpBusinessException e) {
+			Osm2xpLogger.error("Error importing objects rules file", e);
+		}
+		
 	}
 
 	public static void importStreetLightObjects(File file) {

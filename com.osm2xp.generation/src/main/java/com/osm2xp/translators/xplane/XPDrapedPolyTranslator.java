@@ -33,34 +33,33 @@ public class XPDrapedPolyTranslator extends XPWritingTranslator {
 		XplaneOptions options = XPlaneOptionsProvider.getOptions();
 		if (osmPolyline instanceof OsmPolygon && options.isGeneratePolys()) {
 			PolygonRulesList polygonRules = options.getPolygonRules();
-			if (GeomUtils.computeEdgesLength(osmPolyline.getPolyline()) > options.getPolygonRules().getMinPerimeter()) {
-				List<PolygonTagsRule> matchingRules = getMatchingRules(osmPolyline, polygonRules);
-				for (PolygonTagsRule matchingRule : matchingRules) {
-					List<Polygon> polygons = matchingRule.getPolygons();
-					Random rnd = new Random();
-					int i = rnd.nextInt(polygons.size());
-					Polygon polygon = polygons.get(i);				 
-					int idx = dsfObjectsProvider.getStringIndex(polygon.getPath());
-					if (!osmPolyline.isValid()) {
-						List<LinearRing2D> fixed = GeomUtils.fix((LinearRing2D)osmPolyline.getPolyline());
-						for (LinearRing2D linearRing2D : fixed) {
-							writer.write(outputFormat.getPolygonString(linearRing2D, idx + "", "0"));
-						}
-					} else {
-						writer.write(outputFormat.getPolygonString(osmPolyline.getPolyline(), idx + "", "0"));
+			List<PolygonTagsRule> matchingRules = getMatchingRules(osmPolyline, polygonRules);
+			for (PolygonTagsRule matchingRule : matchingRules) {
+				List<Polygon> polygons = matchingRule.getPolygons();
+				Random rnd = new Random();
+				int i = rnd.nextInt(polygons.size());
+				Polygon polygon = polygons.get(i);				 
+				int idx = dsfObjectsProvider.getStringIndex(polygon.getPath());
+				if (!osmPolyline.isValid()) {
+					List<LinearRing2D> fixed = GeomUtils.fix((LinearRing2D)osmPolyline.getPolyline());
+					for (LinearRing2D linearRing2D : fixed) {
+						writer.write(outputFormat.getPolygonString(linearRing2D, idx + "", "0"));
 					}
+				} else {
+					writer.write(outputFormat.getPolygonString(osmPolyline.getPolyline(), idx + "", "0"));
 				}
-				return matchingRules.size() > 0;
-			}			
+			}
+			return matchingRules.size() > 0;
 		}
 		return false;
 	}
 
 	private List<PolygonTagsRule> getMatchingRules(OsmPolyline osmPolyline, PolygonRulesList polygonRules) {
 		List<PolygonTagsRule> resList = new ArrayList<PolygonTagsRule>();
+		double edgesLength = GeomUtils.computeEdgesLength(osmPolyline.getPolyline());
 		List<PolygonTagsRule> rules = polygonRules.getRules();
 		for (PolygonTagsRule polygonTagsRule : rules) {
-			if (osmPolyline.hasTag(polygonTagsRule.getTag())) {
+			if (osmPolyline.hasTag(polygonTagsRule.getTag()) && edgesLength > polygonTagsRule.getMinPerimeter()) {
 				resList.add(polygonTagsRule);
 			}
 		}

@@ -109,6 +109,13 @@
             icon="images/viewIcons/airfield-16.png">
       </view>
       <view
+            class="com.osm2xp.gui.views.XplanePolyView"
+            id="com.osm2xp.viewPolysTab"
+            name="Polygons"
+            restorable="true"
+            icon="images/viewIcons/polygon-16.png">
+      </view>
+      <view
             class="com.osm2xp.gui.views.LastFilesView"
             id="com.osm2xp.viewLastFiles"
             name="last files"
@@ -379,7 +386,14 @@
                relationship="stack"
                relative="com.osm2xp.viewSceneryTab">
          </view>
-          <view
+         <view
+               id="com.osm2xp.viewPolysTab"
+               closeable="false"
+               minimized="false"
+               relationship="stack"
+               relative="com.osm2xp.viewSceneryTab">
+         </view>
+         <view
                id="com.osm2xp.viewAirfieldsTab"
                closeable="false"
                minimized="false"

@@ -20,6 +20,7 @@ import com.osm2xp.core.exceptions.Osm2xpBusinessException;
 import com.osm2xp.core.logging.Osm2xpLogger;
 import com.osm2xp.core.model.osm.Tag;
 import com.osm2xp.generation.options.XmlHelper;
+import com.osm2xp.gui.Activator;
 import com.osm2xp.gui.components.WatchedTagsListTable;
 import com.osm2xp.utils.helpers.FlyLegacyOptionsHelper;
 
@@ -46,7 +47,7 @@ public class WatchedTagsListPanel extends Composite {
 
 		ToolItem tltmAdd = new ToolItem(toolBar, SWT.NONE);
 		tltmAdd.setToolTipText("add");
-		tltmAdd.setImage(ResourceManager.getPluginImage("com.osm2xp",
+		tltmAdd.setImage(ResourceManager.getPluginImage(Activator.PLUGIN_ID,
 				"images/toolbarsIcons/add_16.ico"));
 		tltmAdd.addSelectionListener(new SelectionAdapter() {
 			@Override
@@ -59,7 +60,7 @@ public class WatchedTagsListPanel extends Composite {
 
 		ToolItem tltmDelete = new ToolItem(toolBar, SWT.NONE);
 		tltmDelete.setToolTipText("delete");
-		tltmDelete.setImage(ResourceManager.getPluginImage("com.osm2xp",
+		tltmDelete.setImage(ResourceManager.getPluginImage(Activator.PLUGIN_ID,
 				"images/toolbarsIcons/delete_16.ico"));
 		tltmDelete.addSelectionListener(new SelectionAdapter() {
 			@Override
@@ -78,7 +79,7 @@ public class WatchedTagsListPanel extends Composite {
 
 		ToolItem tltmExport = new ToolItem(toolBar, SWT.NONE);
 		tltmExport.setToolTipText("Export");
-		tltmExport.setImage(ResourceManager.getPluginImage("com.osm2xp",
+		tltmExport.setImage(ResourceManager.getPluginImage(Activator.PLUGIN_ID,
 				"images/toolbarsIcons/export_16.ico"));
 		tltmExport.addSelectionListener(new SelectionAdapter() {
 			@Override
@@ -104,7 +105,7 @@ public class WatchedTagsListPanel extends Composite {
 
 		ToolItem tltmImport = new ToolItem(toolBar, SWT.NONE);
 		tltmImport.setToolTipText("Import");
-		tltmImport.setImage(ResourceManager.getPluginImage("com.osm2xp",
+		tltmImport.setImage(ResourceManager.getPluginImage(Activator.PLUGIN_ID,
 				"images/toolbarsIcons/import_16.ico"));
 		tltmImport.addSelectionListener(new SelectionAdapter() {
 			@Override

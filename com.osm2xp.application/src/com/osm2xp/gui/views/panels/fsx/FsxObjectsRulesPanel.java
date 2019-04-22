@@ -33,7 +33,10 @@ import com.osm2xp.core.model.osm.Tag;
 import com.osm2xp.generation.options.FsxOptionsProvider;
 import com.osm2xp.generation.options.ObjectFile;
 import com.osm2xp.generation.options.rules.ObjectTagRule;
+import com.osm2xp.gui.Activator;
+import com.osm2xp.gui.components.AbstractPathsTable;
 import com.osm2xp.gui.components.FilesPathsTable;
+import com.osm2xp.gui.components.RulesTable;
 import com.osm2xp.gui.components.TagsRulesTable;
 import com.osm2xp.gui.views.panels.Osm2xpPanel;
 
@@ -45,8 +48,8 @@ import com.osm2xp.gui.views.panels.Osm2xpPanel;
  */
 public class FsxObjectsRulesPanel extends Osm2xpPanel {
 
-	private TagsRulesTable tagsTable;
-	private FilesPathsTable ObjectsFilesTable;
+	private RulesTable tagsTable;
+	private AbstractPathsTable ObjectsFilesTable;
 	private Group grpFiles;
 	private Group grpAngle;
 	private static final String[] FILTER_NAMES = { "XML objects rules file (*.xml)" };
@@ -96,21 +99,21 @@ public class FsxObjectsRulesPanel extends Osm2xpPanel {
 		toolBar = new ToolBar(this, SWT.FLAT | SWT.RIGHT);
 		tltmAdd = new ToolItem(toolBar, SWT.NONE);
 		tltmAdd.setToolTipText("add");
-		tltmAdd.setImage(ResourceManager.getPluginImage("com.osm2xp",
+		tltmAdd.setImage(ResourceManager.getPluginImage(Activator.PLUGIN_ID,
 				"images/toolbarsIcons/add_16.ico"));
 		tltmDelete = new ToolItem(toolBar, SWT.NONE);
 		tltmDelete.setToolTipText("delete");
-		tltmDelete.setImage(ResourceManager.getPluginImage("com.osm2xp",
+		tltmDelete.setImage(ResourceManager.getPluginImage(Activator.PLUGIN_ID,
 				"images/toolbarsIcons/delete_16.ico"));
 		ToolItem tltmSeparator = new ToolItem(toolBar, SWT.SEPARATOR);
 		tltmSeparator.setWidth(20);
 		tltmExport = new ToolItem(toolBar, SWT.NONE);
 		tltmExport.setToolTipText("Export");
-		tltmExport.setImage(ResourceManager.getPluginImage("com.osm2xp",
+		tltmExport.setImage(ResourceManager.getPluginImage(Activator.PLUGIN_ID,
 				"images/toolbarsIcons/export_16.ico"));
 		tltmImport = new ToolItem(toolBar, SWT.NONE);
 		tltmImport.setToolTipText("Import");
-		tltmImport.setImage(ResourceManager.getPluginImage("com.osm2xp",
+		tltmImport.setImage(ResourceManager.getPluginImage(Activator.PLUGIN_ID,
 				"images/toolbarsIcons/import_16.ico"));
 		new Label(this, SWT.NONE);
 		groupTags = new Group(this, SWT.NONE);
@@ -153,12 +156,12 @@ public class FsxObjectsRulesPanel extends Osm2xpPanel {
 		toolBarObjectFiles = new ToolBar(grpFiles, SWT.FLAT | SWT.RIGHT);
 		tltmAddObjectFile = new ToolItem(toolBarObjectFiles, SWT.NONE);
 		tltmAddObjectFile.setToolTipText("add");
-		tltmAddObjectFile.setImage(ResourceManager.getPluginImage("com.osm2xp",
+		tltmAddObjectFile.setImage(ResourceManager.getPluginImage(Activator.PLUGIN_ID,
 				"images/toolbarsIcons/add_16.ico"));
 		tltmDeleteObjectFile = new ToolItem(toolBarObjectFiles, SWT.NONE);
 		tltmDeleteObjectFile.setToolTipText("delete");
 		tltmDeleteObjectFile.setImage(ResourceManager.getPluginImage(
-				"com.osm2xp", "images/toolbarsIcons/delete_16.ico"));
+				Activator.PLUGIN_ID, "images/toolbarsIcons/delete_16.ico"));
 		ObjectsFilesTable = new FilesPathsTable(grpFiles, SWT.NONE,
 				"Object GUID");
 
@@ -247,7 +250,7 @@ public class FsxObjectsRulesPanel extends Osm2xpPanel {
 						.isRandomAngle());
 
 				try {
-					ObjectsFilesTable.updateSelectedRule(selectedObjectTagRule
+					ObjectsFilesTable.updateSelectedItem(selectedObjectTagRule
 							.getObjectsFiles());
 				} catch (Osm2xpBusinessException e) {
 					Osm2xpLogger.error("Error updating rules table.", e);

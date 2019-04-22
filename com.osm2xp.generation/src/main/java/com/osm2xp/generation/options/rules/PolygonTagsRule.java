@@ -5,6 +5,7 @@ import java.util.List;
 
 import javax.xml.bind.annotation.XmlAccessType;
 import javax.xml.bind.annotation.XmlAccessorType;
+import javax.xml.bind.annotation.XmlAttribute;
 import javax.xml.bind.annotation.XmlElement;
 import javax.xml.bind.annotation.XmlType;
 
@@ -26,6 +27,9 @@ public class PolygonTagsRule {
 	protected Tag tag;
 	@XmlElement(name="polygon", required = true)
 	protected List<Polygon> polygons;
+	
+	@XmlAttribute
+	protected int minPerimeter = 200;
 
 	/**
 	 * Default no-arg constructor
@@ -93,6 +97,14 @@ public class PolygonTagsRule {
 			polygons = new ArrayList<Polygon>();
 		}
 		return this.polygons;
+	}
+
+	public int getMinPerimeter() {
+		return minPerimeter;
+	}
+
+	public void setMinPerimeter(int minPerimeter) {
+		this.minPerimeter = minPerimeter;
 	}
 
 }
