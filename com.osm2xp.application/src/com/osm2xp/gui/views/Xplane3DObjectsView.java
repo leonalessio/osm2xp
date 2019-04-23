@@ -30,7 +30,7 @@ public class Xplane3DObjectsView extends AbstractOptionsView implements IContext
 		Section sectionObjectsRules = toolkit.createSection(form.getBody(),
 				Section.TWISTIE | Section.EXPANDED | Section.TITLE_BAR);
 		sectionObjectsRules.setLayoutData(new TableWrapData(
-				TableWrapData.FILL_GRAB, TableWrapData.TOP, 1, 1));
+				TableWrapData.FILL_GRAB, TableWrapData.FILL_GRAB, 1, 1));
 
 		sectionObjectsRules.setText("objects rules");
 		XplaneObjectsRulesPanel objectsRulesPanel = new XplaneObjectsRulesPanel(

@@ -3,7 +3,7 @@ target/
 bin/
 /builds/
 Earth nav data/
-*.jar
+lib/
 *.csv
 
 # Mobile Tools for Java (J2ME)

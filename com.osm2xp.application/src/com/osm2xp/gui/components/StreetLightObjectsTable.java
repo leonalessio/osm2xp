@@ -2,6 +2,7 @@ package com.osm2xp.gui.components;
 
 import java.util.List;
 
+import org.eclipse.jface.layout.GridDataFactory;
 import org.eclipse.jface.viewers.ArrayContentProvider;
 import org.eclipse.jface.viewers.CellEditor;
 import org.eclipse.jface.viewers.ColumnLabelProvider;
@@ -14,7 +15,6 @@ import org.eclipse.jface.viewers.TableViewerColumn;
 import org.eclipse.jface.viewers.TableViewerEditor;
 import org.eclipse.jface.viewers.TextCellEditor;
 import org.eclipse.swt.SWT;
-import org.eclipse.swt.layout.GridData;
 import org.eclipse.swt.layout.GridLayout;
 import org.eclipse.swt.widgets.Composite;
 import org.eclipse.swt.widgets.Table;
@@ -60,18 +60,18 @@ public class StreetLightObjectsTable extends Composite {
 		table = viewer.getTable();
 		table.setHeaderVisible(true);
 		table.setLinesVisible(true);
-		table.setSize(500, 500);
+//		table.setSize(500, 500);
 		table.setLinesVisible(true);
 
 		viewer.setContentProvider(new ArrayContentProvider());
 
-		GridData gridData = new GridData();
-		gridData.verticalAlignment = GridData.FILL;
-		gridData.widthHint = 485;
-		gridData.heightHint = 400;
-		gridData.grabExcessVerticalSpace = true;
-		gridData.horizontalAlignment = SWT.FILL;
-		viewer.getControl().setLayoutData(gridData);
+//		GridData gridData = new GridData();
+//		gridData.verticalAlignment = GridData.FILL;
+//		gridData.widthHint = 485;
+//		gridData.heightHint = 400;
+//		gridData.grabExcessVerticalSpace = true;
+//		gridData.horizontalAlignment = SWT.FILL;
+		GridDataFactory.fillDefaults().grab(true, true).applyTo(viewer.getControl());
 
 		ColumnViewerEditorActivationStrategy actSupport = new ColumnViewerEditorActivationStrategy(
 				viewer) {
@@ -139,7 +139,7 @@ public class StreetLightObjectsTable extends Composite {
 				SWT.NONE, colNumber);
 		final TableColumn column = viewerColumn.getColumn();
 		column.setText(title);
-		column.setWidth(500);
+		column.setWidth(150);
 		column.setResizable(true);
 		column.setMoveable(true);
 		return viewerColumn;

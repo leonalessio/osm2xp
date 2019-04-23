@@ -32,7 +32,7 @@ import com.osm2xp.generation.options.XmlHelper;
 import com.osm2xp.generation.options.rules.ForestTagRule;
 import com.osm2xp.gui.Activator;
 import com.osm2xp.gui.components.AbstractPathsTable;
-import com.osm2xp.gui.components.FilesPathsTable;
+import com.osm2xp.gui.components.FilePathsTable;
 import com.osm2xp.gui.components.RulesTable;
 import com.osm2xp.gui.components.TagsRulesTable;
 import com.osm2xp.utils.helpers.XplaneOptionsHelper;
@@ -46,7 +46,7 @@ import com.osm2xp.utils.helpers.XplaneOptionsHelper;
 public class ForestsRulesPanel extends Composite {
 
 	final RulesTable tagsTable;
-	final AbstractPathsTable ForestsFilesTable;
+	final AbstractPathsTable forestsFilesTable;
 	final Group grpForestsFilesFor;
 	final Group grpDensity;
 	private static final String[] FILTER_NAMES = { "XML Forests rules file (*.xml)" };
@@ -149,14 +149,13 @@ public class ForestsRulesPanel extends Composite {
 
 		Group groupTags = new Group(this, SWT.NONE);
 		groupTags.setText("Forests rules - osm tags ");
-		GridData gridData = new GridData(SWT.FILL, SWT.TOP, false, false, 1, 1);
-		gridData.heightHint = 320;
-		gridData.widthHint = 329;
+		GridData gridData = new GridData(SWT.FILL, SWT.FILL, true, true, 1, 1);
+//		gridData.heightHint = 320;
+//		gridData.widthHint = 329;
 		groupTags.setLayoutData(gridData);
 		groupTags.setLayout(new FillLayout(SWT.HORIZONTAL));
 		tagsTable = new TagsRulesTable(groupTags, SWT.NONE, XPlaneOptionsProvider
 				.getOptions().getForestsRules().getRules());
-		tagsTable.setLayout(new FillLayout(SWT.HORIZONTAL));
 		tagsTable.getTable().addListener(SWT.Selection, new Listener() {
 			public void handleEvent(Event event) {
 				selectedForestTagRule = (ForestTagRule) event.item.getData();
@@ -169,7 +168,7 @@ public class ForestsRulesPanel extends Composite {
 				spinnerForestDensity.setSelection(selectedForestTagRule
 						.getForestDensity());
 				try {
-					ForestsFilesTable.updateSelectedItem(selectedForestTagRule
+					forestsFilesTable.updateSelectedItem(selectedForestTagRule
 							.getObjectsFiles());
 				} catch (Osm2xpBusinessException e) {
 					Osm2xpLogger.error("Error updating rules table", e);
@@ -182,16 +181,16 @@ public class ForestsRulesPanel extends Composite {
 		compositeRuleDetail = new Composite(this, SWT.NONE);
 		compositeRuleDetail.setVisible(false);
 		compositeRuleDetail.setLayout(new GridLayout(1, false));
-		GridData gridDataForestsObjects = new GridData(SWT.FILL, SWT.TOP,
-				false, false, 1, 1);
-		gridDataForestsObjects.heightHint = 347;
-		gridDataForestsObjects.widthHint = 608;
+		GridData gridDataForestsObjects = new GridData(SWT.FILL, SWT.FILL,
+				true, true, 1, 1);
+//		gridDataForestsObjects.heightHint = 347;
+//		gridDataForestsObjects.widthHint = 608;
 		compositeRuleDetail.setLayoutData(gridDataForestsObjects);
 		grpDensity = new Group(compositeRuleDetail, SWT.NONE);
 		grpDensity.setLayout(new GridLayout(2, false));
 		GridData gd_grpDensity = new GridData(SWT.FILL, SWT.BOTTOM, true,
 				false, 1, 1);
-		gd_grpDensity.widthHint = 368;
+//		gd_grpDensity.widthHint = 368;
 		grpDensity.setLayoutData(gd_grpDensity);
 		grpDensity.setText("Density ");
 
@@ -232,7 +231,7 @@ public class ForestsRulesPanel extends Composite {
 				ObjectFile file = new ObjectFile();
 				file.setPath("SomePathTo" + File.separator + "aForestFile.fac");
 				selectedForestTagRule.getObjectsFiles().add(file);
-				ForestsFilesTable.getViewer().refresh();
+				forestsFilesTable.getViewer().refresh();
 			}
 		});
 
@@ -245,18 +244,17 @@ public class ForestsRulesPanel extends Composite {
 			@Override
 			public void widgetSelected(SelectionEvent e) {
 
-				IStructuredSelection selection = (IStructuredSelection) ForestsFilesTable
+				IStructuredSelection selection = (IStructuredSelection) forestsFilesTable
 						.getViewer().getSelection();
 				ObjectFile selectedFile = (ObjectFile) selection
 						.getFirstElement();
 				selectedForestTagRule.getObjectsFiles().remove(selectedFile);
-				ForestsFilesTable.getViewer().refresh();
+				forestsFilesTable.getViewer().refresh();
 			}
 		});
 
-		ForestsFilesTable = new FilesPathsTable(grpForestsFilesFor, SWT.NONE,
+		forestsFilesTable = new FilePathsTable(grpForestsFilesFor, SWT.NONE,
 				"Forest file path");
-//		ForestsFilesTable.setLayout(new FillLayout(SWT.HORIZONTAL));
 		new Label(grpForestsFilesFor, SWT.NONE);
 
 	}

@@ -1,5 +1,6 @@
 package com.osm2xp.gui.components;
 
+import org.eclipse.jface.layout.GridDataFactory;
 import org.eclipse.jface.viewers.ArrayContentProvider;
 import org.eclipse.jface.viewers.CellEditor;
 import org.eclipse.jface.viewers.ColumnLabelProvider;
@@ -31,8 +32,10 @@ public abstract class AbstractPathsTable extends Composite {
 		this.fileColumnTitle = fileColumnTitle;
 		GridLayout layout = new GridLayout(2, false);
 		setLayout(layout);
+		if (parent.getLayout() instanceof GridLayout) {
+			GridDataFactory.fillDefaults().grab(true,true).applyTo(this);
+		}
 		createViewer();
-
 	}
 
 	public void updateSelectedItem(Object input) throws Osm2xpBusinessException {
@@ -129,7 +132,7 @@ public abstract class AbstractPathsTable extends Composite {
 				SWT.NONE, colNumber);
 		final TableColumn column = viewerColumn.getColumn();
 		column.setText(title);
-		column.setWidth(500);
+		column.setWidth(200);
 		column.setResizable(true);
 		column.setMoveable(true);
 		return viewerColumn;

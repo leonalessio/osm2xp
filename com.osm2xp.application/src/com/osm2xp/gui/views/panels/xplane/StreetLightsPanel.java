@@ -23,7 +23,7 @@ import com.osm2xp.generation.options.XPlaneOptionsProvider;
 import com.osm2xp.generation.options.XmlHelper;
 import com.osm2xp.gui.Activator;
 import com.osm2xp.gui.components.AbstractPathsTable;
-import com.osm2xp.gui.components.FilesPathsTable;
+import com.osm2xp.gui.components.FilePathsTable;
 import com.osm2xp.utils.helpers.XplaneOptionsHelper;
 
 /**
@@ -133,14 +133,12 @@ public class StreetLightsPanel extends Composite {
 		});
 		Group groupTable = new Group(this, SWT.NONE);
 		groupTable.setText("Street Lights objects");
-		GridData gd_composite = new GridData(SWT.FILL, SWT.CENTER, false, true,
+		GridData gd_composite = new GridData(SWT.FILL, SWT.FILL, true, true,
 				1, 1);
-		gd_composite.widthHint = 523;
 		groupTable.setLayoutData(gd_composite);
 		groupTable.setLayout(new FillLayout(SWT.HORIZONTAL));
-		filesPathsTable = new FilesPathsTable(groupTable, SWT.NONE,
+		filesPathsTable = new FilePathsTable(groupTable, SWT.NONE,
 				"StreetLight object path");
-//		filesPathsTable.setLayout(new FillLayout(SWT.HORIZONTAL));
 		try {
 			filesPathsTable.updateSelectedItem(XPlaneOptionsProvider.getOptions()
 					.getStreetLightObjects().getObjects());

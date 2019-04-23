@@ -33,23 +33,23 @@ public class SceneryOptionsPanel extends Osm2xpPanel {
 
 	@Override
 	protected void initLayout() {
-		final GridLayout gridLayout = new GridLayout(4, false);
+		final GridLayout gridLayout = new GridLayout(3, false);
 		gridLayout.horizontalSpacing = 15;
 		gridLayout.verticalSpacing = 15;
 		setLayout(gridLayout);
 		GridData gd_lblMinSegment = new GridData(SWT.LEFT, SWT.CENTER, false,
 				false, 1, 1);
-		gd_lblMinSegment.widthHint = 279;
+//		gd_lblMinSegment.widthHint = 279;
 		lblMinSegment.setLayoutData(gd_lblMinSegment);
 
 		GridData gd_lblMaxSegment = new GridData(SWT.LEFT, SWT.CENTER, false,
 				false, 1, 1);
-		gd_lblMaxSegment.widthHint = 279;
-		lblMaxSegment.setLayoutData(gd_lblMinSegment);
+//		gd_lblMaxSegment.widthHint = 279;
+		lblMaxSegment.setLayoutData(gd_lblMaxSegment);
 
 		GridData gd_lblMinArea = new GridData(SWT.LEFT, SWT.CENTER, false,
 				false, 1, 1);
-		gd_lblMinArea.widthHint = 279;
+//		gd_lblMinArea.widthHint = 279;
 		lblMinArea.setLayoutData(gd_lblMinArea);
 
 	}

@@ -54,7 +54,7 @@ public class FacadesExclusionsPanel extends Composite {
 			@Override
 			public void widgetSelected(SelectionEvent e) {
 				XPlaneOptionsProvider.getOptions().getBuildingsExclusions()
-						.getExclusions().add(new Tag("a key", "a value"));
+						.getExclusions().add(new Tag("", ""));
 				facadesExclusionsTable.getViewer().refresh();
 			}
 		});
@@ -125,14 +125,12 @@ public class FacadesExclusionsPanel extends Composite {
 
 		Group groupTable = new Group(this, SWT.NONE);
 		groupTable.setText("Osm Tags exclusions");
-		GridData gd_composite = new GridData(SWT.FILL, SWT.CENTER, false, true,
+		GridData gd_composite = new GridData(SWT.FILL, SWT.FILL, true, true,
 				1, 1);
-		gd_composite.widthHint = 523;
+//		gd_composite.widthHint = 523;
 		groupTable.setLayoutData(gd_composite);
 		groupTable.setLayout(new FillLayout(SWT.HORIZONTAL));
 		facadesExclusionsTable = new FacadesExclusionsTable(groupTable,
 				SWT.NONE);
-		facadesExclusionsTable.setLayout(new FillLayout(SWT.HORIZONTAL));
-
 	}
 }

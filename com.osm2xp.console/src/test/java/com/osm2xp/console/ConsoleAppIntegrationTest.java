@@ -106,7 +106,7 @@ public class ConsoleAppIntegrationTest extends TestCase {
 		assertTrue(hasWindings);
 		assertTrue(hasSegments);
 		assertTrue(hasObjects);
-		assertEquals(15, polDefCount);
+		assertEquals(25, polDefCount);
 		assertEquals(6, objDefCount);
 		assertEquals(0, stack);
 	}

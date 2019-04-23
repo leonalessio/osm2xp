@@ -28,8 +28,7 @@ public class XplanePolyView extends AbstractOptionsView {
 
 		Section sectionRules = toolkit.createSection(form.getBody(),
 				Section.TWISTIE | Section.EXPANDED | Section.TITLE_BAR);
-		sectionRules.setLayoutData(new TableWrapData(
-				TableWrapData.FILL_GRAB, TableWrapData.FILL_GRAB, 1, 1));
+		sectionRules.setLayoutData(new TableWrapData(TableWrapData.FILL_GRAB, TableWrapData.FILL_GRAB));
 		
 		
 

@@ -39,7 +39,7 @@ public class StreetLightsDensityPanel extends Composite {
 				.getLightsDensity()));
 		final GridData gridData = new GridData(SWT.FILL, SWT.CENTER, false,
 				false, 1, 1);
-		gridData.widthHint = 187;
+//		gridData.widthHint = 187;
 		combo.setLayoutData(gridData);
 		combo.addModifyListener(new ModifyListener() {
 			public void modifyText(final ModifyEvent event) {

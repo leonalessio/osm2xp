@@ -124,9 +124,9 @@ public class WatchedTagsListPanel extends Composite {
 
 		Group groupTable = new Group(this, SWT.NONE);
 		groupTable.setText("Watched osm tags list");
-		GridData gd_composite = new GridData(SWT.FILL, SWT.CENTER, false, true,
+		GridData gd_composite = new GridData(SWT.FILL, SWT.CENTER, true, true,
 				1, 1);
-		gd_composite.widthHint = 523;
+//		gd_composite.widthHint = 523;
 		groupTable.setLayoutData(gd_composite);
 		groupTable.setLayout(new FillLayout(SWT.HORIZONTAL));
 		tagsTable = new WatchedTagsListTable(groupTable, SWT.NONE);

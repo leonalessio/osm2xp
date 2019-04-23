@@ -2,6 +2,7 @@ package com.osm2xp.gui.components;
 
 import java.util.List;
 
+import org.eclipse.jface.layout.GridDataFactory;
 import org.eclipse.jface.viewers.ArrayContentProvider;
 import org.eclipse.jface.viewers.CellEditor;
 import org.eclipse.jface.viewers.ColumnLabelProvider;
@@ -21,6 +22,7 @@ import org.eclipse.swt.widgets.TableColumn;
 
 public abstract class RulesTable extends Composite {
 
+	private static final int DEFAULT_ITEMS = 10;
 	private TableViewer viewer;
 	private Table table;
 
@@ -33,26 +35,25 @@ public abstract class RulesTable extends Composite {
 		viewer.refresh();
 	}
 
-	protected void createViewer(Composite parent, List<? extends Object> items) {
-		viewer = new TableViewer(parent, SWT.FULL_SELECTION);
-		createColumns(parent, viewer);
+	protected void createViewer(List<? extends Object> items) {
+		viewer = new TableViewer(this, SWT.FULL_SELECTION);
+		createColumns(viewer);
 	
 		table = viewer.getTable();
 		table.setHeaderVisible(true);
-		table.setLinesVisible(true);
-		table.setSize(300, 500);
+//		table.setSize(300, 500);
 		table.setLinesVisible(true);
 	
 		viewer.setContentProvider(new ArrayContentProvider());
 		viewer.setInput(items);
-	
+		viewer.setItemCount(10);
+//		
 		GridData gridData = new GridData();
 		gridData.verticalAlignment = GridData.FILL;
-		gridData.widthHint = 285;
-		gridData.heightHint = 300;
+		gridData.heightHint = table.getHeaderHeight() + table.getItemHeight() * DEFAULT_ITEMS;
 		gridData.grabExcessVerticalSpace = true;
 		gridData.horizontalAlignment = SWT.FILL;
-		viewer.getControl().setLayoutData(gridData);
+		GridDataFactory.fillDefaults().grab(true, true).applyTo(viewer.getControl());
 	
 		ColumnViewerEditorActivationStrategy actSupport = new ColumnViewerEditorActivationStrategy(
 				viewer) {
@@ -76,7 +77,7 @@ public abstract class RulesTable extends Composite {
 		return viewer;
 	}
 
-	private void createColumns(final Composite parent, final TableViewer viewer) {
+	private void createColumns(final TableViewer viewer) {
 		String[] titles = { "key", "value" };
 	
 		/**

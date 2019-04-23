@@ -76,8 +76,8 @@ public class MainSceneryFileView extends ViewPart implements IContextProvider {
 				SWT.BORDER, getSite());
 		toolkit.adapt(sceneryFilePanel, true, true);
 		sectionFile.setClient(sceneryFilePanel);
-		new Label(sceneryFilePanel, SWT.NONE);
-		new Label(sceneryFilePanel, SWT.NONE);
+//		new Label(sceneryFilePanel, SWT.NONE);
+//		new Label(sceneryFilePanel, SWT.NONE);
 		/**
 		 * Scenery options
 		 */
@@ -100,8 +100,7 @@ public class MainSceneryFileView extends ViewPart implements IContextProvider {
 		Section outputFormatSection = toolkit.createSection(form.getBody(),
 				Section.TWISTIE | Section.EXPANDED | Section.TITLE_BAR);
 		TableWrapData twd_outputFormatSection = new TableWrapData(
-				TableWrapData.FILL_GRAB, TableWrapData.TOP, 1, 1);
-		twd_outputFormatSection.heightHint = 800;
+				TableWrapData.FILL_GRAB, TableWrapData.FILL_GRAB, 1, 1);
 		outputFormatSection.setLayoutData(twd_outputFormatSection);
 		outputFormatSection.setText("Output Format");
 		OutPutFormatPanel outputFormatPanel = new OutPutFormatPanel(

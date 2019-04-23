@@ -1,5 +1,6 @@
 package com.osm2xp.gui.components;
 
+import org.eclipse.jface.layout.GridDataFactory;
 import org.eclipse.jface.viewers.ArrayContentProvider;
 import org.eclipse.jface.viewers.CellEditor;
 import org.eclipse.jface.viewers.ColumnLabelProvider;
@@ -12,7 +13,6 @@ import org.eclipse.jface.viewers.TableViewerColumn;
 import org.eclipse.jface.viewers.TableViewerEditor;
 import org.eclipse.jface.viewers.TextCellEditor;
 import org.eclipse.swt.SWT;
-import org.eclipse.swt.layout.GridData;
 import org.eclipse.swt.layout.GridLayout;
 import org.eclipse.swt.widgets.Composite;
 import org.eclipse.swt.widgets.Table;
@@ -35,8 +35,8 @@ public class FacadesExclusionsTable extends Composite {
 		super(parent, style);
 
 		GridLayout layout = new GridLayout(2, false);
-		parent.setLayout(layout);
-		createViewer(parent);
+		setLayout(layout);
+		createViewer(this);
 
 	}
 
@@ -53,19 +53,19 @@ public class FacadesExclusionsTable extends Composite {
 		table = viewer.getTable();
 		table.setHeaderVisible(true);
 		table.setLinesVisible(true);
-		table.setSize(500, 500);
+//		table.setSize(500, 500);
 
 		viewer.setContentProvider(new ArrayContentProvider());
 		viewer.setInput(XPlaneOptionsProvider.getOptions()
 				.getBuildingsExclusions().getExclusions());
 
-		GridData gridData = new GridData();
-		gridData.verticalAlignment = GridData.FILL;
-		gridData.widthHint = 485;
-		gridData.heightHint = 200;
-		gridData.grabExcessVerticalSpace = true;
-		gridData.horizontalAlignment = GridData.FILL;
-		viewer.getControl().setLayoutData(gridData);
+//		GridData gridData = new GridData();
+//		gridData.verticalAlignment = GridData.FILL;
+//		gridData.widthHint = 485;
+//		gridData.heightHint = 200;
+//		gridData.grabExcessVerticalSpace = true;
+//		gridData.horizontalAlignment = GridData.FILL;
+		GridDataFactory.fillDefaults().grab(true, true).applyTo(viewer.getControl());
 
 		ColumnViewerEditorActivationStrategy actSupport = new ColumnViewerEditorActivationStrategy(
 				viewer) {

@@ -39,7 +39,7 @@ import com.osm2xp.generation.options.XmlHelper;
 import com.osm2xp.generation.options.rules.FlightGearObjectTagRule;
 import com.osm2xp.gui.Activator;
 import com.osm2xp.gui.components.AbstractPathsTable;
-import com.osm2xp.gui.components.FilesPathsTable;
+import com.osm2xp.gui.components.FilePathsTable;
 import com.osm2xp.gui.components.RulesTable;
 import com.osm2xp.gui.components.TagsRulesTable;
 
@@ -172,15 +172,12 @@ public class FlightGearObjectsRulesPanel extends Composite {
 
 		Group groupTags = new Group(this, SWT.NONE);
 		groupTags.setText("Objects rules - osm tags ");
-		GridData gridData = new GridData(SWT.FILL, SWT.TOP, false, false, 1, 1);
-		gridData.heightHint = 320;
-		gridData.widthHint = 329;
+		GridData gridData = new GridData(SWT.FILL, SWT.FILL, true, true, 1, 1);
 		groupTags.setLayoutData(gridData);
 		groupTags.setLayout(new FillLayout(SWT.HORIZONTAL));
 		tagsTable = new TagsRulesTable(groupTags, SWT.NONE,
 				FlightGearOptionsProvider.getOptions().getObjectsRules()
 						.getRules());
-		tagsTable.setLayout(new FillLayout(SWT.HORIZONTAL));
 		tagsTable.getTable().addListener(SWT.Selection, new Listener() {
 			public void handleEvent(Event event) {
 				selectedFlightGearObjectTagRule = (FlightGearObjectTagRule) event.item
@@ -192,17 +189,17 @@ public class FlightGearObjectsRulesPanel extends Composite {
 		compositeRuleDetail = new Composite(this, SWT.NONE);
 		compositeRuleDetail.setVisible(true);
 		compositeRuleDetail.setLayout(new GridLayout(1, false));
-		GridData gridDataObjectsObjects = new GridData(SWT.FILL, SWT.TOP,
-				false, false, 1, 1);
+		GridData gridDataObjectsObjects = new GridData(SWT.FILL, SWT.FILL,
+				true, true, 1, 1);
 		// gridDataObjectsObjects.heightHint = 150;
 		gridDataObjectsObjects.grabExcessVerticalSpace = true;
-		gridDataObjectsObjects.widthHint = 608;
+//		gridDataObjectsObjects.widthHint = 608;
 		compositeRuleDetail.setLayoutData(gridDataObjectsObjects);
 
 		TabFolder tabFolder = new TabFolder(compositeRuleDetail, SWT.NONE);
-		GridData gd_tabFolder = new GridData(SWT.LEFT, SWT.CENTER, false,
-				false, 1, 1);
-		gd_tabFolder.heightHint = 300;
+		GridData gd_tabFolder = new GridData(SWT.FILL, SWT.FILL, true,
+				true, 1, 1);
+//		gd_tabFolder.heightHint = 300;
 		tabFolder.setLayoutData(gd_tabFolder);
 
 		TabItem tabObjects = new TabItem(tabFolder, SWT.NONE);
@@ -247,8 +244,7 @@ public class FlightGearObjectsRulesPanel extends Composite {
 			}
 		});
 
-		ObjectsFilesTable = new FilesPathsTable(grpFiles, SWT.NONE, "Object ID");
-//		ObjectsFilesTable.setLayout(new FillLayout(SWT.HORIZONTAL));
+		ObjectsFilesTable = new FilePathsTable(grpFiles, SWT.NONE, "Object ID");
 		new Label(grpFiles, SWT.NONE);
 
 		TabItem tabAngle = new TabItem(tabFolder, SWT.NONE);
@@ -259,12 +255,12 @@ public class FlightGearObjectsRulesPanel extends Composite {
 		compositeAngle.setLayout(new GridLayout(1, false));
 
 		Group grpAngle = new Group(compositeAngle, SWT.NONE);
-		grpAngle.setSize(316, 90);
+//		grpAngle.setSize(316, 90);
 		grpAngle.setLayout(new GridLayout(3, false));
-		GridData gd_grpAngle = new GridData(SWT.LEFT, SWT.TOP, false, true, 1,
+		GridData gd_grpAngle = new GridData(SWT.FILL, SWT.FILL, true, true, 1,
 				1);
-		gd_grpAngle.heightHint = 107;
-		gd_grpAngle.widthHint = 373;
+//		gd_grpAngle.heightHint = 107;
+//		gd_grpAngle.widthHint = 373;
 		grpAngle.setLayoutData(gd_grpAngle);
 		grpAngle.setText("angle");
 
@@ -341,10 +337,10 @@ public class FlightGearObjectsRulesPanel extends Composite {
 		composite.setLayout(gl_composite);
 
 		Group grpOption = new Group(composite, SWT.NONE);
-		grpOption.setLayoutData(new GridData(SWT.LEFT, SWT.CENTER, true, false,
+		grpOption.setLayoutData(new GridData(SWT.FILL, SWT.FILL, true, true,
 				1, 1));
 		grpOption.setText("option");
-		grpOption.setBounds(0, 0, 135, 19);
+//		grpOption.setBounds(0, 0, 135, 19);
 		grpOption.setLayout(new GridLayout(1, false));
 
 		btnCheckSimplePolygon = new Button(grpOption, SWT.CHECK);
@@ -360,7 +356,7 @@ public class FlightGearObjectsRulesPanel extends Composite {
 		});
 
 		Group grpSize = new Group(composite, SWT.NONE);
-		grpSize.setLayoutData(new GridData(SWT.LEFT, SWT.CENTER, true, false,
+		grpSize.setLayoutData(new GridData(SWT.FILL, SWT.FILL, true, true,
 				1, 1));
 		grpSize.setText("size condition");
 		grpSize.setLayout(new GridLayout(6, false));
@@ -437,7 +433,7 @@ public class FlightGearObjectsRulesPanel extends Composite {
 			}
 		});
 		Group grpArea = new Group(composite, SWT.NONE);
-		grpArea.setLayoutData(new GridData(SWT.LEFT, SWT.CENTER, true, false,
+		grpArea.setLayoutData(new GridData(SWT.FILL, SWT.FILL, true, true,
 				1, 1));
 		grpArea.setText("area condition");
 		grpArea.setLayout(new GridLayout(5, false));
@@ -484,7 +480,7 @@ public class FlightGearObjectsRulesPanel extends Composite {
 		grpRotationPoint.setLayout(gl_grpRotationPoint);
 		GridData gd_grpRotationPoint = new GridData(SWT.LEFT, SWT.CENTER,
 				false, false, 1, 1);
-		gd_grpRotationPoint.widthHint = 423;
+//		gd_grpRotationPoint.widthHint = 423;
 		grpRotationPoint.setLayoutData(gd_grpRotationPoint);
 		grpRotationPoint.setText("Rotation point");
 

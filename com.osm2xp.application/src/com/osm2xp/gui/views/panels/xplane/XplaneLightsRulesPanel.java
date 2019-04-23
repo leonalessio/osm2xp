@@ -36,7 +36,7 @@ import com.osm2xp.generation.options.XmlHelper;
 import com.osm2xp.generation.options.rules.XplaneLightTagRule;
 import com.osm2xp.gui.Activator;
 import com.osm2xp.gui.components.AbstractPathsTable;
-import com.osm2xp.gui.components.FilesPathsTable;
+import com.osm2xp.gui.components.FilePathsTable;
 import com.osm2xp.gui.components.RulesTable;
 import com.osm2xp.gui.components.TagsRulesTable;
 import com.osm2xp.utils.helpers.XplaneOptionsHelper;
@@ -157,14 +157,13 @@ public class XplaneLightsRulesPanel extends Composite {
 
 		Group groupTags = new Group(this, SWT.NONE);
 		groupTags.setText("Objects rules - osm tags ");
-		GridData gridData = new GridData(SWT.FILL, SWT.TOP, false, false, 1, 1);
-		gridData.heightHint = 320;
-		gridData.widthHint = 329;
+		GridData gridData = new GridData(SWT.FILL, SWT.FILL, true, true, 1, 1);
+//		gridData.heightHint = 320;
+//		gridData.widthHint = 329;
 		groupTags.setLayoutData(gridData);
 		groupTags.setLayout(new FillLayout(SWT.HORIZONTAL));
 		tagsTable = new TagsRulesTable(groupTags, SWT.NONE, XPlaneOptionsProvider
 				.getOptions().getLightsRules().getRules());
-		tagsTable.setLayout(new FillLayout(SWT.HORIZONTAL));
 		tagsTable.getTable().addListener(SWT.Selection, new Listener() {
 			public void handleEvent(Event event) {
 				selectedXplaneLightTagRule = (XplaneLightTagRule) event.item
@@ -176,11 +175,8 @@ public class XplaneLightsRulesPanel extends Composite {
 		compositeRuleDetail = new Composite(this, SWT.NONE);
 		compositeRuleDetail.setVisible(true);
 		compositeRuleDetail.setLayout(new GridLayout(1, false));
-		GridData gridDataObjectsObjects = new GridData(SWT.FILL, SWT.TOP,
-				false, false, 1, 1);
-		// gridDataObjectsObjects.heightHint = 150;
-		gridDataObjectsObjects.grabExcessVerticalSpace = true;
-		gridDataObjectsObjects.widthHint = 608;
+		GridData gridDataObjectsObjects = new GridData(SWT.FILL, SWT.FILL,
+				true, true, 1, 1);
 		compositeRuleDetail.setLayoutData(gridDataObjectsObjects);
 
 		TabFolder tabFolder = new TabFolder(compositeRuleDetail, SWT.NONE);
@@ -231,7 +227,7 @@ public class XplaneLightsRulesPanel extends Composite {
 			}
 		});
 
-		ObjectsFilesTable = new FilesPathsTable(grpFiles, SWT.NONE,
+		ObjectsFilesTable = new FilePathsTable(grpFiles, SWT.NONE,
 				"Object file path");
 		new Label(grpFiles, SWT.NONE);
 
@@ -247,8 +243,8 @@ public class XplaneLightsRulesPanel extends Composite {
 		grpOptions.setLayout(new GridLayout(2, false));
 		GridData gd_grpAngle = new GridData(SWT.LEFT, SWT.TOP, false, true, 1,
 				1);
-		gd_grpAngle.heightHint = 107;
-		gd_grpAngle.widthHint = 373;
+//		gd_grpAngle.heightHint = 107;
+//		gd_grpAngle.widthHint = 373;
 		grpOptions.setLayoutData(gd_grpAngle);
 		grpOptions.setText("angle");
 

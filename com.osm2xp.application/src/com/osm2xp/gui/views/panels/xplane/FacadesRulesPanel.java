@@ -34,7 +34,7 @@ import com.osm2xp.generation.options.XmlHelper;
 import com.osm2xp.generation.options.rules.FacadeTagRule;
 import com.osm2xp.gui.Activator;
 import com.osm2xp.gui.components.AbstractPathsTable;
-import com.osm2xp.gui.components.FilesPathsTable;
+import com.osm2xp.gui.components.FilePathsTable;
 import com.osm2xp.gui.components.RulesTable;
 import com.osm2xp.gui.components.TagsRulesTable;
 import com.osm2xp.gui.views.panels.Osm2xpPanel;
@@ -72,14 +72,13 @@ public class FacadesRulesPanel extends Osm2xpPanel {
 
 		Group groupTags = new Group(this, SWT.NONE);
 		groupTags.setText("facades rules - osm tags ");
-		GridData gridData = new GridData(SWT.FILL, SWT.TOP, false, false, 1, 1);
-		gridData.heightHint = 320;
-		gridData.widthHint = 329;
+		GridData gridData = new GridData(SWT.FILL, SWT.FILL, true, true, 1, 1);
+//		gridData.heightHint = 320;
+//		gridData.widthHint = 329;
 		groupTags.setLayoutData(gridData);
 		groupTags.setLayout(new FillLayout(SWT.HORIZONTAL));
 		tagsTable = new TagsRulesTable(groupTags, SWT.NONE, XPlaneOptionsProvider
 				.getOptions().getFacadesRules().getRules());
-		tagsTable.setLayout(new FillLayout(SWT.HORIZONTAL));
 		tagsTable.getTable().addListener(SWT.Selection, new Listener() {
 			public void handleEvent(Event event) {
 				selectedFacadeTagRule = (FacadeTagRule) event.item.getData();
@@ -106,10 +105,10 @@ public class FacadesRulesPanel extends Osm2xpPanel {
 		compositeRuleDetail = new Composite(this, SWT.NONE);
 		compositeRuleDetail.setVisible(false);
 		compositeRuleDetail.setLayout(new GridLayout(1, false));
-		GridData gridDataFacadesObjects = new GridData(SWT.FILL, SWT.TOP, true,
-				false, 1, 1);
-		gridDataFacadesObjects.heightHint = 347;
-		gridDataFacadesObjects.widthHint = 608;
+		GridData gridDataFacadesObjects = new GridData(SWT.FILL, SWT.FILL, true,
+				true, 1, 1);
+//		gridDataFacadesObjects.heightHint = 347;
+//		gridDataFacadesObjects.widthHint = 608;
 		compositeRuleDetail.setLayoutData(gridDataFacadesObjects);
 		grpSize = new Group(compositeRuleDetail, SWT.NONE);
 		GridData gridDataSize = new GridData(SWT.LEFT, SWT.TOP, true, false, 1,
@@ -119,7 +118,7 @@ public class FacadesRulesPanel extends Osm2xpPanel {
 		grpSize.setLayout(new GridLayout(6, false));
 
 		Label lblMinSize = new Label(grpSize, SWT.NONE);
-		lblMinSize.setBounds(0, 0, 53, 13);
+//		lblMinSize.setBounds(0, 0, 53, 13);
 		lblMinSize.setText("Min : ");
 
 		spinnerMinSize = new Spinner(grpSize, SWT.BORDER);
@@ -134,7 +133,7 @@ public class FacadesRulesPanel extends Osm2xpPanel {
 		new Label(grpSize, SWT.NONE);
 
 		Label lblMaxSize = new Label(grpSize, SWT.NONE);
-		lblMaxSize.setBounds(0, 0, 53, 13);
+//		lblMaxSize.setBounds(0, 0, 53, 13);
 		lblMaxSize.setText("Max : ");
 
 		spinnerMaxSize = new Spinner(grpSize, SWT.BORDER);
@@ -189,9 +188,8 @@ public class FacadesRulesPanel extends Osm2xpPanel {
 			}
 		});
 
-		facadesFilesTable = new FilesPathsTable(grpFiles, SWT.NONE,
+		facadesFilesTable = new FilePathsTable(grpFiles, SWT.NONE,
 				"Facade path");
-//		facadesFilesTable.setLayout(new FillLayout(SWT.HORIZONTAL));
 		new Label(grpFiles, SWT.NONE);
 
 	}

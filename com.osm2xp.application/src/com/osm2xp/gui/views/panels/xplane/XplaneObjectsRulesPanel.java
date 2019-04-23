@@ -39,7 +39,7 @@ import com.osm2xp.generation.options.XmlHelper;
 import com.osm2xp.generation.options.rules.XplaneObjectTagRule;
 import com.osm2xp.gui.Activator;
 import com.osm2xp.gui.components.AbstractPathsTable;
-import com.osm2xp.gui.components.FilesPathsTable;
+import com.osm2xp.gui.components.FilePathsTable;
 import com.osm2xp.gui.components.RulesTable;
 import com.osm2xp.gui.components.TagsRulesTable;
 import com.osm2xp.utils.helpers.XplaneOptionsHelper;
@@ -53,7 +53,7 @@ import com.osm2xp.utils.helpers.XplaneOptionsHelper;
 public class XplaneObjectsRulesPanel extends Composite {
 
 	final RulesTable tagsTable;
-	final AbstractPathsTable ObjectsFilesTable;
+	final AbstractPathsTable objectFilesTable;
 	final Group grpFiles;
 	private static final String[] FILTER_NAMES = { "XML objects rules file (*.xml)" };
 	private static final String[] FILTER_EXTS = { "*.xml" };
@@ -169,14 +169,13 @@ public class XplaneObjectsRulesPanel extends Composite {
 
 		Group groupTags = new Group(this, SWT.NONE);
 		groupTags.setText("Objects rules - osm tags ");
-		GridData gridData = new GridData(SWT.FILL, SWT.TOP, false, false, 1, 1);
-		gridData.heightHint = 320;
-		gridData.widthHint = 329;
+		GridData gridData = new GridData(SWT.FILL, SWT.FILL, false, true, 1, 1);
+//		gridData.heightHint = 320;
+//		gridData.widthHint = 329;
 		groupTags.setLayoutData(gridData);
 		groupTags.setLayout(new FillLayout(SWT.HORIZONTAL));
 		tagsTable = new TagsRulesTable(groupTags, SWT.NONE, XPlaneOptionsProvider
 				.getOptions().getObjectsRules().getRules());
-		tagsTable.setLayout(new FillLayout(SWT.HORIZONTAL));
 		tagsTable.getTable().addListener(SWT.Selection, new Listener() {
 			public void handleEvent(Event event) {
 				selectedXplaneObjectTagRule = (XplaneObjectTagRule) event.item
@@ -188,17 +187,17 @@ public class XplaneObjectsRulesPanel extends Composite {
 		compositeRuleDetail = new Composite(this, SWT.NONE);
 		compositeRuleDetail.setVisible(true);
 		compositeRuleDetail.setLayout(new GridLayout(1, false));
-		GridData gridDataObjectsObjects = new GridData(SWT.FILL, SWT.TOP,
-				false, false, 1, 1);
+		GridData gridDataObjectsObjects = new GridData(SWT.FILL, SWT.FILL,
+				true, true, 1, 1);
 		// gridDataObjectsObjects.heightHint = 150;
 		gridDataObjectsObjects.grabExcessVerticalSpace = true;
-		gridDataObjectsObjects.widthHint = 608;
+//		gridDataObjectsObjects.widthHint = 608;
 		compositeRuleDetail.setLayoutData(gridDataObjectsObjects);
 
 		TabFolder tabFolder = new TabFolder(compositeRuleDetail, SWT.NONE);
-		GridData gd_tabFolder = new GridData(SWT.LEFT, SWT.CENTER, false,
-				false, 1, 1);
-		gd_tabFolder.heightHint = 300;
+		GridData gd_tabFolder = new GridData(SWT.FILL, SWT.FILL, true,
+				true, 1, 1);
+//		gd_tabFolder.heightHint = 300;
 		tabFolder.setLayoutData(gd_tabFolder);
 
 		TabItem tabObjects = new TabItem(tabFolder, SWT.NONE);
@@ -220,7 +219,7 @@ public class XplaneObjectsRulesPanel extends Composite {
 				ObjectFile file = new ObjectFile();
 				file.setPath("SomePathTo" + File.separator + "aObjectFile.fac");
 				selectedXplaneObjectTagRule.getObjectsFiles().add(file);
-				ObjectsFilesTable.getViewer().refresh();
+				objectFilesTable.getViewer().refresh();
 			}
 		});
 
@@ -233,17 +232,17 @@ public class XplaneObjectsRulesPanel extends Composite {
 			@Override
 			public void widgetSelected(SelectionEvent e) {
 
-				IStructuredSelection selection = (IStructuredSelection) ObjectsFilesTable
+				IStructuredSelection selection = (IStructuredSelection) objectFilesTable
 						.getViewer().getSelection();
 				ObjectFile selectedFile = (ObjectFile) selection
 						.getFirstElement();
 				selectedXplaneObjectTagRule.getObjectsFiles().remove(
 						selectedFile);
-				ObjectsFilesTable.getViewer().refresh();
+				objectFilesTable.getViewer().refresh();
 			}
 		});
 
-		ObjectsFilesTable = new FilesPathsTable(grpFiles, SWT.NONE,
+		objectFilesTable = new FilePathsTable(grpFiles, SWT.NONE,
 				"Object file path");
 		new Label(grpFiles, SWT.NONE);
 
@@ -259,8 +258,8 @@ public class XplaneObjectsRulesPanel extends Composite {
 		grpAngle.setLayout(new GridLayout(3, false));
 		GridData gd_grpAngle = new GridData(SWT.LEFT, SWT.TOP, false, true, 1,
 				1);
-		gd_grpAngle.heightHint = 107;
-		gd_grpAngle.widthHint = 373;
+//		gd_grpAngle.heightHint = 107;
+//		gd_grpAngle.widthHint = 373;
 		grpAngle.setLayoutData(gd_grpAngle);
 		grpAngle.setText("angle");
 
@@ -337,10 +336,10 @@ public class XplaneObjectsRulesPanel extends Composite {
 		composite.setLayout(gl_composite);
 
 		Group grpOption = new Group(composite, SWT.NONE);
-		grpOption.setLayoutData(new GridData(SWT.LEFT, SWT.CENTER, true, false,
+		grpOption.setLayoutData(new GridData(SWT.FILL, SWT.FILL, true, true,
 				1, 1));
 		grpOption.setText("option");
-		grpOption.setBounds(0, 0, 135, 19);
+//		grpOption.setBounds(0, 0, 135, 19);
 		grpOption.setLayout(new GridLayout(1, false));
 
 		btnCheckSimplePolygon = new Button(grpOption, SWT.CHECK);
@@ -356,7 +355,7 @@ public class XplaneObjectsRulesPanel extends Composite {
 		});
 
 		Group grpSize = new Group(composite, SWT.NONE);
-		grpSize.setLayoutData(new GridData(SWT.LEFT, SWT.CENTER, true, false,
+		grpSize.setLayoutData(new GridData(SWT.FILL, SWT.FILL, true, true,
 				1, 1));
 		grpSize.setText("size condition");
 		grpSize.setLayout(new GridLayout(6, false));
@@ -433,7 +432,7 @@ public class XplaneObjectsRulesPanel extends Composite {
 			}
 		});
 		Group grpArea = new Group(composite, SWT.NONE);
-		grpArea.setLayoutData(new GridData(SWT.LEFT, SWT.CENTER, true, false,
+		grpArea.setLayoutData(new GridData(SWT.FILL, SWT.FILL, true, true,
 				1, 1));
 		grpArea.setText("area condition");
 		grpArea.setLayout(new GridLayout(5, false));
@@ -513,7 +512,7 @@ public class XplaneObjectsRulesPanel extends Composite {
 				.setEnabled(!(selectedXplaneObjectTagRule.isRandomAngle() || selectedXplaneObjectTagRule
 						.isUsePolygonAngle()));
 		try {
-			ObjectsFilesTable.updateSelectedItem(selectedXplaneObjectTagRule
+			objectFilesTable.updateSelectedItem(selectedXplaneObjectTagRule
 					.getObjectsFiles());
 		} catch (Osm2xpBusinessException e) {
 			Osm2xpLogger.error("Error updating rules table", e);

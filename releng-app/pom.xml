@@ -107,7 +107,7 @@
 				<target.platform.name>${target.platform.name.default}</target.platform.name>
 				<build.folder.type>release/${build.version}/${TRAVIS_BUILD_NUMBER}</build.folder.type>
 				<build.qualifier>'r'yyyyMMddHHmm</build.qualifier>
-				<build.file>MavenTychoDemo_Release_${build.version}_${TRAVIS_BUILD_NUMBER}</build.file>
+				<build.file>OSM2XP_Release_${build.version}_${TRAVIS_BUILD_NUMBER}</build.file>
 			</properties>
 		</profile>
 	</profiles>

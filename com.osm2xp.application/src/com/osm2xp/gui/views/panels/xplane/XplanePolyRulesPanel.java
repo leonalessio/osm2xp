@@ -153,14 +153,13 @@ public class XplanePolyRulesPanel extends Composite {
 
 		Group groupTags = new Group(this, SWT.NONE);
 		groupTags.setText("Objects rules - osm tags ");
-		GridData gridData = new GridData(SWT.FILL, SWT.TOP, false, false, 1, 2);
+		GridData gridData = new GridData(SWT.FILL, SWT.FILL, true, true, 1, 2);
 //		gridData.heightHint = 320;
 //		gridData.widthHint = 329;
 		groupTags.setLayoutData(gridData);
 		groupTags.setLayout(new FillLayout(SWT.HORIZONTAL));
 		tagsTable = new PolyRulesTable(groupTags, SWT.NONE, XPlaneOptionsProvider
 				.getOptions().getPolygonRules().getRules());
-		tagsTable.setLayout(new FillLayout(SWT.HORIZONTAL));
 		tagsTable.getTable().addListener(SWT.Selection, new Listener() {
 			public void handleEvent(Event event) {
 				selectedPolygonTagsRule = (PolygonTagsRule) event.item
@@ -185,6 +184,7 @@ public class XplanePolyRulesPanel extends Composite {
 		
 		spinnerMinPerimeter = new Spinner(compositeRuleDetail, SWT.BORDER);
 		spinnerMinPerimeter.setMaximum(5000);
+		spinnerMinPerimeter.setEnabled(false);
 		spinnerMinPerimeter.addModifyListener(new ModifyListener() {
 			@Override
 			public void modifyText(ModifyEvent e) {
@@ -237,26 +237,29 @@ public class XplanePolyRulesPanel extends Composite {
 
 		
 		filesTable = new PolyPathsTable(grpFiles, SWT.NONE);
-//		filesTable.setLayout(new FillLayout(SWT.HORIZONTAL));
 		GridDataFactory.fillDefaults().grab(true,true).applyTo(filesTable);
 		
 	}
 
 	private void updateRuleControls() {
-
-		String selectedTag = selectedPolygonTagsRule.getTag().getKey()
-				+ "=" + selectedPolygonTagsRule.getTag().getValue();
-		grpFiles.setText(MessageFormat.format(
-				MessagesConstants.LABEL_FILES_OBJECT_RULE, selectedTag));
 		
-		spinnerMinPerimeter.setSelection(selectedPolygonTagsRule.getMinPerimeter());
-		try {
-			filesTable.updateSelectedItem(selectedPolygonTagsRule
-					.getPolygons());
-		} catch (Osm2xpBusinessException e) {
-			Osm2xpLogger.error("Error updating rules table", e);
+		spinnerMinPerimeter.setEnabled(selectedPolygonTagsRule != null);
+		compositeRuleDetail.setVisible(selectedPolygonTagsRule != null);
+		if (selectedPolygonTagsRule != null) {
+			String selectedTag = selectedPolygonTagsRule.getTag().getKey()
+					+ "=" + selectedPolygonTagsRule.getTag().getValue();
+			grpFiles.setText(MessageFormat.format(
+					MessagesConstants.LABEL_FILES_OBJECT_RULE, selectedTag));
+			
+			spinnerMinPerimeter.setSelection(selectedPolygonTagsRule.getMinPerimeter());
+			try {
+				filesTable.updateSelectedItem(selectedPolygonTagsRule
+						.getPolygons());
+			} catch (Osm2xpBusinessException e) {
+				Osm2xpLogger.error("Error updating rules table", e);
+			}
 		}
-		compositeRuleDetail.setVisible(true);
+		
 
 	}
 }

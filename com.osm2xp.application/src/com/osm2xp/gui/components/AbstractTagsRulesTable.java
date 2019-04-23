@@ -19,9 +19,8 @@ public abstract class AbstractTagsRulesTable extends RulesTable {
 		super(parent, style);
 
 		GridLayout layout = new GridLayout(2, false);
-		parent.setLayout(layout);
-		createViewer(parent, listeTags);
-
+		setLayout(layout);
+		createViewer(listeTags);
 	}
 
 	protected String getKey(Object element) {

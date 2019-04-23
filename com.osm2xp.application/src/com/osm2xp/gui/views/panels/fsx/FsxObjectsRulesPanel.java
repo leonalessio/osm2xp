@@ -10,7 +10,6 @@ import org.eclipse.swt.events.MouseAdapter;
 import org.eclipse.swt.events.MouseEvent;
 import org.eclipse.swt.events.SelectionAdapter;
 import org.eclipse.swt.events.SelectionEvent;
-import org.eclipse.swt.layout.FillLayout;
 import org.eclipse.swt.layout.GridData;
 import org.eclipse.swt.layout.GridLayout;
 import org.eclipse.swt.widgets.Button;
@@ -35,7 +34,7 @@ import com.osm2xp.generation.options.ObjectFile;
 import com.osm2xp.generation.options.rules.ObjectTagRule;
 import com.osm2xp.gui.Activator;
 import com.osm2xp.gui.components.AbstractPathsTable;
-import com.osm2xp.gui.components.FilesPathsTable;
+import com.osm2xp.gui.components.FilePathsTable;
 import com.osm2xp.gui.components.RulesTable;
 import com.osm2xp.gui.components.TagsRulesTable;
 import com.osm2xp.gui.views.panels.Osm2xpPanel;
@@ -49,7 +48,7 @@ import com.osm2xp.gui.views.panels.Osm2xpPanel;
 public class FsxObjectsRulesPanel extends Osm2xpPanel {
 
 	private RulesTable tagsTable;
-	private AbstractPathsTable ObjectsFilesTable;
+	private AbstractPathsTable objectsFilesTable;
 	private Group grpFiles;
 	private Group grpAngle;
 	private static final String[] FILTER_NAMES = { "XML objects rules file (*.xml)" };
@@ -83,15 +82,12 @@ public class FsxObjectsRulesPanel extends Osm2xpPanel {
 				1, 1));
 		groupTags.setLayoutData(gridData);
 		groupTags.setLayout(new GridLayout(1, false));
-		tagsTable.setLayout(new FillLayout(SWT.HORIZONTAL));
 		compositeRuleDetail.setLayout(new GridLayout(1, false));
 		compositeRuleDetail.setLayoutData(gridDataObjects);
 		grpAngle.setLayoutData(gridAngle);
 		grpAngle.setLayout(new GridLayout(5, false));
 		grpFiles.setLayoutData(gridFiles);
 		grpFiles.setLayout(new GridLayout(1, false));
-		ObjectsFilesTable.setLayout(new FillLayout(SWT.HORIZONTAL));
-
 	}
 
 	@Override
@@ -118,17 +114,17 @@ public class FsxObjectsRulesPanel extends Osm2xpPanel {
 		new Label(this, SWT.NONE);
 		groupTags = new Group(this, SWT.NONE);
 		groupTags.setText("Objects rules - osm tags ");
-		gridData = new GridData(SWT.FILL, SWT.TOP, false, false, 1, 1);
-		gridData.heightHint = 320;
-		gridData.widthHint = 329;
+		gridData = new GridData(SWT.FILL, SWT.FILL, true, true, 1, 1);
+//		gridData.heightHint = 320;
+//		gridData.widthHint = 329;
 		tagsTable = new TagsRulesTable(groupTags, SWT.NONE, FsxOptionsProvider
 				.getOptions().getObjectsRules().getRules());
 
 		compositeRuleDetail = new Composite(this, SWT.NONE);
 		compositeRuleDetail.setVisible(false);
-		gridDataObjects = new GridData(SWT.FILL, SWT.TOP, false, false, 1, 1);
-		gridDataObjects.heightHint = 347;
-		gridDataObjects.widthHint = 608;
+		gridDataObjects = new GridData(SWT.FILL, SWT.FILL, true, true, 1, 1);
+//		gridDataObjects.heightHint = 347;
+//		gridDataObjects.widthHint = 608;
 		grpAngle = new Group(compositeRuleDetail, SWT.NONE);
 
 		gridAngle = new GridData(SWT.LEFT, SWT.TOP, true, false, 1, 1);
@@ -162,7 +158,7 @@ public class FsxObjectsRulesPanel extends Osm2xpPanel {
 		tltmDeleteObjectFile.setToolTipText("delete");
 		tltmDeleteObjectFile.setImage(ResourceManager.getPluginImage(
 				Activator.PLUGIN_ID, "images/toolbarsIcons/delete_16.ico"));
-		ObjectsFilesTable = new FilesPathsTable(grpFiles, SWT.NONE,
+		objectsFilesTable = new FilePathsTable(grpFiles, SWT.NONE,
 				"Object GUID");
 
 		new Label(grpFiles, SWT.NONE);
@@ -250,7 +246,7 @@ public class FsxObjectsRulesPanel extends Osm2xpPanel {
 						.isRandomAngle());
 
 				try {
-					ObjectsFilesTable.updateSelectedItem(selectedObjectTagRule
+					objectsFilesTable.updateSelectedItem(selectedObjectTagRule
 							.getObjectsFiles());
 				} catch (Osm2xpBusinessException e) {
 					Osm2xpLogger.error("Error updating rules table.", e);
@@ -282,7 +278,7 @@ public class FsxObjectsRulesPanel extends Osm2xpPanel {
 				ObjectFile file = new ObjectFile();
 				file.setPath("object GUID");
 				selectedObjectTagRule.getObjectsFiles().add(file);
-				ObjectsFilesTable.getViewer().refresh();
+				objectsFilesTable.getViewer().refresh();
 			}
 		});
 		// delete file action listener
@@ -290,12 +286,12 @@ public class FsxObjectsRulesPanel extends Osm2xpPanel {
 			@Override
 			public void widgetSelected(SelectionEvent e) {
 
-				IStructuredSelection selection = (IStructuredSelection) ObjectsFilesTable
+				IStructuredSelection selection = (IStructuredSelection) objectsFilesTable
 						.getViewer().getSelection();
 				ObjectFile selectedFile = (ObjectFile) selection
 						.getFirstElement();
 				selectedObjectTagRule.getObjectsFiles().remove(selectedFile);
-				ObjectsFilesTable.getViewer().refresh();
+				objectsFilesTable.getViewer().refresh();
 			}
 		});
 	}

@@ -1,0 +1,93 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+	<meta charset="utf-8">
+	
+	<title>Osm2xp Xplane10</title>
+	
+	<link rel="stylesheet" href="../css/global.css">
+	
+	<script src="https://ajax.googleapis.com/ajax/libs/jquery/1.5.1/jquery.min.js"></script>
+	<script src="../js/slides.min.jquery.js"></script>
+	<script>
+		$(function(){
+			$('#slides').slides({
+				preload: true,
+				preloadImage: 'img/loading.gif',
+				play: 5000,
+				pause: 2500,
+				hoverPause: true,
+				animationStart: function(current){
+					$('.caption').animate({
+						bottom:-35
+					},100);
+					if (window.console && console.log) {
+						// example return of current slide number
+						console.log('animationStart on slide: ', current);
+					};
+				},
+				animationComplete: function(current){
+					$('.caption').animate({
+						bottom:0
+					},200);
+					if (window.console && console.log) {
+						// example return of current slide number
+						console.log('animationComplete on slide: ', current);
+					};
+				},
+				slidesLoaded: function() {
+					$('.caption').animate({
+						bottom:0
+					},200);
+				}
+			});
+		});
+	</script>
+</head>
+<body>
+
+
+
+<div id="description">
+	<h1> OpenStreetMap mode</h1></p>
+	<b>Author</b> : Benjamin Blanchet</p>
+	<b>Website</b> : <a href="http://osm2xp.com">http://osm2xp.com</a></p>
+	<b>Email</b> : <a href="mailto:osm2xp@gmail.com">osm2xp@gmail.com</a></p>
+</div>
+
+<div id="translatorText">
+	OpenStreetMap mode generates .osm files.</p>
+	It can be usefull to split a big pbf into multiple osm files.</p>
+	This way you can edit in josm the osm files, to add more information for a future flight simulation transformation.</p>
+	This mode only exports building, forests and landmarks, so file will also be smaller than common osm exports.</p>
+</div>
+
+
+	<div id="container">
+
+		<div id="content">
+			<div id="slides">
+				<div class="slides_container">
+					<div class="slide">
+						<a href="../img/osm/1.jpg"><img src="../img/osm/1.jpg" width="700" height="400" alt="Slide 1"></a>		
+					</div>
+					<div class="slide">
+					<img src="../img/osm/2.jpg" width="570" height="270" alt="Slide 1">		
+					</div>
+					<div class="slide">
+						<img src="../img/osm/3.jpg" width="570" height="270" alt="Slide 1">
+						
+					</div>
+				</div>
+				<a href="#" class="prev"><img src="../img/slides/arrow-prev.png" width="24" height="43" alt="Arrow Prev"></a>
+				<a href="#" class="next"><img src="../img/slides/arrow-next.png" width="24" height="43" alt="Arrow Next"></a>
+			</div>
+			<img src="../img/slides/example-frame.png" width="739" height="341" alt="Example Frame" id="frame">
+		</div>
+		<div id="footer">
+			<p>OpenStreetMap pictures</p>
+			<p>http://www.openstreetmap.org/<p>
+		</div>
+	</div>
+</body>
+</html>

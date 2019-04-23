@@ -3,7 +3,6 @@ package com.osm2xp.gui.views;
 import org.eclipse.swt.SWT;
 import org.eclipse.swt.layout.FillLayout;
 import org.eclipse.swt.widgets.Composite;
-import org.eclipse.ui.forms.events.HyperlinkAdapter;
 import org.eclipse.ui.forms.widgets.FormToolkit;
 import org.eclipse.ui.forms.widgets.ScrolledForm;
 import org.eclipse.ui.forms.widgets.TableWrapLayout;
@@ -36,7 +35,6 @@ public abstract class AbstractOptionsView extends ViewPart {
 		}
 		form.setText(heading);
 		toolkit.decorateFormHeading(form.getForm());
-		form.getForm().addMessageHyperlinkListener(new HyperlinkAdapter());
 
 		FillLayout fl_parent = new FillLayout(SWT.HORIZONTAL);
 		fl_parent.marginWidth = 5;
