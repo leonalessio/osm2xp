@@ -15,7 +15,6 @@
 	<classpathentry exported="true" kind="lib" path="lib/h2.jar"/>
 	<classpathentry exported="true" kind="lib" path="lib/json-simple.jar"/>
 	<classpathentry exported="true" kind="lib" path="lib/jts-core.jar" sourcepath="C:/Users/32kda/AppData/Local/Temp/.org.sf.feeling.decompiler1554274658587/source/jts-core-1.16.0-sources-1554275121406.jar"/>
-	<classpathentry exported="true" kind="lib" path="lib/mapdb.jar"/>
 	<classpathentry exported="true" kind="lib" path="lib/guava.jar"/>
 	<classpathentry exported="true" kind="lib" path="lib/trove4j.jar" sourcepath="C:/Users/32kda/AppData/Local/Temp/.org.sf.feeling.decompiler1552632241588/source/trove4j-3.0.3-sources.jar"/>
 	<classpathentry exported="true" kind="lib" path="staticlib/animal-sniffer-annotations-1.17.jar"/>

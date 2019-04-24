@@ -54,7 +54,6 @@ Export-Package: com.osm2xp.constants,
  com.osm2xp.gui.views.panels.xplane,
  com.osm2xp.jobs,
  com.osm2xp.utils.comparators,
- com.osm2xp.utils.helpers,
- net.kotek.jdbm,
- org.eclipse.wb.swt
+ com.osm2xp.utils.helpers
 Import-Package: org.apache.commons.lang
+Automatic-Module-Name: com.osm2xp.application

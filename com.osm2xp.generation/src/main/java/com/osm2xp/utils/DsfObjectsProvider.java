@@ -7,6 +7,7 @@ import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
 import java.util.Random;
+import java.util.stream.Collectors;
 
 import com.osm2xp.core.exceptions.Osm2xpBusinessException;
 import com.osm2xp.core.logging.Osm2xpLogger;
@@ -43,6 +44,7 @@ import math.geom2d.polygon.LinearRing2D;
  */
 public class DsfObjectsProvider {
 
+	private static final String FACADES_DIR_PREFFIX = "facades/";
 	public static final String OBJECTS_TARGET_FOLDER_NAME = "objects";
 	public static final String SPECIAL_OBJECTS_TARGET_FOLDER_NAME = "specobjects";
 	public static final String FORESTS_TARGET_FOLDER_NAME = "forests";
@@ -105,7 +107,7 @@ public class DsfObjectsProvider {
 			resFacade = facadeSetManager.getRandomFacade(buildingType,height,simpleBuilding);
 		}
 		
-		int idx = polygonsList.indexOf(resFacade.getFile());
+		int idx = getFacadeStrIndex(resFacade.getFile());
 		lastPolyId = osmPolygon.getId();
 		lastFacade = idx;
 		return idx;
@@ -117,12 +119,20 @@ public class DsfObjectsProvider {
 		}
 		String name = getFacadeNameFromRules(osmPolygon);
 		if (name != null) {
-			int idx = polygonsList.indexOf(name);
+			int idx = getFacadeStrIndex(name);
 			lastPolyId = osmPolygon.getId();
 			lastFacade = idx;
 			return idx;
 		}
 		return -1;
+	}
+
+	private int getFacadeStrIndex(String name) {
+		if (!name.startsWith(FACADES_DIR_PREFFIX)) {
+			return polygonsList.indexOf(FACADES_DIR_PREFFIX + name);
+		} else {
+			return polygonsList.indexOf(name);
+		}
 	}
 	
 	protected String getFacadeNameFromRules(OsmPolygon osmPolygon) {
@@ -142,7 +152,7 @@ public class DsfObjectsProvider {
 		}
 		Facade randomSpecialFacade = facadeSetManager.getRandomSpecialFacade(specialFacadeType);
 		if (randomSpecialFacade != null) {
-			int idx = polygonsList.indexOf(randomSpecialFacade.getFile());
+			int idx = getFacadeStrIndex(randomSpecialFacade.getFile());
 			lastPolyId = polyline.getId();
 			lastFacade = idx;
 			return idx;
@@ -212,7 +222,7 @@ public class DsfObjectsProvider {
 		// BASIC BUILDINGS FACADES
 		if (XPlaneOptionsProvider.getOptions().isGenerateBuildings()) {
 			facadesList.addAll(facadeSetManager.getAllFacadeStrings());
-			polygonsList.addAll(facadesList);
+			polygonsList.addAll(facadesList.stream().map(str -> FACADES_DIR_PREFFIX + str).collect(Collectors.toList()));
 		}
 
 	}
