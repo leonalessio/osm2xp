@@ -2,14 +2,16 @@ package com.osm2xp.gui.views.panels.generic;
 
 import org.eclipse.jface.layout.GridDataFactory;
 import org.eclipse.swt.SWT;
-import org.eclipse.swt.layout.GridData;
+import org.eclipse.swt.events.SelectionAdapter;
+import org.eclipse.swt.events.SelectionEvent;
 import org.eclipse.swt.layout.GridLayout;
 import org.eclipse.swt.widgets.Button;
 import org.eclipse.swt.widgets.Composite;
+import org.eclipse.swt.widgets.Link;
 
 import com.osm2xp.generation.options.GlobalOptionsProvider;
 import com.osm2xp.gui.views.panels.Osm2xpPanel;
-import com.osm2xp.utils.helpers.GuiOptionsHelper;
+import com.osm2xp.utils.ui.UiUtil;
 
 /**
  * GeneralOptionsPanel.
@@ -62,6 +64,18 @@ public class GeneralOptionsPanel extends Osm2xpPanel {
 		GridDataFactory.swtDefaults().applyTo(btnApdCoords);
 //		btnSinglePass = new Button(this, SWT.CHECK);
 //		btnSinglePass.setText("Single pass mode");
+		
+		Link link = new Link(this, SWT.NONE);
+		link.setText("<a>Read more about current output format</a>");
+		link.addSelectionListener(new SelectionAdapter() {
+			
+			@Override
+			public void widgetSelected(SelectionEvent e) {
+				UiUtil.showCurrentModeInfo(true);
+			}
+			
+		});
+		GridDataFactory.swtDefaults().span(3,1).applyTo(link);
 
 	}
 

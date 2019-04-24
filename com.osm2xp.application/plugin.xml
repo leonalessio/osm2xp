@@ -183,6 +183,13 @@
             restorable="true"
             icon="images/viewIcons/light-16.png">
       </view>
+      <view
+            class="com.osm2xp.gui.views.BrowserView"
+            id="com.osm2xp.application.BrowserView"
+            name="Browser"
+            restorable="true"
+            icon="icons/internal_browser.png">
+      </view>
    </extension>
    <extension
          point="org.eclipse.ui.perspectiveExtensions">
@@ -194,7 +201,7 @@
                minimized="false"
                relationship="top"
                relative="org.eclipse.ui.editorss"
-               standalone="true">
+               standalone="false">
          </view>
          <view
                closeable="false"
@@ -269,7 +276,7 @@
                minimized="false"
                relationship="top"
                relative="org.eclipse.ui.editorss"
-               standalone="true">
+               standalone="false">
          </view>
          <view
                closeable="true"
@@ -307,7 +314,7 @@
                minimized="false"
                relationship="top"
                relative="org.eclipse.ui.editorss"
-               standalone="true">
+               standalone="false">
          </view>
          <view
                id="org.eclipse.ui.console.ConsoleView"
@@ -362,7 +369,7 @@
                minimized="false"
                relationship="top"
                relative="org.eclipse.ui.editorss"
-               standalone="true">
+               standalone="false">
          </view>
          <view
                closeable="false"
@@ -402,6 +409,7 @@
          </view>
          <view
                id="com.osm2xp.viewLightsTab"
+               closeable="false"
                minimized="false"
                relationship="stack"
                relative="com.osm2xp.viewSceneryTab">
@@ -438,7 +446,7 @@
                minimized="false"
                relationship="top"
                relative="org.eclipse.ui.editorss"
-               standalone="true">
+               standalone="false">
          </view>
          <view
                closeable="true"
@@ -470,7 +478,7 @@
                minimized="false"
                relationship="top"
                relative="org.eclipse.ui.editorss"
-               standalone="true">
+               standalone="false">
          </view>
          <view
                closeable="true"
@@ -496,7 +504,7 @@
                minimized="false"
                relationship="top"
                relative="org.eclipse.ui.editorss"
-               standalone="true">
+               standalone="false">
          </view>
          <view
                closeable="true"
@@ -522,7 +530,7 @@
                minimized="false"
                relationship="top"
                relative="org.eclipse.ui.editorss"
-               standalone="true">
+               standalone="false">
          </view>
          <view
                closeable="true"
@@ -545,7 +553,18 @@
                minimized="false"
                relationship="stack"
                relative="com.osm2xp.viewSceneryTab"
-               standalone="true">
+               standalone="false">
+         </view>
+      </perspectiveExtension>
+      <perspectiveExtension targetID="*">
+      	 <view
+               closeable="true"
+               id="com.osm2xp.application.BrowserView"
+               visible="false"
+               relationship="stack"
+               moveable="true"
+               standalone="false"
+               relative="com.osm2xp.viewSceneryTab">               
          </view>
       </perspectiveExtension>
    </extension>

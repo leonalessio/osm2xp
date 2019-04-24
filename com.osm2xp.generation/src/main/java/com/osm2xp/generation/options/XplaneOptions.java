@@ -53,7 +53,7 @@ public class XplaneOptions {
 	protected int minHouseArea;
 	protected int smartExclusionSize;
 	protected int smartExclusionDistance;
-	protected boolean generateObj;
+	protected boolean generateObj = true;
 	protected boolean generateFor = true;
 	protected boolean generateBuildings = true;
 	protected boolean generatePowerlines = true;

@@ -90,23 +90,23 @@ public class MainSceneryFileView extends ViewPart implements IContextProvider {
 				sectionSceneryOptions, SWT.BORDER);
 		toolkit.adapt(sceneryOptionsPanel, true, true);
 		sectionSceneryOptions.setClient(sceneryOptionsPanel);
-		new Label(sceneryOptionsPanel, SWT.NONE);
-		new Label(sceneryOptionsPanel, SWT.NONE);
-		new Label(sceneryOptionsPanel, SWT.NONE);
+		
+		
 		/**
-		 * Output Format
+		 * Output Format 
+		 * @deprecated - should be shown using separate view instead
 		 */
 
-		Section outputFormatSection = toolkit.createSection(form.getBody(),
-				Section.TWISTIE | Section.EXPANDED | Section.TITLE_BAR);
-		TableWrapData twd_outputFormatSection = new TableWrapData(
-				TableWrapData.FILL_GRAB, TableWrapData.FILL_GRAB, 1, 1);
-		outputFormatSection.setLayoutData(twd_outputFormatSection);
-		outputFormatSection.setText("Output Format");
-		OutPutFormatPanel outputFormatPanel = new OutPutFormatPanel(
-				outputFormatSection, SWT.BORDER);
-		toolkit.adapt(outputFormatPanel, true, true);
-		outputFormatSection.setClient(outputFormatPanel);
+//		Section outputFormatSection = toolkit.createSection(form.getBody(),
+//				Section.TWISTIE | Section.EXPANDED | Section.TITLE_BAR);
+//		TableWrapData twd_outputFormatSection = new TableWrapData(
+//				TableWrapData.FILL_GRAB, TableWrapData.FILL_GRAB, 1, 1);
+//		outputFormatSection.setLayoutData(twd_outputFormatSection);
+//		outputFormatSection.setText("Output Format");
+//		OutPutFormatPanel outputFormatPanel = new OutPutFormatPanel(
+//				outputFormatSection, SWT.BORDER);
+//		toolkit.adapt(outputFormatPanel, true, true);
+//		outputFormatSection.setClient(outputFormatPanel);
 
 	}
 

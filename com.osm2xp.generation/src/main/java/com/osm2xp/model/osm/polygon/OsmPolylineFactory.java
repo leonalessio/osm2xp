@@ -74,6 +74,9 @@ public class OsmPolylineFactory {
 			} else {
 				newId = resList.get(0).getId();
 			}
+			if (newId == 0) {
+				newId = IDGenerationService.getIncrementId();
+			}
 			resList.add(new Node(null, coords[i].y, coords[i].x, newId));
 		}
 		return resList;
@@ -89,6 +92,9 @@ public class OsmPolylineFactory {
 			if (coords[i] instanceof NodeCoordinate) {
 				newId = ((NodeCoordinate) coords[i]).getNodeId();
 			} else {
+				newId = IDGenerationService.getIncrementId();
+			}
+			if (newId == 0) {
 				newId = IDGenerationService.getIncrementId();
 			}
 			resList.add(new Node(null, coords[i].y, coords[i].x, newId));

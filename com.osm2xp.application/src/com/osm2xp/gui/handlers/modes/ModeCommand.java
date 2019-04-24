@@ -11,10 +11,6 @@ import com.osm2xp.utils.ui.UiUtil;
 
 public class ModeCommand extends AbstractHandler {
 	
-	private static final String HTML_FILE_PREFFIX = Platform.getInstallLocation() + "/resources/html/modes/";
-	
-	private static final String HTML_FILE = "/index.html";
-
 	private String perspectiveId;
 
 	private String docFolder;
@@ -33,8 +29,8 @@ public class ModeCommand extends AbstractHandler {
 //		GlobalOptionsProvider.getOptions().setOutputFormat( //TODO
 //				Perspectives.PERSPECTIVE_XPLANE10);
 		UiUtil.switchPerspective(perspectiveId);
-		BuildController.setGenerationMode(modeId);
-		OutPutFormatPanel.updateBrowserUrl(HTML_FILE_PREFFIX + docFolder + HTML_FILE);
+		BuildController.setGenerationMode(modeId);		
+		UiUtil.showCurrentModeInfo(false);
 		return null;
 	}
 	
