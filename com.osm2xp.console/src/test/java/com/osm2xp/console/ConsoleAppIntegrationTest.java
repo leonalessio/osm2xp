@@ -99,7 +99,7 @@ public class ConsoleAppIntegrationTest extends TestCase {
 				stack++;
 			} else if (line.startsWith("END_")){
 				stack--;
-			} else if (line.startsWith("OBJECT")){
+			} else if (line.startsWith("OBJECT ")){ //TODO was OBJECT 2
 				hasObjects = true;
 			}
 		}
