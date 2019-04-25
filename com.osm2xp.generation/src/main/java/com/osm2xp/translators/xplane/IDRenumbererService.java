@@ -11,18 +11,19 @@ import java.util.Map;
 public class IDRenumbererService {
 	
 	private Map<Long, Integer> crossingRenumberMap = new HashMap<Long, Integer>();
-	private int renumberCounter = -1; //In OSM spec, negative id means newly created(uncommited) or 'fake' node
+	private int renumberCounter = 1;
+	
 	
 	public void reinit() {
 		crossingRenumberMap.clear();
-		renumberCounter = -1;
+		renumberCounter = 1;
 	}
 	
 	public int getNewId(long id) {
 		Integer newId = crossingRenumberMap.get(id);
 		if (newId == null) {
 			newId = renumberCounter;
-			renumberCounter--;
+			renumberCounter++;
 			crossingRenumberMap.put(id,newId);
 		}
 		return newId;
@@ -30,7 +31,7 @@ public class IDRenumbererService {
 	
 	public int getIncrementId() {
 		int newId = renumberCounter;
-		renumberCounter--;
+		renumberCounter++;
 		return newId;
 	}
 	
