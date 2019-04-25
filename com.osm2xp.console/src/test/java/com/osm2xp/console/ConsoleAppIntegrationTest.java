@@ -11,6 +11,8 @@ import org.apache.commons.lang.ArrayUtils;
 import org.junit.Test;
 
 import com.google.common.io.Files;
+import com.osm2xp.stats.StatsProvider;
+
 import junit.framework.TestCase;
 
 public class ConsoleAppIntegrationTest extends TestCase {
@@ -28,6 +30,7 @@ public class ConsoleAppIntegrationTest extends TestCase {
 		assertTrue(basicFolder.isDirectory());
 		File targetDir = new File(basicFolder,TESTSCENERY_NAME);
 		FileUtils.deleteDirectory(targetDir);
+		StatsProvider.reinit();
 		List<String> argList = new ArrayList<String>();
 		argList.add(new File(basicFolder, "volchikha.osm.pbf").getAbsolutePath());
 		argList.add("-m");

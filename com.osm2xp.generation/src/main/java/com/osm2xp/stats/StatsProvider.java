@@ -7,7 +7,7 @@ import math.geom2d.Point2D;
 
 public class StatsProvider {
 	
-	private static CountStats commonStats;
+	private static CountStats commonStats = new CountStats();
 	
 	private static Map<Point2D, CountStats> tileStatsMap = new HashMap<Point2D, CountStats>();
 

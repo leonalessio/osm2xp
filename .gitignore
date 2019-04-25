@@ -2,7 +2,6 @@
 target/
 bin/
 /builds/
-Earth nav data/
 lib/
 *.csv
 

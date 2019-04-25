@@ -24,4 +24,9 @@ public class CountStats implements ICountStats {
 		return countMap.keySet().stream().sorted().map(key -> key + ":" + countMap.get(key)).collect(Collectors.joining(", "));
 	}
 
+	@Override
+	public void setCount(String id, int count) {
+		countMap.put(id, count);
+	}
+
 }

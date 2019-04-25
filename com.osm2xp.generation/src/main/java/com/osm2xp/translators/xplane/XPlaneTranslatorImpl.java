@@ -132,7 +132,7 @@ public class XPlaneTranslatorImpl implements ITranslator{
 		if (tileStats != null) {
 			System.out.println("Tile " + currentTile + ", generated: " + tileStats.getSummary().toLowerCase());
 		} else {
-			System.out.println("No generation stats available");
+			System.out.println("Tile " + currentTile + " is empty, no generation stats");
 		}
 		if (translationListener != null) {
 			translationListener.complete();

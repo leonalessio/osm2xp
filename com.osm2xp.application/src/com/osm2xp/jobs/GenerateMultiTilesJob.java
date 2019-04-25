@@ -11,6 +11,7 @@ import com.osm2xp.core.exceptions.DataSinkException;
 import com.osm2xp.core.logging.Osm2xpLogger;
 import com.osm2xp.core.parsers.IVisitingParser;
 import com.osm2xp.parsers.builders.ParserBuilder;
+import com.osm2xp.stats.StatsProvider;
 import com.osm2xp.translators.ITranslatorProvider;
 
 /**
@@ -35,6 +36,7 @@ public class GenerateMultiTilesJob extends GenerateJob {
 		try {
 			IVisitingParser parser = ParserBuilder.getMultiTileParser(currentFile, translatorProvider);
 			parser.process();
+			Osm2xpLogger.info("Generated: " + StatsProvider.getCommonStats().getSummary());
 			Osm2xpLogger.info("Finished generation of " +  ((MultiTileDataConverter) parser.getVisitor()).getTilesCount() + " tiles, target folder " + folderPath);
 		} catch (DataSinkException e) {
 			Osm2xpLogger.error("Data sink exception : ", e);

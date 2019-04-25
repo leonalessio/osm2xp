@@ -10,12 +10,14 @@ import java.util.stream.Collectors;
 import com.google.common.collect.Lists;
 import com.google.common.collect.Sets;
 import com.osm2xp.core.exceptions.Osm2xpBusinessException;
+import com.osm2xp.core.model.osm.CompositeTagSet;
 import com.osm2xp.core.model.osm.IHasTags;
 import com.osm2xp.core.model.osm.Node;
 import com.osm2xp.core.model.osm.Tag;
 import com.osm2xp.model.osm.polygon.OsmPolygon;
 import com.osm2xp.model.osm.polygon.OsmPolyline;
 import com.osm2xp.model.osm.polygon.OsmPolylineFactory;
+import com.osm2xp.stats.StatsProvider;
 import com.osm2xp.translators.ISpecificTranslator;
 import com.osm2xp.generation.options.XPlaneOptionsProvider;
 import com.osm2xp.utils.osm.OsmUtils;
@@ -192,6 +194,9 @@ public class XPAirfieldTranslationAdapter implements ISpecificTranslator {
 			}
 			airfieldOutput.writeSingleRunway(data);
 		}
+		
+		StatsProvider.getCommonStats().setCount("Airfields", airfieldList.size());
+		StatsProvider.getCommonStats().setCount("Separate Runways", runwayList.size());
 	}
 
 	protected void bindAirways(List<AirfieldData> airfieldList) {
@@ -258,6 +263,7 @@ public class XPAirfieldTranslationAdapter implements ISpecificTranslator {
 		OsmPolyline longest = null;
 		String name = null;
 		List<RunwayData> rwyList = Lists.newArrayList();
+		CompositeTagSet tagsHolder = new CompositeTagSet();
 		for (OsmPolyline osmPolyline : nearRunways) {
 			RunwayData runwayData = new RunwayData(osmPolyline);
 			if (osmPolyline.getPolyline().length() > length) {
@@ -268,8 +274,9 @@ public class XPAirfieldTranslationAdapter implements ISpecificTranslator {
 			if (runwayData.getName() != null && !runwayData.getName().equals(runwayData.getId())) {
 				name = runwayData.getName();
 			}
+			tagsHolder.addTags(osmPolyline);
 		}
-		PointAirfieldData airfieldData = new PointAirfieldData(longest.getCenter(), longest);
+		PointAirfieldData airfieldData = new PointAirfieldData(longest.getCenter(), tagsHolder);
 		if (!StringUtils.isEmpty(name)) {
 			airfieldData.setName(name);
 		}

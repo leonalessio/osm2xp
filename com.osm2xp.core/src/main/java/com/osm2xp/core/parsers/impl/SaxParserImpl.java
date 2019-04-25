@@ -1,6 +1,8 @@
 package com.osm2xp.core.parsers.impl;
 
+import java.io.BufferedInputStream;
 import java.io.File;
+import java.io.FileInputStream;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
@@ -8,8 +10,10 @@ import java.util.List;
 import javax.xml.parsers.SAXParser;
 import javax.xml.parsers.SAXParserFactory;
 
+import org.apache.commons.lang.StringUtils;
 import org.xml.sax.Attributes;
 import org.xml.sax.ContentHandler;
+import org.xml.sax.InputSource;
 import org.xml.sax.Locator;
 import org.xml.sax.SAXException;
 import org.xml.sax.XMLReader;
@@ -73,12 +77,12 @@ public class SaxParserImpl implements ContentHandler, IVisitingParser {
 	 * @throws Exception
 	 */
 	public void parseDocument() throws SAXException, Osm2xpBusinessException {
-		try {
+		try (BufferedInputStream inputStream = new BufferedInputStream(new FileInputStream(this.xmlFile))) {
 	        SAXParserFactory factory = SAXParserFactory.newInstance();
 	        SAXParser parser = factory.newSAXParser();
 			XMLReader saxReader = parser.getXMLReader();
 			saxReader.setContentHandler(this);
-			saxReader.parse(this.xmlFile.getAbsolutePath());
+			saxReader.parse(new InputSource(inputStream));
 		} catch (Exception e) {
 			throw new Osm2xpBusinessException(e.getMessage(), e);
 		}
@@ -254,8 +258,13 @@ public class SaxParserImpl implements ContentHandler, IVisitingParser {
 
 		public OsmAttributes(Attributes attributs) {
 			for (int i = 0; i < attributs.getLength(); i++) {
-				values.put(attributs.getLocalName(i), attributs.getValue(i));
-
+				String name = attributs.getLocalName(i);
+				if (StringUtils.isEmpty(name)) {
+					name = attributs.getQName(i);
+				}
+				if (!StringUtils.isEmpty(name)) {
+					values.put(name, attributs.getValue(i));
+				}
 			}
 		}
 

@@ -151,9 +151,6 @@
             <objectsFiles>
                 <path>objects/watertower-3.obj</path>
             </objectsFiles>
-            <objectsFiles>
-                <path>objects/watertower-3.obj</path>
-            </objectsFiles>
             <angle>0</angle>
             <randomAngle>true</randomAngle>
             <polygonAngle>false</polygonAngle>
@@ -174,10 +171,7 @@
             <tag value="tower" key="man_made"/>
             <objectsFiles>
                 <path>objects/watertower-3.obj</path>
-            </objectsFiles>
-            <objectsFiles>
-                <path>objects/watertower-3.obj</path>
-            </objectsFiles>
+            </objectsFiles>            
             <angle>0</angle>
             <randomAngle>true</randomAngle>
             <polygonAngle>false</polygonAngle>

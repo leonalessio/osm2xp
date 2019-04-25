@@ -211,7 +211,7 @@ public abstract class AbstractOSMDataConverter implements IOSMDataVisitor {
 			return Collections.singletonList(factory.createPolygon(getRing(outer.get(0)), innerRings));
 		} else if (inner.isEmpty()) { // If we have no inner rings - create poly for each outer ring and return these
 										// polys
-			return outer.stream().map(ids -> getPolygon(ids)).collect(Collectors.toList());
+			return outer.stream().map(ids -> getPolygon(ids)).filter(poly -> poly != null).collect(Collectors.toList());
 		}
 		List<Polygon> outerPolysList = outer.stream().map(ids -> getPolygon(ids)).filter(poly -> poly != null)
 				.collect(Collectors.toList());

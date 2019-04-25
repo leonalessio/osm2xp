@@ -26,6 +26,7 @@ import com.osm2xp.generation.paths.PathsService;
 import com.osm2xp.generation.preferences.BasicPreferences;
 import com.osm2xp.generation.preferences.PreferenceService;
 import com.osm2xp.parsers.builders.ParserBuilder;
+import com.osm2xp.stats.StatsProvider;
 import com.osm2xp.translators.ITranslator;
 import com.osm2xp.translators.ITranslatorProvider;
 import com.osm2xp.translators.TranslatorBuilder;
@@ -140,7 +141,7 @@ public class App
 						parser = ParserBuilder.getParser(inputFile, dataVisitor);
 					}
     			}
-    			
+    			StatsProvider.reinit();
     			
     			parser.process();
     			if (parser instanceof IVisitingParser && ((IVisitingParser) parser).getVisitor() instanceof MultiTileDataConverter) {

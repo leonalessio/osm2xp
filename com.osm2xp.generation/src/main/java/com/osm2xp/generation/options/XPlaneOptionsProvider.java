@@ -128,28 +128,26 @@ public class XPlaneOptionsProvider {
 	}
 
 	/**
-	 * @return
+	 * @return Default 3D Object rules list
 	 */
 	private static XplaneObjectsRulesList createNewObjectsRules() {
 		List<XplaneObjectTagRule> XplaneObjectTagRules = new ArrayList<XplaneObjectTagRule>();
-		XplaneObjectTagRules.add(new XplaneObjectTagRule(new Tag(
-				"power_source", "wind"), Lists.newArrayList(new ObjectFile(
-						"objects/wind_turbine.obj")), 0, true, false, false, 0, 0, 0, 0, false, 0, 0, false, false));
-		XplaneObjectTagRules.add(new XplaneObjectTagRule(new Tag(OsmConstants.MAN_MADE_TAG,
-				"lighthouse"), Lists.newArrayList(new ObjectFile(
-						"objects/capemay.obj")), 0, true, false, false, 0, 0, 0, 0, false, 0, 0, false, false));
-		XplaneObjectTagRules.add(new XplaneObjectTagRule(new Tag(OsmConstants.MAN_MADE_TAG,
-				"water_tower"), Lists.newArrayList(new ObjectFile("objects/watertower-3.obj"),new ObjectFile(
-						"objects/watertower-3.obj")), 0, true, false, false, 0, 0, 0, 0, false, 0, 0, false, false));
-		XplaneObjectTagRules.add(new XplaneObjectTagRule(new Tag(OsmConstants.MAN_MADE_TAG,
-				"tower"), Lists.newArrayList(new ObjectFile(
-						"objects/watertower-3.obj"),new ObjectFile(
-						"objects/watertower-3.obj")), 0, true, false, false, 0, 0, 0, 0, false, 0, 0, false, false));
-		XplaneObjectTagRules.add(new XplaneObjectTagRule(new Tag(OsmConstants.MAN_MADE_TAG,
-				"crane"), Lists.newArrayList(new ObjectFile(
-						"objects/crane.obj")), 0, true, false, false, 0, 0, 0, 0, false, 0, 0, false, false));
-		XplaneObjectsRulesList result = new XplaneObjectsRulesList(
-				XplaneObjectTagRules);
+		XplaneObjectTagRules.add(new XplaneObjectTagRule(new Tag("power_source", "wind"),
+				Lists.newArrayList(new ObjectFile("objects/wind_turbine.obj")), 0, true, false, false, 0, 0, 0, 0,
+				false, 0, 0, false, false));
+		XplaneObjectTagRules.add(new XplaneObjectTagRule(new Tag(OsmConstants.MAN_MADE_TAG, "lighthouse"),
+				Lists.newArrayList(new ObjectFile("objects/capemay.obj")), 0, true, false, false, 0, 0, 0, 0, false, 0,
+				0, false, false));
+		XplaneObjectTagRules.add(new XplaneObjectTagRule(new Tag(OsmConstants.MAN_MADE_TAG, "water_tower"),
+				Lists.newArrayList(new ObjectFile("objects/watertower-3.obj")), 0, true, false, false, 0, 0, 0, 0,
+				false, 0, 0, false, false));
+		XplaneObjectTagRules.add(new XplaneObjectTagRule(new Tag(OsmConstants.MAN_MADE_TAG, "tower"),
+				Lists.newArrayList(new ObjectFile("objects/watertower-3.obj")), 0, true, false, false, 0, 0, 0, 0,
+				false, 0, 0, false, false));
+		XplaneObjectTagRules.add(new XplaneObjectTagRule(new Tag(OsmConstants.MAN_MADE_TAG, "crane"),
+				Lists.newArrayList(new ObjectFile("objects/crane.obj")), 0, true, false, false, 0, 0, 0, 0, false, 0, 0,
+				false, false));
+		XplaneObjectsRulesList result = new XplaneObjectsRulesList(XplaneObjectTagRules);
 		return result;
 	}
 

@@ -12,7 +12,6 @@ import java.util.logging.Logger;
  */
 public class Osm2xpLogger {
 
-	private static final String ERROR_LOG_NAME = "error.log";
 	private static Logger logger;
 	private static Logger errorFileLogger;
 
