@@ -20,6 +20,7 @@ Since initial task is generating X-Plane 10 scenery, most fixes I've done and al
 * Bridges for roads and railways based on OSM markup
 * For buildings with type *"garage"* special facade is used, since using regular building facade for garage usually gives poor result
 * Airifields and heliports generation is supported starting from 3.5.0. Program can create apt.dat file for each airfield specified in OSM data.
+* Draped polygons support (from 4.x) for items like paved parkings
 
 ### As well as
 * Using _building:levels_ tag value if no _height_ tag specified for building
@@ -32,8 +33,7 @@ Since initial task is generating X-Plane 10 scenery, most fixes I've done and al
 You need at least Java 8 JRE or JDK to be installed
 
 Download program archive from [SourceForge](https://sourceforge.net/projects/osm2xp/ "SourceForge") and unpack to any folder. It's better to use path without spaces. Launch program using osm2xp/osm2xp.exe executable.
-
-For now program is available for Windows only. If you need it for other OS, please create an issue on GitHub.
+Initially program was available for Windows only, starting from 3.5/4.x Linux version is also provided (see .tgz archives on website). 
 
 ## Usage
 
