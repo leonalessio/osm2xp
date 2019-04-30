@@ -12,6 +12,13 @@
             <directory>${project.basedir}/../osm2xp_additions/xplane</directory>
             <outputDirectory>xplane</outputDirectory>
         </fileSet>
+        <fileSet> <!-- A trick to create empty dir -->
+		    <directory>.</directory>
+		    <outputDirectory>xplane/resources</outputDirectory>
+		    <excludes>
+		      <exclude>*/**</exclude>
+		    </excludes>
+		</fileSet>
     </fileSets>
     <files>
         <file>

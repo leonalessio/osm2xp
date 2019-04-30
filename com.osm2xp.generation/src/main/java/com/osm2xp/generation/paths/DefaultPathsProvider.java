@@ -11,6 +11,7 @@ public class DefaultPathsProvider implements IPathsProvider {
 	private File objectsFolder;
 	private File forestsFolder;
 	private File xPlaneToolsFolder;
+	private File userResourcesFolder;
 	private File roofColorFile = null;
 
 	
@@ -107,6 +108,30 @@ public class DefaultPathsProvider implements IPathsProvider {
 			return new File(getBasicFolder(),"/xplane/utils");
 		}
 		return xPlaneToolsFolder;
+	}
+
+	@Override
+	public File getUserResourcesFolder() {
+		if (userResourcesFolder == null) {
+			return new File(getBasicFolder(),"/xplane/resources");
+		}
+		return userResourcesFolder;
+	}
+
+	public File getxPlaneToolsFolder() {
+		return xPlaneToolsFolder;
+	}
+
+	public void setxPlaneToolsFolder(File xPlaneToolsFolder) {
+		this.xPlaneToolsFolder = xPlaneToolsFolder;
+	}
+
+	public void setForestsFolder(File forestsFolder) {
+		this.forestsFolder = forestsFolder;
+	}
+
+	public void setUserResourcesFolder(File userResourcesFolder) {
+		this.userResourcesFolder = userResourcesFolder;
 	}
 
 }

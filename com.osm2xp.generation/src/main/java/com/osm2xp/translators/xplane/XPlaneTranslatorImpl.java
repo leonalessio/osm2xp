@@ -410,6 +410,7 @@ public class XPlaneTranslatorImpl implements ITranslator{
 				object.setPolygon(new OsmPolygon(node.getId(), node
 						.getTags(), nodes, false));
 				writeObjectToDsf(object);
+				StatsProvider.getTileStats(currentTile, true).incCount("object");
 			}
 		}
 	}

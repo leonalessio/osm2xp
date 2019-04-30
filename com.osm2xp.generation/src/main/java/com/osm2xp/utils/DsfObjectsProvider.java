@@ -71,15 +71,14 @@ public class DsfObjectsProvider {
 		this.targetFolderPath = folderPath;
 		computePolygonsList();
 		computeObjectsList();
+		copyUserResources();
 	}
 
 	/**
 	 * @param folderPath target folder path
 	 */
 	public DsfObjectsProvider(String folderPath) {
-		this.targetFolderPath = folderPath;
-		computePolygonsList();
-		computeObjectsList();
+		this(folderPath, null);
 	}
 
 	/**
@@ -125,6 +124,20 @@ public class DsfObjectsProvider {
 			return idx;
 		}
 		return -1;
+	}
+
+	/**
+	 * Copies custom user resources from {osm2xp}/xplane/reources folder
+	 */
+	private void copyUserResources() {
+		File userResourcesFolder = PathsService.getPathsProvider().getUserResourcesFolder();
+		if (userResourcesFolder.isDirectory()) {
+			try {
+				FilesUtils.copyDirectory(userResourcesFolder, new File(targetFolderPath), true);
+			} catch (IOException e) {
+				Osm2xpLogger.log(e);
+			}
+		}
 	}
 
 	private int getFacadeStrIndex(String name) {

@@ -22,4 +22,6 @@ public interface IPathsProvider {
 	public File getForestsFolder();
 	
 	public File getXPlaneToolsFolder();
+	
+	public File getUserResourcesFolder();
 }
