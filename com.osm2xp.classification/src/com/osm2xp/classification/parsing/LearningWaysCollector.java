@@ -8,7 +8,7 @@ import java.util.Set;
 import java.util.function.Predicate;
 import java.util.stream.Collectors;
 
-import com.osm2xp.classification.WayBuildingData;
+import com.osm2xp.classification.model.WayEntity;
 import com.osm2xp.core.model.osm.Nd;
 import com.osm2xp.core.model.osm.Node;
 import com.osm2xp.core.model.osm.Relation;
@@ -20,24 +20,24 @@ import math.geom2d.Box2D;
 public class LearningWaysCollector extends LearningDataCollector {
 	
 	private Set<Long> necessaryWays;
-	private List<WayBuildingData> collectedWayData = new ArrayList<WayBuildingData>();
+	private List<WayEntity> collectedWayData = new ArrayList<WayEntity>();
 	private Map<Long, List<Long>> wayNds = new HashMap<Long, List<Long>>();
+	private boolean needsClosedWays;
 
-	public LearningWaysCollector(Predicate<List<Tag>> samplePredicate, Set<Long> necessaryWays) {
+	public LearningWaysCollector(Predicate<List<Tag>> samplePredicate, Set<Long> necessaryWays, boolean needsClosedWays) {
 		super(samplePredicate);
 		this.necessaryWays = necessaryWays;
+		this.needsClosedWays = needsClosedWays;
 	}
 
 	@Override
 	public void visit(Box2D box) {
-		// TODO Auto-generated method stub
-
+		// Do nothing - we count for ways only here
 	}
 
 	@Override
 	public void visit(Node node) {
-		// TODO Auto-generated method stub
-
+		// Do nothing - we count for ways only here
 	}
 
 	@Override
@@ -45,12 +45,11 @@ public class LearningWaysCollector extends LearningDataCollector {
 		if (necessaryWays.contains(way.getId())) {
 			wayNds.put(way.getId(), way.getNd().stream().map(nd -> nd.getRef()).collect(Collectors.toList()));
 		} else if (isGoodSample(way.getTags())) {
-			if (!isClosed(way)) {
+			if (!isClosed(way) && needsClosedWays) {
 				System.out.println("Invalid way " + way.getId() + ", not closed");
 				return;
 			}
-			WayBuildingData data = new WayBuildingData(way.getNd().stream().map(nd -> nd.getRef()).collect(Collectors.toList()));
-			initDataFromTags(data, way.getTags());
+			WayEntity data = new WayEntity(way.getId(), way.getTags(), way.getNd().stream().map(nd -> nd.getRef()).collect(Collectors.toList()));
 			collectedWayData.add(data);
 		}
 	}
@@ -72,7 +71,7 @@ public class LearningWaysCollector extends LearningDataCollector {
 
 	}
 
-	public List<WayBuildingData> getCollectedWayData() {
+	public List<WayEntity> getCollectedWayData() {
 		return collectedWayData;
 	}
 

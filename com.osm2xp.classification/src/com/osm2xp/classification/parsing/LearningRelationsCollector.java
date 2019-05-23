@@ -5,7 +5,7 @@ import java.util.List;
 import java.util.function.Predicate;
 import java.util.stream.Collectors;
 
-import com.osm2xp.classification.RelationBuildingData;
+import com.osm2xp.classification.model.RelationEntity;
 import com.osm2xp.core.model.osm.Member;
 import com.osm2xp.core.model.osm.Node;
 import com.osm2xp.core.model.osm.Relation;
@@ -16,7 +16,7 @@ import math.geom2d.Box2D;
 
 public class LearningRelationsCollector extends LearningDataCollector {
 	
-	List<RelationBuildingData> collectedRelationData = new ArrayList<RelationBuildingData>();
+	List<RelationEntity> collectedRelationData = new ArrayList<>();
 
 	public LearningRelationsCollector(Predicate<List<Tag>> samplePredicate) {
 		super(samplePredicate);
@@ -42,9 +42,10 @@ public class LearningRelationsCollector extends LearningDataCollector {
 	public void visit(Relation relation) {
 		List<Tag> tags = relation.getTags();
 		if (isGoodSample(tags)) {
-			RelationBuildingData buildingData = new RelationBuildingData(relation.getMember().stream().filter(member -> isOuter(member)).map(member -> member.getId()).collect(Collectors.toList()),
-																		relation.getMember().stream().filter(member -> isInner(member)).map(member -> member.getId()).collect(Collectors.toList()));
-			initDataFromTags(buildingData, tags);
+			RelationEntity buildingData = new RelationEntity(relation.getId(), 
+															relation.getTags(),
+															relation.getMember().stream().filter(member -> isOuter(member)).map(member -> member.getId()).collect(Collectors.toList()),
+															relation.getMember().stream().filter(member -> isInner(member)).map(member -> member.getId()).collect(Collectors.toList()));
 			collectedRelationData.add(buildingData);
 		}
 	}
@@ -62,7 +63,7 @@ public class LearningRelationsCollector extends LearningDataCollector {
 		// Do nothing
 	}
 
-	public List<RelationBuildingData> getCollectedRelationData() {
+	public List<RelationEntity> getCollectedRelationData() {
 		return collectedRelationData;
 	}
 

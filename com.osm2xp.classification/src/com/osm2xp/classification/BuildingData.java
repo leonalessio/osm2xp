@@ -4,7 +4,6 @@ import com.osm2xp.classification.annotations.Ignore;
 import com.osm2xp.classification.annotations.Positive;
 import com.osm2xp.classification.annotations.Present;
 import com.osm2xp.classification.annotations.Result;
-import com.osm2xp.core.model.osm.BuildingType;
 
 public class BuildingData {
 	
@@ -25,6 +24,10 @@ public class BuildingData {
 	private int levels;
 	@Positive
 	private int sidesCount;
+	@Ignore
+	private long id;	
+	@Ignore
+	private boolean hasHoles;
 	
 	public BuildingData() {
 		super();
@@ -38,6 +41,7 @@ public class BuildingData {
 		this.height = data.height;
 		this.levels = data.levels;
 		this.sidesCount = data.sidesCount;
+		this.id = data.id;
 	}
 
 	public BuildingType getType() {
@@ -94,6 +98,22 @@ public class BuildingData {
 
 	public void setSidesCount(int sidesCount) {
 		this.sidesCount = sidesCount;
+	}
+
+	public long getId() {
+		return id;
+	}
+
+	public void setId(long id) {
+		this.id = id;
+	}
+
+	public boolean isHasHoles() {
+		return hasHoles;
+	}
+
+	public void setHasHoles(boolean hasHoles) {
+		this.hasHoles = hasHoles;
 	}
 
 }

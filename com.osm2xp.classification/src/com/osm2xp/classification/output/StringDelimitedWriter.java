@@ -9,6 +9,7 @@ import java.io.PrintWriter;
 import java.lang.reflect.Field;
 import java.util.ArrayList;
 import java.util.Arrays;
+import java.util.Collection;
 import java.util.HashSet;
 import java.util.List;
 import java.util.Locale;
@@ -58,6 +59,18 @@ public abstract class StringDelimitedWriter<T> implements Closeable{
 		this.id = id;
 		this.resultFieldName = resultFieldName;
 		writer = new PrintWriter(new BufferedWriter(new FileWriter(file)));
+	}
+	
+	public void write (T[] data) {
+		for (T t : data) {
+			write(t);
+		}
+	}
+	
+	public void write (Collection<T> data) {
+		for (T t : data) {
+			write(t);
+		}
 	}
 	
 	public void write (T data) {

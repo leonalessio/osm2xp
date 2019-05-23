@@ -6,18 +6,25 @@ import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Collection;
 import java.util.List;
+import java.util.Map;
+import java.util.OptionalDouble;
 import java.util.function.Predicate;
 import java.util.stream.Collectors;
 
 import com.osm2xp.classification.index.KdTree;
 import com.osm2xp.classification.index.PointData;
 import com.osm2xp.classification.learning.ModelGenerator;
+import com.osm2xp.classification.model.WayEntity;
 import com.osm2xp.classification.output.ARFFWriter;
 import com.osm2xp.classification.output.CSVWithAdditionalsWriter;
 import com.osm2xp.classification.output.StringDelimitedWriter;
 import com.osm2xp.classification.parsing.LearningDataParser;
+import com.osm2xp.core.model.osm.Node;
 import com.osm2xp.core.model.osm.Tag;
 
+import math.geom2d.Point2D;
+import math.geom2d.ShapeArray2D;
+import math.geom2d.polygon.LinearRing2D;
 import weka.classifiers.AbstractClassifier;
 import weka.classifiers.bayes.NaiveBayes;
 import weka.classifiers.evaluation.Evaluation;
@@ -31,21 +38,28 @@ import weka.filters.unsupervised.attribute.Normalize;
 public class App {
 
 	private static final int NEIGHBOUR_COUNT = 4;
+	
+	private static final int WGS_TO_METERS_COEF = 111000;
 
 	public static void main(String[] args) {
 //		buildWithGeoindex(new File("F:/tmp/siberian-fed-district-latest.osm.pbf"));
-		buildWithGeoindex(Arrays.asList(new File("f:\\tmp\\osm\\").listFiles(file -> file.getName().endsWith(".pbf") || file.getName().endsWith(".osm"))), data -> data.getData().getHeight() > 0 && data.getData().getHeight() < 100);
+		buildWithGeoindex(Arrays.asList(new File("f:\\tmp\\osm\\").listFiles(file -> file.getName().endsWith(".pbf") || file.getName().endsWith(".osm"))), data -> hasSuitableHeight(data));
 //		buildWithGeoindex(Arrays.asList(new File("f:\\tmp\\osm\\").listFiles()), data -> data.getData().getType() != null);
 //		buildDataset();
 //		buildClassifier();
 	}
 
+	private static boolean hasSuitableHeight(PointData<WayEntity> data) {
+		int height = HeightProvider.getHeight(data.getData().getTags());
+		return height > 0 && height < 100;
+	}
+
 	protected static void buildDataset() {
-		LearningDataParser parser = new LearningDataParser(new File("F:/tmp/siberian-fed-district-latest.osm.pbf"), getBuildingPredicate());
-		try (StringDelimitedWriter<WayBuildingData> writer = new ARFFWriter<WayBuildingData>(new File("type_ways.arff"), "type")) {
-			List<WayBuildingData> typeWays = parser.getTypeWays();
-			for (WayBuildingData wayBuildingData : typeWays) {
-				writer.write(wayBuildingData);
+		LearningDataParser parser = new LearningDataParser(new File("F:/tmp/siberian-fed-district-latest.osm.pbf"), getBuildingPredicate(), true);
+		try (StringDelimitedWriter<BuildingData> writer = new ARFFWriter<BuildingData>(new File("type_ways.arff"), "type")) {
+			List<WayEntity> typeWays = parser.getCollectedWays();
+			for (WayEntity data : typeWays) {
+				writer.write(createBuildingData(data, parser.getCollectedNodes()));
 			}
 		} catch (IOException e) {
 			// TODO Auto-generated catch block
@@ -53,8 +67,8 @@ public class App {
 		}
 	}
 	
-	protected static void buildWithGeoindex(List<File> files, Predicate<? super PointData<WayBuildingData>> classifiedPredicate) {
-		try (CSVWithAdditionalsWriter<WayBuildingData> writer = new CSVWithAdditionalsWriter<>(new File(getName(files.get(0)) + "_" + NEIGHBOUR_COUNT + ".csv"), "levels", "levels", NEIGHBOUR_COUNT)) {
+	protected static void buildWithGeoindex(List<File> files, Predicate<? super PointData<WayEntity>> classifiedPredicate) {
+		try (CSVWithAdditionalsWriter<BuildingData> writer = new CSVWithAdditionalsWriter<>(new File(getName(files.get(0)) + "_" + NEIGHBOUR_COUNT + ".csv"), "levels", "levels", NEIGHBOUR_COUNT)) {
 			for (File curFile : files) {
 				processCurFile(writer, curFile, classifiedPredicate);
 			}
@@ -65,33 +79,42 @@ public class App {
 //		System.out.println("App.buildGeoindex() "+ geospatialIndex.getNearestNeighbors(new SimpleGeospatialPoint(55.01, 82.55), 3));
 	}
 
-	protected static void processCurFile(CSVWithAdditionalsWriter<WayBuildingData> writer, File curFile, Predicate<? super PointData<WayBuildingData>> classifiedPredicate) {
+	protected static void processCurFile(CSVWithAdditionalsWriter<BuildingData> writer, File curFile, Predicate<? super PointData<WayEntity>> classifiedPredicate) {
 		System.out.println("Processing " + curFile.getAbsolutePath());
-		KdTree<PointData<WayBuildingData>> kdTree = new KdTree<>();
-		List<PointData<WayBuildingData>> classifiedPoints = getPointData(curFile, kdTree, classifiedPredicate);
-		for (PointData<WayBuildingData> pointData : classifiedPoints) {
-			Collection<PointData<WayBuildingData>> neighbours = kdTree.nearestNeighbourSearch(NEIGHBOUR_COUNT + 1, pointData);
+		KdTree<PointData<WayEntity>> kdTree = new KdTree<>();
+		LearningDataParser parser = new LearningDataParser(curFile, getBuildingPredicate(), true);
+		List<PointData<WayEntity>> classifiedPoints = getPointData(parser, kdTree, classifiedPredicate);
+		for (PointData<WayEntity> pointData : classifiedPoints) {
+			Collection<PointData<WayEntity>> neighbours = kdTree.nearestNeighbourSearch(NEIGHBOUR_COUNT + 1, pointData);
 			neighbours.remove(pointData);
-			writer.write(pointData.getData(), neighbours.stream().limit(NEIGHBOUR_COUNT).map(data -> data.getData()).collect(Collectors.toList()));
+			writer.write(createBuildingData(pointData.getData(), parser.getCollectedNodes()), 
+					neighbours.stream().limit(NEIGHBOUR_COUNT).map(data -> createBuildingData(data.getData(), parser.getCollectedNodes())).collect(Collectors.toList()));
 		}
 	}
+	
+	
 
-	protected static List<PointData<WayBuildingData>> getPointData(File file,
-			KdTree<PointData<WayBuildingData>> kdTree, Predicate<? super PointData<WayBuildingData>> classifiedPredicate) {
-		LearningDataParser parser = new LearningDataParser(file, getBuildingPredicate());
-		List<WayBuildingData> typeWays = parser.getTypeWays();
-		List<PointData<WayBuildingData>> pointsList = new ArrayList<PointData<WayBuildingData>>();
+	private static BuildingData createBuildingData(WayEntity way, Map<Long, Node> collectedNodes) {
+		BuildingData buildingData = new BuildingData();
+		computeGeometryData(buildingData, way, collectedNodes);
+		return buildingData;
+	}
+
+	protected static List<PointData<WayEntity>> getPointData(LearningDataParser parser,
+			KdTree<PointData<WayEntity>> kdTree, Predicate<? super PointData<WayEntity>> classifiedPredicate) {
+		List<WayEntity> typeWays = parser.getCollectedWays();
+		List<PointData<WayEntity>> pointsList = new ArrayList<PointData<WayEntity>>();
 		int i = 0;
-		for (WayBuildingData wayBuildingData : typeWays) {
+		for (WayEntity entity:typeWays) {
 			i++;
 			if (i % 50000 == 0) {
 				System.out.println("Added " + i + " points");
 			}
-			PointData<WayBuildingData> pointData = new PointData<WayBuildingData>(wayBuildingData.getCenter().x(), wayBuildingData.getCenter().y(), wayBuildingData);
+			PointData<WayEntity> pointData = new PointData<WayEntity>(entity.getCenter().x(), entity.getCenter().y(), entity);
 			kdTree.add(pointData);
 			pointsList.add(pointData);
 		}
-		List<PointData<WayBuildingData>> classifiedPoints = pointsList.stream().filter(classifiedPredicate).collect(Collectors.toList());
+		List<PointData<WayEntity>> classifiedPoints = pointsList.stream().filter(classifiedPredicate).collect(Collectors.toList());
 		return classifiedPoints;
 	}
 	
@@ -143,6 +166,52 @@ public class App {
 			// TODO Auto-generated catch block
 			e.printStackTrace();
 		}
+	}
+	
+	private static void computeGeometryData(BuildingData buildingData, WayEntity way, Map<Long, Node> collectedNodes) {
+		int invalid = 0;
+			List<Point2D> points = way.getNodes().stream()
+				.map(id -> collectedNodes.get(id))
+				.filter(node -> node != null)
+				.map(node -> new Point2D(node.getLon(), node.getLat()))
+				.collect(Collectors.toList());
+			int n = points.size();
+			ShapeArray2D<Point2D> shapeArray2D = new ShapeArray2D<Point2D>(points);
+			way.setBoundingBox(shapeArray2D.boundingBox());
+			if (n > 0 && n == way.getNodes().size()) {
+				Point2D base = points.get(0);
+				double coef = Math.cos(base.y());
+				List<Point2D> resList = new ArrayList<>();
+				resList.add(new Point2D(0,0));
+				double centerLat = base.y() / n;
+				double centerLon = base.x() / n;
+				for (int i = 1; i < n; i++) {
+					Point2D curPt = points.get(i);
+					centerLat += curPt.y() / n;
+					centerLon += curPt.x() / n;
+					resList.add(new Point2D((curPt.x() - base.x()) * coef * WGS_TO_METERS_COEF, (curPt.y() - base.y()) * WGS_TO_METERS_COEF));
+				}
+				if (resList.size() > 2) {
+					LinearRing2D ring2d = new LinearRing2D(resList);
+					OptionalDouble max = ring2d.edges().stream().mapToDouble(edge -> edge.length()).max();
+					double perimeter = ring2d.length();
+					double area = Math.abs(ring2d.area());
+					buildingData.setSidesCount(resList.size() - 1);
+					buildingData.setPerimeter(perimeter);
+					buildingData.setArea(area);
+					way.setCenter(centerLon, centerLat);
+					if (max.isPresent()) {
+						buildingData.setMaxSide(max.getAsDouble());
+					}
+				} else {
+					invalid++;
+				}
+			} else {
+				invalid++;
+			}
+			
+		System.out.println("Missing some nodes for " + invalid + " ways");
+		
 	}
 
 	protected static void evaluate(Instances traindataset, Instances testdataset, AbstractClassifier classifier) throws Exception {

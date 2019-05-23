@@ -6,35 +6,37 @@ import java.util.Collections;
 import java.util.Iterator;
 import java.util.List;
 import java.util.Map;
-import java.util.OptionalDouble;
 import java.util.Set;
 import java.util.function.Predicate;
 import java.util.stream.Collectors;
 
-import com.osm2xp.classification.RelationBuildingData;
-import com.osm2xp.classification.WayBuildingData;
+import com.osm2xp.classification.model.RelationEntity;
+import com.osm2xp.classification.model.WayEntity;
 import com.osm2xp.core.model.osm.Node;
 import com.osm2xp.core.model.osm.Tag;
 import com.osm2xp.core.parsers.impl.TranslatingBinaryParser;
 
 import math.geom2d.Point2D;
 import math.geom2d.ShapeArray2D;
-import math.geom2d.polygon.LinearRing2D;
 
 public class LearningDataParser {
 	
-	private static final int WGS_TO_METERS_COEF = 111000;
-	private List<WayBuildingData> collectedWays;
+	private List<WayEntity> collectedWays;
+	private LearningNodesCollector typeNdCollector;
 
 	public LearningDataParser(File inputFile, Predicate<List<Tag>> wayCollectionPredicate) {
+		this(inputFile,wayCollectionPredicate,false);
+	}
+	
+	public LearningDataParser(File inputFile, Predicate<List<Tag>> wayCollectionPredicate, boolean needsClosedWays) {
 		LearningRelationsCollector typeRelationsCollector = new LearningRelationsCollector(wayCollectionPredicate);
 		TranslatingBinaryParser binaryParser = new TranslatingBinaryParser(inputFile, typeRelationsCollector);
 		binaryParser.process();
 		
-		List<RelationBuildingData> typeRelationsList = typeRelationsCollector.getCollectedRelationData();
+		List<RelationEntity> typeRelationsList = typeRelationsCollector.getCollectedRelationData();
 		Set<Long> necessaryTypeWays = typeRelationsList.stream().flatMap(data -> data.getOuterWayIds().stream()).collect(Collectors.toSet());
 		necessaryTypeWays.addAll(typeRelationsList.stream().flatMap(data -> data.getInnerWayIds().stream()).collect(Collectors.toSet()));
-		LearningWaysCollector typeWaysCollector = new LearningWaysCollector(wayCollectionPredicate, necessaryTypeWays);
+		LearningWaysCollector typeWaysCollector = new LearningWaysCollector(wayCollectionPredicate, necessaryTypeWays, needsClosedWays);
 		binaryParser = new TranslatingBinaryParser(inputFile, typeWaysCollector);
 		binaryParser.process();
 		
@@ -42,63 +44,14 @@ public class LearningDataParser {
 		collectedWays.addAll(createBuildings(typeRelationsList, typeWaysCollector.getWayNds()));
 		
 		Set<Long> typeNds = collectedWays.stream().flatMap(way -> way.getNodes().stream()).collect(Collectors.toSet());
-		LearningNodesCollector typeNdCollector = new LearningNodesCollector(wayCollectionPredicate, typeNds);
+		typeNdCollector = new LearningNodesCollector(wayCollectionPredicate, typeNds);
 		binaryParser = new TranslatingBinaryParser(inputFile, typeNdCollector);
 		binaryParser.process();
-		computeGeometryData(collectedWays, typeNdCollector.getCollectedNodes());
 	}
 	
-	private void computeGeometryData(List<WayBuildingData> ways, Map<Long, Node> collectedNodes) {
-		int invalid = 0;
-		for (WayBuildingData wayData : ways) {
-			List<Point2D> points = wayData.getNodes().stream()
-				.map(id -> collectedNodes.get(id))
-				.filter(node -> node != null)
-				.map(node -> new Point2D(node.getLon(), node.getLat()))
-				.collect(Collectors.toList());
-			int n = points.size();
-			ShapeArray2D<Point2D> shapeArray2D = new ShapeArray2D<Point2D>(points);
-			wayData.setBoundingBox(shapeArray2D.boundingBox());
-			if (n > 0 && n == wayData.getNodes().size()) {
-				Point2D base = points.get(0);
-				double coef = Math.cos(base.y());
-				List<Point2D> resList = new ArrayList<>();
-				resList.add(new Point2D(0,0));
-				double centerLat = base.y() / n;
-				double centerLon = base.x() / n;
-				for (int i = 1; i < n; i++) {
-					Point2D curPt = points.get(i);
-					centerLat += curPt.y() / n;
-					centerLon += curPt.x() / n;
-					resList.add(new Point2D((curPt.x() - base.x()) * coef * WGS_TO_METERS_COEF, (curPt.y() - base.y()) * WGS_TO_METERS_COEF));
-				}
-				if (resList.size() > 2) {
-					LinearRing2D ring2d = new LinearRing2D(resList);
-					OptionalDouble max = ring2d.edges().stream().mapToDouble(edge -> edge.length()).max();
-					double perimeter = ring2d.length();
-					double area = Math.abs(ring2d.area());
-					wayData.setSidesCount(resList.size() - 1);
-					wayData.setPerimeter(perimeter);
-					wayData.setArea(area);
-					wayData.setCenter(centerLon, centerLat);
-					if (max.isPresent()) {
-						wayData.setMaxSide(max.getAsDouble());
-					}
-				} else {
-					invalid++;
-				}
-			} else {
-				invalid++;
-			}
-			
-		}
-		System.out.println("Missing some nodes for " + invalid + " ways");
-		
-	}
-
-	private List<WayBuildingData> createBuildings(List<RelationBuildingData> relationBuildings, Map<Long, List<Long>> wayNds) {
-		List<WayBuildingData> resultList = new ArrayList<WayBuildingData>();
-		for (RelationBuildingData relationBuildingData : relationBuildings) {
+	private List<WayEntity> createBuildings(List<RelationEntity> relationBuildings, Map<Long, List<Long>> wayNds) {
+		List<WayEntity> resultList = new ArrayList<WayEntity>();
+		for (RelationEntity relationBuildingData : relationBuildings) {
 			List<Long> outerWayIds = relationBuildingData.getOuterWayIds();
 			List<List<Long>> outerNdsList = outerWayIds.stream().map(id -> wayNds.get(id)).filter(lst -> lst != null).collect(Collectors.toList());
 			List<List<Long>> polygonLists = getPolygonsFrom(outerNdsList);
@@ -111,15 +64,13 @@ public class LearningDataParser {
 					if (!isClosed(list)) {
 						continue;
 					}
-					WayBuildingData buildingData = new WayBuildingData(list);
-					buildingData.copyProps(relationBuildingData);
+					WayEntity buildingData = new WayEntity(relationBuildingData.getId(), relationBuildingData.getTags(), list);
 					resultList.add(buildingData);
 				}
 			}
 			else if (polygonLists.size() == 1) {
 				boolean hasHoles = getPolygonsFrom(innerNdsList).size() > 0;
-				WayBuildingData buildingData = new WayBuildingData(polygonLists.get(0));
-				buildingData.copyProps(relationBuildingData);
+				WayEntity buildingData = new WayEntity(relationBuildingData.getId(), relationBuildingData.getTags(), polygonLists.get(0));
 				buildingData.setHasHoles(hasHoles);
 				resultList.add(buildingData);
 			}
@@ -178,8 +129,45 @@ public class LearningDataParser {
 		return false;
 	}
 
-	public List<WayBuildingData> getTypeWays() {
+	public List<WayEntity> getCollectedWays(boolean computeBasicGeometry) {
+		if (computeBasicGeometry) {
+			for (WayEntity wayEntity : collectedWays) {
+				computeGeometryData(wayEntity, typeNdCollector.getCollectedNodes());
+			}
+		}
 		return collectedWays;
+	}
+	
+	public List<WayEntity> getCollectedWays() {
+		return getCollectedWays(false);
+	}
+
+	public Map<Long, Node> getCollectedNodes() {
+		return typeNdCollector.getCollectedNodes();
+	}
+	
+	private static void computeGeometryData(WayEntity way, Map<Long, Node> collectedNodes) {
+		List<Point2D> points = way.getNodes().stream()
+			.map(id -> collectedNodes.get(id))
+			.filter(node -> node != null)
+			.map(node -> new Point2D(node.getLon(), node.getLat()))
+			.collect(Collectors.toList());
+		int n = points.size();
+		ShapeArray2D<Point2D> shapeArray2D = new ShapeArray2D<Point2D>(points);
+		way.setBoundingBox(shapeArray2D.boundingBox());
+		if (n > 0 && n == way.getNodes().size()) {
+			Point2D base = points.get(0);
+			List<Point2D> resList = new ArrayList<>();
+			resList.add(new Point2D(0,0));
+			double centerLat = base.y() / n;
+			double centerLon = base.x() / n;
+			for (int i = 1; i < n; i++) {
+				Point2D curPt = points.get(i);
+				centerLat += curPt.y() / n;
+				centerLon += curPt.x() / n;
+			}
+			way.setCenter(centerLat,centerLon);
+		}
 	}
 
 }

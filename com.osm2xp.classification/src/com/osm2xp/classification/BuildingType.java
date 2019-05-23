@@ -1,4 +1,4 @@
-package com.osm2xp.core.model.osm;
+package com.osm2xp.classification;
 
 public enum BuildingType {
 	RESIDENTAL,

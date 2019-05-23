@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <classpath>
-	<classpathentry exported="true" kind="lib" path="staticlib/commons-collections-3.2.1.jar"/>
+	<classpathentry exported="true" kind="lib" path="staticlib/commons-collections-3.2.1.jar" sourcepath="C:/Users/32kda/AppData/Local/Temp/.org.sf.feeling.decompiler1557208597401/source/commons-collections-3.2.1-sources.jar"/>
 	<classpathentry exported="true" kind="lib" path="staticlib/commons-compress-1.0.jar"/>
 	<classpathentry exported="true" kind="lib" path="staticlib/commons-configuration-1.6.jar"/>
 	<classpathentry exported="true" kind="lib" path="staticlib/gt-api-19.2.jar"/>

@@ -2,7 +2,6 @@ package com.osm2xp.classification;
 
 import java.util.List;
 
-import com.osm2xp.core.model.osm.BuildingType;
 import com.osm2xp.core.model.osm.Tag;
 
 public class TypeProvider {
