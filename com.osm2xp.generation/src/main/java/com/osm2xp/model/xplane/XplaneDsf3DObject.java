@@ -42,13 +42,6 @@ public class XplaneDsf3DObject extends XplaneDsfObject {
 				Point2D ptX = polygon.vertex(i);
 				Point2D ptOrigin = polygon.vertex(i + 1);
 				Point2D ptY = polygon.vertex(i + 2);
-				Point2D ptLast;
-
-				if (i == polygon.vertices().size() - 3) {
-					ptLast = polygon.vertex(0);
-				} else {
-					ptLast = polygon.vertex(i + 3);
-				}
 
 				double segmentX = GeomUtils.latLonDistance(ptX.y(), ptX.x(),
 						ptOrigin.y(), ptOrigin.x());

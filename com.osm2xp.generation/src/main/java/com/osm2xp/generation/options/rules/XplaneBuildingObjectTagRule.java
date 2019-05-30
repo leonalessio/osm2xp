@@ -17,9 +17,9 @@ import com.osm2xp.generation.options.ObjectFile;
  */
 @XmlAccessorType(XmlAccessType.FIELD)
 @XmlType(name = "XplaneBuildingObjectTagRule", propOrder = { "angle", "randomAngle",
-		"polygonAngle", "sizeCheck", "xVectorMinLength","xVectorMaxLength", "yVectorMinLength","yVectorMaxLength",
+		"polygonAngle", "sizeCheck", "xVectorMinLength","xVectorMaxLength",
 		"areaCheck", "minArea", "maxArea", "simplePolygonOnly",
-		"usePolygonAngle", "rotationPointX", "rotationPointY" })
+		"usePolygonAngle", "rotationPointX", "rotationPointY", "minHeight", "maxHeight" })
 public class XplaneBuildingObjectTagRule extends TagsRule {
 
 	protected int angle;
@@ -28,15 +28,16 @@ public class XplaneBuildingObjectTagRule extends TagsRule {
 	protected boolean sizeCheck;
 	protected int xVectorMinLength;
 	protected int xVectorMaxLength;
-	protected int yVectorMinLength;
-	protected int yVectorMaxLength;
 	protected boolean areaCheck;
 	protected int minArea;
 	protected int maxArea;
 	protected boolean simplePolygonOnly;
-	protected boolean usePolygonAngle;
+	protected boolean usePolygonAngle = true;
 	protected int rotationPointX;
 	protected int rotationPointY;
+	protected double minHeight;
+	protected double maxHeight;
+	
 
 	/**
 	 * Default no-arg constructor
@@ -54,8 +55,7 @@ public class XplaneBuildingObjectTagRule extends TagsRule {
 			final List<ObjectFile> objectsFiles, final int angle,
 			final boolean randomAngle, final boolean polygonAngle,
 			final boolean sizeCheck, final int xVectorMinLength,final int xVectorMaxLength,
-			final int yVectorMinLength,final int yVectorMaxLength,  final boolean areaCheck,
-			final int minArea, final int maxArea,
+			final boolean areaCheck,final int minArea,  final int maxArea,
 			final boolean simplePolygonOnly, final boolean usePolygonAngle) {
 		super(tag, objectsFiles);
 		this.angle = angle;
@@ -63,9 +63,7 @@ public class XplaneBuildingObjectTagRule extends TagsRule {
 		this.polygonAngle = polygonAngle;
 		this.sizeCheck = sizeCheck;
 		this.xVectorMinLength = xVectorMinLength;
-		this.yVectorMinLength = yVectorMinLength;
 		this.xVectorMaxLength = xVectorMaxLength;
-		this.yVectorMaxLength = yVectorMaxLength;
 		this.areaCheck = areaCheck;
 		this.minArea = minArea;
 		this.maxArea = maxArea;
@@ -251,21 +249,20 @@ public class XplaneBuildingObjectTagRule extends TagsRule {
 		this.xVectorMaxLength = xVectorMaxLength;
 	}
 
-	public int getyVectorMinLength() {
-		return yVectorMinLength;
+	public double getMinHeight() {
+		return minHeight;
 	}
 
-	public void setyVectorMinLength(int yVectorMinLength) {
-		this.yVectorMinLength = yVectorMinLength;
+	public void setMinHeight(double minHeight) {
+		this.minHeight = minHeight;
 	}
 
-	public int getyVectorMaxLength() {
-		return yVectorMaxLength;
+	public double getMaxHeight() {
+		return maxHeight;
 	}
 
-	public void setyVectorMaxLength(int yVectorMaxLength) {
-		this.yVectorMaxLength = yVectorMaxLength;
+	public void setMaxHeight(double maxHeight) {
+		this.maxHeight = maxHeight;
 	}
-
 
 }

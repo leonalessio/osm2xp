@@ -1,6 +1,6 @@
 package com.osm2xp.generation.options.rules;
 
-import java.util.List;
+import java.util.ArrayList;
 
 import javax.xml.bind.annotation.XmlAccessType;
 import javax.xml.bind.annotation.XmlAccessorType;
@@ -17,27 +17,30 @@ import com.osm2xp.generation.options.ObjectFile;
  */
 @XmlAccessorType(XmlAccessType.FIELD)
 @XmlType(name = "XplaneObjectTagRule", propOrder = { "angle", "randomAngle",
-		"polygonAngle", "sizeCheck", "xVectorMinLength", "xVectorMaxLength",
+		"usePolygonAngle", "sizeCheck", "xVectorMinLength", "xVectorMaxLength",
 		"yVectorMinLength", "yVectorMaxLength", "areaCheck", "minArea",
-		"maxArea", "simplePolygonOnly", "usePolygonAngle", "rotationPointX",
-		"rotationPointY" })
+		"maxArea", "simplePolygonOnly", "rotationPointX",
+		"rotationPointY", "minHeight", "maxHeight"  })
 public class XplaneObjectTagRule extends TagsRule {
 
-	protected int angle;
-	protected boolean randomAngle;
+	protected int angle = 0;
+	protected boolean randomAngle = false;
 	protected boolean polygonAngle;
 	protected boolean sizeCheck;
 	protected int xVectorMinLength;
 	protected int xVectorMaxLength;
-	protected int yVectorMinLength;
 	protected int yVectorMaxLength;
+	protected int yVectorMinLength;
 	protected boolean areaCheck;
 	protected int minArea;
 	protected int maxArea;
 	protected boolean simplePolygonOnly;
-	protected boolean usePolygonAngle;
+	protected boolean usePolygonAngle = true;
 	protected int rotationPointX;
 	protected int rotationPointY;
+	
+	protected double minHeight;
+	protected double maxHeight;
 
 	/**
 	 * Default no-arg constructor
@@ -47,34 +50,40 @@ public class XplaneObjectTagRule extends TagsRule {
 		super();
 	}
 
-	/**
-	 * Fully-initialising value constructor
-	 * 
-	 */
-	public XplaneObjectTagRule(final Tag tag,
-			final List<ObjectFile> objectsFiles, final int angle,
-			final boolean randomAngle, final boolean polygonAngle,
-			final boolean sizeCheck, final int xVectorMaxLength,
-			final int xVectorMinLength, final int yVectorMinLength,
-			final int yVectorMaxLength, final boolean areaCheck,
-			final int minArea, final int maxArea,
-			final boolean simplePolygonOnly, final boolean usePolygonAngle) {
+//	/**
+//	 * Fully-initialising value constructor
+//	 * 
+//	 */
+//	public XplaneObjectTagRule(final Tag tag,
+//			final List<ObjectFile> objectsFiles, final int angle,
+//			final boolean randomAngle, final boolean usePolygonAngle,
+//			final boolean sizeCheck, final int xVectorMaxLength,
+//			final int xVectorMinLength, final int yVectorMinLength,
+//			final int yVectorMaxLength, final boolean areaCheck,
+//			final int minArea, final int maxArea,
+//			final boolean simplePolygonOnly) {
+//		super(tag, objectsFiles);
+//		this.angle = angle;
+//		this.randomAngle = randomAngle;
+//		this.usePolygonAngle = usePolygonAngle;
+//		this.sizeCheck = sizeCheck;
+//		this.xVectorMinLength = xVectorMinLength;
+//		this.yVectorMaxLength = yVectorMaxLength;
+//		this.xVectorMaxLength = xVectorMaxLength;
+//		this.yVectorMinLength = yVectorMinLength;
+//		this.areaCheck = areaCheck;
+//		this.minArea = minArea;
+//		this.maxArea = maxArea;
+//		this.simplePolygonOnly = simplePolygonOnly;
+//		this.rotationPointX = 50;
+//		this.rotationPointY = 50;
+//	}
+
+	public XplaneObjectTagRule(Tag tag, ArrayList<ObjectFile> objectsFiles, int angle, boolean randomAngle, boolean usePolygonAngle) {
 		super(tag, objectsFiles);
 		this.angle = angle;
 		this.randomAngle = randomAngle;
-		this.polygonAngle = polygonAngle;
-		this.sizeCheck = sizeCheck;
-		this.xVectorMinLength = xVectorMinLength;
-		this.yVectorMaxLength = yVectorMaxLength;
-		this.xVectorMaxLength = xVectorMaxLength;
-		this.yVectorMinLength = yVectorMinLength;
-		this.areaCheck = areaCheck;
-		this.minArea = minArea;
-		this.maxArea = maxArea;
-		this.simplePolygonOnly = simplePolygonOnly;
 		this.usePolygonAngle = usePolygonAngle;
-		this.rotationPointX = 50;
-		this.rotationPointY = 50;
 	}
 
 	/**
@@ -107,22 +116,6 @@ public class XplaneObjectTagRule extends TagsRule {
 	 */
 	public void setRandomAngle(boolean value) {
 		this.randomAngle = value;
-	}
-
-	/**
-	 * Gets the value of the polygonAngle property.
-	 * 
-	 */
-	public boolean isPolygonAngle() {
-		return usePolygonAngle;
-	}
-
-	/**
-	 * Sets the value of the polygonAngle property.
-	 * 
-	 */
-	public void setPolygonAngle(boolean value) {
-		this.polygonAngle = value;
 	}
 
 	/**

@@ -3,6 +3,7 @@ package com.osm2xp.gui.views.panels.xplane;
 import java.io.File;
 import java.text.MessageFormat;
 
+import org.eclipse.jface.layout.GridDataFactory;
 import org.eclipse.jface.viewers.IStructuredSelection;
 import org.eclipse.swt.SWT;
 import org.eclipse.swt.events.ModifyEvent;
@@ -92,9 +93,10 @@ public class XplaneObjectsRulesPanel extends Composite {
 						.getOptions()
 						.getObjectsRules()
 						.getRules()
-						.add(new XplaneObjectTagRule(new Tag("a tag key",
-								"a tag value"), Lists.newArrayList(new ObjectFile("the path to an Object file")), 0, true, false, false, 0, 0, 0, 0, false, 0,
-								0, false, false));
+//						.add(new XplaneObjectTagRule(new Tag("a tag key",
+//								"a tag value"), Lists.newArrayList(new ObjectFile("the path to an Object file")), 0, true, false, false, 0, 0, 0, 0, false, 0, 0, false,
+//								false));
+						.add(new XplaneObjectTagRule());
 				tagsTable.getViewer().refresh();
 
 			}
@@ -357,8 +359,11 @@ public class XplaneObjectsRulesPanel extends Composite {
 		Group grpSize = new Group(composite, SWT.NONE);
 		grpSize.setLayoutData(new GridData(SWT.FILL, SWT.FILL, true, true,
 				1, 1));
-		grpSize.setText("size condition");
+		grpSize.setText("Size conditions");
 		grpSize.setLayout(new GridLayout(6, false));
+		Label hintLabel = new Label(grpSize, SWT.NONE);
+		hintLabel.setText("Wall size conditions. Leave secondary max size 0m if you want to apply primary size to all walls.");
+		GridDataFactory.swtDefaults().span(6,0).applyTo(hintLabel);
 
 		btnCheckSizeConditions = new Button(grpSize, SWT.CHECK);
 		btnCheckSizeConditions.addMouseListener(new MouseAdapter() {
@@ -374,7 +379,7 @@ public class XplaneObjectsRulesPanel extends Composite {
 
 		Label lblXVectorMaxSize = new Label(grpSize, SWT.NONE);
 		lblXVectorMaxSize.setBounds(0, 0, 53, 13);
-		lblXVectorMaxSize.setText("X vector max size : ");
+		lblXVectorMaxSize.setText("Primary wall max length,m: ");
 
 		spinnerXVectorMaxSize = new Spinner(grpSize, SWT.BORDER);
 		spinnerXVectorMaxSize.addModifyListener(new ModifyListener() {
@@ -390,7 +395,7 @@ public class XplaneObjectsRulesPanel extends Composite {
 
 		Label lblYVectorMaxSize = new Label(grpSize, SWT.NONE);
 		lblYVectorMaxSize.setBounds(0, 0, 53, 13);
-		lblYVectorMaxSize.setText("Y vector max size : ");
+		lblYVectorMaxSize.setText("Secondary wall max length, m : ");
 
 		spinnerYVectorMaxSize = new Spinner(grpSize, SWT.BORDER);
 		spinnerYVectorMaxSize.addModifyListener(new ModifyListener() {
@@ -405,7 +410,7 @@ public class XplaneObjectsRulesPanel extends Composite {
 		new Label(grpSize, SWT.NONE);
 
 		Label lblXVectorMinSize = new Label(grpSize, SWT.NONE);
-		lblXVectorMinSize.setText("X vector min size : ");
+		lblXVectorMinSize.setText("Primary wall min length,m : ");
 
 		spinnerXVectorMinSize = new Spinner(grpSize, SWT.BORDER);
 		spinnerXVectorMinSize.addModifyListener(new ModifyListener() {
@@ -420,7 +425,7 @@ public class XplaneObjectsRulesPanel extends Composite {
 		new Label(grpSize, SWT.NONE);
 
 		Label lblYVectorMinSize = new Label(grpSize, SWT.NONE);
-		lblYVectorMinSize.setText("Y vector min size : ");
+		lblYVectorMinSize.setText("Secondary wall min length,m : ");
 
 		spinnerYVectorMinSize = new Spinner(grpSize, SWT.BORDER);
 		spinnerYVectorMinSize.addModifyListener(new ModifyListener() {

@@ -31,10 +31,7 @@ import com.osm2xp.model.xplane.XplaneDsf3DObject;
 import com.osm2xp.model.xplane.XplaneDsfLightObject;
 import com.osm2xp.model.xplane.XplaneDsfObject;
 import com.osm2xp.translators.BuildingType;
-import com.osm2xp.utils.geometry.GeomUtils;
 import com.osm2xp.utils.osm.OsmUtils;
-
-import math.geom2d.polygon.LinearRing2D;
 
 /**
  * DsfObjectsProvider.
@@ -374,57 +371,6 @@ public class DsfObjectsProvider {
 						result.setAngle(objectTagRule.getAngle());
 					}
 					break;
-				}
-			}
-		}
-		return result;
-	}
-
-	/**
-	 * return a random object index and the angle for the first matching rule
-	 * 
-	 * @param tags
-	 * @return
-	 */
-	public XplaneDsfObject getRandomDsfObject(OsmPolygon osmPolygon) {
-		LinearRing2D polygon = osmPolygon.getPolygon();
-		XplaneDsfObject result = null;
-		// shuffle rules
-		List<XplaneObjectTagRule> tagsRules = new ArrayList<XplaneObjectTagRule>();
-		tagsRules.addAll(XPlaneOptionsProvider.getOptions().getObjectsRules()
-				.getRules());
-		Collections.shuffle(tagsRules);
-		for (Tag tag : osmPolygon.getTags()) {
-			for (XplaneObjectTagRule rule : tagsRules) {
-				// check Tag matching
-				if ((rule.getTag().getKey().equalsIgnoreCase("id") && rule
-						.getTag().getValue()
-						.equalsIgnoreCase(String.valueOf(osmPolygon.getId())))
-						|| (OsmUtils.compareTags(rule.getTag(), tag))) {
-					// check rule options
-
-					Boolean checkArea = !rule.isAreaCheck()
-							|| (rule.isAreaCheck() && (osmPolygon.getArea() > rule
-									.getMinArea() && osmPolygon.getArea() < rule
-									.getMaxArea()));
-
-					Boolean checkSize = !rule.isSizeCheck()
-							|| GeomUtils.isRectangleBigEnoughForObject(
-									rule.getxVectorMaxLength(),
-									rule.getyVectorMaxLength(),
-									rule.getxVectorMinLength(),
-									rule.getyVectorMinLength(), polygon);
-
-					Boolean checkSimplePoly = !rule.isSimplePolygonOnly()
-							|| (rule.isSimplePolygonOnly() && osmPolygon
-									.isSimplePolygon());
-
-					if (checkArea && checkSize && checkSimplePoly) {
-						result = new XplaneDsf3DObject(osmPolygon, rule);
-						// compute object index
-						result.setDsfIndex(getRandomObject(rule));
-
-					}
 				}
 			}
 		}

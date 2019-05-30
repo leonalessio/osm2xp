@@ -78,6 +78,8 @@ public class XPlaneTranslatorImpl implements ITranslator{
 	
 	protected XPForestTranslator forestTranslator;
 	
+	protected XP3DObjectTranslator objectTranslator;
+	
 	protected ITranslationListener translationListener;
 	
 	protected XPOutputFormat outputFormat;
@@ -107,8 +109,9 @@ public class XPlaneTranslatorImpl implements ITranslator{
 		polyHandlers.add(new XPCoolingTowerTranslator(writer, dsfObjectsProvider));
 		polyHandlers.add(new XPChimneyTranslator(writer, dsfObjectsProvider));
 		polyHandlers.add(new XPDrapedPolyTranslator(writer, dsfObjectsProvider, outputFormat));
-		forestTranslator = new XPForestTranslator(writer, dsfObjectsProvider, outputFormat);
 		
+		forestTranslator = new XPForestTranslator(writer, dsfObjectsProvider, outputFormat);
+		objectTranslator = new XP3DObjectTranslator(writer, dsfObjectsProvider, outputFormat);
 	}
 
 	protected XPOutputFormat createOutputFormat() {
@@ -478,32 +481,13 @@ public class XPlaneTranslatorImpl implements ITranslator{
 	 * @return true if a 3D object has been written in the dsf file.
 	 */
 	protected boolean process3dObject(OsmPolyline poly) {
+		boolean processed = objectTranslator.handlePoly(poly);
 
-		if (!(poly instanceof OsmPolygon) || poly.isPart() || !((OsmPolygon) poly).getPolygon().isClosed()) {
-			return false;
+		if (processed) {
+			StatsProvider.getTileStats(currentTile, true).incCount("object");
 		}
 		
-		if (XPlaneOptionsProvider.getOptions().isGenerateObj()) {
-			// simplify shape if checked and if necessary
-			if (GlobalOptionsProvider.getOptions().isSimplifyShapes()
-					&& !((OsmPolygon) poly).isSimplePolygon()) {
-				poly = ((OsmPolygon) poly).toSimplifiedPoly();
-			}
-			XplaneDsfObject object = dsfObjectsProvider
-					.getRandomDsfObject((OsmPolygon) poly);
-			if (object != null) {
-				object.setPolygon((OsmPolygon) poly);
-				try {
-					writeObjectToDsf(object);
-					StatsProvider.getTileStats(currentTile, true).incCount("object");
-					return true;
-				} catch (Osm2xpBusinessException e) {
-					Osm2xpLogger.error(e.getMessage(), e);
-				}
-
-			}
-		}
-		return false;
+		return processed;
 	}
 	
 	/**
