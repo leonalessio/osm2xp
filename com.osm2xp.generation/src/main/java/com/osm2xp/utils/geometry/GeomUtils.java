@@ -286,6 +286,17 @@ public class GeomUtils {
 	}
 	
 	/**
+	 * Compute length of given edge in meters
+	 * 
+	 * @param line - specified by {@link Point2D} coordinates (lat, lon) array
+	 * @return line length in meters
+	 */
+	public static double computeLengthInMeters(LineSegment2D line) {
+		return latLonDistance(line.firstPoint().y(),
+					line.firstPoint().x(), line.lastPoint().y(),line.lastPoint().x());
+	}
+	
+	/**
 	 * Compute polyline edge length sum or perimeter of the polygon in meters.
 	 * 
 	 * @param polyline - polyline with edges specified by coordinates (lat, lon) 

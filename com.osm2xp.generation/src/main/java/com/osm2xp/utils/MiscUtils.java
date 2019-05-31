@@ -68,7 +68,7 @@ public class MiscUtils {
 	 * @param max
 	 * @return Integer
 	 */
-	public static Integer getRandomSize(Integer min, Integer max) {
+	public static Integer getRandomInt(Integer min, Integer max) {
 		if (min.equals(max)) {
 			return max;
 		} else {

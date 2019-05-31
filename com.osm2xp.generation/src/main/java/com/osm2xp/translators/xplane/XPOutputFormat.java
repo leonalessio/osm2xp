@@ -11,6 +11,7 @@ import com.osm2xp.core.logging.Osm2xpLogger;
 import com.osm2xp.generation.options.XPlaneOptionsProvider;
 import com.osm2xp.model.osm.polygon.OsmMultiPolygon;
 import com.osm2xp.model.osm.polygon.OsmPolygon;
+import com.osm2xp.model.xplane.XplaneDsf3DObject;
 import com.osm2xp.utils.DsfObjectsProvider;
 import com.osm2xp.utils.geometry.GeomUtils;
 
@@ -20,7 +21,7 @@ import math.geom2d.polygon.LinearCurve2D;
 import math.geom2d.polygon.LinearRing2D;
 
 public class XPOutputFormat {
-	
+
 	public static final String EXCLUSION_PLACEHOLDER = "{EXCLUSIONS}";
 
 	/**
@@ -52,7 +53,8 @@ public class XPOutputFormat {
 		sb.append("PROPERTY sim/require_object 1/0\n");
 		// }
 		sb.append("PROPERTY sim/require_facade 6/0\n");
-		sb.append("PROPERTY sim/creation_agent Osm2Xp " + CoreConstants.OSM2XP_VERSION + " by Benjamin Blanchet, Dmitry Karpenko \n");
+		sb.append("PROPERTY sim/creation_agent Osm2Xp " + CoreConstants.OSM2XP_VERSION
+				+ " by Benjamin Blanchet, Dmitry Karpenko \n");
 		// Exclusions
 		String exclusionCoordinate = exclusionBox != null
 				? formatDsfCoord(exclusionBox.getMinX()) + "/" + formatDsfCoord(exclusionBox.getMinY()) + "/"
@@ -65,7 +67,8 @@ public class XPOutputFormat {
 		sb.append("PROPERTY sim/north " + (latitude + 1) + "\n");
 		sb.append("PROPERTY sim/south " + latitude + "\n\n");
 
-		dsfObjectsProvider.getPolygonsList().stream().map(str -> "POLYGON_DEF " + str + "\n").forEach(str -> sb.append(str));
+		dsfObjectsProvider.getPolygonsList().stream().map(str -> "POLYGON_DEF " + str + "\n")
+				.forEach(str -> sb.append(str));
 
 		if (dsfObjectsProvider.getObjectsList() != null) {
 			for (String objectPath : dsfObjectsProvider.getObjectsList()) {
@@ -78,11 +81,20 @@ public class XPOutputFormat {
 		return sb.toString();
 	}
 
+	public String getObjectString(XplaneDsf3DObject obj) {
+		StringBuilder sb = new StringBuilder();
+		sb.append("OBJECT " + obj.getDsfIndex() + " " + obj.getOrigin().x() + " " + obj.getOrigin().y() + " "
+				+ String.format("%1.2f", obj.getAngle()));
+		sb.append(XPlaneTranslatorImpl.LINE_SEP);
+		return sb.toString();
+	}
+
 	public String getPolygonString(LinearCurve2D poly, String arg1, String arg2) {
 		return getPolygonString(poly, null, arg1, arg2);
 	}
 
-	public String getPolygonString(LinearCurve2D poly, List<? extends LinearCurve2D> innerPolys, String arg1, String arg2) {
+	public String getPolygonString(LinearCurve2D poly, List<? extends LinearCurve2D> innerPolys, String arg1,
+			String arg2) {
 		StringBuilder sb = new StringBuilder();
 		sb.append("BEGIN_POLYGON " + arg1 + " " + arg2 + " 2");
 		sb.append(XPlaneTranslatorImpl.LINE_SEP);
@@ -90,7 +102,7 @@ public class XPOutputFormat {
 
 		if (innerPolys != null && !innerPolys.isEmpty()) {
 			if (innerPolys.size() > MAX_INNER_POLYS) {
-				Osm2xpLogger.warning( "255 windings at most supported for polygon, current polygon has "
+				Osm2xpLogger.warning("255 windings at most supported for polygon, current polygon has "
 						+ innerPolys.size() + ". Only first 255 would be used.");
 				innerPolys = innerPolys.subList(0, MAX_INNER_POLYS);
 			}
@@ -141,7 +153,8 @@ public class XPOutputFormat {
 				pathSegment.getStartId(), points[0].x(), points[0].y(), pathSegment.getStartHeight()));
 		builder.append(LINE_SEP);
 		for (int i = 1; i < points.length - 1; i++) {
-			builder.append(String.format(Locale.ROOT, "SHAPE_POINT %1.9f %2.9f 0.000000000", points[i].x(), points[i].y()));
+			builder.append(
+					String.format(Locale.ROOT, "SHAPE_POINT %1.9f %2.9f 0.000000000", points[i].x(), points[i].y()));
 			builder.append(LINE_SEP);
 		}
 		builder.append(String.format(Locale.ROOT, "END_SEGMENT %d %2.9f %3.9f %4.9f", pathSegment.getEndId(),
@@ -150,7 +163,6 @@ public class XPOutputFormat {
 		return builder.toString();
 	}
 
-	
 	/**
 	 * @param tileCoordinate
 	 * @return
@@ -181,12 +193,13 @@ public class XPOutputFormat {
 		if (XPlaneOptionsProvider.getOptions().isExcludeStr()) {
 			sb.append("PROPERTY sim/exclude_str " + tileCoordinate);
 		}
-	
+
 		return sb.toString();
 	}
 
 	/**
 	 * Formats lat/long to string with 9 chars after "."
+	 * 
 	 * @param coord coord value to format
 	 * @return formatted string
 	 */

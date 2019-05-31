@@ -17,140 +17,32 @@ import math.geom2d.polygon.LinearRing2D;
  */
 public class XplaneDsf3DObject extends XplaneDsfObject {
 
-	private XplaneObjectTagRule rule;
-
-	public XplaneDsf3DObject(OsmPolygon poly, XplaneObjectTagRule rule) {
-		super(poly);
-		this.rule = rule;
-	}
+	private int objectIdx;
+	private Point2D origin;
 
 	public XplaneDsf3DObject() {
 	}
 
-	/**
-	 * @param polygon
-	 * @return
-	 */
-	private XplaneObjGeoRef getOriginAndAngle() {
-		XplaneObjGeoRef result = null;
-
-		LinearRing2D polygon = this.osmPolygon.getPolygon();
-
-		if (polygon.vertices().size() == 5) {
-
-			for (int i = 0; i < polygon.vertices().size() - 2; i++) {
-				Point2D ptX = polygon.vertex(i);
-				Point2D ptOrigin = polygon.vertex(i + 1);
-				Point2D ptY = polygon.vertex(i + 2);
-
-				double segmentX = GeomUtils.latLonDistance(ptX.y(), ptX.x(),
-						ptOrigin.y(), ptOrigin.x());
-				double segmentY = GeomUtils.latLonDistance(ptOrigin.y(),
-						ptOrigin.x(), ptY.y(), ptY.x());
-				// check if the rule x/y segments "fits" the current osm
-				// polygon
-				Boolean xVectorCheck = segmentX > rule.getxVectorMinLength()
-						&& segmentX < rule.getxVectorMaxLength();
-				Boolean yVectorCheck = segmentY > rule.getyVectorMinLength()
-						&& segmentY < rule.getyVectorMaxLength();
-				Boolean dimensionsCheck = xVectorCheck && yVectorCheck;
-
-				// if that's the case, compute the rotation point (origin)
-				// of
-				// the object
-				if (dimensionsCheck) {
-					result = new XplaneObjGeoRef();
-					result.origin = ptOrigin;
-					result.angle = GeomUtils.getTrueBearing(ptOrigin, ptY);
-				}
-
-				if (result != null)
-					break;
-			}
-
-		}
-
-		return result;
+	public XplaneDsf3DObject(OsmPolygon osmPolygon, int objectIdx, double angle, Point2D origin) {
+		this.osmPolygon = osmPolygon;
+		this.objectIdx = objectIdx;
+		this.angle = angle;
+		this.origin = origin;
 	}
 
-	private XplaneObjGeoRef computeObjGeoRef() {
-		XplaneObjGeoRef result = new XplaneObjGeoRef();
-		if (osmPolygon != null && osmPolygon.getPolygon() != null) {
-			// if polygon is under 5 points, use first point
-			if (osmPolygon.getPolygon().vertices().size() < 5) {
-				result = computeBasicOriginAndAngle();
-			}
-			// if more complex polygon
-			else {
-				// if simple rectangle and if rule is made for simple polygon
-				if (osmPolygon.getPolygon().vertices().size() == 5
-						&& rule.isSimplePolygonOnly()) {
-					result = getOriginAndAngle();
-				}
-				// if complex polygon
-				else {
-					result = computeComplexPolygonOriginAndAngle();
-				}
-
-			}
-		}
-		return result;
-	}
-
-	private XplaneObjGeoRef computeComplexPolygonOriginAndAngle() {
-		XplaneObjGeoRef result = new XplaneObjGeoRef();
-		result.origin = GeomUtils.getPolylineCenter(osmPolygon.getPolygon());
-		if (rule.isRandomAngle()) {
-			result.angle = Double.valueOf(MiscUtils.getRandomSize(0, 360));
-		} else {
-			result.angle = Double.valueOf(rule.getAngle());
-		}
-		return result;
-	}
-
-	private XplaneObjGeoRef computeBasicOriginAndAngle() {
-		XplaneObjGeoRef result = new XplaneObjGeoRef();
-		result.origin = osmPolygon.getPolygon().firstPoint();
-		if (rule.isRandomAngle()) {
-			result.angle = Double.valueOf(MiscUtils.getRandomSize(0, 360));
-		} else {
-			result.angle = Double.valueOf(rule.getAngle());
-		}
-		return result;
-	}
-
+	@Override
 	public String asObjDsfText() throws Osm2xpBusinessException {
-
-		StringBuffer sb = new StringBuffer();
-		// compute the center of the object.
-
-		XplaneObjGeoRef obj = computeObjGeoRef();
-		if (obj == null || obj.angle == null | obj.origin == null) {
-			throw new Osm2xpBusinessException("Error computing 3D object");
-		}
-		sb.append("OBJECT " + this.dsfIndex + " " + obj.origin.x() + " "
-				+ obj.origin.y() + " " + obj.angle);
-		sb.append(System.getProperty("line.separator"));
-		return sb.toString();
+		throw new UnsupportedOperationException();
 	}
 
-	public XplaneObjectTagRule getRule() {
-		return rule;
+	public int getObjectIdx() {
+		return objectIdx;
 	}
 
-	public void setRule(XplaneObjectTagRule rule) {
-		this.rule = rule;
+	public Point2D getOrigin() {
+		return origin;
 	}
 
-	/**
-	 * inner class for angle and origin storage.
-	 * 
-	 * @author Benjamin Blanchet
-	 * 
-	 */
-	private class XplaneObjGeoRef {
-		protected Point2D origin;
-		protected Double angle;
+	
 
-	}
 }

@@ -362,7 +362,6 @@ public class DsfObjectsProvider {
 						.equalsIgnoreCase(String.valueOf(id)))
 						|| (OsmUtils.compareTags(objectTagRule.getTag(), tag))) {
 					result = new XplaneDsf3DObject();
-					result.setRule(objectTagRule);
 					result.setDsfIndex(getRandomObject(objectTagRule));
 					if (objectTagRule.isRandomAngle()) {
 						Random randomGenerator = new Random();

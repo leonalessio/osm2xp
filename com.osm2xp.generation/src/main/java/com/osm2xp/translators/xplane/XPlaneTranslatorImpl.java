@@ -228,11 +228,11 @@ public class XPlaneTranslatorImpl implements ITranslator{
 				result = XPlaneOptionsProvider.getOptions().getResidentialMin();
 			} else {
 				if (polygon.getArea() * 10000000 > ASSERTION_RESIDENTIAL_MAX_AREA)
-					result = MiscUtils.getRandomSize(XPlaneOptionsProvider
+					result = MiscUtils.getRandomInt(XPlaneOptionsProvider
 							.getOptions().getBuildingMin(), XPlaneOptionsProvider
 							.getOptions().getBuildingMax());
 				else if (polygon.getArea() * 10000000 < ASSERTION_RESIDENTIAL_MAX_AREA)
-					result = MiscUtils.getRandomSize(XPlaneOptionsProvider
+					result = MiscUtils.getRandomInt(XPlaneOptionsProvider
 							.getOptions().getResidentialMin(),
 							XPlaneOptionsProvider.getOptions()
 									.getResidentialMax());

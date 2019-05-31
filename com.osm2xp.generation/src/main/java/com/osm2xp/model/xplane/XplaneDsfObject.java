@@ -13,13 +13,13 @@ public abstract class XplaneDsfObject {
 
 	protected Integer dsfIndex;
 	protected OsmPolygon osmPolygon;
-	private Integer angle;
+	protected double angle;
 
-	public Integer getAngle() {
+	public double getAngle() {
 		return angle;
 	}
 
-	public void setAngle(Integer angle) {
+	public void setAngle(double angle) {
 		this.angle = angle;
 	}
 
