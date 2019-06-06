@@ -1,12 +1,12 @@
 package com.osm2xp.classification;
 
 public enum BuildingType {
-	RESIDENTAL,
+	BLOCK, //Living block
 	INDUSTRIAL,
-	HOSPITAL,
-	OFFICE,
-	SCHOOL, //Amenity school/college
-	INSTITUTE, //Amenity university/rearch_institute
-	SHOP, //Tag shop=* (malls, supermarkets)
+	SOCIAL, //School, hospital, university...
+	OFFICE,	
+	SHOP, //Tag shop=* 
+	MALL,
+	HOUSE, //house,detached..
 	GARAGE
 }

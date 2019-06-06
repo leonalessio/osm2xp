@@ -14,24 +14,24 @@ public class TypeProvider {
 			return BuildingType.OFFICE;
 		}
 		if ("hospital".equals(building)) {
-			return BuildingType.HOSPITAL;
+			return BuildingType.SOCIAL;
 		}
 		if ("school".equals(building)) {
-			return BuildingType.SCHOOL;
+			return BuildingType.SOCIAL;
 		}
 		if ("retail".equals(building) || "supermarket".equals(building)) {
 			return BuildingType.SHOP;
 		}
 		String amenity = TagUtil.getValue("amenity", tags);
 		if (amenity != null && amenity.endsWith("school") || "college".equals(amenity)) {
-			return BuildingType.SCHOOL;
+			return BuildingType.SOCIAL;
 		}
 		if ("university".equals(building) || "university".equals(amenity)) {
-			return BuildingType.INSTITUTE;
+			return BuildingType.SOCIAL;
 		}
 		if ("clinic".equals(amenity) || "hospital".equals(amenity) || 
 			"dentist".equals(amenity) || "doctors".equals(amenity)) {
-			return BuildingType.HOSPITAL;
+			return BuildingType.SOCIAL;
 		}
 		if (building != null && building.startsWith("garage")) {
 			return BuildingType.GARAGE;
@@ -40,7 +40,10 @@ public class TypeProvider {
 			return BuildingType.INDUSTRIAL;
 		}
 		if ("residental".equals(building) || "apartments".equals(building)) {
-			return BuildingType.RESIDENTAL;
+			return BuildingType.BLOCK;
+		}
+		if ("house".equals(building) || "detached".equals(building)) {
+			return BuildingType.HOUSE;
 		}
 		if ("commercial".equals(building)) {
 			return BuildingType.SHOP;
