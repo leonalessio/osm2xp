@@ -132,7 +132,7 @@ public abstract class StringDelimitedWriter<T> implements Closeable{
 				boolean present = value != null;
 				String res = "?";
 				if (present) {
-					res = "'" + value.toString() + "'";
+					res = '"' + value.toString() + '"';
 				}
 				builder.append(res);
 				if (shouldBePresent(fld)) {
