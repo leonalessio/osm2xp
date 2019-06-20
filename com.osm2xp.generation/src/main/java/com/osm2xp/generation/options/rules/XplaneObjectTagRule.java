@@ -25,7 +25,6 @@ public class XplaneObjectTagRule extends TagsRule {
 
 	protected int angle = 0;
 	protected boolean randomAngle = false;
-	protected boolean polygonAngle;
 	protected boolean sizeCheck;
 	protected int xVectorMinLength;
 	protected int xVectorMaxLength;

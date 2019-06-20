@@ -1,8 +1,64 @@
 <?xml version="1.0" encoding="UTF-8" standalone="yes"?>
 <FacadeSet>
     <name>russian facades and fence set</name>
-    <author>Alex Krug</author>
+    <author>32kda, Alex Krug</author>
     <description>russian facades set for osm2xp V2.0.2</description>
+	<facades>
+        <file>apartment1.fac</file>
+        <roofColor></roofColor>
+        <wallColor></wallColor>
+        <industrial>false</industrial>
+        <commercial>true</commercial>
+        <residential>true</residential>
+        <sloped>false</sloped>
+        <minVectorLength>0.0</minVectorLength>
+        <maxVectorLength>0.0</maxVectorLength>
+        <simpleBuildingOnly>false</simpleBuildingOnly>
+        <minHeight>12</minHeight>
+        <maxHeight>100</maxHeight>
+    </facades>
+	<facades>
+        <file>apartment2.fac</file>
+        <roofColor></roofColor>
+        <wallColor></wallColor>
+        <industrial>false</industrial>
+        <commercial>true</commercial>
+        <residential>true</residential>
+        <sloped>false</sloped>
+        <minVectorLength>0.0</minVectorLength>
+        <maxVectorLength>0.0</maxVectorLength>
+        <simpleBuildingOnly>false</simpleBuildingOnly>
+        <minHeight>12</minHeight>
+        <maxHeight>100</maxHeight>
+    </facades>
+	<facades>
+        <file>apartment3.fac</file>
+        <roofColor></roofColor>
+        <wallColor></wallColor>
+        <industrial>false</industrial>
+        <commercial>true</commercial>
+        <residential>true</residential>
+        <sloped>false</sloped>
+        <minVectorLength>0.0</minVectorLength>
+        <maxVectorLength>0.0</maxVectorLength>
+        <simpleBuildingOnly>false</simpleBuildingOnly>
+        <minHeight>12</minHeight>
+        <maxHeight>100</maxHeight>
+    </facades>
+	<facades>
+        <file>apartment4.fac</file>
+        <roofColor></roofColor>
+        <wallColor></wallColor>
+        <industrial>false</industrial>
+        <commercial>true</commercial>
+        <residential>true</residential>
+        <sloped>false</sloped>
+        <minVectorLength>0.0</minVectorLength>
+        <maxVectorLength>0.0</maxVectorLength>
+        <simpleBuildingOnly>false</simpleBuildingOnly>
+        <minHeight>12</minHeight>
+        <maxHeight>100</maxHeight>
+    </facades>
     <facades>
         <file>cheshka.fac</file>
         <roofColor></roofColor>

@@ -37,3 +37,4 @@ Bundle-ClassPath: .,
  lib/osmosis-osm-binary.jar,
  lib/osmosis-xml.jar,
  lib/protobuf-java.jar
+Automatic-Module-Name: com.osm2xp.core

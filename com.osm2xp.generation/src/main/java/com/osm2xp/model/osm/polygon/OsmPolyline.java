@@ -17,7 +17,7 @@ public class OsmPolyline implements IHasTags{
 	protected long id;
 	protected List<Tag> tags;
 	protected List<Node> nodes;
-	protected Integer height;
+	protected int height = 0;
 	protected LinearCurve2D polyline;
 	protected Point2D center;
 	/**
@@ -155,7 +155,7 @@ public class OsmPolyline implements IHasTags{
 		return center;
 	}
 
-	public Integer getHeight() {
+	public int getHeight() {
 		return height;
 	}
 

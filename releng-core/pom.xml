@@ -9,9 +9,7 @@
 	xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
 
 	<modelVersion>4.0.0</modelVersion>
-	<groupId>com.osm2xp</groupId>
 	<artifactId>com.osm2xp.core.parent</artifactId>
-	<version>4.0.0-SNAPSHOT</version>
 	<packaging>pom</packaging>
 	<name>OSM2XP</name>
 	<organization>
@@ -27,6 +25,7 @@
 	
 	<modules>
 		<module>../com.osm2xp.core</module>
+		<module>../com.osm2xp.classification.core</module>
 		<module>../com.osm2xp.generation</module>
 	</modules>
 	

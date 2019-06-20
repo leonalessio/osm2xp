@@ -1,6 +1,5 @@
 package com.osm2xp.model.xplane;
 
-import com.osm2xp.core.exceptions.Osm2xpBusinessException;
 import com.osm2xp.model.osm.polygon.OsmPolygon;
 
 /**
@@ -11,7 +10,7 @@ import com.osm2xp.model.osm.polygon.OsmPolygon;
  */
 public abstract class XplaneDsfObject {
 
-	protected Integer dsfIndex;
+	protected int dsfIndex;
 	protected OsmPolygon osmPolygon;
 	protected double angle;
 
@@ -31,11 +30,11 @@ public abstract class XplaneDsfObject {
 		this.osmPolygon = poly;
 	}
 
-	public Integer getDsfIndex() {
+	public int getDsfIndex() {
 		return dsfIndex;
 	}
 
-	public void setDsfIndex(Integer dsfIndex) {
+	public void setDsfIndex(int dsfIndex) {
 		this.dsfIndex = dsfIndex;
 	}
 
@@ -46,7 +45,5 @@ public abstract class XplaneDsfObject {
 	public void setPolygon(OsmPolygon polygon) {
 		this.osmPolygon = polygon;
 	}
-
-	public abstract String asObjDsfText() throws Osm2xpBusinessException;
 
 }

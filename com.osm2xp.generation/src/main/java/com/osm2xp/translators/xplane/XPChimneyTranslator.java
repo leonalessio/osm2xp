@@ -26,8 +26,8 @@ public class XPChimneyTranslator extends XPSpecObjectTranslator {
 
 	@Override
 	protected int getObjectSize(OsmPolygon osmPolygon) {
-		Integer height = osmPolygon.getHeight();
-		if (height == null) {
+		int height = osmPolygon.getHeight();
+		if (height == 0) {
 			return 50; //Default value
 		}
 		return height;
@@ -45,7 +45,7 @@ public class XPChimneyTranslator extends XPSpecObjectTranslator {
 	
 	protected String getComment(OsmPolygon osmPolygon) {
 		StringBuilder commentBuilder = new StringBuilder("#Chimney");
-		if (osmPolygon.getHeight() != null) {
+		if (osmPolygon.getHeight() > 0) {
 			commentBuilder.append(" ");
 			commentBuilder.append(osmPolygon.getHeight());
 			commentBuilder.append("m");

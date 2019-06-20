@@ -16,7 +16,7 @@ import javax.xml.bind.annotation.XmlType;
  * 
  */
 @XmlAccessorType(XmlAccessType.FIELD)
-@XmlType(name = "PolygonRulesList", propOrder = { "minPerimeter", "rules" })
+@XmlType(name = "PolygonRulesList", propOrder = { "rules" })
 public class PolygonRulesList {
 
 	@XmlElement(required = true)

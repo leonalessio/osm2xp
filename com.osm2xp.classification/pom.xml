@@ -34,8 +34,8 @@
      </dependency>
   	<dependency>
   		<groupId>com.osm2xp</groupId>
-  		<artifactId>com.osm2xp.core</artifactId>
-  		<version>[0.0.0,)</version>
+  		<artifactId>com.osm2xp.classification.core</artifactId>
+  		<version>4.0.0-SNAPSHOT</version>
   	</dependency>
   </dependencies>
 </project>

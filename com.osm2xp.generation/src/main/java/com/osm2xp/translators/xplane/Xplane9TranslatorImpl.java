@@ -114,15 +114,19 @@ public class Xplane9TranslatorImpl extends XPlaneTranslatorImpl {
 			List<OsmPolyline> polylines = preprocess(osmPolygon);
 			// try to transform those polygons into dsf objects.
 			for (OsmPolyline poly : polylines) {
-				// try to generate a 3D object
-				if (!process3dObject(poly)) {
-					// nothing generated? try to generate a facade building.
-					if (!processBuilding(poly)) {
-						// nothing generated? try to generate a forest.
-						if (!forestTranslator.handlePoly(poly)) {
-							// still nothing? try to generate a streetlight.
-							if (!processStreetLights(poly)) {
-								processByHandlers(poly);
+				// try to generate a 3D object based on rules
+				if (!processByTranslator(poly, objectByRuleTranslator)) {
+					// try to generate 3D object based on present model files
+					if (!processByTranslator(poly, polyToObjectTranslator)) {
+
+						// nothing generated? try to generate a facade building.
+						if (!processBuilding(poly)) {
+							// nothing generated? try to generate a forest.
+							if (!forestTranslator.handlePoly(poly)) {
+								// still nothing? try to generate a streetlight.
+								if (!processStreetLights(poly)) {
+									processByHandlers(poly);
+								}
 							}
 						}
 					}

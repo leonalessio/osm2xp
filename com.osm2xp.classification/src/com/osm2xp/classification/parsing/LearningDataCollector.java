@@ -3,9 +3,9 @@ package com.osm2xp.classification.parsing;
 import java.util.List;
 import java.util.function.Predicate;
 
+import com.onpositive.classification.core.buildings.TypeProvider;
 import com.osm2xp.classification.BuildingData;
 import com.osm2xp.classification.HeightProvider;
-import com.osm2xp.classification.TypeProvider;
 import com.osm2xp.core.model.osm.Tag;
 import com.osm2xp.core.parsers.IOSMDataVisitor;
 

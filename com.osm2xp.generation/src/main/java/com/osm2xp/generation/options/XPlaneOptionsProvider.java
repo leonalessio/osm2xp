@@ -46,7 +46,7 @@ public class XPlaneOptionsProvider {
 		try {
 			return (XplaneOptions) XmlHelper.loadFileFromXml(optionsFile, XplaneOptions.class);
 		} catch (com.osm2xp.core.exceptions.Osm2xpBusinessException e) {
-			Osm2xpLogger.warning("Unable to find X-Plane options file at " + optionsFile.getAbsolutePath()); 
+			Osm2xpLogger.warning("Unable to load X-Plane options file at " + optionsFile.getAbsolutePath()); 
 		}
 		return null;
 	}

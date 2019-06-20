@@ -81,12 +81,16 @@ public class XPOutputFormat {
 		return sb.toString();
 	}
 
-	public String getObjectString(XplaneDsf3DObject obj) {
+	public String getObjectString(int index, double x, double y, double angle) {
 		StringBuilder sb = new StringBuilder();
-		sb.append("OBJECT " + obj.getDsfIndex() + " " + obj.getOrigin().x() + " " + obj.getOrigin().y() + " "
-				+ String.format("%1.2f", obj.getAngle()));
+		sb.append("OBJECT " + index + " " + x + " " + y + " "
+				+ String.format(Locale.ROOT, "%1.2f", angle));
 		sb.append(XPlaneTranslatorImpl.LINE_SEP);
 		return sb.toString();
+	}
+	
+	public String getObjectString(XplaneDsf3DObject obj) {
+		return getObjectString(obj.getDsfIndex(), obj.getOrigin().x(), obj.getOrigin().y(), obj.getAngle());
 	}
 
 	public String getPolygonString(LinearCurve2D poly, String arg1, String arg2) {

@@ -219,7 +219,7 @@ public class XplaneObjectsRulesPanel extends Composite {
 			@Override
 			public void widgetSelected(SelectionEvent e) {
 				ObjectFile file = new ObjectFile();
-				file.setPath("SomePathTo" + File.separator + "aObjectFile.fac");
+				file.setPath("objects/1.obj");
 				selectedXplaneObjectTagRule.getObjectsFiles().add(file);
 				objectFilesTable.getViewer().refresh();
 			}

@@ -75,7 +75,7 @@ public class MultiTileDataConverter extends AbstractOSMDataConverter {
 		for (ISpecificTranslator adapter : translationAdapters) {
 			try {
 				adapter.processNode(node);
-			} catch (Osm2xpBusinessException e) {
+			} catch (Exception e) {
 				Osm2xpLogger.log(e);
 			}
 		}

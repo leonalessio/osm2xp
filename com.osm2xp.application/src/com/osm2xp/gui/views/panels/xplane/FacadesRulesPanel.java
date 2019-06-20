@@ -164,7 +164,7 @@ public class FacadesRulesPanel extends Osm2xpPanel {
 			@Override
 			public void widgetSelected(SelectionEvent e) {
 				ObjectFile file = new ObjectFile();
-				file.setPath("SomePathTo" + File.separator + "aFacadeFile.fac");
+				file.setPath("facades/1.fac");
 				selectedFacadeTagRule.getObjectsFiles().add(file);
 				facadesFilesTable.getViewer().refresh();
 			}

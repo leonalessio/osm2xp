@@ -11,6 +11,7 @@ import java.util.OptionalDouble;
 import java.util.function.Predicate;
 import java.util.stream.Collectors;
 
+import com.onpositive.classification.core.buildings.TypeProvider;
 import com.osm2xp.classification.index.KdTree;
 import com.osm2xp.classification.index.PointData;
 import com.osm2xp.classification.learning.ModelGenerator;

@@ -229,7 +229,7 @@ public class ForestsRulesPanel extends Composite {
 			@Override
 			public void widgetSelected(SelectionEvent e) {
 				ObjectFile file = new ObjectFile();
-				file.setPath("SomePathTo" + File.separator + "aForestFile.fac");
+				file.setPath("forests/1.for");
 				selectedForestTagRule.getObjectsFiles().add(file);
 				forestsFilesTable.getViewer().refresh();
 			}

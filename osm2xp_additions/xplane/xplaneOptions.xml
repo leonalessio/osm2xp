@@ -211,6 +211,57 @@
             <rotationPointX>50</rotationPointX>
             <rotationPointY>50</rotationPointY>
         </rules>
+		<rules>
+            <tag value="communication" key="tower:type"/>
+            <objectsFiles>
+                <path>objects/GSM-tow-20m.obj</path>
+            </objectsFiles>
+			<objectsFiles>
+                <path>objects/GSM-tow.obj</path>
+            </objectsFiles>
+            <angle>0</angle>
+            <randomAngle>true</randomAngle>
+            <polygonAngle>false</polygonAngle>
+            <sizeCheck>false</sizeCheck>
+            <xVectorMinLength>0</xVectorMinLength>
+            <xVectorMaxLength>0</xVectorMaxLength>
+            <yVectorMinLength>0</yVectorMinLength>
+            <yVectorMaxLength>0</yVectorMaxLength>
+            <areaCheck>false</areaCheck>
+            <minArea>0</minArea>
+            <maxArea>0</maxArea>
+            <simplePolygonOnly>false</simplePolygonOnly>
+            <usePolygonAngle>false</usePolygonAngle>
+            <rotationPointX>5</rotationPointX>
+            <rotationPointY>5</rotationPointY>
+        </rules>
+		<rules>
+            <tag value="communications_tower" key="man_made"/>
+            <objectsFiles>
+                <path>objects/R_Tower_SAT_107m.obj</path>
+            </objectsFiles>
+			<objectsFiles>
+                <path>objects/R_Tower_GRN_65m.obj</path>
+            </objectsFiles>
+			<objectsFiles>
+                <path>objects/R_Tower_50m.obj</path>
+            </objectsFiles>
+            <angle>0</angle>
+            <randomAngle>true</randomAngle>
+            <polygonAngle>false</polygonAngle>
+            <sizeCheck>false</sizeCheck>
+            <xVectorMinLength>0</xVectorMinLength>
+            <xVectorMaxLength>0</xVectorMaxLength>
+            <yVectorMinLength>0</yVectorMinLength>
+            <yVectorMaxLength>0</yVectorMaxLength>
+            <areaCheck>false</areaCheck>
+            <minArea>0</minArea>
+            <maxArea>0</maxArea>
+            <simplePolygonOnly>false</simplePolygonOnly>
+            <usePolygonAngle>false</usePolygonAngle>
+            <rotationPointX>5</rotationPointX>
+            <rotationPointY>5</rotationPointY>
+        </rules>
     </ObjectsRules>
     <LightsRules/>
     <FacadesRules/>

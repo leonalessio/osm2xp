@@ -46,8 +46,7 @@ public abstract class RulesTable extends Composite {
 	
 		viewer.setContentProvider(new ArrayContentProvider());
 		viewer.setInput(items);
-		viewer.setItemCount(10);
-//		
+		
 		GridData gridData = new GridData();
 		gridData.verticalAlignment = GridData.FILL;
 		gridData.heightHint = table.getHeaderHeight() + table.getItemHeight() * DEFAULT_ITEMS;

@@ -65,8 +65,8 @@ public class OsmPolygon extends OsmPolyline {
 	public Boolean isSimplePolygon() {
 		Boolean result = false;
 		if (this.getPolyline() != null) {
-			result = (polyline.edgeNumber() == 4 && GeomUtils
-					.areParallelsSegmentsIdentics((LinearRing2D) polyline));
+			result = (polyline.edges().size() == 4 &&  
+					GeomUtils.areParallelsSegmentsIdentics((LinearRing2D) polyline));
 		}
 	
 		return result;
@@ -74,6 +74,6 @@ public class OsmPolygon extends OsmPolyline {
 	
 	@Override
 	public String toString() {
-		return "OsmPolygon [id=" + id + ", tag=" + tags + "]";
+		return "OsmPolygon [id=" + id + ", tags:" + tags + "]";
 	}
 }

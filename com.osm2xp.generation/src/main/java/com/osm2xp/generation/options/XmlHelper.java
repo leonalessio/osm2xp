@@ -65,7 +65,7 @@ public class XmlHelper {
 			}
 			result = root.getValue();
 		} catch (JAXBException e) {
-			throw new Osm2xpBusinessException(e.getMessage());
+			throw new Osm2xpBusinessException(e.getMessage(),e);
 		}
 		return result;
 	}

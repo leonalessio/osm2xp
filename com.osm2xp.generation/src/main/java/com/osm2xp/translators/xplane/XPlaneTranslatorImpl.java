@@ -78,7 +78,9 @@ public class XPlaneTranslatorImpl implements ITranslator{
 	
 	protected XPForestTranslator forestTranslator;
 	
-	protected XP3DObjectTranslator objectTranslator;
+	protected XP3DObjectByRuleTranslator objectByRuleTranslator;
+	
+	protected XPPolyTo3DObjectTranslator polyToObjectTranslator;
 	
 	protected ITranslationListener translationListener;
 	
@@ -111,7 +113,8 @@ public class XPlaneTranslatorImpl implements ITranslator{
 		polyHandlers.add(new XPDrapedPolyTranslator(writer, dsfObjectsProvider, outputFormat));
 		
 		forestTranslator = new XPForestTranslator(writer, dsfObjectsProvider, outputFormat);
-		objectTranslator = new XP3DObjectTranslator(writer, dsfObjectsProvider, outputFormat);
+		objectByRuleTranslator = new XP3DObjectByRuleTranslator(writer, dsfObjectsProvider, outputFormat);
+		polyToObjectTranslator = new XPPolyTo3DObjectTranslator(writer, dsfObjectsProvider, outputFormat);
 	}
 
 	protected XPOutputFormat createOutputFormat() {
@@ -155,7 +158,7 @@ public class XPlaneTranslatorImpl implements ITranslator{
 	 * @param size
 	 */
 	protected void writeBuildingToDsf(OsmPolygon osmPolygon, Integer facade) {
-		if (facade != null && osmPolygon.getHeight() != null) {
+		if (facade != null && osmPolygon.getHeight() > 0) {
 			osmPolygon.setPolygon(GeomUtils.setCCW(osmPolygon.getPolygon()));
 			double area = osmPolygon.getPolygon().area();
 			if (area < 0) {
@@ -196,20 +199,10 @@ public class XPlaneTranslatorImpl implements ITranslator{
 	 */
 	protected Integer computeBuildingHeight(OsmPolygon polygon) {
 		Integer result = null;
-		Integer osmHeight = polygon.getHeight();
-		if (osmHeight != null) {
+		int osmHeight = polygon.getHeight();
+		if (osmHeight > 0) {
 			result = osmHeight;
 		} else {
-			String value = polygon.getTagValue("building:levels");
-			if (value != null) {
-				try {
-					int levels = Integer.parseInt(value);
-					return (int) Math.round(levels * levelHeight);
-				} catch (NumberFormatException e) {
-					//Ignore. Should we log it?
-				}
-				
-			}
 			int height = tryGetHeightByType(polygon);
 			if (height > 0) {
 				return height;
@@ -336,7 +329,7 @@ public class XPlaneTranslatorImpl implements ITranslator{
 	
 			// if the polygon is a simple rectangle, we'll use a facade made for
 			// simple shaped buildings
-			if (polygon.getPolygon().edgeNumber() == 4) {
+			if (polygon.isSimplePolygon()) {
 				result = dsfObjectsProvider.computeFacadeDsfIndex(true, buildingType,
 						false, polygon);
 			}
@@ -375,11 +368,8 @@ public class XPlaneTranslatorImpl implements ITranslator{
 	 *            a xplane dsf object
 	 * @throws Osm2xpBusinessException
 	 */
-	protected void writeObjectToDsf(XplaneDsfObject object) throws Osm2xpBusinessException {
-	
-		String objectDsfText = object.asObjDsfText();
-		writer.write(objectDsfText);
-
+	protected void writeObjectToDsf(XplaneDsf3DObject object) throws Osm2xpBusinessException {
+		writer.write(outputFormat.getObjectString(object));
 	}
 
 	@Override
@@ -408,6 +398,7 @@ public class XPlaneTranslatorImpl implements ITranslator{
 					.getRandomDsfObjectIndexAndAngle(node.getTags(),
 							node.getId());
 			if (object != null) {
+				object.setOrigin(new Point2D(node.getLon(), node.getLat()));
 				List<Node> nodes = new ArrayList<Node>();
 				nodes.add(node);
 				object.setPolygon(new OsmPolygon(node.getId(), node
@@ -431,16 +422,20 @@ public class XPlaneTranslatorImpl implements ITranslator{
 				//Try processing by registered handlers first - they ususally have more concrete rules
 				if (!processByHandlers(poly))
 				{	
-					// try to generate a 3D object
-					if (!process3dObject(poly)) {
-						// nothing generated? try to generate a facade building.
-						if (!processBuilding(poly)) {
-							// nothing generated? try to generate a forest.
-							if (forestTranslator.handlePoly(poly) && translationListener != null) {
-								translationListener.processForest((OsmPolygon) poly);
-								StatsProvider.getTileStats(currentTile, true).incCount(forestTranslator.getId());
-							} 
+					// try to generate a 3D object based on rules
+					if (!processByTranslator(poly, objectByRuleTranslator)) {
+						//try to generate 3D object based on present model files
+						if (!processByTranslator(poly, polyToObjectTranslator)) {
+							// nothing generated? try to generate a facade building.
+							if (!processBuilding(poly)) {
+								// nothing generated? try to generate a forest.
+								if (forestTranslator.handlePoly(poly) && translationListener != null) {
+									translationListener.processForest((OsmPolygon) poly);
+									StatsProvider.getTileStats(currentTile, true).incCount(forestTranslator.getId());
+								} 
+							}
 						}
+						
 					}
 				}
 			}
@@ -474,17 +469,19 @@ public class XPlaneTranslatorImpl implements ITranslator{
 	}
 	
 	/**
-	 * choose and write a 3D object in the dsf file.
+	 * Try processing given polygon with given tranlator and increase statistics in case of success
 	 * 
 	 * @param polygon
 	 *            osm polygon.
-	 * @return true if a 3D object has been written in the dsf file.
+	 * @param translator
+	 * 			  translator to use
+	 * @return true if translator succeded
 	 */
-	protected boolean process3dObject(OsmPolyline poly) {
-		boolean processed = objectTranslator.handlePoly(poly);
+	protected boolean processByTranslator(OsmPolyline poly, IPolyHandler translator) {
+		boolean processed = translator.handlePoly(poly);
 
 		if (processed) {
-			StatsProvider.getTileStats(currentTile, true).incCount("object");
+			StatsProvider.getTileStats(currentTile, true).incCount(translator.getId());
 		}
 		
 		return processed;
@@ -581,11 +578,11 @@ public class XPlaneTranslatorImpl implements ITranslator{
 					.getRandomDsfLightObject((OsmPolygon) poly);
 			if (object != null) {
 				object.setPolygon((OsmPolygon) poly);
-				try {
-					writeObjectToDsf(object);
-				} catch (Osm2xpBusinessException e) {
-					Osm2xpLogger.log(e);
-				}
+//				try {
+//					writeObjectToDsf(object);
+//				} catch (Osm2xpBusinessException e) {
+//					Osm2xpLogger.log(e);
+//				}
 			}
 		}
 	}

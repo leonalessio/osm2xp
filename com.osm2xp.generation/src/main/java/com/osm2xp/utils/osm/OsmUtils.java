@@ -14,6 +14,7 @@ import com.osm2xp.core.constants.CoreConstants;
 import com.osm2xp.core.logging.Osm2xpLogger;
 import com.osm2xp.core.model.osm.Node;
 import com.osm2xp.core.model.osm.Tag;
+import com.osm2xp.generation.options.GlobalOptionsProvider;
 import com.osm2xp.generation.options.XPlaneOptionsProvider;
 import com.osm2xp.generation.options.rules.ForestTagRule;
 import com.osm2xp.generation.options.rules.TagsRule;
@@ -378,14 +379,14 @@ public class OsmUtils {
 	 * @param tags
 	 * @return the height in meter.
 	 */
-	public static Integer getHeightFromTags(List<Tag> tags) {
+	public static int getHeightFromTags(List<Tag> tags) {
 		for (Tag tag : tags) {
 			if (!tag.getKey().toLowerCase().contains("max")
 					&& !tag.getKey().toLowerCase().contains("min")) {
 				if (tag.getKey().toLowerCase().contains("height")
 						&& tag.getValue().length() < 11) {
 					Integer height = MiscUtils.extractNumbers(tag.getValue());
-					if (height != null && height < 800 && height > 4) {
+					if (height != null && height < 800 && height > 2) {
 						return height;
 					}
 				}
@@ -394,15 +395,23 @@ public class OsmUtils {
 						&& tag.getValue().length() < 5) {
 					Integer levels = MiscUtils.extractNumbers(tag.getValue());
 					if (levels != null) {
-						int height = (levels * 3) + 1;
-						if (height < 800 && height > 4) {
+						int height =  (int) Math.round(levels * GlobalOptionsProvider.getOptions().getLevelHeight());
+						if (height < 800 && height > 2) {
 							return height;
 						}
 					}
 				}
+				if ("building:levels".equalsIgnoreCase(tag.getKey())) {
+					try {
+						int levels = Integer.parseInt(tag.getValue().trim());
+						return (int) Math.round(levels * GlobalOptionsProvider.getOptions().getLevelHeight());
+					} catch (NumberFormatException e) {
+						//Best effort
+					}
+				}
 			}
 		}
-		return null;
+		return 0;
 	}
 	
 	public static String getReadableType(List<Tag> tags) {

@@ -1,14 +1,14 @@
 package com.osm2xp.classification;
 
+import com.onpositive.classification.core.buildings.OSMBuildingType;
 import com.osm2xp.classification.annotations.Ignore;
 import com.osm2xp.classification.annotations.Positive;
-import com.osm2xp.classification.annotations.Present;
 import com.osm2xp.classification.annotations.Result;
 
 public class BuildingData {
 	
 	@Result
-	private BuildingType type;
+	private OSMBuildingType type;
 	@Positive
 	private double perimeter;
 	@Positive
@@ -44,11 +44,11 @@ public class BuildingData {
 		this.id = data.id;
 	}
 
-	public BuildingType getType() {
+	public OSMBuildingType getType() {
 		return type;
 	}
 
-	public void setType(BuildingType type) {
+	public void setType(OSMBuildingType type) {
 		this.type = type;
 	}
 

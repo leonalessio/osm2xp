@@ -2,6 +2,7 @@ package com.osm2xp.classification;
 
 import java.util.List;
 
+import com.onpositive.classification.core.util.TagUtil;
 import com.osm2xp.core.model.osm.Tag;
 
 public class HeightProvider {

@@ -72,30 +72,28 @@ public class GeomUtils {
 
 	/**
 	 * Check if the object fits the polygon.
-	 * 
+	 * @param xMinLength object x min length.
 	 * @param xMaxLength object x max length.
+	 * @param yMinLength object y min length.
 	 * @param yMaxLength object y max length.
-	 * @param xMinLength bject x min length.
-	 * @param yMinLength bject y min length.
 	 * @param poly       osm polygon.
+	 * 
 	 * @return true if the object can be used for this polygon.
 	 */
-	public static boolean isRectangleBigEnoughForObject(int xMaxLength, int yMaxLength, int xMinLength, int yMinLength,
+	public static boolean isRectangleBigEnoughForObject(int xMinLength, int xMaxLength, int yMinLength, int yMaxLength,
 			LinearRing2D poly) {
 		if (poly.vertices().size() == 5) {
-			Point2D vertex0 = poly.vertex(0);
-			Point2D vertex1 = poly.vertex(1);
-			if (yMaxLength == 0) { //use simplified algo, just check all sides against x bounding
+			if (yMaxLength == 0 || yMaxLength == xMaxLength) { //use simplified algo, just check all sides against x bounding
 				for (LineSegment2D segment : poly.edges()) {
-					Double distance = latLonDistance(segment.firstPoint().y(),
-							segment.firstPoint().x(), segment.lastPoint().y(),
-							segment.lastPoint().x());
+					Double distance = getSegmentLength(segment);
 					if (distance < xMinLength || distance > xMaxLength) {
 						return false;
 					}
 				}
 				return true;
 			}
+			Point2D vertex0 = poly.vertex(0);
+			Point2D vertex1 = poly.vertex(1);
 			double segment1 = latLonDistance(vertex0.y(), vertex0.x(), vertex1.y(), vertex1.x());
 			double segment2 = latLonDistance(vertex1.y(), vertex1.x(), poly.vertex(2).y(), poly.vertex(2).x());
 			return segment1 < xMaxLength && segment1 > xMinLength && segment2 < yMaxLength && segment2 > yMinLength
@@ -103,6 +101,59 @@ public class GeomUtils {
 
 		}
 		return false;
+	}
+	
+	public static double computeAvgDistance(LineSegment2D... segments) {
+		double avg = 0;
+		int n = segments.length;
+		for (LineSegment2D lineSegment2D : segments) {
+			avg += getSegmentLength(lineSegment2D) / n;
+		}
+		return avg;
+	}
+	
+	/**
+	 * Check if the polygon matches given length(s) with given tolerance
+	 * @param xLength x side length, m
+	 * @param yLength y side length, m. Sides are swappable
+	 * @param tolerance tolerance for matching, in range [0.0,1.0]
+	 * 
+	 * @param len1 - average edge length of the first pair of two opposite edges, m
+	 * @param len2 - average edge length of the second pair of two opposite edges, m
+	 * 
+	 * @return distance bethween actual side lengths and specified ones. Distance will be <b>Double.MAX_VALUE</b> if some length is outside of specified bounds
+	 */
+	public static double fitWithDistance(double xLength, double yLength, double tolerance,
+			double len1, double len2) {
+		double xMinLength = xLength - xLength * tolerance;
+		double xMaxLength = xLength + xLength * tolerance;
+		
+		double yMinLength = yLength - yLength * tolerance;
+		double yMaxLength = yLength + yLength * tolerance;
+		
+		
+		double lx01 = xMaxLength - len1;
+		double lx02 = len1 - xMinLength;
+		
+		double ly01 = yMaxLength - len2;
+		double ly02 = len2 - yMinLength;
+		
+		if (lx01 >= 0 && lx02 >=0 && ly01 >= 0 && ly02 >= 0) {
+			return (lx01 + lx02 + ly01 + ly02) / 4;
+		}
+		
+		return Double.MAX_VALUE;		
+	}
+
+	/**
+	 * Get segment length, m
+	 * @param segment {@link LineSegment2D}
+	 * @return segmenth length in meters
+	 */
+	protected static double getSegmentLength(LineSegment2D segment) {
+		return latLonDistance(segment.firstPoint().y(),
+				segment.firstPoint().x(), segment.lastPoint().y(),
+				segment.lastPoint().x());
 	}
 	
 	public static Geometry polylineToJtsGeom(LinearCurve2D polyline2d) {
@@ -187,7 +238,7 @@ public class GeomUtils {
 		return geometryFactory.createLineString(coords.toArray(new Coordinate[0]));
 	}
 
-	public static Double latLonDistance(double lat1, double lon1, double lat2,
+	public static double latLonDistance(double lat1, double lon1, double lat2,
 			double lon2) {
 		double earthRadius = 3958.75;
 		double dLat = Math.toRadians(lat2 - lat1);
@@ -201,7 +252,7 @@ public class GeomUtils {
 
 		int meterConversion = 1609;
 
-		return Double.valueOf(dist * meterConversion);
+		return dist * meterConversion;
 	}
 
 //	private static double deg2rad(double deg) {
@@ -224,9 +275,7 @@ public class GeomUtils {
 		Double maxVector = null;
 
 		for (LineSegment2D segment : polygon.edges()) {
-			Double distance = latLonDistance(segment.firstPoint().y(),
-					segment.firstPoint().x(), segment.lastPoint().y(),
-					segment.lastPoint().x());
+			Double distance = getSegmentLength(segment);
 			if (minVector == null || minVector > distance)
 				minVector = Double.valueOf(distance);
 			if (maxVector == null || maxVector < distance)
@@ -292,8 +341,7 @@ public class GeomUtils {
 	 * @return line length in meters
 	 */
 	public static double computeLengthInMeters(LineSegment2D line) {
-		return latLonDistance(line.firstPoint().y(),
-					line.firstPoint().x(), line.lastPoint().y(),line.lastPoint().x());
+		return getSegmentLength(line);
 	}
 	
 	/**
@@ -304,10 +352,13 @@ public class GeomUtils {
 	 */
 	public static double computeEdgesLength(LinearCurve2D polyline) {
 		double sum = 0;
+		Point2D[] vertexArray = polyline.vertexArray();
+		int n = vertexArray.length;
+		if (n < 2) {
+			return 0;
+		}
 		for (LineSegment2D segment : polyline.edges()) {
-			Double distance = latLonDistance(segment.firstPoint().y(),
-					segment.firstPoint().x(), segment.lastPoint().y(),
-					segment.lastPoint().x());
+			Double distance = getSegmentLength(segment);
 			sum += distance;
 		}
 		return sum;

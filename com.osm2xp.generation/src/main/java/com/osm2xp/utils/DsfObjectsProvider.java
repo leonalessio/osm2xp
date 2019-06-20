@@ -3,6 +3,11 @@ package com.osm2xp.utils;
 import java.awt.Color;
 import java.io.File;
 import java.io.IOException;
+import java.nio.file.FileVisitResult;
+import java.nio.file.Files;
+import java.nio.file.Path;
+import java.nio.file.SimpleFileVisitor;
+import java.nio.file.attribute.BasicFileAttributes;
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
@@ -41,6 +46,7 @@ import com.osm2xp.utils.osm.OsmUtils;
  */
 public class DsfObjectsProvider {
 
+	public static final String OBJ_EXT = ".obj";
 	private static final String FACADES_DIR_PREFFIX = "facades/";
 	public static final String OBJECTS_TARGET_FOLDER_NAME = "objects";
 	public static final String SPECIAL_OBJECTS_TARGET_FOLDER_NAME = "specobjects";
@@ -299,15 +305,30 @@ public class DsfObjectsProvider {
 
 	protected void registerAndCopyObjectsFolder(File objectsFolder, String targetSubfolder) {
 		try {
-			FilesUtils.copyDirectory(objectsFolder, new File(targetFolderPath, targetSubfolder),
+			File targetLocation = new File(targetFolderPath, targetSubfolder);
+			FilesUtils.copyDirectory(objectsFolder, targetLocation,
 					false);
+			Path parentPath = targetLocation.getParentFile().toPath();
+			List<String> pathsList = new ArrayList<String>();
+			Files.walkFileTree(targetLocation.toPath(), new SimpleFileVisitor<Path>() {
+				@Override
+				public FileVisitResult visitFile(Path file, BasicFileAttributes attrs) throws IOException {
+					Path resolved = parentPath.relativize(file);
+					String relative = resolved.toString().replace('\\','/');
+					if (relative.endsWith(OBJ_EXT)) {
+						pathsList.add(relative);
+					}
+					return super.visitFile(file, attrs);
+				}
+			});
+			objectsList.addAll(pathsList);
 		} catch (IOException e) {
 			Osm2xpLogger.log(e);
 		}
-		File[] objFiles = objectsFolder.listFiles((parent, name) -> name.toLowerCase().endsWith(".obj"));
-		for (File file : objFiles) {
-			objectsList.add(targetSubfolder + "/" + file.getName());
-		}
+//		File[] objFiles = objectsFolder.listFiles((parent, name) -> name.toLowerCase().endsWith(".obj"));
+//		for (File file : objFiles) {
+//			objectsList.add(targetSubfolder + "/" + file.getName());
+//		}
 	}
 
 	/**
@@ -318,7 +339,15 @@ public class DsfObjectsProvider {
 		Random rnd = new Random();
 		int i = rnd.nextInt(tagRule.getObjectsFiles().size());
 		String objectFile = tagRule.getObjectsFiles().get(i).getPath();
-		return objectsList.indexOf(objectFile);
+		int objectIndex = getObjectIndex(objectFile);
+		if (objectIndex == -1) {
+			Osm2xpLogger.error("Object " + objectFile + " is specified in rules, but can't be found in objects folder! Please check your rules against actually present objects");
+		}
+		return objectIndex;
+	}
+
+	public int getObjectIndex(String objectPath) {
+		return objectsList.indexOf(objectPath);
 	}
 	
 	/**

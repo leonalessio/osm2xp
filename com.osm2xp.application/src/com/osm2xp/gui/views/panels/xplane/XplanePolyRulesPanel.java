@@ -210,7 +210,7 @@ public class XplanePolyRulesPanel extends Composite {
 			@Override
 			public void widgetSelected(SelectionEvent e) {
 				Polygon file = new Polygon();
-//				file.setPath("SomePathTo" + File.separator + "aPolygon.fac");
+//				file.setPath("polygons/1.pol");
 				selectedPolygonTagsRule.getPolygons().add(file);
 				filesTable.getViewer().refresh();
 			}
