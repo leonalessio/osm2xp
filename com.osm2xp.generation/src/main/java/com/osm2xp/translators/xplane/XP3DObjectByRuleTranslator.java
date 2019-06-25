@@ -120,17 +120,6 @@ public class XP3DObjectByRuleTranslator extends XPWritingTranslator {
 		return result;
 	}
 	
-	protected List<ObjectFile> getNoHeightFiles(XplaneObjectTagRule objectTagRule) {
-		List<ObjectFile> resList = new ArrayList<ObjectFile>();
-		for (ObjectFile objectFile : objectTagRule.getObjectsFiles()) {
-			String path = objectFile.getPath();
-			if (extractHeight(path) > -1) {
-				resList.add(objectFile);
-			}
-		}
-		return resList;
-	}
-
 	protected boolean isMultiHeight(XplaneObjectTagRule objectTagRule) {
 		List<ObjectFile> objectsFiles = objectTagRule.getObjectsFiles();
 		if (objectsFiles.size() < 2) {
@@ -170,8 +159,7 @@ public class XP3DObjectByRuleTranslator extends XPWritingTranslator {
 		int height = osmPolygon.getHeight();
 		String choosedPath = null;
 		if (isMultiHeight(rule)) {
-			List<ObjectFile> noHeightFiles = getNoHeightFiles(rule);
-			if (height > 0 || (height == 0 && noHeightFiles.isEmpty())) {
+			if (height > 0) {
 				double minDelta = Double.MAX_VALUE;
 				for (ObjectFile objectFile : rule.getObjectsFiles()) {
 					double delta = Math.abs(extractHeight(objectFile.getPath()) - height);
@@ -181,8 +169,7 @@ public class XP3DObjectByRuleTranslator extends XPWritingTranslator {
 					}
 				}
 			} else {
-				int i = new Random().nextInt(noHeightFiles.size());
-				choosedPath = noHeightFiles.get(i).getPath();
+				choosedPath = rule.getObjectsFiles().get(0).getPath();
 			}
 			int objectIndex = dsfObjectsProvider.getObjectIndex(choosedPath);
 			if (objectIndex == -1) {

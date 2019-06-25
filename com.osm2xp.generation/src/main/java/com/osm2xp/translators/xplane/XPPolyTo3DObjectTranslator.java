@@ -12,6 +12,8 @@ import com.google.common.collect.ArrayListMultimap;
 import com.google.common.collect.Multimap;
 import com.onpositive.classification.core.buildings.OSMBuildingType;
 import com.onpositive.classification.core.buildings.TypeProvider;
+import com.osm2xp.core.logging.Osm2xpLogger;
+import com.osm2xp.generation.options.XPlaneOptionsProvider;
 import com.osm2xp.generation.paths.PathsService;
 import com.osm2xp.model.osm.polygon.OsmPolygon;
 import com.osm2xp.model.osm.polygon.OsmPolyline;
@@ -54,7 +56,7 @@ public class XPPolyTo3DObjectTranslator extends XPWritingTranslator {
 			return Collections.emptyList();
 		}
 		List<ModelWithSize> resList = new ArrayList<ModelWithSize>();
-		File[] files = parentFolder.listFiles((dir,name) -> name.endsWith(".obj"));
+		File[] files = parentFolder.listFiles((dir,name) -> name.endsWith(DsfObjectsProvider.OBJ_EXT));
 		resList.addAll(Arrays.asList(files).stream().map(file -> createFromFileName(preffixPath, file.getName())).filter(model -> model != null).collect(Collectors.toList()));
 		
 		File[] folders = parentFolder.listFiles(file -> file.isDirectory());
@@ -66,6 +68,9 @@ public class XPPolyTo3DObjectTranslator extends XPWritingTranslator {
 
 	@Override
 	public boolean handlePoly(OsmPolyline osmPolyline) {
+		if (!XPlaneOptionsProvider.getOptions().isGenerateObj()) {
+			return false;
+		}
 		if (!(osmPolyline instanceof OsmPolygon)) {
 			return false;
 		}
@@ -103,8 +108,8 @@ public class XPPolyTo3DObjectTranslator extends XPWritingTranslator {
 			}
 			if (matched != null) {
 				Point2D center = GeomUtils.getPolylineCenter(osmPolyline.getPolyline());
-				double angle = directAngle? GeomUtils.getTrueBearing(edge0.firstPoint(), edge0.lastPoint()) : 
-											GeomUtils.getTrueBearing(edge1.firstPoint(), edge1.lastPoint());
+				double angle = directAngle? GeomUtils.getTrueBearing(edge1.firstPoint(), edge1.lastPoint()) : 
+											GeomUtils.getTrueBearing(edge0.firstPoint(), edge0.lastPoint());
 				double d = Math.random();
 				angle = d < 0.5 ? angle : (angle + 180) % 360;
 				String objectString = outputFormat.getObjectString(dsfObjectsProvider.getObjectIndex(matched.getPath()),center.x(), center.y(), angle);
@@ -127,18 +132,28 @@ public class XPPolyTo3DObjectTranslator extends XPWritingTranslator {
 	
 	protected ModelWithSize createFromFileName(String preffixPath, String fileName) {
 		int idx = 0;
-		while (idx < fileName.length()) {
+		int n = fileName.length() - DsfObjectsProvider.OBJ_EXT.length();
+		while (idx < n) {
 			if (Character.isDigit(fileName.charAt(idx))) {
 				int start = idx;
-				while (idx < fileName.length() && (Character.isDigit(fileName.charAt(idx)) || fileName.charAt(idx) == 'x' || fileName.charAt(idx) == '.')) {
+				while (idx < n && (Character.isDigit(fileName.charAt(idx)) || fileName.charAt(idx) == 'x' || fileName.charAt(idx) == '.')) {
 					idx++;
 				}
+				idx--;
+				while(idx > 0 && !Character.isDigit(fileName.charAt(idx))) { //Skip possible tail until we see a number;
+					idx--;
+				}
+				idx++;
 				String marking = fileName.substring(start, idx);
 				String[] parts = marking.split("x");
 				if (parts.length == 2) {
-					double x = Double.parseDouble(parts[0]);
-					double y = Double.parseDouble(parts[1]);
-					return new ModelWithSize(preffixPath + "/" + fileName, x ,y);
+					try {
+						double x = Double.parseDouble(parts[0]);
+						double y = Double.parseDouble(parts[1]);
+						return new ModelWithSize(preffixPath + "/" + fileName, x ,y);
+					} catch (NumberFormatException e) {
+						Osm2xpLogger.error(e);
+					}
 				}
 			} else {
 				idx++;
