@@ -45,6 +45,10 @@ public class TagsRule {
 		this.objectsFiles = new ArrayList<>(objectsFiles);
 	}
 
+	public TagsRule(Tag tag) {
+		this.tag = tag;
+	}
+
 	/**
 	 * Gets the value of the tag property.
 	 * 

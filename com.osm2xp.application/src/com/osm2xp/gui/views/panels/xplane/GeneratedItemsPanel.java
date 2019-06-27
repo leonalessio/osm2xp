@@ -21,6 +21,7 @@ public class GeneratedItemsPanel extends Osm2xpPanel {
 
 	private Button btnGenerateBuildings;
 	private Button btnGenerateObjects;
+	private Button btnGenerateObjBuildings;
 	private Button btnGenerateForests;
 	private Button btnGeneratePolys;
 	private Button btnGenerateStreetLights;
@@ -41,9 +42,15 @@ public class GeneratedItemsPanel extends Osm2xpPanel {
 	protected void initComponents() {
 		btnGenerateBuildings = new Button(this, SWT.CHECK);
 		btnGenerateBuildings.setText("Generate Buildings(facades)");
+		btnGenerateBuildings.setToolTipText("Generate buildings using X-Plane Facades feature. It allows to generate simple building model based on almost every contour on map.");
 		GridDataFactory.fillDefaults().applyTo(btnGenerateBuildings);
+		btnGenerateObjBuildings = new Button(this, SWT.CHECK);
+		btnGenerateObjBuildings.setToolTipText("Generate buildings by choosing a model with closest size  from objects/<building type> folder");
+		btnGenerateObjBuildings.setText("Generate Buildings(objects)");
+		GridDataFactory.fillDefaults().applyTo(btnGenerateObjBuildings);
 		btnGenerateObjects = new Button(this, SWT.CHECK);
 		btnGenerateObjects.setText("Generate 3D objects");
+		btnGenerateObjects.setToolTipText("Generate 3D objects based on rules specified on 3D Objects tab");
 		GridDataFactory.fillDefaults().applyTo(btnGenerateObjects);
 		btnGenerateForests = new Button(this, SWT.CHECK);
 		btnGenerateForests.setText("Generate Forests");
@@ -98,6 +105,8 @@ public class GeneratedItemsPanel extends Osm2xpPanel {
 				PojoProperties.value("generateBuildings").observe(XPlaneOptionsProvider.getOptions()));
 		bindingContext.bindValue(WidgetProperties.selection().observe(btnGenerateObjects),		
 				PojoProperties.value("generateObj").observe(XPlaneOptionsProvider.getOptions()));
+		bindingContext.bindValue(WidgetProperties.selection().observe(btnGenerateObjBuildings),		
+				PojoProperties.value("generateObjBuildings").observe(XPlaneOptionsProvider.getOptions()));
 		bindingContext.bindValue(WidgetProperties.selection().observe(btnGenerateForests),		
 				PojoProperties.value("generateFor").observe(XPlaneOptionsProvider.getOptions()));
 		bindingContext.bindValue(WidgetProperties.selection().observe(btnGeneratePolys),		

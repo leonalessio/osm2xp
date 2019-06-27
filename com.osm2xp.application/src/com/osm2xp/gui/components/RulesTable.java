@@ -87,7 +87,7 @@ public abstract class RulesTable extends Composite {
 		colKey.setLabelProvider(new ColumnLabelProvider() {
 			@Override
 			public String getText(Object element) {
-				return getKey(element);
+				return getTagKey(element);
 			}
 		});
 	
@@ -104,13 +104,13 @@ public abstract class RulesTable extends Composite {
 	
 			@Override
 			protected Object getValue(Object element) {
-				return getKey(element);
+				return getTagKey(element);
 			}
 	
 			@Override
 			protected void setValue(Object element, Object value) {
 				String str = (String)value;
-				setKey(element, str);
+				setTagKey(element, str);
 				getViewer().refresh();
 			}
 		});
@@ -123,7 +123,7 @@ public abstract class RulesTable extends Composite {
 		colValue.setLabelProvider(new ColumnLabelProvider() {
 			@Override
 			public String getText(Object element) {
-				return getValue(element);
+				return getTagValue(element);
 			}
 		});
 	
@@ -140,13 +140,13 @@ public abstract class RulesTable extends Composite {
 	
 			@Override
 			protected Object getValue(Object element) {
-				return getValue(element);
+				return getTagValue(element);
 			}
 	
 			@Override
 			protected void setValue(Object element, Object value) {
 				String str = (String) value;
-				setValue(element, str);
+				setTagValue(element, str);
 				getViewer().refresh();
 			}
 		});
@@ -169,12 +169,12 @@ public abstract class RulesTable extends Composite {
 		return table;
 	}
 	
-	protected abstract String getKey(Object element);
+	protected abstract String getTagKey(Object element);
 
-	protected abstract void setKey(Object element, String key);
+	protected abstract void setTagKey(Object element, String key);
 
-	protected abstract String getValue(Object element);
+	protected abstract String getTagValue(Object element);
 
-	protected abstract void setValue(Object element, String value);
+	protected abstract void setTagValue(Object element, String value);
 
 }

@@ -5,6 +5,7 @@ import java.text.MessageFormat;
 
 import org.eclipse.jface.layout.GridDataFactory;
 import org.eclipse.jface.viewers.IStructuredSelection;
+import org.eclipse.jface.viewers.StructuredSelection;
 import org.eclipse.swt.SWT;
 import org.eclipse.swt.events.ModifyEvent;
 import org.eclipse.swt.events.ModifyListener;
@@ -29,7 +30,6 @@ import org.eclipse.swt.widgets.ToolBar;
 import org.eclipse.swt.widgets.ToolItem;
 import org.eclipse.wb.swt.ResourceManager;
 
-import com.google.common.collect.Lists;
 import com.osm2xp.constants.MessagesConstants;
 import com.osm2xp.core.exceptions.Osm2xpBusinessException;
 import com.osm2xp.core.logging.Osm2xpLogger;
@@ -89,6 +89,7 @@ public class XplaneObjectsRulesPanel extends Composite {
 		tltmAdd.addSelectionListener(new SelectionAdapter() {
 			@Override
 			public void widgetSelected(SelectionEvent e) {
+				XplaneObjectTagRule newRule = new XplaneObjectTagRule(new Tag("", ""));
 				XPlaneOptionsProvider
 						.getOptions()
 						.getObjectsRules()
@@ -96,9 +97,9 @@ public class XplaneObjectsRulesPanel extends Composite {
 //						.add(new XplaneObjectTagRule(new Tag("a tag key",
 //								"a tag value"), Lists.newArrayList(new ObjectFile("the path to an Object file")), 0, true, false, false, 0, 0, 0, 0, false, 0, 0, false,
 //								false));
-						.add(new XplaneObjectTagRule());
+						.add(newRule);
 				tagsTable.getViewer().refresh();
-
+				tagsTable.getViewer().setSelection(new StructuredSelection(newRule));
 			}
 		});
 
@@ -222,6 +223,7 @@ public class XplaneObjectsRulesPanel extends Composite {
 				file.setPath("objects/1.obj");
 				selectedXplaneObjectTagRule.getObjectsFiles().add(file);
 				objectFilesTable.getViewer().refresh();
+				objectFilesTable.getViewer().setSelection(new StructuredSelection(file));
 			}
 		});
 

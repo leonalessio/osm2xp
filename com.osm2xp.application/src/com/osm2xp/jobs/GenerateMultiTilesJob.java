@@ -13,6 +13,7 @@ import com.osm2xp.core.parsers.IVisitingParser;
 import com.osm2xp.parsers.builders.ParserBuilder;
 import com.osm2xp.stats.StatsProvider;
 import com.osm2xp.translators.ITranslatorProvider;
+import com.osm2xp.utils.ui.StatusUtil;
 
 /**
  * Job for generating scenario for multiple tiles 
@@ -32,7 +33,7 @@ public class GenerateMultiTilesJob extends GenerateJob {
 	}
 
 	@Override
-	protected IStatus run(IProgressMonitor monitor) {
+	protected IStatus doGenerate(IProgressMonitor monitor) {
 		try {
 			IVisitingParser parser = ParserBuilder.getMultiTileParser(currentFile, translatorProvider);
 			parser.process();
@@ -40,6 +41,7 @@ public class GenerateMultiTilesJob extends GenerateJob {
 			Osm2xpLogger.info("Finished generation of " +  ((MultiTileDataConverter) parser.getVisitor()).getTilesCount() + " tiles, target folder " + folderPath);
 		} catch (DataSinkException e) {
 			Osm2xpLogger.error("Data sink exception : ", e);
+			return StatusUtil.error(e.getMessage());
 		} 
 
 		return Status.OK_STATUS;

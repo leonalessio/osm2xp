@@ -125,7 +125,7 @@ public class WavefrontTranslatorImpl implements ITranslator {
 	 */
 	private void exportPolygonToObject(final OsmPolyline osmPolygon) {
 		if (osmPolygon.getNodes().size() > 4
-				|| (OsmUtils.getHeightFromTags(osmPolygon.getTags()) != null && OsmUtils
+				|| (OsmUtils.getHeightFromTags(osmPolygon.getTags()) > 0 && OsmUtils
 						.getHeightFromTags(osmPolygon.getTags()) > 20)) {
 			String filePath = null;
 			try {
@@ -179,7 +179,7 @@ public class WavefrontTranslatorImpl implements ITranslator {
 
 			if (osmPolygon.getNodes().size() > WavefrontOptionsHelper
 					.getOptions().getWaveFrontExportPointsFilter()
-					|| (OsmUtils.getHeightFromTags(osmPolygon.getTags()) != null && OsmUtils
+					|| (OsmUtils.getHeightFromTags(osmPolygon.getTags()) > 0 && OsmUtils
 							.getHeightFromTags(osmPolygon.getTags()) > WavefrontOptionsHelper
 							.getOptions().getWaveFrontExportHeightFilter())) {
 				globalWayList.add((OsmPolygon) osmPolygon);

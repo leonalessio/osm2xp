@@ -85,6 +85,10 @@ public class XplaneObjectTagRule extends TagsRule {
 		this.usePolygonAngle = usePolygonAngle;
 	}
 
+	public XplaneObjectTagRule(Tag tag) {
+		super(tag);
+	}
+
 	/**
 	 * Gets the value of the angle property.
 	 * 

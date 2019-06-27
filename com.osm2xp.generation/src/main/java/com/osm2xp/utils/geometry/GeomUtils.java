@@ -115,7 +115,7 @@ public class GeomUtils {
 	/**
 	 * Check if the polygon matches given length(s) with given tolerance
 	 * @param xLength x side length, m
-	 * @param yLength y side length, m. Sides are swappable
+	 * @param yLength y side length, m. Sides are swapable
 	 * @param tolerance tolerance for matching, in range [0.0,1.0]
 	 * 
 	 * @param len1 - average edge length of the first pair of two opposite edges, m

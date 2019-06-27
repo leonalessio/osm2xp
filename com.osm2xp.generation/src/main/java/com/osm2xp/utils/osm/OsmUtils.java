@@ -10,6 +10,7 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.regex.Pattern;
 
+import com.onpositive.classification.core.util.TagUtil;
 import com.osm2xp.core.constants.CoreConstants;
 import com.osm2xp.core.logging.Osm2xpLogger;
 import com.osm2xp.core.model.osm.Node;
@@ -344,9 +345,10 @@ public class OsmUtils {
 	}
 
 	public static boolean isBuilding(List<Tag> tags) {
+		String part = TagUtil.getValue("building:part",tags);
 		return isStringInTags("building", tags) && 
 				!isTagInTagsList("wall","no", tags) && 
-				!isTagInTagsList("building:part","*", tags);
+				("no".equalsIgnoreCase(part) || part == null);
 	}
 
 	public static String getNormalizedTagText(Tag tag) {

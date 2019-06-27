@@ -12,7 +12,11 @@ public class StatusUtil {
 	}
 	
 	public static IStatus error(String message) {
-		return new Status(IStatus.ERROR, Activator.PLUGIN_ID,message);
+		return new Status(IStatus.ERROR, Activator.PLUGIN_ID,message, null);
+		
+	}
+	public static IStatus error(String message, Throwable throwable) {
+		return new Status(IStatus.ERROR, Activator.PLUGIN_ID,message, throwable);
 	}
 	
 	public static IStatus warning(String message) {

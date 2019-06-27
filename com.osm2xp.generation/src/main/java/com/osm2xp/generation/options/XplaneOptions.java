@@ -23,12 +23,12 @@ import com.osm2xp.generation.options.rules.XplaneObjectsRulesList;
 		"smartExclusions", "smartExclusionSize", "smartExclusionDistance",
 		"excludeBch", "excludeNet", "excludeLin", "excludePol", "excludeStr","exclusionsFromInput",
 		"residentialMin", "residentialMax", "buildingMin", "buildingMax",
-		"minHouseSegment", "maxHouseSegment", "minHouseArea", "generateObj",
+		"minHouseSegment", "maxHouseSegment", "minHouseArea", "generateObj","generateObjBuildings",
 		"generateFor", "generateBuildings","generatePowerlines","generateRailways","generateRoads","generateFence",
 		"generateTanks","generateChimneys","generateCoolingTowers","generateBridges","generateSlopedRoofs", "generatePolys", "generateStreetLights", 
 		"lightsDensity", "packageFacades","hardBuildings", "lightObject", "facadeSets", "restrictFacadeLod", "facadeLod", 
 		"generateXmlStats", "generatePdfStats", "generateDebugImg", "generateComments", 		
-		"roadBridgeRampLen","railBridgeRampLen","buildingsExclusions",
+		"roadBridgeRampLen","railBridgeRampLen","maxPerimeterToSimplify","objSizeTolerance", "buildingsExclusions",
 		"forestsRules", "objectsRules", "lightsRules", "facadesRules", "polygonRules",
 		"streetLightObjects", "airfieldOptions" })
 @XmlRootElement(name = "XplaneOptions")
@@ -54,6 +54,7 @@ public class XplaneOptions {
 	protected int smartExclusionSize;
 	protected int smartExclusionDistance;
 	protected boolean generateObj = true;
+	protected boolean generateObjBuildings = true;
 	protected boolean generateFor = true;
 	protected boolean generateBuildings = true;
 	protected boolean generatePowerlines = true;
@@ -83,6 +84,8 @@ public class XplaneOptions {
 	protected boolean generateComments = false;
 	protected int roadBridgeRampLen = 100;
 	protected int railBridgeRampLen = 200;
+	protected int maxPerimeterToSimplify = 50;
+	protected double objSizeTolerance = 0.1;
 	@XmlElement(name = "BuildingsExclusions", required = true)
 	protected BuildingsExclusionsList buildingsExclusions;
 	@XmlElement(name = "ForestsRules", required = true)
@@ -931,6 +934,30 @@ public class XplaneOptions {
 
 	public void setGeneratePolys(boolean generatePolys) {
 		this.generatePolys = generatePolys;
+	}
+
+	public boolean isGenerateObjBuildings() {
+		return generateObjBuildings;
+	}
+
+	public void setGenerateObjBuildings(boolean generateObjBuildings) {
+		this.generateObjBuildings = generateObjBuildings;
+	}
+
+	public double getObjSizeTolerance() {
+		return objSizeTolerance;
+	}
+
+	public void setObjSizeTolerance(double objSizeTolerance) {
+		this.objSizeTolerance = objSizeTolerance;
+	}
+
+	public int getMaxPerimeterToSimplify() {
+		return maxPerimeterToSimplify;
+	}
+
+	public void setMaxPerimeterToSimplify(int maxPerimeterToSimplify) {
+		this.maxPerimeterToSimplify = maxPerimeterToSimplify;
 	}
 
 }

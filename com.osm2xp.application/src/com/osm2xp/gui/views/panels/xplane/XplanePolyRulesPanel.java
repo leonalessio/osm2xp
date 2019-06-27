@@ -5,6 +5,7 @@ import java.text.MessageFormat;
 
 import org.eclipse.jface.layout.GridDataFactory;
 import org.eclipse.jface.viewers.IStructuredSelection;
+import org.eclipse.jface.viewers.StructuredSelection;
 import org.eclipse.swt.SWT;
 import org.eclipse.swt.events.ModifyEvent;
 import org.eclipse.swt.events.ModifyListener;
@@ -213,6 +214,7 @@ public class XplanePolyRulesPanel extends Composite {
 //				file.setPath("polygons/1.pol");
 				selectedPolygonTagsRule.getPolygons().add(file);
 				filesTable.getViewer().refresh();
+				filesTable.getViewer().setSelection(new StructuredSelection(file));
 			}
 		});
 

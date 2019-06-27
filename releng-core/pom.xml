@@ -47,7 +47,6 @@
 		<build.folder.type>test</build.folder.type>
 		<build.file.zip>osm2xp.zip</build.file.zip>
 		<build.deploy.release>false</build.deploy.release>
-		<!-- <target.platform.name.default>mavenTychoDemo</target.platform.name.default>  -->
 	</properties>
 
 
@@ -99,7 +98,5 @@
 				<version>1.8</version>
 			</plugin>
 		</plugins>
-		<!-- <sourceDirectory>src</sourceDirectory> -->
-	
 	</build>
 </project>

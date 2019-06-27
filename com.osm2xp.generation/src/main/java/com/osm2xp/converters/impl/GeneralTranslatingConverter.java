@@ -39,6 +39,9 @@ public class GeneralTranslatingConverter extends AbstractTranslatingConverter {
 
 	@Override
 	protected void translatePolys(long id, List<Tag> tagsModel, List<Polygon> cleanedPolys) throws Osm2xpBusinessException {
+		if (id == 405508) {
+			System.out.println("GeneralTranslatingConverter.translatePolys()");
+		}
 		for (Geometry curGeo : cleanedPolys) {
 			List<OsmPolyline> polylines = OsmPolylineFactory.createPolylinesFromJTSGeometry(id, tagsModel, curGeo, false);
 			for (OsmPolyline osmPolyline : polylines) {

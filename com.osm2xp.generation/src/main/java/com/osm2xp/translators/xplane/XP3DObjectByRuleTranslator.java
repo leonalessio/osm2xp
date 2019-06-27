@@ -47,7 +47,7 @@ public class XP3DObjectByRuleTranslator extends XPWritingTranslator {
 					&& !((OsmPolygon) osmPolyline).isSimplePolygon()) {
 				osmPolyline = ((OsmPolygon) osmPolyline).toSimplifiedPoly();
 			}
-			XplaneDsf3DObject object = getRandomDsfObject((OsmPolygon) osmPolyline);
+			XplaneDsf3DObject object = select3DObject((OsmPolygon) osmPolyline);
 			if (object != null) {
 				writer.write(outputFormat.getObjectString(object));
 				return true;
@@ -57,23 +57,42 @@ public class XP3DObjectByRuleTranslator extends XPWritingTranslator {
 	}
 	
 	/**
-	 * return a random object index and the angle for the first matching rule
+	 * Return suitable object index and the angle for the first matching rule
+	 * If several rules/objects matches given poly, chooses random one 
 	 * 
-	 * @param tags
-	 * @return
+	 * @param osmPolygon - polygon to choose object for
+	 * @return {@link XplaneDsf3DObject}
 	 */
-	protected XplaneDsf3DObject getRandomDsfObject(OsmPolygon osmPolygon) {
-		LinearRing2D polygon = osmPolygon.getPolygon();
+	protected XplaneDsf3DObject select3DObject(OsmPolygon osmPolygon) {
 		XplaneDsf3DObject result = null;
-		// shuffle rules
-		List<XplaneObjectTagRule> matchingRules = new ArrayList<XplaneObjectTagRule>();
+		XplaneObjectTagRule matchingRule = selectMatchingRule(osmPolygon);
+		if (matchingRule != null) {
+			
+			Point2D origin = GeomUtils.getPolylineCenter(osmPolygon.getPolygon());
+			double angle = matchingRule.getAngle();
+			if (matchingRule.isUsePolygonAngle()) {
+				angle = calculateAngle(osmPolygon.getPolygon(), matchingRule);
+			} else if (matchingRule.isRandomAngle()) {
+				angle = Double.valueOf(MiscUtils.getRandomInt(0, 360));
+			}
+			result = new XplaneDsf3DObject(osmPolygon, getObjectFromRule(matchingRule, osmPolygon), angle, origin);
+		}
+		// compute object index
+		return result;
+	}
+
+	protected XplaneObjectTagRule selectMatchingRule(OsmPolygon osmPolygon) {
+		LinearRing2D polygon = osmPolygon.getPolygon();
 		List<XplaneObjectTagRule> rules = XPlaneOptionsProvider.getOptions().getObjectsRules().getRules();
+		List<XplaneObjectTagRule> matchingRules = new ArrayList<XplaneObjectTagRule>();
+		int height = osmPolygon.getHeight();
 		for (XplaneObjectTagRule rule : rules) {
 			for (Tag tag : osmPolygon.getTags()) {
 				// check Tag matching
-				if ((rule.getTag().getKey().equalsIgnoreCase("id")
-						&& rule.getTag().getValue().equalsIgnoreCase(String.valueOf(osmPolygon.getId())))
-						|| (OsmUtils.compareTags(rule.getTag(), tag))) {
+				if (rule.getTag().getKey().equalsIgnoreCase("id")
+						&& rule.getTag().getValue().equalsIgnoreCase(String.valueOf(osmPolygon.getId()))) {
+					return rule;
+				} else if (OsmUtils.compareTags(rule.getTag(), tag)) {
 					// check rule options
 
 					Boolean areaOK = !rule.isAreaCheck() || (rule.isAreaCheck()
@@ -87,37 +106,19 @@ public class XP3DObjectByRuleTranslator extends XPWritingTranslator {
 							|| (rule.isSimplePolygonOnly() && osmPolygon.isSimplePolygon());
 
 					if (areaOK && sizeOK && checkSimplePoly) {
-						matchingRules.add(rule);
+						if (height > 0 && isMultiHeight(rule)) {
+							return rule;
+						} else {
+							matchingRules.add(rule);
+						}
 					}
 				}
 			}
 		}
 		if (matchingRules.size() > 0) {
-			int height = osmPolygon.getHeight();
-			XplaneObjectTagRule rule = null;
-			if (height > 0) {
-				for (XplaneObjectTagRule curRule : matchingRules) {
-					if (isMultiHeight(curRule)) {
-						rule = curRule;
-						break;
-					}
-				}
-			}
-			if (rule == null) {
-				rule = matchingRules.get(new Random().nextInt(matchingRules.size()));
-			}
-			Point2D origin = GeomUtils.getPolylineCenter(osmPolygon.getPolygon());
-			double angle = rule.getAngle();
-			if (rule.isUsePolygonAngle()) {
-				angle = calculateAngle(polygon, rule);
-			} else if (rule.isRandomAngle()) {
-				angle = Double.valueOf(MiscUtils.getRandomInt(0, 360));
-			}
-
-			result = new XplaneDsf3DObject(osmPolygon, getObjectFromRule(rule, osmPolygon), angle, origin);
+			return matchingRules.get(new Random().nextInt(matchingRules.size()));
 		}
-		// compute object index
-		return result;
+		return null;
 	}
 	
 	protected boolean isMultiHeight(XplaneObjectTagRule objectTagRule) {

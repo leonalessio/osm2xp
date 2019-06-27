@@ -34,8 +34,6 @@ import math.geom2d.line.LineSegment2D;
  */
 public class XPPolyTo3DObjectTranslator extends XPWritingTranslator {
 
-	private static final double TOLERANCE = 0.1; //TODO make this a setting
-	private static final int MAX_PERIMETER_TO_SIMPLIFY = 50; //If house is small enough, we don't care about complex shape and just simplify it to try finding suitable model
 	private Multimap<OSMBuildingType, ModelWithSize> modelsByType = ArrayListMultimap.create();
 	private DsfObjectsProvider dsfObjectsProvider;
 	private XPOutputFormat outputFormat;
@@ -68,7 +66,7 @@ public class XPPolyTo3DObjectTranslator extends XPWritingTranslator {
 
 	@Override
 	public boolean handlePoly(OsmPolyline osmPolyline) {
-		if (!XPlaneOptionsProvider.getOptions().isGenerateObj()) {
+		if (!XPlaneOptionsProvider.getOptions().isGenerateObjBuildings()) {
 			return false;
 		}
 		if (!(osmPolyline instanceof OsmPolygon)) {
@@ -76,12 +74,13 @@ public class XPPolyTo3DObjectTranslator extends XPWritingTranslator {
 		}
 		if (!((OsmPolygon) osmPolyline).isSimplePolygon()) {
 			double length = GeomUtils.computeEdgesLength(osmPolyline.getPolyline());
-			if (length <= MAX_PERIMETER_TO_SIMPLIFY) {
+			if (length <= XPlaneOptionsProvider.getOptions().getMaxPerimeterToSimplify()) { //If house is small enough, we don't care about complex shape and just simplify it to try finding suitable model
 				osmPolyline = ((OsmPolygon) osmPolyline).toSimplifiedPoly();
 			} else {
 				return false;
 			}
 		}
+		double tolerance = XPlaneOptionsProvider.getOptions().getObjSizeTolerance();
 		OSMBuildingType buildingType = TypeProvider.getBuildingType(osmPolyline.getTags());
 		LineSegment2D edge0 = osmPolyline.getPolyline().edge(0);
 		LineSegment2D edge1 = osmPolyline.getPolyline().edge(1);
@@ -98,8 +97,8 @@ public class XPPolyTo3DObjectTranslator extends XPWritingTranslator {
 			ModelWithSize matched = null;
 			boolean directAngle = true;
 			for (ModelWithSize model : models) {
-				double dist1 = GeomUtils.fitWithDistance(model.geXSize(), model.getYSize(),TOLERANCE,len1,len2);
-				double dist2 = GeomUtils.fitWithDistance(model.geXSize(), model.getYSize(),TOLERANCE,len2,len1);
+				double dist1 = GeomUtils.fitWithDistance(model.geXSize(), model.getYSize(),tolerance,len1,len2);
+				double dist2 = GeomUtils.fitWithDistance(model.geXSize(), model.getYSize(),tolerance,len2,len1);
 				if (dist1 < dist || dist2 < dist) {
 					directAngle = dist1 < dist2;
 					dist = Math.min(dist1, dist2);

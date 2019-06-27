@@ -212,6 +212,21 @@
     </ObjectsRules>
     <LightsRules/>
     <FacadesRules/>
+	<Polygons minPerimeter="200">
+        <rules>
+            <tag value="parking" key="amenity"/>
+            <polygon path="lib/airport/pavement/asphalt_1L.pol"/>
+            <polygon path="lib/airport/pavement/asphalt_1D.pol"/>
+            <polygon path="lib/airport/pavement/asphalt_2L.pol"/>
+            <polygon path="lib/airport/pavement/asphalt_2D.pol"/>
+            <polygon path="lib/airport/pavement/asphalt_3L.pol"/>
+            <polygon path="lib/airport/pavement/asphalt_3D.pol"/>
+            <polygon path="lib/airport/pavement/concrete_3L.pol"/>
+            <polygon path="lib/airport/pavement/concrete_3D.pol"/>
+            <polygon path="lib/airport/pavement/concrete_4L.pol"/>
+            <polygon path="lib/airport/pavement/concrete_4D.pol"/>
+        </rules>
+    </Polygons>
     <StreetLightObjects>
         <objects>
             <path>opensceneryx/objects/furniture/lights/street/3.obj</path>

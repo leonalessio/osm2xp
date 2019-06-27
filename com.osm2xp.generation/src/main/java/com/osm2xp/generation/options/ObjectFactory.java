@@ -195,7 +195,7 @@ public class ObjectFactory {
 	 * 
 	 */
 	public XplaneObjectTagRule createXplaneObjectTagRule() {
-		return new XplaneObjectTagRule();
+		return new XplaneObjectTagRule(new Tag("",""));
 	}
 
 }

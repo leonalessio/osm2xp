@@ -7,6 +7,7 @@ import org.eclipse.swt.SWT;
 import org.eclipse.ui.forms.widgets.Section;
 import org.eclipse.ui.forms.widgets.TableWrapData;
 
+import com.osm2xp.gui.views.panels.xplane.ObjectByPolyPanel;
 import com.osm2xp.gui.views.panels.xplane.XplaneObjectsRulesPanel;
 
 /**
@@ -32,11 +33,21 @@ public class Xplane3DObjectsView extends AbstractOptionsView implements IContext
 		sectionObjectsRules.setLayoutData(new TableWrapData(
 				TableWrapData.FILL_GRAB, TableWrapData.FILL_GRAB, 1, 1));
 
-		sectionObjectsRules.setText("objects rules");
+		sectionObjectsRules.setText("Object generation rules");
 		XplaneObjectsRulesPanel objectsRulesPanel = new XplaneObjectsRulesPanel(
 				sectionObjectsRules, SWT.BORDER);
 		toolkit.adapt(objectsRulesPanel, true, true);
 		sectionObjectsRules.setClient(objectsRulesPanel);
+		
+		Section sectionBuildingObjectOptions = toolkit.createSection(form.getBody(),
+				Section.TWISTIE | Section.EXPANDED | Section.TITLE_BAR);
+		sectionBuildingObjectOptions.setLayoutData(new TableWrapData(
+				TableWrapData.FILL_GRAB, TableWrapData.FILL_GRAB, 1, 1));
+		
+		sectionBuildingObjectOptions.setText("Object by polygon selection options");
+		ObjectByPolyPanel panel = new ObjectByPolyPanel(sectionBuildingObjectOptions, SWT.BORDER);
+		toolkit.adapt(panel, true, true);
+		sectionBuildingObjectOptions.setClient(panel);
 	}
 
 	@Override

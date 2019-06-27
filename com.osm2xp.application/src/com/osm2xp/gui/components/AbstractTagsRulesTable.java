@@ -23,21 +23,21 @@ public abstract class AbstractTagsRulesTable extends RulesTable {
 		createViewer(listeTags);
 	}
 
-	protected String getKey(Object element) {
+	protected String getTagKey(Object element) {
 		return getTag(element).getKey();
 	}
 
-	protected void setKey(Object element, String key) {
+	protected void setTagKey(Object element, String key) {
 		getTag(element).setKey(key);
 	}
 
 	protected abstract Tag getTag(Object element);
 
-	protected String getValue(Object element) {
+	protected String getTagValue(Object element) {
 		return getTag(element).getValue();
 	}
 
-	protected void setValue(Object element, String value) {
+	protected void setTagValue(Object element, String value) {
 		getTag(element).setValue(value);
 	}
 

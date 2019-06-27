@@ -13,7 +13,7 @@
 	<artifactId>com.osm2xp.classification.core</artifactId>
 	<packaging>eclipse-plugin</packaging>
 
-	<name>core</name>
+	<name>classification.core</name>
 	<url>http://maven.apache.org</url>
 
 	<properties>

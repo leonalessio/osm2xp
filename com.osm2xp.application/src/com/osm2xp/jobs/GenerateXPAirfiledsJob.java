@@ -24,7 +24,7 @@ public class GenerateXPAirfiledsJob extends GenerateJob {
 	}
 
 	@Override
-	protected IStatus run(IProgressMonitor monitor) {
+	protected IStatus doGenerate(IProgressMonitor monitor) {
 		IParser parser = ParserBuilder.getXPAirfieldGeneratingParser(currentFile,
 				folderPath);
 		parser.process();
