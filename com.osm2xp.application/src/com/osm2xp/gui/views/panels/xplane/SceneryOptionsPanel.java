@@ -57,16 +57,16 @@ public class SceneryOptionsPanel extends Osm2xpPanel {
 	@Override
 	protected void initComponents() {
 
-		new Label(this, SWT.NONE);
-		new Label(this, SWT.NONE);
-		new Label(this, SWT.NONE);
+//		new Label(this, SWT.NONE);
+//		new Label(this, SWT.NONE);
+//		new Label(this, SWT.NONE);
 		lblMinSegment = new Label(this, SWT.NONE);
 		lblMinSegment.setText("exclude buildings which largest wall is under");
 		spinnerMinSegment = new Spinner(this, SWT.BORDER);
 		lblMeters = new Label(this, SWT.NONE);
 		lblMeters.setText("meters");
 
-		new Label(this, SWT.NONE);
+//		new Label(this, SWT.NONE);
 
 		lblMaxSegment = new Label(this, SWT.NONE);
 		lblMaxSegment.setText("exclude buildings which largest wall is over");
@@ -75,7 +75,7 @@ public class SceneryOptionsPanel extends Osm2xpPanel {
 		lblMaxMeters = new Label(this, SWT.NONE);
 		lblMaxMeters.setText("meters");
 
-		new Label(this, SWT.NONE);
+//		new Label(this, SWT.NONE);
 
 		lblMinArea = new Label(this, SWT.NONE);
 		lblMinArea.setText("exclude buildings which area is under");

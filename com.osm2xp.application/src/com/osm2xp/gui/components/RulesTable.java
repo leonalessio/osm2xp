@@ -52,7 +52,8 @@ public abstract class RulesTable extends Composite {
 		gridData.heightHint = table.getHeaderHeight() + table.getItemHeight() * DEFAULT_ITEMS;
 		gridData.grabExcessVerticalSpace = true;
 		gridData.horizontalAlignment = SWT.FILL;
-		GridDataFactory.fillDefaults().grab(true, true).applyTo(viewer.getControl());
+		viewer.getControl().setLayoutData(gridData);
+//		GridDataFactory.fillDefaults().grab(true, true).applyTo(viewer.getControl());
 	
 		ColumnViewerEditorActivationStrategy actSupport = new ColumnViewerEditorActivationStrategy(
 				viewer) {

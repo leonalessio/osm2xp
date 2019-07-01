@@ -21,7 +21,7 @@ public abstract class AirfieldData extends AerowayData {
 	
 	protected List<RunwayData> runways = new ArrayList<>();
 	
-	private static final int MIN_IFFERENT_RUNWAYS_DISTANCE = 100;
+	private static final int MIN_DIFFERENT_RUNWAYS_DISTANCE = 100;
 	private List<OsmPolygon> apronAreas = new ArrayList<>();
 	private List<TaxiLane> taxiLanes = new ArrayList<>();
 	private List<HelipadData> helipads = new ArrayList<>();
@@ -84,8 +84,8 @@ public abstract class AirfieldData extends AerowayData {
 				
 				double l01 = GeomUtils.latLonDistance(curLine.p1, checkedLine.p2);
 				double l02 = GeomUtils.latLonDistance(curLine.p2, checkedLine.p1);
-				if ((l1 < MIN_IFFERENT_RUNWAYS_DISTANCE && l2 < MIN_IFFERENT_RUNWAYS_DISTANCE) || 
-						(l01 < MIN_IFFERENT_RUNWAYS_DISTANCE && l02 < MIN_IFFERENT_RUNWAYS_DISTANCE)) {
+				if ((l1 < MIN_DIFFERENT_RUNWAYS_DISTANCE && l2 < MIN_DIFFERENT_RUNWAYS_DISTANCE) || 
+						(l01 < MIN_DIFFERENT_RUNWAYS_DISTANCE && l02 < MIN_DIFFERENT_RUNWAYS_DISTANCE)) {
 					toRemove.add(checked);
 				}
 			}

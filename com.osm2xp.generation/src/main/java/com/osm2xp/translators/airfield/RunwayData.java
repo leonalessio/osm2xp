@@ -14,6 +14,7 @@ public class RunwayData extends AerowayData {
 	private double width = XPlaneOptionsProvider.getOptions().getAirfieldOptions().getDefaultGrassRunwayWidth();
 	private String surface;
 	private String ref;
+	private int length;
 	private boolean hard = false;
 	private double course1, course2;
 	private String marking1, marking2;
@@ -42,6 +43,17 @@ public class RunwayData extends AerowayData {
 			} catch (Exception e) {
 				// Ignore
 			}
+		}
+		String lengthStr = polyline.getTagValue("length");
+		if (lengthStr != null) {
+			try {
+				length = (int) Double.parseDouble(lengthStr);
+			} catch (Exception e) {
+				// Ignore
+			}
+		}
+		if (length == 0) {
+			length = (int) GeomUtils.latLonDistance(runwayLine.p1, runwayLine.p2);
 		}
 		String ref = polyline.getTagValue("ref");
 		this.ref = ref;
@@ -141,5 +153,13 @@ public class RunwayData extends AerowayData {
 
 	public final String getRef() {
 		return ref;
+	}
+
+	public int getLength() {
+		return length;
+	}
+
+	public void setLength(int length) {
+		this.length = length;
 	}
 }

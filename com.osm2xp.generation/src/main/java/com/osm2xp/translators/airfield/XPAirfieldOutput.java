@@ -347,6 +347,8 @@ public class XPAirfieldOutput {
 		builder.append(getEndStr(runway.getMarking1(), runway.getRunwayLine().p1, runway.isHard()));
 		builder.append(' ');
 		builder.append(getEndStr(runway.getMarking2(), runway.getRunwayLine().p2, runway.isHard()));
+		builder.append(' ');
+		builder.append("# length " + runway.getLength() + "m");		
 		return builder.toString();
 	}
 
