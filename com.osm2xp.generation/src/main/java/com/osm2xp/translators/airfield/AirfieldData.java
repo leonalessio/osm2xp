@@ -2,6 +2,7 @@ package com.osm2xp.translators.airfield;
 
 import java.util.ArrayList;
 import java.util.Collection;
+import java.util.Collections;
 import java.util.List;
 
 import org.apache.commons.lang.StringUtils;
@@ -69,6 +70,7 @@ public abstract class AirfieldData extends AerowayData {
 	
 	public List<RunwayData> getUniqueRunways() {
 		List<RunwayData> toRemove = new ArrayList<RunwayData>();
+		Collections.sort(runways, (r1,r2) -> r2.getLength() - r1.getLength());
 		for (int i = 0; i < runways.size(); i++) {
 			RunwayData current = runways.get(i);
 			for (int j = i+1; j < runways.size(); j++) {
@@ -86,7 +88,19 @@ public abstract class AirfieldData extends AerowayData {
 				double l02 = GeomUtils.latLonDistance(curLine.p2, checkedLine.p1);
 				if ((l1 < MIN_DIFFERENT_RUNWAYS_DISTANCE && l2 < MIN_DIFFERENT_RUNWAYS_DISTANCE) || 
 						(l01 < MIN_DIFFERENT_RUNWAYS_DISTANCE && l02 < MIN_DIFFERENT_RUNWAYS_DISTANCE)) {
+					current.setHard(current.isHard() || checked.isHard());
 					toRemove.add(checked);
+					continue;
+				}
+				double course = current.getCourse1();
+				if (Math.abs(course - checked.getCourse1()) < 3 || Math.abs(course - checked.getCourse2()) < 3) { //Almost parallel
+					curLine = GeomUtils.line2DToLocal(curLine, checkedLine.p1);
+					double distance = curLine.distance(0,0) * 111000; //XXX change to extracted constant
+					if (distance < 100) {
+						current.setHard(current.isHard() || checked.isHard());
+						toRemove.add(checked);
+						continue;
+					}
 				}
 			}
 		}

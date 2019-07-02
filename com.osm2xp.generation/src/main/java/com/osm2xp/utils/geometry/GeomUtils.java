@@ -170,6 +170,17 @@ public class GeomUtils {
 		return geometryFactory.createLineString(points);
 	}
 	
+	public static Line2D line2DToLocal(Line2D line, Point2D centerpoint) {
+		List<Point2D> coords = new ArrayList<>();
+		double factor = Math.cos(Math.toRadians(centerpoint.y()));
+		for (Point2D point : line.vertices()) {
+			double x = (point.x() - centerpoint.x()) * factor;
+			double y = point.y() - centerpoint.y();
+			coords.add(new Point2D(x,y));
+		}
+		return new Line2D(coords.get(0), coords.get(1));
+	}
+	
 	public static Geometry geom2dToJtsLocal(LinearCurve2D line, Point2D centerpoint) {
 		List<Coordinate> coords = new ArrayList<Coordinate>();
 		double factor = Math.cos(Math.toRadians(centerpoint.y()));

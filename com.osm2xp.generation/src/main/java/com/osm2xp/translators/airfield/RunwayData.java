@@ -126,6 +126,10 @@ public class RunwayData extends AerowayData {
 		return hard;
 	}
 
+	public void setHard(boolean hard) {
+		this.hard = hard;
+	}
+
 	public String getMarking1() {
 		if (marking1 == null) {
 			marking1 = StringUtils.leftPad("" + (int)Math.round(course1 / 10), 2, '0');

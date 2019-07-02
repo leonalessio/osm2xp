@@ -60,7 +60,7 @@ public class ConsoleAppIntegrationTest extends TestCase {
 		assertTrue(lines.contains("1302 flatten 1"));
 		assertTrue(lines.contains("1302 datum_lat 52.025411"));
 		assertTrue(lines.contains("1302 datum_lon 80.337624"));
-		assertTrue(lines.contains("100 40.00 3 0 0.25 0 0 0 03 52.02056120 80.33193670 0 0  0 0 0 0 21 52.03026100 80.34331140 0 0  0 0 0 0"));
+		assertTrue(lines.contains("100 40.00 3 0 0.25 0 0 0 03 52.02056120 80.33193670 0 0  0 0 0 0 21 52.03026100 80.34331140 0 0  0 0 0 0 # length 1329m"));
 		assertTrue(lines.contains("102 H1 52.02050385 80.33587750 123.28 29.49 27.35 3 0 0 0.3 0"));
 		assertTrue(lines.contains("102 H2 52.02000245 80.33527335 123.28 29.50 27.35 3 0 0 0.3 0"));
 	}
