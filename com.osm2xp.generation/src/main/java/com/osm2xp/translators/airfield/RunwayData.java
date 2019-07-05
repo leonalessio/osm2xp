@@ -76,8 +76,11 @@ public class RunwayData extends AerowayData {
 		if (!StringUtils.isEmpty(name)) {
 			id = toId(name);
 		}
-		if (!StringUtils.isEmpty(ref)) {
+		if (id == null && !StringUtils.isEmpty(ref)) {
 			id = toId(ref);
+		}
+		if (id == null && !StringUtils.isEmpty(polyline.getTagValue("icao"))) {
+			id = toId(polyline.getTagValue("icao"));
 		}
 		if (id == null) {
 			id = getMarking1() + "/" + getMarking2();

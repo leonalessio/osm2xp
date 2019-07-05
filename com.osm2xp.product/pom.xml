@@ -8,7 +8,7 @@
 	<parent>
 		<groupId>com.osm2xp</groupId>
 		<artifactId>com.osm2xp.parent</artifactId>
-		<version>4.0.0</version>
+		<version>4.1.0</version>
 		<relativePath>../releng-app/pom.xml</relativePath>
 	</parent>
 
@@ -134,15 +134,15 @@
 						<phase>install</phase>
 						<configuration>
 							<target>
-								<fail
-									message="Cannot Release!!! Release folder already exists !!! Potential overwrite to ${build.folder.fullpath} !!!">
-									<condition>
-										<and>
-											<equals arg1="${build.deploy.release}" arg2="true" />
-											<available file="${build.folder.fullpath}" type="dir" />
-										</and>
-									</condition>
-								</fail>
+<!-- 								<fail -->
+<!-- 									message="Cannot Release!!! Release folder already exists !!! Potential overwrite to ${build.folder.fullpath} !!!"> -->
+<!-- 									<condition> -->
+<!-- 										<and> -->
+<!-- 											<equals arg1="${build.deploy.release}" arg2="true" /> -->
+<!-- 											<available file="${build.folder.fullpath}" type="dir" /> -->
+<!-- 										</and> -->
+<!-- 									</condition> -->
+<!-- 								</fail> -->
 
 								<!-- ANT Script Start -->
 								<delete file="${build.file.win32.fullpath}" />

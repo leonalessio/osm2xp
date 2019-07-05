@@ -14,6 +14,8 @@ import java.util.List;
 import java.util.Random;
 import java.util.stream.Collectors;
 
+import org.apache.commons.lang.StringUtils;
+
 import com.osm2xp.core.exceptions.Osm2xpBusinessException;
 import com.osm2xp.core.logging.Osm2xpLogger;
 import com.osm2xp.core.model.osm.Tag;
@@ -195,7 +197,7 @@ public class DsfObjectsProvider {
 			for (ForestTagRule forest : XPlaneOptionsProvider.getOptions()
 					.getForestsRules().getRules()) {
 				for (ObjectFile file : forest.getObjectsFiles()) {
-					if (!forestsList.contains(file.getPath())) {
+					if (!StringUtils.isEmpty(file.getPath()) && !forestsList.contains(file.getPath())) {
 						forestsList.add(file.getPath());
 					}
 					
@@ -211,7 +213,7 @@ public class DsfObjectsProvider {
 			for (PolygonTagsRule forest : XPlaneOptionsProvider.getOptions()
 					.getPolygonRules().getRules()) {
 				for (Polygon poly : forest.getPolygons()) {
-					if (!drapedPolysList.contains(poly.getPath())) {
+					if (!StringUtils.isEmpty(poly.getPath()) && !drapedPolysList.contains(poly.getPath())) {
 						drapedPolysList.add(poly.getPath());
 					}
 
@@ -227,7 +229,7 @@ public class DsfObjectsProvider {
 			for (FacadeTagRule facadeTagRule : XPlaneOptionsProvider.getOptions()
 					.getFacadesRules().getRules()) {
 				for (ObjectFile file : facadeTagRule.getObjectsFiles()) {
-					if (!singlesFacadesList.contains(file.getPath())) {
+					if (!StringUtils.isEmpty(file.getPath()) && !singlesFacadesList.contains(file.getPath())) {
 						singlesFacadesList.add(file.getPath());
 					}
 				}

@@ -25,9 +25,17 @@ public class DsfWriterImpl implements IHeaderedWriter {
 	private BufferedWriter writer;
 	private boolean headerWritten = false;
 	private String header;
+	private boolean deleteSourceFile;
 	
-	public DsfWriterImpl(String sceneFolder, Point2D tile) {
+	/**
+	 * Create DSF writer
+	 * @param sceneFolder generated scene folder 
+	 * @param tile Tile we write
+	 * @param deleteSourceFile Delete generated .txt file after packing 
+	 */
+	public DsfWriterImpl(String sceneFolder, Point2D tile, boolean deleteSourceFile) {
 		dsfFile = DsfUtils.computeXPlaneDsfFilePath(sceneFolder, tile);
+		this.deleteSourceFile = deleteSourceFile;
 		// create the parent folder file
 		File parentFolder = new File(dsfFile.getParent());
 		parentFolder.mkdirs();
@@ -65,16 +73,7 @@ public class DsfWriterImpl implements IHeaderedWriter {
 				Osm2xpLogger.error(e.getMessage());
 			}
 		if (headerWritten) {
-//			if (data != null) {
-//				try {
-//					injectSmartExclusions((String) data);
-//				} catch (IOException e) {
-//					e.printStackTrace();
-//				}
-//			}
-			if (DsfUtils.getDsfTool().isFile()) {
-				 ProcessExecutor.getExecutor().execute(new DsfConversionRunnable(dsfFile, new File(dsfFile.getPath().replaceAll(".txt", ""))));
-			}
+			ProcessExecutor.getExecutor().execute(new DsfConversionRunnable(dsfFile, new File(dsfFile.getPath().replaceAll(".txt", "")), deleteSourceFile));
 		} else {
 			dsfFile.delete(); //No header written means empty file - nothing was added to it. So just delete.
 		}

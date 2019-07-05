@@ -2,10 +2,15 @@
   <modelVersion>4.0.0</modelVersion>
   <groupId>com.osm2xp</groupId>
   <artifactId>com.osm2xp.build</artifactId>
-  <version>4.0.0-SNAPSHOT</version>
+  <version>4.1.0-SNAPSHOT</version>
   <name>OSM2XP-Global</name>  
   <description>Global build parent for osm2xp</description>
   <packaging>pom</packaging>
+  
+  <properties>
+	  <build.folder.bin>bin</build.folder.bin>
+	  <build.folder.target.bin>../builds/${build.folder.bin}</build.folder.target.bin>
+  </properties>
   
   <repositories>
 		<repository>

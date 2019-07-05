@@ -19,6 +19,7 @@ import com.osm2xp.core.logging.Osm2xpLogger;
 import com.osm2xp.core.model.osm.Node;
 import com.osm2xp.core.model.osm.Tag;
 import com.osm2xp.generation.options.ObjectFile;
+import com.osm2xp.generation.options.XPlaneOptionsProvider;
 import com.osm2xp.generation.options.XmlHelper;
 import com.osm2xp.generation.options.rules.ObjectTagRule;
 import com.osm2xp.generation.options.rules.ObjectsRulesList;
@@ -277,7 +278,7 @@ public class WavefrontTranslatorImpl implements ITranslator {
 		}
 		ProcessExecutor.getExecutor().execute(new DsfConversionRunnable(dsfTextFile, new File(folderPath
 				+ File.separatorChar + "Earth nav data" + File.separatorChar
-				+ folderName + File.separatorChar + fileName + ".dsf")));
+				+ folderName + File.separatorChar + fileName + ".dsf"), XPlaneOptionsProvider.getOptions().isDeleteSrc()));
 	}
 
 	/**
@@ -320,7 +321,7 @@ public class WavefrontTranslatorImpl implements ITranslator {
 		FilesUtils.writeTextToFile(dsfTextFile, sb.toString(), true);
 		ProcessExecutor.getExecutor().execute(new DsfConversionRunnable(dsfTextFile, new File(folderPath
 				+ File.separatorChar + "Earth nav data" + File.separatorChar
-				+ folderName + File.separatorChar + fileName + ".dsf")));
+				+ folderName + File.separatorChar + fileName + ".dsf"),XPlaneOptionsProvider.getOptions().isDeleteSrc()));
 	}
 
 	/**

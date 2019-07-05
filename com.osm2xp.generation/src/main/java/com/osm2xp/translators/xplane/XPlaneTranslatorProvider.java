@@ -41,7 +41,7 @@ public abstract class XPlaneTranslatorProvider extends AbstractTranslatorProvide
 			DsfUtils.writeLibraryFile(folderPath, dsfObjectsProvider);
 		}
 		
-		IHeaderedWriter writer = new DsfWriterImpl(folderPath, currentTile);
+		IHeaderedWriter writer = new DsfWriterImpl(folderPath, currentTile, XPlaneOptionsProvider.getOptions().isDeleteSrc());
 		XPlaneTranslatorImpl translatorImpl = createTranslator(currentTile, writer);
 		if (XPlaneOptionsProvider.getOptions().isGenerateDebugImg()) {
 			translatorImpl.setTranslationListener(new ImageDebugTranslationListener());

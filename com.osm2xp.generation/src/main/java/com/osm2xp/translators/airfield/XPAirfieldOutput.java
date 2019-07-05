@@ -312,9 +312,10 @@ public class XPAirfieldOutput {
 		if (writeMainAirfield) {
 			dataFolder = new File(baseFolder, NAV_DATA_FOLDER_NAME);
 		} else {
-			File airfieldFolder = new File(baseFolder, OSM2XP_AIRFIELD_PREFFIX + aptId);
+			String folderName = aptId.replace('/','_');
+			File airfieldFolder = new File(baseFolder, OSM2XP_AIRFIELD_PREFFIX + folderName);
 			for (int i = 0; airfieldFolder.exists() && i < Integer.MAX_VALUE; i++) {
-				airfieldFolder = new File(baseFolder, OSM2XP_AIRFIELD_PREFFIX + aptId + i);
+				airfieldFolder = new File(baseFolder, OSM2XP_AIRFIELD_PREFFIX + folderName + i);
 			}
 			dataFolder = new File(airfieldFolder, NAV_DATA_FOLDER_NAME);
 		}

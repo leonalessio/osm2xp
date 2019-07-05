@@ -6,11 +6,46 @@ and this project adheres to [Semantic Versioning](http://semver.org/spec/v2.0.0.
 
 ## [Unreleased]
 
+## [4.1.0]
+
+### Added
+- Selecting 3D object by type and size, ~50 houses models added to xplane/objects/house folder for this feature
+- 3D object rules supporting models choosing by height
+- Facades from World2Xplane library
+- 3D objects from open libraries and rules for them added for GSM, radio towers and masts
+
+### Fixed
+- Choosing 3D object by id now will ignore all other conditions if id matches
+- Calculating object direction
+- Removing duplicate runway segments and other small aierfield gen issues
+
+### Changed
+- Using Eclipse 2018-12 instead of Oxygen as TP. This should avoid Java 9 - related issues
+
+## [4.0.0]
+
+### Added
+- Console version - osm2xpc, lighter than UI one
+- Draped polygon support, by default - creating pavements for parkings
+- Database mode using MapDB - should allow slower generation, but for areas much larger, than before
+- /xplane/resources folder - all files/folders from it will be copied into generated scenario root folder
+
+### Fixed
+- Barrier generation - only types 'fence' and 'wall' will be treated as walls now
+- Airfield generation - uniting orphan airfields
+- Airfield generation - removing duplicate runways (e.g. when polygnal and centerline runways are specified)
+- Airfield generation - runways winding direction problems
+
+### Changed
+- Folder structure changed, e.g. all X-Plane stuff is now in 'osm2xp/xplane'
+- Build mavenized, tuned Travis for it on Github
+- LOD support fixed to treat given LOD value as maximal instead of strict
+
 ## [3.5.1]
 
 ### Added
 - Open scenery file action for toolbar
-- Action to generate only airfileds not geneating anything else 
+- Action to generate only airfieeds not geneating anything else 
 
 ### Fixed
 - osm file support

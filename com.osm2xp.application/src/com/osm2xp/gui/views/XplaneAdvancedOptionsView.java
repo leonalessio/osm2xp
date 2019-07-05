@@ -7,6 +7,7 @@ import org.eclipse.swt.SWT;
 import org.eclipse.ui.forms.widgets.Section;
 import org.eclipse.ui.forms.widgets.TableWrapData;
 
+import com.osm2xp.gui.views.panels.xplane.DebugOptionsPanel;
 import com.osm2xp.gui.views.panels.xplane.GeneratedItemsPanel;
 import com.osm2xp.gui.views.panels.xplane.SceneryExclusionsPanel;
 import com.osm2xp.gui.views.panels.xplane.SceneryOptionsPanel;
@@ -65,19 +66,19 @@ public class XplaneAdvancedOptionsView extends AbstractOptionsView implements
 		toolkit.adapt(sceneryOptionsPanel, true, true);
 		sectionSceneryOptions.setClient(sceneryOptionsPanel);
 		/**
-		 * Stats options - deprecated
+		 * Debug options
 		 */
-//
-//		Section statsOptionsSection = toolkit.createSection(form.getBody(),
-//				Section.TWISTIE | Section.TITLE_BAR);
-//		statsOptionsSection.setLayoutData(new TableWrapData(
-//				TableWrapData.FILL_GRAB, TableWrapData.TOP, 1, 1));
-//		statsOptionsSection.setText("Stats and Debug options");
-//		StatsOptionsPanel statsOptionsPanel = new StatsOptionsPanel(
-//				statsOptionsSection, SWT.BORDER);
-//
-//		toolkit.adapt(statsOptionsPanel, true, true);
-//		statsOptionsSection.setClient(statsOptionsPanel);
+
+		Section statsOptionsSection = toolkit.createSection(form.getBody(),
+				Section.TWISTIE | Section.TITLE_BAR);
+		statsOptionsSection.setLayoutData(new TableWrapData(
+				TableWrapData.FILL_GRAB, TableWrapData.TOP, 1, 1));
+		statsOptionsSection.setText("Debug options (for experienced users!)");
+		DebugOptionsPanel statsOptionsPanel = new DebugOptionsPanel(
+				statsOptionsSection, SWT.BORDER);
+
+		toolkit.adapt(statsOptionsPanel, true, true);
+		statsOptionsSection.setClient(statsOptionsPanel);
 	}
 	
 	@Override

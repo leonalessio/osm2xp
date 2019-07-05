@@ -30,7 +30,7 @@ import com.osm2xp.generation.options.rules.XplaneObjectsRulesList;
 		"generateXmlStats", "generatePdfStats", "generateDebugImg", "generateComments", 		
 		"roadBridgeRampLen","railBridgeRampLen","maxPerimeterToSimplify","objSizeTolerance", "buildingsExclusions",
 		"forestsRules", "objectsRules", "lightsRules", "facadesRules", "polygonRules",
-		"streetLightObjects", "airfieldOptions" })
+		"streetLightObjects", "airfieldOptions","deleteSrc" })
 @XmlRootElement(name = "XplaneOptions")
 public class XplaneOptions {
 
@@ -68,6 +68,7 @@ public class XplaneOptions {
 	protected boolean generatePolys = true;
 	protected boolean generateStreetLights;
 	protected boolean generateSlopedRoofs;
+	protected boolean deleteSrc = true;
 	protected int lightsDensity;
 	protected boolean packageFacades;
 	protected boolean hardBuildings;
@@ -958,6 +959,14 @@ public class XplaneOptions {
 
 	public void setMaxPerimeterToSimplify(int maxPerimeterToSimplify) {
 		this.maxPerimeterToSimplify = maxPerimeterToSimplify;
+	}
+
+	public boolean isDeleteSrc() {
+		return deleteSrc;
+	}
+
+	public void setDeleteSrc(boolean deleteSrc) {
+		this.deleteSrc = deleteSrc;
 	}
 
 }

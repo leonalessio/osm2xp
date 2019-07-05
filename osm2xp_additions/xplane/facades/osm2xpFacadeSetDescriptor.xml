@@ -336,7 +336,7 @@
         <minVectorLength>0.0</minVectorLength>
         <maxVectorLength>0.0</maxVectorLength>
         <simpleBuildingOnly>true</simpleBuildingOnly>
-        <minHeight>0</minHeight>
+        <minHeight>8</minHeight>
         <maxHeight>12</maxHeight>
     </facades>
     <facades>

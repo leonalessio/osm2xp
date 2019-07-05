@@ -10,7 +10,7 @@ import javax.xml.bind.annotation.XmlType;
 public class Polygon {
 	
 	@XmlAttribute
-	protected String path;
+	protected String path = "";
 
 	public Polygon(String path) {
 		super();

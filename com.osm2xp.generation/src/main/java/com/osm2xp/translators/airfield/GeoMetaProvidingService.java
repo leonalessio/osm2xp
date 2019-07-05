@@ -86,7 +86,9 @@ public abstract class GeoMetaProvidingService<T> {
 		for (Future<?> future: futureList) {
 			try {
 				Object result = future.get();
-				putObtainedToMap(result);
+				if (result != null) {
+					putObtainedToMap(result);
+				}
 			} catch (Exception e) {
 				Osm2xpLogger.log(e);
 			}

@@ -30,6 +30,7 @@ public class GetGeonameCallable implements Callable<Toponym>{
 			if (result != null && result.size() > 0) {
 				return result.get(0);
 			}
+			
 		} catch (Exception e) {
 			Osm2xpLogger.log(e);
 		}

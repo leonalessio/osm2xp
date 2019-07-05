@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <?pde version="3.5"?>
 
-<product name="OSM2XP" uid="com.osm2xp.product" id="com.osm2xp.application.product" application="com.osm2xp.application.app" version="4.0.0.qualifier" useFeatures="false" includeLaunchers="true">
+<product name="OSM2XP" uid="com.osm2xp.product" id="com.osm2xp.application.product" application="com.osm2xp.application.app" version="4.1.0.qualifier" useFeatures="false" includeLaunchers="true">
 
    <aboutInfo>
       <text>
