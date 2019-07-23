@@ -55,6 +55,21 @@ Faced a problem? Please look at [basic troubleshooting information](https://gith
 
 ![Screenshot 2](https://32kda.github.io/osm2xp/screenshots/CH750_2.png "Screenshot 2")
 
+## License
+OSM2XP is licensed under [GPL 3.0](https://www.gnu.org/licenses/gpl-3.0.txt)
+
+## 2D and 3D assets
+
+OSM2XP uses some built-in assets in default facade set, 3D model set, forest definitions etc. All of them was taken from different open libraries, e.g.:
+
+### Facades
+
+OSM2XP uses facades taken from different open libraries, e.g. from facade set by Alex Krug or World Models library. Some facades was created by 32kda in Blender specially for OSM2XP
+
+### 3D Models
+
+3D Models from different open libraries - OpenSceneryX, RuScenery and WorldModels - are used. Also several models was creatred for OSM2XP by Lenya69 and 32kda.
+
 ## Participate
 You can help with coding, if you know Java/Eclipse, with creating better default facade set (current one has a lot of problems), default models (cranes, chimneys, communication towers...) or just filing issues and posting improvement suggestions. Any help is welcome. 
 
