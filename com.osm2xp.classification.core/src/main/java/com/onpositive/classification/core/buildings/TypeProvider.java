@@ -14,9 +14,6 @@ public class TypeProvider {
 		if ("department_store".equals(shop) || "mall".equals(shop)) {
 			return OSMBuildingType.MALL;
 		}
-		if ("office".equals(building)) {
-			return OSMBuildingType.OFFICE;
-		}
 		if ("hospital".equals(building)) {
 			return OSMBuildingType.SOCIAL;
 		}

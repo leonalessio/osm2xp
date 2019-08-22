@@ -74,9 +74,9 @@ public class FacadeSetManager {
 				list.add(set);
 			}
 		}
-		String problems = getSpecialFacadeProblems();
-		if (!StringUtils.isBlank(problems)) {
-			Osm2xpLogger.warning( problems);
+		boolean specialsMissing = hasSpecialFacadeProblems();
+		if (specialsMissing) {
+			Osm2xpLogger.info("Some special facade types was not configured, will use default special facades");
 			File specFacadesFolder = PathsService.getPathsProvider().getSpecFacadesFolder();
 			FacadeSet set = loadFacadeSet(specFacadesFolder);
 			if (set != null) {
@@ -84,7 +84,7 @@ public class FacadeSetManager {
 			}
 		}
 		list.stream().flatMap(set -> set.getFacades().stream()).forEach(facade -> addFacade(facade));
-		checkCopyFacades(targetFolder, !StringUtils.isBlank(problems));
+		checkCopyFacades(targetFolder, specialsMissing);
 	}
 	private FacadeSet loadFacadeSet(String pathStr) {
 		File folder = new File(pathStr);
@@ -101,24 +101,25 @@ public class FacadeSetManager {
 		return null;
 	}
 
-	private String getSpecialFacadeProblems() {
-		StringBuilder builder = new StringBuilder();
-		if (XPlaneOptionsProvider.getOptions().isGenerateFence() && (!specialFacades.containsKey(SpecialFacadeType.FENCE) || !specialFacades.containsKey(SpecialFacadeType.WALL))) {
-			builder.append(" - 'Generate barriers option choosen, but no fence and/or wall facades are present in specified facade sets");
-			builder.append('\n');
-		}
-		if (XPlaneOptionsProvider.getOptions().isGenerateTanks() && !specialFacades.containsKey(SpecialFacadeType.TANK)) {
-			builder.append(" - 'Generate tanks/gasometers option choosen, but no 'tank' facades are present in specified facade sets");
-			builder.append('\n');
-		}
-		if (XPlaneOptionsProvider.getOptions().isGenerateBuildings() && !specialFacades.containsKey(SpecialFacadeType.GARAGE)) {
-			builder.append(" - 'Generate buildings option choosen, but no special facades for garages are present in specified facade sets");
-			builder.append('\n');
-		}
-		if (builder.length() > 0) {
-			builder.append("Will use built-in default facades");
-		}
-		return builder.toString();
+	private boolean hasSpecialFacadeProblems() {
+//		StringBuilder builder = new StringBuilder();
+//		if (XPlaneOptionsProvider.getOptions().isGenerateFence() && (!specialFacades.containsKey(SpecialFacadeType.FENCE) || !specialFacades.containsKey(SpecialFacadeType.WALL))) {
+//			builder.append(" - 'Generate barriers option choosen, but no fence and/or wall facades are present in specified facade sets");
+//			builder.append('\n');
+//		}
+//		if (XPlaneOptionsProvider.getOptions().isGenerateTanks() && !specialFacades.containsKey(SpecialFacadeType.TANK)) {
+//			builder.append(" - 'Generate tanks/gasometers option choosen, but no 'tank' facades are present in specified facade sets");
+//			builder.append('\n');
+//		}
+//		if (XPlaneOptionsProvider.getOptions().isGenerateBuildings() && !specialFacades.containsKey(SpecialFacadeType.GARAGE)) {
+//			builder.append(" - 'Generate buildings option choosen, but no special facades for garages are present in specified facade sets");
+//			builder.append('\n');
+//		}
+		boolean hasProblems = false;
+		hasProblems = hasProblems || (XPlaneOptionsProvider.getOptions().isGenerateFence() && (!specialFacades.containsKey(SpecialFacadeType.FENCE) || !specialFacades.containsKey(SpecialFacadeType.WALL))); 
+		hasProblems = hasProblems ||  (XPlaneOptionsProvider.getOptions().isGenerateTanks() && !specialFacades.containsKey(SpecialFacadeType.TANK));
+		hasProblems = hasProblems ||  (XPlaneOptionsProvider.getOptions().isGenerateBuildings() && !specialFacades.containsKey(SpecialFacadeType.GARAGE));
+		return hasProblems;
 	}
 	
 	protected void checkCopyFacades(File targetFolder, boolean copySpecFacades) {

@@ -2,8 +2,6 @@ package com.osm2xp.translators;
 
 import java.util.List;
 
-import org.openstreetmap.osmosis.osmbinary.Osmformat.HeaderBBox;
-
 import com.osm2xp.core.exceptions.Osm2xpBusinessException;
 import com.osm2xp.core.model.osm.Node;
 import com.osm2xp.core.model.osm.Tag;

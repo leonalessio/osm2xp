@@ -2,6 +2,11 @@ package com.osm2xp.utils.geometry;
 
 import org.locationtech.jts.geom.Coordinate;
 
+/**
+ * {@link Coordinate} adapted for storing x - lontitude, y - latitude
+ * @author 32kda
+ *
+ */
 public class LatLonCoordinate extends Coordinate {
 	
 	private static final int    EARTH_RADIUS    = 6371 * 1000; //meters
@@ -17,7 +22,15 @@ public class LatLonCoordinate extends Coordinate {
 		super(x,y);
 	}
 
+	public LatLonCoordinate(Coordinate coordinate) {
+		super(coordinate.x, coordinate.y);
+	}
+
 	@Override
+	/**
+	 * Distance funt adapted for using with (lontitude, latitude) coords
+	 * @param p Other point
+	 */
 	public double distance(Coordinate p) {
 		if (p instanceof LatLonCoordinate) {
 		    double latitude1 = y * RAD_COEF;

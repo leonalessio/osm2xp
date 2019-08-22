@@ -3,11 +3,13 @@ package com.osm2xp.core.parsers.impl;
 import java.io.File;
 import java.io.IOException;
 import java.util.ArrayList;
+import java.util.Collections;
 import java.util.List;
 
 import com.bbn.openmap.layer.shape.ESRIPoly.ESRIFloatPoly;
 import com.bbn.openmap.layer.shape.ESRIPolygonRecord;
 import com.bbn.openmap.layer.shape.ShapeFile;
+import com.bbn.openmap.proj.Length;
 import com.osm2xp.core.logging.Osm2xpLogger;
 import com.osm2xp.core.model.osm.Nd;
 import com.osm2xp.core.model.osm.Node;
@@ -52,14 +54,16 @@ public class ShapefileParserImpl implements IVisitingParser {
 
 				ESRIFloatPoly poly = (ESRIFloatPoly) esriPolygonRecord.polygons[0];
 				Way way = new Way();
-				way.getTags().add(shapefileTag);
+				if (shapefileTag != null) {
+					way.getTags().add(shapefileTag);
+				}
 				way.setId(++wayIndex);
 
 				for (int i = 0; i < poly.getRadians().length - 1; i = i + 2) {
 
-					Node node = new Node(null,
-							Math.toDegrees(poly.getRadians()[i]),
-							Math.toDegrees(poly.getRadians()[i + 1]), nodeIndex);
+					Node node = new Node(Collections.emptyList(),
+							Length.DECIMAL_DEGREE.fromRadians(poly.getRadians()[i]),
+							Length.DECIMAL_DEGREE.fromRadians(poly.getRadians()[i + 1]), nodeIndex);
 
 					// add the node ref to the way
 					way.getNd().add(new Nd(nodeIndex));

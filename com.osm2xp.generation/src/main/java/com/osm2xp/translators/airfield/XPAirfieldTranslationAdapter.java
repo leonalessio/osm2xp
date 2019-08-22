@@ -10,6 +10,7 @@ import java.util.stream.Collectors;
 import com.google.common.collect.Lists;
 import com.google.common.collect.Sets;
 import com.osm2xp.core.exceptions.Osm2xpBusinessException;
+import com.osm2xp.core.logging.Osm2xpLogger;
 import com.osm2xp.core.model.osm.CompositeTagSet;
 import com.osm2xp.core.model.osm.IHasTags;
 import com.osm2xp.core.model.osm.Node;
@@ -20,6 +21,7 @@ import com.osm2xp.model.osm.polygon.OsmPolylineFactory;
 import com.osm2xp.stats.StatsProvider;
 import com.osm2xp.translators.ISpecificTranslator;
 import com.osm2xp.generation.options.XPlaneOptionsProvider;
+import com.osm2xp.generation.paths.PathsService;
 import com.osm2xp.utils.osm.OsmUtils;
 
 import org.apache.commons.lang.StringUtils;
@@ -47,6 +49,7 @@ public class XPAirfieldTranslationAdapter implements ISpecificTranslator {
 	private List<Node> helipadsList = new ArrayList<>();
 	private File workFolder;
 	private KdTree orphanRunwaysTree = new KdTree();
+	private LocalGeonameProvider provider;
 
 	public XPAirfieldTranslationAdapter(String outputFolder) {
 		workFolder = new File(outputFolder); 
@@ -98,8 +101,14 @@ public class XPAirfieldTranslationAdapter implements ISpecificTranslator {
 				data.setElevation((int) Math.round(elevation));
 			}
 		}
-		if (data.getName() == null && data.getICAO() == null && XPlaneOptionsProvider.getOptions().getAirfieldOptions().isTryGetName()) {
-			String name = GeonameProvidingService.getInstance().getMeta(areaCenter, true);
+		if (data.getName() == null && data.getICAO() == null) {
+			String name = null;
+			if (provider != null) {
+				name = provider.getName(areaCenter.x(), areaCenter.y());
+			}
+			if (name == null && XPlaneOptionsProvider.getOptions().getAirfieldOptions().isTryGetName()) {
+				name = GeonameProvidingService.getInstance().getMeta(areaCenter, true);
+			}
 			if (name != null) {
 				data.setName(name);
 			}
@@ -305,7 +314,15 @@ public class XPAirfieldTranslationAdapter implements ISpecificTranslator {
 
 	@Override
 	public void processBoundingBox(Box2D bbox) {
-		// Do nothing		
+		File basicFolder = PathsService.getPathsProvider().getBasicFolder();
+		File indexFile = new File(basicFolder, "geo/index.dat");
+		if (indexFile.isFile()) {
+			try {
+				provider = new LocalGeonameProvider(bbox, indexFile);
+			} catch (Exception e) {
+				Osm2xpLogger.error("Unable to use local geoname index");
+			}
+		}
 	}
 
 	@Override

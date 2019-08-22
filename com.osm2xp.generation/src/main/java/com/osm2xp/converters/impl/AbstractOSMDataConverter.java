@@ -32,14 +32,14 @@ import org.locationtech.jts.geom.Polygon;
 
 public abstract class AbstractOSMDataConverter implements IOSMDataVisitor {
 
-	protected IDataSink processor;
+	protected IDataSink dataSink;
 	protected Map<Long, Color> roofsColorMap;
 	private int nodeCnt = 0;
 	private long wayCnt = 0;
 	
 	public AbstractOSMDataConverter(IDataSink processor, Map<Long, Color> roofsColorMap) {
 		super();
-		this.processor = processor;
+		this.dataSink = processor;
 		this.roofsColorMap = roofsColorMap;
 	}
 
@@ -50,7 +50,7 @@ public abstract class AbstractOSMDataConverter implements IOSMDataVisitor {
 			// aren't on a single pass mode
 			//pointParsed(node.getLon(), node.getLat());
 			if (mustStoreNode(node)) {
-				processor.storeNode(node);
+				dataSink.storeNode(node);
 				nodeCnt ++;
 				if (nodeCnt % 1000000 == 0) {
 					Osm2xpLogger.info(nodeCnt + " nodes processed");		
@@ -72,17 +72,13 @@ public abstract class AbstractOSMDataConverter implements IOSMDataVisitor {
 		}
 
 		try {
-			processor.storeWayPoints(way.getId(), way.getNodesArray());
+			dataSink.storeWayPoints(way.getId(), way.getNodesArray());
 
 			if (!mustProcessPolyline(way.getTags())) {
 				return;
 			}
 
-			List<Long> ids = new ArrayList<Long>();
-			for (Nd nd : way.getNd()) {
-				ids.add(nd.getRef());
-			}
-
+			List<Long> ids = way.getNd().stream().map(nd -> nd.getRef()).collect(Collectors.toList());
 			translateWay(way, ids);
 
 			wayCnt++;
@@ -96,7 +92,12 @@ public abstract class AbstractOSMDataConverter implements IOSMDataVisitor {
 
 	}
 	
+	protected boolean mustStoreWay(Way way) {
+		return !dataSink.isCompleted();
+	}
+	
 	protected abstract boolean mustStoreNode(Node node);
+	
 	
 	protected abstract boolean mustProcessPolyline(List<Tag> tagsModel);
 	
@@ -114,7 +115,7 @@ public abstract class AbstractOSMDataConverter implements IOSMDataVisitor {
 				for (Member member : relation.getMember()) {
 					String role = member.getRole();
 					if ("outer".equals(role)) {
-						long[] wayPoints = processor.getWayPoints(member.getId());
+						long[] wayPoints = dataSink.getWayPoints(member.getId());
 						if (wayPoints != null) {
 							outer.add(Arrays.stream(wayPoints).boxed().collect(Collectors.toList()));
 						} else {
@@ -122,7 +123,7 @@ public abstract class AbstractOSMDataConverter implements IOSMDataVisitor {
 						}
 					}
 					if ("inner".equals(role)) {
-						long[] wayPoints = processor.getWayPoints(member.getId());
+						long[] wayPoints = dataSink.getWayPoints(member.getId());
 						if (wayPoints != null) {
 							inner.add(Arrays.stream(wayPoints).boxed().collect(Collectors.toList()));
 						} else {
@@ -147,7 +148,7 @@ public abstract class AbstractOSMDataConverter implements IOSMDataVisitor {
 	
 	protected List<com.osm2xp.core.model.osm.Node> getNodes(List<Long> polyIds) {
 		try {
-			return processor.getNodes(polyIds);
+			return dataSink.getNodes(polyIds);
 		} catch (DataSinkException e) {
 			Osm2xpLogger.error(e);
 		}
@@ -282,5 +283,14 @@ public abstract class AbstractOSMDataConverter implements IOSMDataVisitor {
 
 	protected List<Geometry> fix(List<? extends Geometry> geometries) {
 		return geometries.stream().map(geom -> GeomUtils.fix(geom)).filter(geom -> geom != null).collect(Collectors.toList());
+	}
+	
+	@Override
+	public void complete() {
+		try {
+			dataSink.complete();
+		} catch (DataSinkException e) {
+			Osm2xpLogger.error(e);
+		}
 	}
 }

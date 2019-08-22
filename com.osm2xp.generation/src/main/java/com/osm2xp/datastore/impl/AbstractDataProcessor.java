@@ -9,6 +9,8 @@ import com.osm2xp.datastore.IDataSink;
 
 public abstract class AbstractDataProcessor implements IDataSink {
 
+	private boolean completed = false;
+
 	@Override
 	public List<Node> getNodes(final List<Long> ids) throws DataSinkException {
 		final List<Node> nodes = new ArrayList<Node>();
@@ -19,6 +21,17 @@ public abstract class AbstractDataProcessor implements IDataSink {
 			} 
 		}
 		return nodes.size() > 0 ? nodes : null;
+	}
+	
+	
+	@Override
+	public void complete() throws DataSinkException {
+		completed = true;
+	}
+	
+	@Override
+	public boolean isCompleted() {
+		return completed;
 	}
 	
 }

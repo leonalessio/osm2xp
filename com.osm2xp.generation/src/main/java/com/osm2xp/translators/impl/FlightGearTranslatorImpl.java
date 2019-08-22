@@ -83,7 +83,7 @@ public class FlightGearTranslatorImpl implements ITranslator {
 			if (matchingTags != null && !matchingTags.isEmpty()) {
 
 				LinearRing2D polygon = new LinearRing2D();
-				// if the processor sent back a complete list of nodes
+				// if the dataSink sent back a complete list of nodes
 				// construct a polygon from those nodes
 				polygon = GeomUtils.getPolygonFromOsmNodes(osmPolygon
 						.getNodes());

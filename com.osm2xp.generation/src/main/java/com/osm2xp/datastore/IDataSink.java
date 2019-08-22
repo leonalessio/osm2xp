@@ -43,6 +43,11 @@ public interface IDataSink {
 	 * called on completion of generation job.
 	 */
 	public void complete() throws DataSinkException;
+	
+	/**
+	 * @return Whether data collection is completed and this data sink is "full". This can be used to determine that we don't need to store some data second time, on second pass
+	 */
+	public boolean isCompleted(); 
 
 	/**
 	 * return the number of stored nodes

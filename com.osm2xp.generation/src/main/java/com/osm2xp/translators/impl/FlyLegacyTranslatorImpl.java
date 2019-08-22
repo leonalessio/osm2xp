@@ -117,7 +117,7 @@ public class FlyLegacyTranslatorImpl implements ITranslator {
 			throws Osm2xpBusinessException {
 		LinearRing2D polygon = new LinearRing2D();
 
-		// if the processor sent back a complete list of nodes
+		// if the dataSink sent back a complete list of nodes
 		// construct a polygon from those nodes
 
 		polygon = GeomUtils.getPolygonFromOsmNodes(osmPolyline.getNodes());

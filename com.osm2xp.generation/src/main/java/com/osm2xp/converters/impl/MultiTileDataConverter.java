@@ -10,6 +10,7 @@ import java.util.Set;
 import org.locationtech.jts.geom.Geometry;
 import org.locationtech.jts.geom.Polygon;
 
+import com.osm2xp.core.exceptions.DataSinkException;
 import com.osm2xp.core.exceptions.Osm2xpBusinessException;
 import com.osm2xp.core.logging.Osm2xpLogger;
 import com.osm2xp.core.model.osm.Node;
@@ -48,6 +49,11 @@ public class MultiTileDataConverter extends AbstractOSMDataConverter {
 		for (ISpecificTranslator tileTranslationAdapter : translationAdapters) {
 			tileTranslationAdapter.complete();
 		}
+		try {
+			dataSink.complete();
+		} catch (DataSinkException e) {
+			Osm2xpLogger.error(e);
+		}
 	}
 	
 	public void pointParsed(double lonf, double latf) {
@@ -59,7 +65,7 @@ public class MultiTileDataConverter extends AbstractOSMDataConverter {
 	}
 
 	protected void addTranslationAdapter(Point2D point) {
-		TileTranslationAdapter adapter = new TileTranslationAdapter(point, processor, translatorProvider.getTranslator(point));
+		TileTranslationAdapter adapter = new TileTranslationAdapter(point, dataSink, translatorProvider.getTranslator(point));
 		adapter.init();
 		translationAdapters.add(adapter);
 		tiles.add(point);
@@ -84,6 +90,9 @@ public class MultiTileDataConverter extends AbstractOSMDataConverter {
 
 	@Override
 	protected boolean mustStoreNode(Node node) {
+		if (dataSink.isCompleted()) {
+			return false;
+		}
 		for (ISpecificTranslator tileTranslationAdapter : translationAdapters) {
 			if (tileTranslationAdapter.mustStoreNode(node)) {
 				return true;		

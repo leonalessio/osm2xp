@@ -61,8 +61,8 @@ public class ParserBuilder {
 //			roofsColorMap = FilesUtils.loadG2xplColorFile(PathsService.getPathsProvider()
 //					.getRoofColorFile());
 //		}
-//		IDataSink processor = DataSinkFactory.getProcessor();
-//		AbstractTranslatingConverter converter = new GeneralTranslatingConverter(translator, processor, roofsColorMap);
+//		IDataSink dataSink = DataSinkFactory.getProcessor();
+//		AbstractTranslatingConverter converter = new GeneralTranslatingConverter(translator, dataSink, roofsColorMap);
 //		return getParser(currentFile, converter);
 //	}
 	public static IParser getParser(File currentFile,
