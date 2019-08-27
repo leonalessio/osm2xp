@@ -50,6 +50,7 @@ public class XPAirfieldTranslationAdapter implements ISpecificTranslator {
 	private File workFolder;
 	private KdTree orphanRunwaysTree = new KdTree();
 	private LocalGeonameProvider provider;
+	private Box2D bbox;
 
 	public XPAirfieldTranslationAdapter(String outputFolder) {
 		workFolder = new File(outputFolder); 
@@ -103,8 +104,8 @@ public class XPAirfieldTranslationAdapter implements ISpecificTranslator {
 		}
 		if (data.getName() == null && data.getICAO() == null) {
 			String name = null;
-			if (provider != null) {
-				name = provider.getName(areaCenter.x(), areaCenter.y());
+			if (getLocalProvider() != null) {
+				name = getLocalProvider().getName(areaCenter.x(), areaCenter.y());
 			}
 			if (name == null && XPlaneOptionsProvider.getOptions().getAirfieldOptions().isTryGetName()) {
 				name = GeonameProvidingService.getInstance().getMeta(areaCenter, true);
@@ -113,6 +114,21 @@ public class XPAirfieldTranslationAdapter implements ISpecificTranslator {
 				data.setName(name);
 			}
 		}
+	}
+	
+	protected LocalGeonameProvider getLocalProvider() {
+		if (provider == null) {
+			File basicFolder = PathsService.getPathsProvider().getBasicFolder();
+			File indexFile = new File(basicFolder, "geo/index.dat");
+			if (indexFile.isFile()) {
+				try {
+					provider = new LocalGeonameProvider(bbox, indexFile);
+				} catch (Exception e) {
+					Osm2xpLogger.error("Unable to use local geoname index");
+				}
+			}
+		}
+		return provider;
 	}
 
 	@Override
@@ -314,15 +330,7 @@ public class XPAirfieldTranslationAdapter implements ISpecificTranslator {
 
 	@Override
 	public void processBoundingBox(Box2D bbox) {
-		File basicFolder = PathsService.getPathsProvider().getBasicFolder();
-		File indexFile = new File(basicFolder, "geo/index.dat");
-		if (indexFile.isFile()) {
-			try {
-				provider = new LocalGeonameProvider(bbox, indexFile);
-			} catch (Exception e) {
-				Osm2xpLogger.error("Unable to use local geoname index");
-			}
-		}
+		this.bbox = bbox;
 	}
 
 	@Override

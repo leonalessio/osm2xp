@@ -93,8 +93,8 @@ public class FlightGearObjectsRulesPanel extends Composite {
 						.getOptions()
 						.getObjectsRules()
 						.getRules()
-						.add(new FlightGearObjectTagRule(new Tag("a tag key",
-								"a tag value"), Collections.singletonList(new ObjectFile("the path to an Object file"))
+						.add(new FlightGearObjectTagRule(new Tag("",
+								""), Collections.singletonList(new ObjectFile("flightgear/"))
 
 						, 0, true, false, false, 0, 0, 0, 0, false, 0,
 								0, false, false));

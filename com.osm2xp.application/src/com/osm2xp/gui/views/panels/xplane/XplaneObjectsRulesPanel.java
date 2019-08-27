@@ -94,8 +94,8 @@ public class XplaneObjectsRulesPanel extends Composite {
 						.getOptions()
 						.getObjectsRules()
 						.getRules()
-//						.add(new XplaneObjectTagRule(new Tag("a tag key",
-//								"a tag value"), Lists.newArrayList(new ObjectFile("the path to an Object file")), 0, true, false, false, 0, 0, 0, 0, false, 0, 0, false,
+//						.add(new XplaneObjectTagRule(new Tag("",
+//								""), Lists.newArrayList(new ObjectFile("xplane/objects")), 0, true, false, false, 0, 0, 0, 0, false, 0, 0, false,
 //								false));
 						.add(newRule);
 				tagsTable.getViewer().refresh();

@@ -17,7 +17,7 @@ public abstract class OptionsHelper {
 	 * @return
 	 */
 	public static ObjectTagRule createObjectTagRule(final String objectMessage) {
-		return new ObjectTagRule(new Tag("a tag key", "a tag value"),
+		return new ObjectTagRule(new Tag("", ""),
 				Lists.newArrayList(new ObjectFile(objectMessage)), 0, true);
 	}
 }

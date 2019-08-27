@@ -179,8 +179,8 @@ public class FsxObjectsRulesPanel extends Osm2xpPanel {
 						.getOptions()
 						.getObjectsRules()
 						.getRules()
-						.add(new ObjectTagRule(new Tag("a tag key",
-								"a tag value"), Lists.newArrayList(new ObjectFile("object GUID")), 0, true));
+						.add(new ObjectTagRule(new Tag("",
+								""), Lists.newArrayList(new ObjectFile("object GUID")), 0, true));
 				tagsTable.getViewer().refresh();
 
 			}

@@ -80,8 +80,8 @@ public class XplaneLightsRulesPanel extends Composite {
 						.getOptions()
 						.getLightsRules()
 						.getRules()
-						.add(new XplaneLightTagRule(new Tag("a tag key",
-								"a tag value"),Lists.newArrayList(new ObjectFile(
+						.add(new XplaneLightTagRule(new Tag("",
+								""),Lists.newArrayList(new ObjectFile(
 										"the path to a light Object file")), 5, 0, 20));
 				tagsTable.getViewer().refresh();
 

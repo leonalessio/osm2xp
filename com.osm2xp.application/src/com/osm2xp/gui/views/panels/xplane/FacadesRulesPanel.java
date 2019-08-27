@@ -3,6 +3,7 @@ package com.osm2xp.gui.views.panels.xplane;
 import java.io.File;
 import java.text.MessageFormat;
 import java.util.ArrayList;
+import java.util.Collections;
 
 import org.eclipse.jface.viewers.IStructuredSelection;
 import org.eclipse.swt.SWT;
@@ -238,13 +239,8 @@ public class FacadesRulesPanel extends Osm2xpPanel {
 						.getOptions()
 						.getFacadesRules()
 						.getRules()
-						.add(new FacadeTagRule(new Tag("a tag key",
-								"a tag value"), new ArrayList<ObjectFile>() {
-							{
-								add(new ObjectFile("the path to an Object file"));
-
-							}
-						}, 10, 40));
+						.add(new FacadeTagRule(new Tag("",
+								""), new ArrayList<>(Collections.singleton(new ObjectFile("the path to an Object file"))), 10, 40));
 
 				tagsTable.getViewer().refresh();
 			}

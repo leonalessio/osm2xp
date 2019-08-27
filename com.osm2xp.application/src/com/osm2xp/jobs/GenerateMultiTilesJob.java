@@ -10,6 +10,8 @@ import com.osm2xp.converters.impl.MultiTileDataConverter;
 import com.osm2xp.core.exceptions.DataSinkException;
 import com.osm2xp.core.logging.Osm2xpLogger;
 import com.osm2xp.core.parsers.IVisitingParser;
+import com.osm2xp.datastore.DataSinkFactory;
+import com.osm2xp.datastore.IDataSink;
 import com.osm2xp.parsers.builders.ParserBuilder;
 import com.osm2xp.stats.StatsProvider;
 import com.osm2xp.translators.ITranslatorProvider;
@@ -35,7 +37,16 @@ public class GenerateMultiTilesJob extends GenerateJob {
 	@Override
 	protected IStatus doGenerate(IProgressMonitor monitor) {
 		try {
-			IVisitingParser parser = ParserBuilder.getMultiTileParser(currentFile, translatorProvider);
+			IDataSink dataSink = DataSinkFactory.getProcessor();
+			try {
+				IVisitingParser preprocessParser = ParserBuilder.getPreprocessParser(currentFile, translatorProvider, dataSink);
+				if (preprocessParser != null) {
+					preprocessParser.process();
+				}
+			} catch (Exception e1) {
+				Osm2xpLogger.error("Error preprocessing input file: ", e1);
+			}
+			IVisitingParser parser = ParserBuilder.getMultiTileParser(currentFile, translatorProvider, dataSink);
 			parser.process();
 			Osm2xpLogger.info("Generated: " + StatsProvider.getCommonStats().getSummary());
 			Osm2xpLogger.info("Finished generation of " +  ((MultiTileDataConverter) parser.getVisitor()).getTilesCount() + " tiles, target folder " + folderPath);

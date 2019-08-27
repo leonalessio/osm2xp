@@ -23,11 +23,8 @@ import com.osm2xp.generation.options.GlobalOptionsProvider;
 import com.osm2xp.generation.paths.PathsService;
 import com.osm2xp.translators.ITranslator;
 import com.osm2xp.translators.ITranslatorProvider;
-import com.osm2xp.translators.TranslatorBuilder;
 import com.osm2xp.translators.airfield.XPAirfieldTranslationAdapter;
 import com.osm2xp.utils.FilesUtils;
-
-import math.geom2d.Point2D;
 
 /**
  * ParserBuilder.
@@ -66,7 +63,7 @@ public class ParserBuilder {
 //		return getParser(currentFile, converter);
 //	}
 	public static IParser getParser(File currentFile,
-			ITranslator translator)
+			ITranslator translator, IDataSink dataSink)
 					throws DataSinkException {
 		// if a roof color file is available, load it into a map and give it to
 		// the parser
@@ -75,8 +72,7 @@ public class ParserBuilder {
 			roofsColorMap = FilesUtils.loadG2xplColorFile(PathsService.getPathsProvider()
 					.getRoofColorFile());
 		}
-		IDataSink processor = DataSinkFactory.getProcessor();
-		AbstractTranslatingConverter converter = new GeneralTranslatingConverter(translator, processor, roofsColorMap);
+		AbstractTranslatingConverter converter = new GeneralTranslatingConverter(translator, dataSink, roofsColorMap);
 		return getParser(currentFile, converter);
 	}
 
@@ -109,6 +105,7 @@ public class ParserBuilder {
 	
 	/**
 	 * Build the parser implementation for the type of file
+	 * @param dataSink 
 	 * 
 	 * @param folderPath
 	 * @param relationsList
@@ -120,9 +117,8 @@ public class ParserBuilder {
 	 * @throws NumberFormatException
 	 * @throws Exception
 	 */
-	public static IVisitingParser getMultiTileParser(File currentFile,ITranslatorProvider translatorProvider)
+	public static IVisitingParser getMultiTileParser(File currentFile,ITranslatorProvider translatorProvider, IDataSink dataSink)
 			throws DataSinkException {
-		IDataSink processor = DataSinkFactory.getProcessor();
 		// if a roof color file is available, load it into a map and give it to
 		// the parser
 		Map<Long, Color> roofsColorMap = null;
@@ -130,8 +126,12 @@ public class ParserBuilder {
 			roofsColorMap = FilesUtils.loadG2xplColorFile(PathsService.getPathsProvider()
 					.getRoofColorFile());
 		}
-		MultiTileDataConverter converter = new MultiTileDataConverter(processor, translatorProvider, roofsColorMap);		
+		MultiTileDataConverter converter = new MultiTileDataConverter(dataSink, translatorProvider, roofsColorMap);		
 		return (IVisitingParser) getParser(currentFile, converter);
+	}
+
+	public static IVisitingParser getPreprocessParser(File currentFile, ITranslatorProvider translatorProvider, IDataSink dataSink) {
+		return null;
 	}
 
 }
