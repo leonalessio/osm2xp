@@ -75,5 +75,6 @@ You can help with coding, if you know Java/Eclipse, with creating better default
 
 ## Nearest plans
 
+* Landuse zones analysis
 * More options in the GUI
 * Better default facade set
