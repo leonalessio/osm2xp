@@ -1,10 +1,8 @@
 package com.osm2xp.converters.impl;
 
-import java.awt.Color;
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
-import java.util.Map;
 import java.util.Set;
 
 import org.locationtech.jts.geom.Geometry;
@@ -39,8 +37,8 @@ public class MultiTileDataConverter extends AbstractOSMDataConverter {
 	private Box2D boundingBox;
 	private ITranslatorProvider translatorProvider;
 
-	public MultiTileDataConverter(IDataSink processor, ITranslatorProvider translatorProvider, Map<Long, Color> roofsColorMap) {
-		super(processor, roofsColorMap);
+	public MultiTileDataConverter(IDataSink processor, ITranslatorProvider translatorProvider) {
+		super(processor);
 		this.translatorProvider = translatorProvider;
 		translationAdapters.addAll(translatorProvider.createAdditinalAdapters());
 	}

@@ -1,19 +1,22 @@
 package com.osm2xp.converters.impl;
 
-import java.awt.Color;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Collections;
 import java.util.Iterator;
 import java.util.List;
-import java.util.Map;
 import java.util.stream.Collectors;
+
+import org.locationtech.jts.geom.Coordinate;
+import org.locationtech.jts.geom.Geometry;
+import org.locationtech.jts.geom.GeometryFactory;
+import org.locationtech.jts.geom.LinearRing;
+import org.locationtech.jts.geom.Polygon;
 
 import com.osm2xp.core.exceptions.DataSinkException;
 import com.osm2xp.core.exceptions.Osm2xpBusinessException;
 import com.osm2xp.core.logging.Osm2xpLogger;
 import com.osm2xp.core.model.osm.Member;
-import com.osm2xp.core.model.osm.Nd;
 import com.osm2xp.core.model.osm.Node;
 import com.osm2xp.core.model.osm.Relation;
 import com.osm2xp.core.model.osm.Tag;
@@ -24,23 +27,16 @@ import com.osm2xp.utils.geometry.GeomUtils;
 import com.osm2xp.utils.geometry.NodeCoordinate;
 import com.osm2xp.utils.geometry.Osm2XPGeometryFactory;
 import com.osm2xp.utils.osm.OsmUtils;
-import org.locationtech.jts.geom.Coordinate;
-import org.locationtech.jts.geom.Geometry;
-import org.locationtech.jts.geom.GeometryFactory;
-import org.locationtech.jts.geom.LinearRing;
-import org.locationtech.jts.geom.Polygon;
 
 public abstract class AbstractOSMDataConverter implements IOSMDataVisitor {
 
 	protected IDataSink dataSink;
-	protected Map<Long, Color> roofsColorMap;
 	private int nodeCnt = 0;
 	private long wayCnt = 0;
 	
-	public AbstractOSMDataConverter(IDataSink processor, Map<Long, Color> roofsColorMap) {
+	public AbstractOSMDataConverter(IDataSink processor) {
 		super();
 		this.dataSink = processor;
-		this.roofsColorMap = roofsColorMap;
 	}
 
 	@Override
@@ -64,13 +60,6 @@ public abstract class AbstractOSMDataConverter implements IOSMDataVisitor {
 
 	@Override
 	public void visit(Way way) {
-		// if roof color information is available, add it to the current way
-		if (this.roofsColorMap != null && this.roofsColorMap.get(way.getId()) != null) {
-			String hexColor = Integer.toHexString(this.roofsColorMap.get(way.getId()).getRGB() & 0x00ffffff);
-			Tag roofColorTag = new Tag("building:roof:color", hexColor);
-			way.getTags().add(roofColorTag);
-		}
-
 		try {
 			dataSink.storeWayPoints(way.getId(), way.getNodesArray());
 

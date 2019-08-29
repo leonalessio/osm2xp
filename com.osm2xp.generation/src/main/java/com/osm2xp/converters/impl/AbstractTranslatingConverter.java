@@ -1,8 +1,6 @@
 package com.osm2xp.converters.impl;
 
-import java.awt.Color;
 import java.util.List;
-import java.util.Map;
 
 import com.osm2xp.core.model.osm.Node;
 import com.osm2xp.core.model.osm.Tag;
@@ -15,8 +13,8 @@ public abstract class AbstractTranslatingConverter extends AbstractOSMDataConver
 
 	protected IBasicTranslator translator;
 
-	public AbstractTranslatingConverter(IBasicTranslator translator, IDataSink processor, Map<Long, Color> roofsColorMap) {
-		super(processor, roofsColorMap);
+	public AbstractTranslatingConverter(IBasicTranslator translator, IDataSink processor) {
+		super(processor);
 		this.translator = translator;
 	}
 

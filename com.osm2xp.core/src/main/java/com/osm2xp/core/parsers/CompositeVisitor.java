@@ -1,9 +1,10 @@
-package com.osm2xp.classification.parsing;
+package com.osm2xp.core.parsers;
+
+import java.util.Collection;
 
 import com.osm2xp.core.model.osm.Node;
 import com.osm2xp.core.model.osm.Relation;
 import com.osm2xp.core.model.osm.Way;
-import com.osm2xp.core.parsers.IOSMDataVisitor;
 
 import math.geom2d.Box2D;
 
@@ -13,6 +14,10 @@ public class CompositeVisitor implements IOSMDataVisitor {
 
 	public CompositeVisitor(IOSMDataVisitor... children) {
 		this.children = children;
+	}
+
+	public CompositeVisitor(Collection<IOSMDataVisitor> preprocessors) {
+		children = preprocessors.toArray(new IOSMDataVisitor[0]);
 	}
 
 	@Override

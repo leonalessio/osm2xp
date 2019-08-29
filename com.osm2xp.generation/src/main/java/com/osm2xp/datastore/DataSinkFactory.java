@@ -13,7 +13,7 @@ import com.osm2xp.generation.options.GlobalOptionsProvider;
  */
 public class DataSinkFactory {
 
-	public static IDataSink getProcessor() throws DataSinkException {
+	public static IDataSink getDataSink() throws DataSinkException {
 		if (GlobalOptionsProvider.getOptions().isDatabaseMode()) { 
 			return new MapDBProcessorImpl();
 		} else {

@@ -267,7 +267,7 @@
         <maxVectorLength>0.0</maxVectorLength>
         <simpleBuildingOnly>true</simpleBuildingOnly>
         <minHeight>0</minHeight>
-        <maxHeight>12</maxHeight>
+        <maxHeight>9</maxHeight>
     </facades>
     <facades>
         <file>familysloped2.fac</file>
@@ -281,7 +281,7 @@
         <maxVectorLength>0.0</maxVectorLength>
         <simpleBuildingOnly>true</simpleBuildingOnly>
         <minHeight>0</minHeight>
-        <maxHeight>12</maxHeight>
+        <maxHeight>9</maxHeight>
     </facades>
     <facades>
         <file>familysloped3.fac</file>
@@ -295,7 +295,7 @@
         <maxVectorLength>0.0</maxVectorLength>
         <simpleBuildingOnly>true</simpleBuildingOnly>
         <minHeight>0</minHeight>
-        <maxHeight>12</maxHeight>
+        <maxHeight>9</maxHeight>
     </facades>
     <facades>
         <file>familysloped4.fac</file>
@@ -309,7 +309,7 @@
         <maxVectorLength>0.0</maxVectorLength>
         <simpleBuildingOnly>true</simpleBuildingOnly>
         <minHeight>0</minHeight>
-        <maxHeight>12</maxHeight>
+        <maxHeight>9</maxHeight>
     </facades>
     <facades>
         <file>familysloped5.fac</file>
@@ -323,7 +323,7 @@
         <maxVectorLength>0.0</maxVectorLength>
         <simpleBuildingOnly>true</simpleBuildingOnly>
         <minHeight>0</minHeight>
-        <maxHeight>12</maxHeight>
+        <maxHeight>9</maxHeight>
     </facades>
     <facades>
         <file>familysloped6.fac</file>
@@ -337,7 +337,7 @@
         <maxVectorLength>0.0</maxVectorLength>
         <simpleBuildingOnly>true</simpleBuildingOnly>
         <minHeight>0</minHeight>
-        <maxHeight>12</maxHeight>
+        <maxHeight>9</maxHeight>
     </facades>
     <facades>
         <file>familysloped7.fac</file>
@@ -351,7 +351,7 @@
         <maxVectorLength>0.0</maxVectorLength>
         <simpleBuildingOnly>true</simpleBuildingOnly>
         <minHeight>0</minHeight>
-        <maxHeight>12</maxHeight>
+        <maxHeight>9</maxHeight>
     </facades>
     <facades>
         <file>familysloped8.fac</file>
@@ -365,7 +365,7 @@
         <maxVectorLength>0.0</maxVectorLength>
         <simpleBuildingOnly>true</simpleBuildingOnly>
         <minHeight>8</minHeight>
-        <maxHeight>12</maxHeight>
+        <maxHeight>9</maxHeight>
     </facades>
     <facades>
         <file>family.fac</file>
@@ -406,7 +406,7 @@
         <minVectorLength>0.0</minVectorLength>
         <maxVectorLength>0.0</maxVectorLength>
         <simpleBuildingOnly>false</simpleBuildingOnly>
-        <minHeight>0</minHeight>
+        <minHeight>10</minHeight>
         <maxHeight>200</maxHeight>
     </facades>
     <facades>

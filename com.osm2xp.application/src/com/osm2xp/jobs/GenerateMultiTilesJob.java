@@ -37,7 +37,7 @@ public class GenerateMultiTilesJob extends GenerateJob {
 	@Override
 	protected IStatus doGenerate(IProgressMonitor monitor) {
 		try {
-			IDataSink dataSink = DataSinkFactory.getProcessor();
+			IDataSink dataSink = DataSinkFactory.getDataSink();
 			try {
 				IVisitingParser preprocessParser = ParserBuilder.getPreprocessParser(currentFile, translatorProvider, dataSink);
 				if (preprocessParser != null) {

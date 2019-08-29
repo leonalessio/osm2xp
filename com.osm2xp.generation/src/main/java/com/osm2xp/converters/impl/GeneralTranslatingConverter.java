@@ -1,9 +1,10 @@
 package com.osm2xp.converters.impl;
 
-import java.awt.Color;
 import java.util.Collections;
 import java.util.List;
-import java.util.Map;
+
+import org.locationtech.jts.geom.Geometry;
+import org.locationtech.jts.geom.Polygon;
 
 import com.osm2xp.core.exceptions.Osm2xpBusinessException;
 import com.osm2xp.core.model.osm.Tag;
@@ -12,14 +13,11 @@ import com.osm2xp.datastore.IDataSink;
 import com.osm2xp.model.osm.polygon.OsmPolyline;
 import com.osm2xp.model.osm.polygon.OsmPolylineFactory;
 import com.osm2xp.translators.ITranslator;
-import org.locationtech.jts.geom.Geometry;
-import org.locationtech.jts.geom.Polygon;
 
 public class GeneralTranslatingConverter extends AbstractTranslatingConverter {
 
-	public GeneralTranslatingConverter(ITranslator translator, IDataSink processor,
-			Map<Long, Color> roofsColorMap) {
-		super(translator, processor, roofsColorMap);
+	public GeneralTranslatingConverter(ITranslator translator, IDataSink processor) {
+		super(translator, processor);
 	}
 
 	@Override

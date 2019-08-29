@@ -20,6 +20,8 @@ import com.osm2xp.core.exceptions.DataSinkException;
 import com.osm2xp.core.parsers.IOSMDataVisitor;
 import com.osm2xp.core.parsers.IParser;
 import com.osm2xp.core.parsers.IVisitingParser;
+import com.osm2xp.datastore.DataSinkFactory;
+import com.osm2xp.datastore.IDataSink;
 import com.osm2xp.generation.options.GlobalOptionsProvider;
 import com.osm2xp.generation.options.XPlaneOptionsProvider;
 import com.osm2xp.generation.paths.PathsService;
@@ -126,13 +128,14 @@ public class App
     			System.out.println("Generation started at "  + new Date());
     			IParser parser = null;
     			ITranslatorProvider translatorProvider = TranslatorBuilder.getTranslatorProvider(inputFile, targetFolder.getAbsolutePath(), outputFormat);
+    			IDataSink dataSink = DataSinkFactory.getDataSink();
     			if (translatorProvider != null) {
-    				parser = ParserBuilder.getMultiTileParser(inputFile, translatorProvider);
+    				parser = ParserBuilder.getMultiTileParser(inputFile, translatorProvider, dataSink);
     			}
     			if (parser == null) {
 					ITranslator translator = TranslatorBuilder.getTranslator(inputFile, null, targetFolder.getAbsolutePath(), outputFormat);
 					if (translator != null) {
-						parser = ParserBuilder.getParser(inputFile, translator);
+						parser = ParserBuilder.getParser(inputFile, translator, dataSink);
 					}
 				}
     			if (parser == null) {

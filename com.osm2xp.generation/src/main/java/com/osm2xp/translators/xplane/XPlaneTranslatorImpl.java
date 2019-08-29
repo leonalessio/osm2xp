@@ -1,9 +1,11 @@
 package com.osm2xp.translators.xplane;
 
+import java.awt.Color;
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.Date;
 import java.util.List;
+import java.util.Map;
 
 import org.apache.commons.lang.StringUtils;
 
@@ -14,6 +16,7 @@ import com.osm2xp.core.model.osm.Tag;
 import com.osm2xp.generation.options.GlobalOptionsProvider;
 import com.osm2xp.generation.options.XPlaneOptionsProvider;
 import com.osm2xp.generation.osm.OsmConstants;
+import com.osm2xp.generation.paths.PathsService;
 import com.osm2xp.model.facades.SpecialFacadeType;
 import com.osm2xp.model.osm.polygon.OsmPolygon;
 import com.osm2xp.model.osm.polygon.OsmPolyline;
@@ -26,6 +29,7 @@ import com.osm2xp.translators.IPolyHandler;
 import com.osm2xp.translators.ITranslationListener;
 import com.osm2xp.translators.ITranslator;
 import com.osm2xp.utils.DsfObjectsProvider;
+import com.osm2xp.utils.FilesUtils;
 import com.osm2xp.utils.MiscUtils;
 import com.osm2xp.utils.geometry.GeomUtils;
 import com.osm2xp.utils.osm.OsmUtils;
@@ -90,6 +94,7 @@ public class XPlaneTranslatorImpl implements ITranslator{
 	 */
 	protected double levelHeight = GlobalOptionsProvider.getOptions().getLevelHeight();
 	protected List<IPolyHandler> polyHandlers = new ArrayList<IPolyHandler>();
+	private Map<Long, Color> roofsColorMap;
 
 	public XPlaneTranslatorImpl(IHeaderedWriter writer,
 			Point2D currentTile, String folderPath,
@@ -115,6 +120,15 @@ public class XPlaneTranslatorImpl implements ITranslator{
 		forestTranslator = new XPForestTranslator(writer, dsfObjectsProvider, outputFormat);
 		objectByRuleTranslator = new XP3DObjectByRuleTranslator(writer, dsfObjectsProvider, outputFormat);
 		polyToObjectTranslator = new XPPolyTo3DObjectTranslator(writer, dsfObjectsProvider, outputFormat);
+		
+		if (PathsService.getPathsProvider().getRoofColorFile() != null) {
+			try {
+				roofsColorMap = FilesUtils.loadG2xplColorFile(PathsService.getPathsProvider()
+						.getRoofColorFile());
+			} catch (Exception e) {
+				Osm2xpLogger.error("Error reading roofs color config file", e);
+			}
+		}
 	}
 
 	protected XPOutputFormat createOutputFormat() {
@@ -412,6 +426,14 @@ public class XPlaneTranslatorImpl implements ITranslator{
 	@Override
 	public void processPolyline(OsmPolyline osmPolyline) throws Osm2xpBusinessException {
 		// polygon is null or empty don't process it
+		if (roofsColorMap != null) {
+			Color color = roofsColorMap.get(osmPolyline.getId());
+			if (color != null) {
+				String hexColor = Integer.toHexString(color.getRGB() & 0x00ffffff);
+				Tag roofColorTag = new Tag("building:roof:color", hexColor);
+				osmPolyline.getTags().add(roofColorTag);
+			}
+		}
 		if (osmPolyline.getNodes() != null && !osmPolyline.getNodes().isEmpty()) {
 			List<OsmPolyline> polylines = preprocess(osmPolyline);
 			// try to transform those polygons into dsf objects.
