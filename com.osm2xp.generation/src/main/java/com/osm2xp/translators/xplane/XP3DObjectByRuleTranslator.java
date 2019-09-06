@@ -10,6 +10,7 @@ import com.osm2xp.core.model.osm.Tag;
 import com.osm2xp.generation.options.GlobalOptionsProvider;
 import com.osm2xp.generation.options.ObjectFile;
 import com.osm2xp.generation.options.XPlaneOptionsProvider;
+import com.osm2xp.generation.options.rules.RulesUtil;
 import com.osm2xp.generation.options.rules.XplaneObjectTagRule;
 import com.osm2xp.model.osm.polygon.OsmPolygon;
 import com.osm2xp.model.osm.polygon.OsmPolyline;
@@ -87,6 +88,9 @@ public class XP3DObjectByRuleTranslator extends XPWritingTranslator {
 		List<XplaneObjectTagRule> matchingRules = new ArrayList<XplaneObjectTagRule>();
 		int height = osmPolygon.getHeight();
 		for (XplaneObjectTagRule rule : rules) {
+			if (!RulesUtil.areaTypeMatches(rule, osmPolygon.getTags())) {
+				continue;
+			}
 			for (Tag tag : osmPolygon.getTags()) {
 				// check Tag matching
 				if (rule.getTag().getKey().equalsIgnoreCase("id")

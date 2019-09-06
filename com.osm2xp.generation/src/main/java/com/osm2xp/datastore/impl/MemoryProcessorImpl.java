@@ -47,7 +47,7 @@ public class MemoryProcessorImpl extends AbstractDataProcessor {
 	}
 
 	@Override
-	public Long getNodesNumber() {
+	public long getNodesNumber() {
 		return (long) nodeMap.size();
 	}
 

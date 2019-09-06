@@ -9,7 +9,10 @@ import javax.xml.bind.annotation.XmlElement;
 import javax.xml.bind.annotation.XmlSeeAlso;
 import javax.xml.bind.annotation.XmlType;
 
+import org.apache.commons.lang.StringUtils;
+
 import com.osm2xp.core.model.osm.Tag;
+import com.osm2xp.generation.areas.AreaTypesDef;
 import com.osm2xp.generation.options.ObjectFile;
 
 /**
@@ -27,6 +30,10 @@ public class TagsRule {
 	protected Tag tag;
 	@XmlElement(required = true)
 	protected List<ObjectFile> objectsFiles;
+	
+	protected String areaTypes;
+	
+	protected transient AreaTypesDef areaTypesDef;
 
 	/**
 	 * Default no-arg constructor
@@ -98,6 +105,21 @@ public class TagsRule {
 			objectsFiles = new ArrayList<ObjectFile>();
 		}
 		return this.objectsFiles;
+	}
+
+	public String getAreaTypes() {
+		return areaTypes;
+	}
+
+	public void setAreaTypes(String areaTypes) {
+		this.areaTypes = areaTypes;
+	}
+	
+	public AreaTypesDef getAreaTypesDef() {
+		if (areaTypesDef == null) {
+			areaTypesDef = new AreaTypesDef(StringUtils.stripToEmpty(areaTypes));
+		}
+		return areaTypesDef;
 	}
 
 }

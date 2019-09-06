@@ -45,16 +45,21 @@ public interface IDataSink {
 	public void complete() throws DataSinkException;
 	
 	/**
-	 * @return Whether data collection is completed and this data sink is "full". This can be used to determine that we don't need to store some data second time, on second pass
+	 * @return Whether this data sink is "readonly" and nothing more should be appended to it. Can be used e.g. to avoid double element addition if we have more than one pass
 	 */
-	public boolean isCompleted(); 
+	public boolean isReadOnly();
+	
+	/**
+	 * @param readOnly <code>true</code> if this store does not support elemnet addition anymore (e.g. after first input file pass was finished), <code>false</code> otherwise
+	 */
+	public void setReadOnly(boolean readOnly); 
 
 	/**
 	 * return the number of stored nodes
 	 * 
 	 * @return
 	 */
-	public Long getNodesNumber();
+	public long getNodesNumber();
 
 
 	/**

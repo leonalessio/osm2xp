@@ -43,8 +43,7 @@ public class FacadeSetHelper {
 		File facadeSetFile = new File(facadeSetFolder + File.separator
 				+ FACADE_SET_DESCRIPTOR_FILE_NAME);
 		try {
-			JAXBContext jc = JAXBContext.newInstance(FacadeSet.class
-					.getPackage().getName());
+			JAXBContext jc = JAXBContext.newInstance(FacadeSet.class);
 			Marshaller marshaller = jc.createMarshaller();
 			marshaller.setProperty(Marshaller.JAXB_ENCODING, "UTF-8");
 			marshaller.setProperty(Marshaller.JAXB_FORMATTED_OUTPUT,

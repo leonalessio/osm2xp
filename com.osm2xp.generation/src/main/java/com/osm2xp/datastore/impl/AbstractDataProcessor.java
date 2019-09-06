@@ -9,7 +9,7 @@ import com.osm2xp.datastore.IDataSink;
 
 public abstract class AbstractDataProcessor implements IDataSink {
 
-	private boolean completed = false;
+	private boolean readOnly = false;
 
 	@Override
 	public List<Node> getNodes(final List<Long> ids) throws DataSinkException {
@@ -23,15 +23,14 @@ public abstract class AbstractDataProcessor implements IDataSink {
 		return nodes.size() > 0 ? nodes : null;
 	}
 	
-	
 	@Override
-	public void complete() throws DataSinkException {
-		completed = true;
+	public boolean isReadOnly() {
+		return readOnly;
 	}
-	
+
 	@Override
-	public boolean isCompleted() {
-		return completed;
+	public void setReadOnly(boolean readOnly) {
+		this.readOnly = readOnly;
 	}
 	
 }

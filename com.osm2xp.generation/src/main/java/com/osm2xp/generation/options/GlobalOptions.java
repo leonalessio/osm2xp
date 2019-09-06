@@ -15,7 +15,7 @@ import org.apache.commons.lang.StringUtils;
  * 
  */
 @XmlAccessorType(XmlAccessType.FIELD)
-@XmlType(name = "", propOrder = { "databaseMode", "appendHour", "appendTile",
+@XmlType(name = "", propOrder = { "databaseMode", "appendHour", "appendTile","analyzeAreas",
 		"simplifyShapes", "currentFilePath", "levelHeight", 
 		"allowedHighwayTypes","allowedHighwayLinkTypes", "allowedHighwaySurfaceTypes"})
 @XmlRootElement(name = "GlobalOptions")
@@ -24,6 +24,7 @@ public class GlobalOptions {
 	protected boolean databaseMode = false;
 	protected boolean appendHour;
 	protected boolean appendTile;
+	protected boolean analyzeAreas = true;
 	protected boolean simplifyShapes;
 	@XmlElement(required = true)
 	protected String currentFilePath;
@@ -204,6 +205,14 @@ public class GlobalOptions {
 
 	public void setAllowedHighwaySurfaceTypes(String allowedHighwaySurfaceTypes) {
 		this.allowedHighwaySurfaceTypes = allowedHighwaySurfaceTypes;
+	}
+
+	public boolean isAnalyzeAreas() {
+		return analyzeAreas;
+	}
+
+	public void setAnalyzeAreas(boolean analyzeAreas) {
+		this.analyzeAreas = analyzeAreas;
 	}
 
 }

@@ -47,11 +47,7 @@ public class MultiTileDataConverter extends AbstractOSMDataConverter {
 		for (ISpecificTranslator tileTranslationAdapter : translationAdapters) {
 			tileTranslationAdapter.complete();
 		}
-		try {
-			dataSink.complete();
-		} catch (DataSinkException e) {
-			Osm2xpLogger.error(e);
-		}
+		super.complete();
 	}
 	
 	public void pointParsed(double lonf, double latf) {
@@ -88,7 +84,7 @@ public class MultiTileDataConverter extends AbstractOSMDataConverter {
 
 	@Override
 	protected boolean mustStoreNode(Node node) {
-		if (dataSink.isCompleted()) {
+		if (dataSink.isReadOnly()) {
 			return false;
 		}
 		for (ISpecificTranslator tileTranslationAdapter : translationAdapters) {

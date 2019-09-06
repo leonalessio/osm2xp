@@ -1,9 +1,8 @@
-package com.osm2xp.translators.xplane.areas;
+package com.osm2xp.generation.areas;
 
 import java.util.List;
 
-import org.locationtech.jts.geom.Envelope;
-import org.locationtech.jts.geom.Geometry;
+import org.apache.commons.lang.StringUtils;
 import org.locationtech.jts.geom.Polygon;
 
 import com.onpositive.classification.core.util.TagUtil;
@@ -13,6 +12,7 @@ import com.osm2xp.core.model.osm.Node;
 import com.osm2xp.core.model.osm.Tag;
 import com.osm2xp.core.model.osm.Way;
 import com.osm2xp.datastore.IDataSink;
+import com.osm2xp.utils.osm.OsmUtils;
 
 import math.geom2d.Box2D;
 
@@ -20,6 +20,7 @@ public class LanduseAreasAnalyzer extends AbstractOSMDataConverter {
 	
 	public LanduseAreasAnalyzer(IDataSink dataSink) {
 		super(dataSink);
+		AreaProvider.getInstance().clear();
 	}
 
 	@Override
@@ -40,17 +41,32 @@ public class LanduseAreasAnalyzer extends AbstractOSMDataConverter {
 
 	@Override
 	protected void translateWay(Way way, List<Long> ids) throws Osm2xpBusinessException {
-		Geometry geometry = getGeometry(ids);
-		Envelope envelope = geometry.getEnvelopeInternal();
-		// TODO Auto-generated method stub
-		
+		List<Tag> tags = way.getTags();
+		String landuse = OsmUtils.getTagValue("landuse", tags);
+		if (!StringUtils.stripToEmpty(landuse).trim().isEmpty()) {
+			Polygon poly = getPolygon(ids);
+			if (poly != null) {
+				MapArea area = new MapArea(landuse, poly);
+				AreaProvider.getInstance().addArea(area);
+			}
+		}
 	}
 
 	@Override
 	protected void translatePolys(long id, List<Tag> tagsModel, List<Polygon> cleanedPolys)
 			throws Osm2xpBusinessException {
-		// TODO Auto-generated method stub
-		
+		String landuse = OsmUtils.getTagValue("landuse", tagsModel);
+		if (!StringUtils.stripToEmpty(landuse).trim().isEmpty()) {
+			for (Polygon polygon : cleanedPolys) {
+				MapArea area = new MapArea(landuse, polygon);
+				AreaProvider.getInstance().addArea(area);
+			}
+		}
+	}
+	
+	@Override
+	public void complete() {
+		dataSink.setReadOnly(true);
 	}
 
 }

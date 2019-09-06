@@ -51,42 +51,6 @@ public class OsmPolyline implements IHasTags{
 		 this.polyline = GeomUtils.getPolylineFromOsmNodes(nodes);
 	}
 
-	/**
-	 * Split current polygon along tiles
-	 * 
-	 * @return
-	 */
-//	public List<OsmPolyline> splitPolygonAroundTiles() {
-//		// if the polygon is on only one tile, return the current polygon
-//		if (isOnOneTile()) {
-//			return Collections.singletonList(this);
-//		} else {
-//			List<OsmPolyline> result = new ArrayList<>();
-//			// the polygon is on more than one tile, split it.
-//			if (this.polyline == null) {
-//				initCurve();
-//			}
-//			Map<Point2D, OsmPolygon> polygons = new HashMap<Point2D, OsmPolygon>();
-//			for (Point2D point : polyline.vertices()) {
-//				Point2D tilePoint = GeomUtils.cleanCoordinatePoint(point);
-//				if (polygons.get(tilePoint) == null) {
-//					polygons.put(tilePoint, new OsmPolygon(id, tags,
-//							new ArrayList<Node>(), false));
-//				}
-//				polygons.get(tilePoint).getNodes()
-//						.add(new Node(null, point.y, point.x, 1));
-//	
-//			}
-//	
-//			for (Map.Entry<Point2D, OsmPolygon> entry : polygons.entrySet()) {
-//				result.add(entry.getValue());
-//			}
-//			return result;
-//		}
-//	}
-
-	
-
 	public long getId() {
 		return id;
 	}
@@ -147,6 +111,7 @@ public class OsmPolyline implements IHasTags{
 	}
 
 	public Point2D getCenter() {
+		getPolyline();
 		if (this.nodes.size() > 1) {
 			this.center = GeomUtils.getPolylineCenter(polyline);
 		} else {

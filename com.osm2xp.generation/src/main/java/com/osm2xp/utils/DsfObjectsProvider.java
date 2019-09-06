@@ -25,6 +25,7 @@ import com.osm2xp.generation.options.XPlaneOptionsProvider;
 import com.osm2xp.generation.options.rules.FacadeTagRule;
 import com.osm2xp.generation.options.rules.ForestTagRule;
 import com.osm2xp.generation.options.rules.PolygonTagsRule;
+import com.osm2xp.generation.options.rules.RulesUtil;
 import com.osm2xp.generation.options.rules.TagsRule;
 import com.osm2xp.generation.options.rules.XplaneLightTagRule;
 import com.osm2xp.generation.options.rules.XplaneObjectTagRule;
@@ -59,7 +60,6 @@ public class DsfObjectsProvider {
 	private List<String> forestsList = new ArrayList<String>();
 	private List<String> drapedPolysList = new ArrayList<String>();
 	private List<String> polygonsList = new ArrayList<String>();
-	private List<String> lightsObjectsList = new ArrayList<String>();
 	private List<FacadeTagRule> facadesRules = XPlaneOptionsProvider.getOptions().getFacadesRules().getRules();
 
 	private FacadeSetManager facadeSetManager;
@@ -385,13 +385,16 @@ public class DsfObjectsProvider {
 	public XplaneDsf3DObject getRandomDsfObjectIndexAndAngle(List<Tag> tags,
 			Long id) {
 		XplaneDsf3DObject result = null;
-		for (Tag tag : tags) {
-			for (XplaneObjectTagRule objectTagRule : XPlaneOptionsProvider
-					.getOptions().getObjectsRules().getRules()) {
+		for (XplaneObjectTagRule objectTagRule : XPlaneOptionsProvider
+				.getOptions().getObjectsRules().getRules()) {
+			if (!RulesUtil.areaTypeMatches(objectTagRule, tags)) {
+				continue;
+			}
+			for (Tag tag : tags) {
 				if ((objectTagRule.getTag().getKey().equalsIgnoreCase("id") && objectTagRule
 						.getTag().getValue()
 						.equalsIgnoreCase(String.valueOf(id)))
-						|| (OsmUtils.compareTags(objectTagRule.getTag(), tag))) {
+						|| OsmUtils.compareTags(objectTagRule.getTag(), tag)) {
 					result = new XplaneDsf3DObject();
 					result.setDsfIndex(getRandomObject(objectTagRule));
 					if (objectTagRule.isRandomAngle()) {
@@ -413,9 +416,12 @@ public class DsfObjectsProvider {
 	 * @return
 	 */
 	public Integer[] getRandomForestIndexAndDensity(List<Tag> tags) {
-		for (Tag tag : tags) {
-			for (ForestTagRule forestTagRule : XPlaneOptionsProvider.getOptions()
-					.getForestsRules().getRules()) {
+		for (ForestTagRule forestTagRule : XPlaneOptionsProvider.getOptions()
+				.getForestsRules().getRules()) {
+			if (!RulesUtil.areaTypeMatches(forestTagRule, tags)) {
+				continue;
+			}
+			for (Tag tag : tags) {
 				if (OsmUtils.compareTags(forestTagRule.getTag(), tag)) {
 					Integer[] result = new Integer[2];
 					result[0] = getRandomForest(forestTagRule);
@@ -495,6 +501,7 @@ public class DsfObjectsProvider {
 		return Collections.unmodifiableList(polygonsList);
 	}
 
+	@Deprecated
 	public XplaneDsfObject getRandomDsfLightObject(OsmPolygon osmPolygon) {
 		XplaneDsfObject result = null;
 		// shuffle rules
@@ -502,8 +509,11 @@ public class DsfObjectsProvider {
 		tagsRules.addAll(XPlaneOptionsProvider.getOptions().getLightsRules()
 				.getRules());
 		Collections.shuffle(tagsRules);
-		for (Tag tag : osmPolygon.getTags()) {
-			for (XplaneLightTagRule rule : tagsRules) {
+		for (XplaneLightTagRule rule : tagsRules) {
+			if (!RulesUtil.areaTypeMatches(rule, osmPolygon.getTags())) {
+				continue;
+			}
+			for (Tag tag : osmPolygon.getTags()) {
 				// check Tag matching
 				if ((rule.getTag().getKey().equalsIgnoreCase("id") && rule
 						.getTag().getValue()

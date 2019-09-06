@@ -8,11 +8,14 @@ import java.util.List;
 import java.util.Map;
 
 import org.apache.commons.lang.StringUtils;
+import org.locationtech.jts.geom.Coordinate;
 
 import com.osm2xp.core.exceptions.Osm2xpBusinessException;
 import com.osm2xp.core.logging.Osm2xpLogger;
 import com.osm2xp.core.model.osm.Node;
 import com.osm2xp.core.model.osm.Tag;
+import com.osm2xp.generation.areas.AreaProvider;
+import com.osm2xp.generation.areas.MapArea;
 import com.osm2xp.generation.options.GlobalOptionsProvider;
 import com.osm2xp.generation.options.XPlaneOptionsProvider;
 import com.osm2xp.generation.osm.OsmConstants;
@@ -405,6 +408,11 @@ public class XPlaneTranslatorImpl implements ITranslator{
 		// if not on single pass, only process if the node is on the current
 		// lat/long tile
 		if (XPlaneOptionsProvider.getOptions().isGenerateObj() && GeomUtils.compareCoordinates(currentTile, node)) {
+			MapArea area = getContainingArea(node.getLon(), node.getLat());
+			if (area != null) {
+				node.getTags().add(new Tag("landuse", area.type));
+			}
+			
 			// write a 3D object in the dsf file if this node is in an
 			// object
 			// rule
@@ -487,9 +495,22 @@ public class XPlaneTranslatorImpl implements ITranslator{
 //			}
 //			return polygons;
 		}
+		MapArea area = getContainingArea(osmPolyline.getCenter().x(), osmPolyline.getCenter().y());
+		if (area != null) {
+			osmPolyline.getTags().add(new Tag("landuse", area.type));
+		}
 		return Collections.singletonList(osmPolyline);
 	}
 	
+	protected MapArea getContainingArea(double x, double y) {
+		List<MapArea> areas = AreaProvider.getInstance().queryContainingAreas(new Coordinate(x, y));
+		if (!areas.isEmpty()) {
+			Collections.sort(areas, (a1,a2) -> (int)Math.signum(a2.polygon.getArea() - a1.polygon.getArea()));
+			return areas.get(0);
+		}
+		return null;
+	}
+
 	/**
 	 * Try processing given polygon with given tranlator and increase statistics in case of success
 	 * 

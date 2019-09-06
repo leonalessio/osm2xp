@@ -80,6 +80,7 @@ public class FacadeSetEditorDialog extends Dialog {
 	private Text textAuthor;
 	private Text textRoofColor;
 	private Text textWallColor;
+	private Text textAreaTypes;
 	private String facadeSetFolder;
 	private Table table;
 	private TableViewer viewer;
@@ -339,6 +340,18 @@ public class FacadeSetEditorDialog extends Dialog {
 		});
 		new Label(buildingParamsComposite, SWT.NONE);
 		new Label(buildingParamsComposite, SWT.NONE);
+		
+		Label labelAreaTypes = new Label(buildingParamsComposite, SWT.NONE);
+		labelAreaTypes.setLayoutData(new GridData(SWT.FILL, SWT.CENTER, false,
+				false, 1, 1));
+		labelAreaTypes.setText("Launduse :");
+		labelAreaTypes.setToolTipText("Landuse Area types this facade can be used for");
+		textAreaTypes = new Text(buildingParamsComposite, SWT.BORDER);
+		textAreaTypes.setLayoutData(new GridData(SWT.FILL, SWT.CENTER, true,
+				false, 1, 1));
+		textAreaTypes.addModifyListener(e -> {
+			currentFacade.setAreaTypes(textAreaTypes.getText());
+		});
 
 		btnIndustrial = new Button(buildingParamsComposite, SWT.CHECK);
 		btnIndustrial.addSelectionListener(new SelectionAdapter() {
@@ -669,6 +682,8 @@ public class FacadeSetEditorDialog extends Dialog {
 			textWallColor.setText("");
 		}
 
+		textAreaTypes.setText(StringUtils.stripToEmpty(currentFacade.getAreaTypes()));
+		
 		btnResidential.setSelection(currentFacade.isResidential());
 		btnCommercial.setSelection(currentFacade.isCommercial());
 		btnIndustrial.setSelection(currentFacade.isIndustrial());
@@ -743,7 +758,7 @@ public class FacadeSetEditorDialog extends Dialog {
 	 */
 	@Override
 	protected Point getInitialSize() {
-		return new Point(733, 700);
+		return new Point(900, 700);
 	}
 	
 	public static boolean editFacadeSet(String path) {

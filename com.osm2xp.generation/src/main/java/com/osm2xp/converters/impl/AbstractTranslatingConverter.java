@@ -30,7 +30,7 @@ public abstract class AbstractTranslatingConverter extends AbstractOSMDataConver
 
 	@Override
 	protected boolean mustStoreNode(Node node) {
-		return !dataSink.isCompleted() && translator.mustStoreNode(node);
+		return !dataSink.isReadOnly() && translator.mustStoreNode(node);
 	}
 
 	@Override

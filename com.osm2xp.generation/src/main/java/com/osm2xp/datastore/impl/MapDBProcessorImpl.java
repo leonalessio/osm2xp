@@ -100,11 +100,10 @@ public class MapDBProcessorImpl extends AbstractDataProcessor {
 	@Override
 	public void complete() {
 		db.close();
-
 	}
 
 	@Override
-	public Long getNodesNumber() {
+	public long getNodesNumber() {
 		return Long.valueOf(nodesMap.size());
 	}
 

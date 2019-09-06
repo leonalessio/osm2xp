@@ -24,6 +24,7 @@ public class GeneralOptionsPanel extends Osm2xpPanel {
 	private Button btnApdTime;
 	private Button btnApdCoords;
 	private Button btnSimplifyShapes;
+	private Button btnAnalyzeAreas;
 //	private Button btnSinglePass;
 
 	public GeneralOptionsPanel(final Composite parent, final int style) {
@@ -35,17 +36,6 @@ public class GeneralOptionsPanel extends Osm2xpPanel {
 		final GridLayout gridLayout = new GridLayout(3, true);
 		gridLayout.verticalSpacing = 15;
 		setLayout(gridLayout);
-//		btnDataBaseMode.setLayoutData(new GridData(SWT.FILL, SWT.FILL, false,
-//				false, 1, 1));
-//		btnSimplifyShapes.setLayoutData(new GridData(SWT.FILL, SWT.FILL, false,
-//				false, 1, 1));
-//		btnApdTime.setLayoutData(new GridData(SWT.FILL, SWT.FILL, false, false,
-//				1, 1));
-//		btnApdCoords.setLayoutData(new GridData(SWT.FILL, SWT.FILL, false,
-//				false, 1, 1));
-//		btnSinglePass.setLayoutData(new GridData(SWT.FILL, SWT.FILL, false,
-//				false, 1, 1));
-
 	}
 
 	@Override
@@ -56,6 +46,10 @@ public class GeneralOptionsPanel extends Osm2xpPanel {
 		btnSimplifyShapes = new Button(this, SWT.CHECK);
 		btnSimplifyShapes.setText("Simplify shapes");
 		GridDataFactory.swtDefaults().applyTo(btnSimplifyShapes);
+		btnAnalyzeAreas = new Button(this, SWT.CHECK);
+		btnAnalyzeAreas.setText("Analyze Landuse areas");
+		btnAnalyzeAreas.setToolTipText("Analyze, which Landuse area current point or line belongs to. This requires additional time (for extra pass) and more RAM.");
+		GridDataFactory.swtDefaults().applyTo(btnAnalyzeAreas);
 		btnApdTime = new Button(this, SWT.CHECK);
 		btnApdTime.setText("Add time to scene name");
 		GridDataFactory.swtDefaults().applyTo(btnApdTime);
@@ -85,8 +79,8 @@ public class GeneralOptionsPanel extends Osm2xpPanel {
 				"databaseMode");
 		bindComponent(btnApdTime, GlobalOptionsProvider.getOptions(), "appendHour");
 		bindComponent(btnApdCoords, GlobalOptionsProvider.getOptions(), "appendTile");
-		bindComponent(btnSimplifyShapes, GlobalOptionsProvider.getOptions(),
-				"simplifyShapes");
+		bindComponent(btnSimplifyShapes, GlobalOptionsProvider.getOptions(),"simplifyShapes");
+		bindComponent(btnAnalyzeAreas, GlobalOptionsProvider.getOptions(),"analyzeAreas");
 //		bindComponent(btnSinglePass, GlobalOptionsProvider.getOptions(),
 //				"singlePass");
 

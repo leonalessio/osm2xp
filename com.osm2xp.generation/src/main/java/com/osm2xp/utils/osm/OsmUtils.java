@@ -8,6 +8,7 @@ import java.io.IOException;
 import java.text.Normalizer;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Optional;
 import java.util.regex.Pattern;
 
 import com.onpositive.classification.core.util.TagUtil;
@@ -247,6 +248,12 @@ public class OsmUtils {
 		}
 		return false;
 	}
+	
+	public static String getTagValue(String tagKey, List<Tag> tags) {
+		Optional<Tag> first = tags.stream().filter(tag -> tagKey.equals(tag.getKey())).findFirst();
+		return first.isPresent() ? first.get().getValue() : null;
+	}
+	
 	public static boolean isKeyInTags(String key, List<Tag> tags) {
 		for (Tag tag : tags) {
 			if (key.equalsIgnoreCase(tag.getKey())) {

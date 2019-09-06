@@ -5,6 +5,10 @@ import javax.xml.bind.annotation.XmlAccessorType;
 import javax.xml.bind.annotation.XmlElement;
 import javax.xml.bind.annotation.XmlType;
 
+import org.apache.commons.lang.StringUtils;
+
+import com.osm2xp.generation.areas.AreaTypesDef;
+
 /**
  * Facade.
  * 
@@ -12,7 +16,7 @@ import javax.xml.bind.annotation.XmlType;
  * 
  */
 @XmlAccessorType(XmlAccessType.FIELD)
-@XmlType(name = "Facade", propOrder = { "file", "roofColor", "wallColor", "specialType", "barrierType", "industrial", "commercial",
+@XmlType(name = "Facade", propOrder = { "file", "roofColor", "wallColor", "specialType", "barrierType", "areaTypes", "industrial", "commercial",
 		"residential", "sloped", "minVectorLength", "maxVectorLength", "simpleBuildingOnly", "minHeight", "maxHeight" })
 public class Facade {
 
@@ -24,6 +28,8 @@ public class Facade {
 	protected BarrierType barrierType;
 	@XmlElement(name = "specialType")
 	protected SpecialFacadeType specialType;
+	protected String areaTypes;
+	protected transient AreaTypesDef areaTypesDef;
 	protected boolean industrial;
 	protected boolean commercial;
 	protected boolean residential;
@@ -271,6 +277,22 @@ public class Facade {
 			return specialType.name() + " " + file;
 		}
 		return file;
+	}
+
+	public String getAreaTypes() {
+		return areaTypes;
+	}
+
+	public void setAreaTypes(String areaTypes) {
+		this.areaTypes = areaTypes;
+		areaTypesDef = null;
+	}
+
+	public AreaTypesDef getAreaTypesDef() {
+		if (areaTypesDef == null) {
+			areaTypesDef = new AreaTypesDef(StringUtils.stripToEmpty(areaTypes));
+		}
+		return areaTypesDef;
 	}
 
 }

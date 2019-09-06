@@ -5,7 +5,7 @@ import java.util.Collection;
 /**
  * @author 32kda
  */
-public class IdToObjectIndex implements IIdIndex<Object>{
+public class ArrayBasedIndex<T> implements IIdIndex<T>{
 	
 	/**
      * Default initial capacity.
@@ -64,19 +64,20 @@ public class IdToObjectIndex implements IIdIndex<Object>{
      */
     private int size;
     
-    public IdToObjectIndex(int initialCapacity) {
+    public ArrayBasedIndex(int initialCapacity) {
     	idArray = new char[initialCapacity];
     	objectArray = new Object[initialCapacity];
 	}
     
-    public IdToObjectIndex() {
+    public ArrayBasedIndex() {
     	this(DEFAULT_CAPACITY);
 	}
 
 	 // Positional Access Operations
 
-    Object elementData(int index) {
-        return objectArray[index];
+    @SuppressWarnings("unchecked")
+	T elementData(int index) {
+        return (T) objectArray[index];
     }
 
 
@@ -87,13 +88,13 @@ public class IdToObjectIndex implements IIdIndex<Object>{
      * @return the element at the specified position in this list
      * @throws IndexOutOfBoundsException {@inheritDoc}
      */
-    public Object get(int index) {
+    public T get(int index) {
         rangeCheck(index);
 
         return elementData(index);
     }
     
-    public Object getItem(char id) {
+    public T getItem(char id) {
     	if (idArray.length == 0 || size == 0) {
     		return null;
     	}
@@ -121,7 +122,7 @@ public class IdToObjectIndex implements IIdIndex<Object>{
     	return iterateSearch(id, start, end);
     }
 
-    protected Object iterateSearch(long id, int start, int end) {
+    protected T iterateSearch(long id, int start, int end) {
     	for (int i = start; i <= end; i++) {
 			if (idArray[i] == id) {
 				return get(i);
@@ -136,7 +137,7 @@ public class IdToObjectIndex implements IIdIndex<Object>{
      * @param e element to be appended to this list
      * @return <tt>true</tt> (as specified by {@link Collection#add})
      */
-    public void addItem(char pointId, Object object) {
+    public void addItem(char pointId, T object) {
         ensureCapacityInternal(size + 1);  // Increments modCount!!
         idArray[size] = pointId;
         objectArray[size] = object;

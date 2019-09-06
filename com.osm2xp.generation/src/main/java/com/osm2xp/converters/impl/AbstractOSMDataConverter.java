@@ -82,7 +82,7 @@ public abstract class AbstractOSMDataConverter implements IOSMDataVisitor {
 	}
 	
 	protected boolean mustStoreWay(Way way) {
-		return !dataSink.isCompleted();
+		return !dataSink.isReadOnly();
 	}
 	
 	protected abstract boolean mustStoreNode(Node node);

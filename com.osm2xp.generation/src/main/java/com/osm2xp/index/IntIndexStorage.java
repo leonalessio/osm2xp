@@ -4,13 +4,13 @@ import java.util.ArrayList;
 import java.util.List;
 
 /**
- * Storage for long key - T valu e pairs.
- * For now - keys should appear in strctly increasing manner
+ * Storage for long key - T value pairs.
+ * For now - keys should appear in strictly increasing order
  * @author 32kda
  *
  * @param <T> Storage values type
  */
-public abstract class IntIndexStorage<T> {
+public class IntIndexStorage<T> {
 	
 	protected List<IIdIndex<T>> indexList = new ArrayList<IIdIndex<T>>();
 
@@ -41,7 +41,9 @@ public abstract class IntIndexStorage<T> {
 		return null;
 	}
 
-	protected abstract IIdIndex<T> createIndex();
+	protected IIdIndex<T> createIndex() {
+		return new ArrayBasedIndex<T>();
+	}
 
 	public long size() {
 		long sum = 0;

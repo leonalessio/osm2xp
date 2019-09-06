@@ -21,12 +21,14 @@ import com.osm2xp.core.model.osm.Node;
  */
 public class H2DBDProcessorImpl extends AbstractDataProcessor {
 
+	private static final String QUERY_COUNT_NODES = "SELECT COUNT(*) FROM nodes";
 	private static final String QUERY_SELECT_NODE = "SELECT * FROM nodes where id=";
 	private static final String QUERY_INSERT_NODE = "INSERT INTO NODES (id,latitude,longitude) VALUES ";
 	private static final String QUERY_CREATE_NODES_TABLE = "CREATE TABLE NODES(id LONG PRIMARY KEY, latitude DOUBLE,longitude DOUBLE)";
 	private static final String QUERY_DROP_NODES_TABLE = "DROP TABLE IF EXISTS NODES";
 	private Server server;
 	private Connection conn;
+	private long count = -1;
 
 	public H2DBDProcessorImpl() throws DataSinkException {
 		initDB();
@@ -63,7 +65,7 @@ public class H2DBDProcessorImpl extends AbstractDataProcessor {
 		} catch (SQLException e) {
 			throw new DataSinkException("H2DB node record error", e);
 		}
-
+		count = -1;
 	}
 
 	@Override
@@ -90,8 +92,20 @@ public class H2DBDProcessorImpl extends AbstractDataProcessor {
 	}
 
 	@Override
-	public Long getNodesNumber() {
-		return null;
+	public long getNodesNumber() {
+		if (count == -1) {
+			try {
+				Statement stmt = conn.createStatement();
+				ResultSet result = stmt.executeQuery(QUERY_COUNT_NODES);
+				if (result.next()) {
+					count = result.getLong(0);
+				}
+			} catch (SQLException e) {
+				Osm2xpLogger.error("H2DB get node error", e);
+			}
+			
+			}
+		return count;
 	}
 
 	@Override

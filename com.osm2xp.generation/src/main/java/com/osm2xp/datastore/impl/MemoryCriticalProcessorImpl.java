@@ -3,7 +3,6 @@ package com.osm2xp.datastore.impl;
 import com.osm2xp.core.exceptions.DataSinkException;
 import com.osm2xp.core.model.osm.Node;
 import com.osm2xp.index.IIdIndex;
-import com.osm2xp.index.IdToObjectIndex;
 import com.osm2xp.index.IntIndexStorage;
 import com.osm2xp.index.PointCoordsIndex;
 
@@ -23,13 +22,7 @@ public class MemoryCriticalProcessorImpl extends AbstractDataProcessor {
 			return new PointCoordsIndex();
 		}
 	};
-	private IntIndexStorage<Object> wayStorage = new IntIndexStorage<Object>() {
-
-		@Override
-		protected IIdIndex<Object> createIndex() {
-			return new IdToObjectIndex();
-		}
-	};
+	private IntIndexStorage<Object> wayStorage = new IntIndexStorage<Object>();	
 	private IDListFactory idListFactory = new IDListFactory();
 
 	@Override
@@ -58,7 +51,7 @@ public class MemoryCriticalProcessorImpl extends AbstractDataProcessor {
 	}
 
 	@Override
-	public Long getNodesNumber() {
+	public long getNodesNumber() {
 		return (long) pointStorage.size();
 	}
 

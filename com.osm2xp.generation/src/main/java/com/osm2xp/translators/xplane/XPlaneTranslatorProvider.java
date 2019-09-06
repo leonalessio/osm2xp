@@ -6,13 +6,13 @@ import java.util.Collections;
 
 import com.osm2xp.core.parsers.IOSMDataVisitor;
 import com.osm2xp.datastore.IDataSink;
+import com.osm2xp.generation.areas.LanduseAreasAnalyzer;
 import com.osm2xp.generation.options.XPlaneOptionsProvider;
 import com.osm2xp.model.facades.FacadeSetManager;
 import com.osm2xp.translators.AbstractTranslatorProvider;
 import com.osm2xp.translators.IPreprocessorProvider;
 import com.osm2xp.translators.ITranslator;
 import com.osm2xp.translators.impl.ImageDebugTranslationListener;
-import com.osm2xp.translators.xplane.areas.LanduseAreasAnalyzer;
 import com.osm2xp.utils.DsfObjectsProvider;
 import com.osm2xp.utils.DsfUtils;
 import com.osm2xp.writers.IHeaderedWriter;
