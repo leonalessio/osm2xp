@@ -26,11 +26,6 @@ public class ObjectByPolyPanel extends Osm2xpPanel {
 	}
 
 	@Override
-	protected void initLayout() {
-
-	}
-
-	@Override
 	protected void initComponents() {
 		setLayout(GridLayoutFactory.swtDefaults().numColumns(2).create());
 		Label toleranceLbl = new Label(this, SWT.NONE);

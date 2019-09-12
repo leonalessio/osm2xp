@@ -29,6 +29,7 @@ import com.osm2xp.generation.options.rules.RulesUtil;
 import com.osm2xp.generation.options.rules.TagsRule;
 import com.osm2xp.generation.options.rules.XplaneLightTagRule;
 import com.osm2xp.generation.options.rules.XplaneObjectTagRule;
+import com.osm2xp.generation.osm.OsmConstants;
 import com.osm2xp.generation.paths.PathsService;
 import com.osm2xp.model.facades.Facade;
 import com.osm2xp.model.facades.FacadeSetManager;
@@ -95,20 +96,21 @@ public class DsfObjectsProvider {
 	 * @param xVectorLength
 	 * @return Integer the facade file index
 	 */
-	public Integer computeFacadeDsfIndex(Boolean simpleBuilding,
-			BuildingType buildingType, Boolean slopedRoof, OsmPolygon osmPolygon) {
+	public Integer computeFacadeDsfIndex(boolean simpleBuilding,
+			BuildingType buildingType, boolean slopedRoof, OsmPolygon osmPolygon) {
 		if (osmPolygon.getId() == lastPolyId && lastFacade >= 0) {
 			return lastFacade;
 		}
+		String landuse = osmPolygon.getTagValue(OsmConstants.LANDUSE_TAG);
 		Color roofColor = osmPolygon.getRoofColor();
 		Double minVector = osmPolygon.getMinVectorSize();
 		Integer height = osmPolygon.getHeight();
 		Facade resFacade = null;
 		if (slopedRoof) {
-			resFacade = facadeSetManager.getRandomHouseSlopedFacade(buildingType, minVector, height, roofColor); 
+			resFacade = facadeSetManager.getRandomHouseSlopedFacade(buildingType, minVector, height, roofColor, landuse); 
 		}
 		if (resFacade == null) {
-			resFacade = facadeSetManager.getRandomFacade(buildingType,height,simpleBuilding);
+			resFacade = facadeSetManager.getRandomFacade(buildingType,height,simpleBuilding, landuse);
 		}
 		
 		int idx = getFacadeStrIndex(resFacade.getFile());

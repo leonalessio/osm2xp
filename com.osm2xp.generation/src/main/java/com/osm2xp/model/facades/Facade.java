@@ -8,6 +8,7 @@ import javax.xml.bind.annotation.XmlType;
 import org.apache.commons.lang.StringUtils;
 
 import com.osm2xp.generation.areas.AreaTypesDef;
+import com.osm2xp.generation.options.rules.IHasAreaTypes;
 
 /**
  * Facade.
@@ -18,7 +19,7 @@ import com.osm2xp.generation.areas.AreaTypesDef;
 @XmlAccessorType(XmlAccessType.FIELD)
 @XmlType(name = "Facade", propOrder = { "file", "roofColor", "wallColor", "specialType", "barrierType", "areaTypes", "industrial", "commercial",
 		"residential", "sloped", "minVectorLength", "maxVectorLength", "simpleBuildingOnly", "minHeight", "maxHeight" })
-public class Facade {
+public class Facade implements IHasAreaTypes{
 
 	@XmlElement(required = true)
 	protected String file;

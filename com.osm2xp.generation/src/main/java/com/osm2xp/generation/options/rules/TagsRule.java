@@ -22,9 +22,9 @@ import com.osm2xp.generation.options.ObjectFile;
  * 
  */
 @XmlAccessorType(XmlAccessType.FIELD)
-@XmlType(name = "TagsRule", propOrder = { "tag", "objectsFiles" })
+@XmlType(name = "TagsRule", propOrder = { "tag", "areaTypes", "objectsFiles" })
 @XmlSeeAlso({ ForestTagRule.class, FacadeTagRule.class, ObjectTagRule.class })
-public class TagsRule {
+public class TagsRule implements IHasAreaTypes{
 
 	@XmlElement(required = true)
 	protected Tag tag;
@@ -113,6 +113,7 @@ public class TagsRule {
 
 	public void setAreaTypes(String areaTypes) {
 		this.areaTypes = areaTypes;
+		areaTypesDef = null;
 	}
 	
 	public AreaTypesDef getAreaTypesDef() {

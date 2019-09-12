@@ -32,6 +32,15 @@ public class XPOutputFormat {
 	 */
 	private static final int MAX_INNER_POLYS = 254;
 
+	private int objectRenderLevel;
+
+	private int facadeRenderLevel;
+
+	public XPOutputFormat(int objectRenderLevel, int facadeRenderLevel) {
+		this.objectRenderLevel = objectRenderLevel;
+		this.facadeRenderLevel = facadeRenderLevel;
+	}
+
 	public String getHeaderString(Point2D tileCoordinates, Box2D exclusionBox, DsfObjectsProvider dsfObjectsProvider) {
 
 		StringBuilder sb = new StringBuilder();
@@ -50,10 +59,10 @@ public class XPOutputFormat {
 		// .size();
 		// sb.append("PROPERTY sim/require_object 1/" + requireIndex + "\n");
 		// } else {
-		sb.append("PROPERTY sim/require_object 1/0\n");
+		sb.append(String.format("PROPERTY sim/require_object %d/0\n", objectRenderLevel));
 		// }
-		sb.append("PROPERTY sim/require_facade 6/0\n");
-		sb.append("PROPERTY sim/creation_agent Osm2Xp " + CoreConstants.OSM2XP_VERSION
+		sb.append(String.format("PROPERTY sim/require_facade %d/0\n", facadeRenderLevel));
+		sb.append("PROPERTY sim/creation_agent OSM2XP " + CoreConstants.OSM2XP_VERSION
 				+ " by Benjamin Blanchet, Dmitry Karpenko \n");
 		// Exclusions
 		String exclusionCoordinate = exclusionBox != null

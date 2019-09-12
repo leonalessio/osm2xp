@@ -33,6 +33,7 @@ import com.osm2xp.core.model.osm.Tag;
 import com.osm2xp.generation.options.Polygon;
 import com.osm2xp.generation.options.XPlaneOptionsProvider;
 import com.osm2xp.generation.options.XmlHelper;
+import com.osm2xp.generation.options.rules.IHasAreaTypes;
 import com.osm2xp.generation.options.rules.PolygonTagsRule;
 import com.osm2xp.gui.Activator;
 import com.osm2xp.gui.components.AbstractPathsTable;
@@ -57,6 +58,7 @@ public class XplanePolyRulesPanel extends Composite {
 	private Composite compositeRuleDetail;
 	private Spinner spinnerMinPerimeter;
 	protected PolygonTagsRule selectedPolygonTagsRule;
+	private LanduseText landuseText;
 
 	public XplanePolyRulesPanel(final Composite parent, int style) {
 		super(parent, style);
@@ -94,7 +96,7 @@ public class XplanePolyRulesPanel extends Composite {
 			public void widgetSelected(SelectionEvent e) {
 				IStructuredSelection selection = (IStructuredSelection) tagsTable
 						.getViewer().getSelection();
-				PolygonTagsRule selectedPolygonTagsRule = (PolygonTagsRule) selection
+				IHasAreaTypes selectedPolygonTagsRule = (IHasAreaTypes) selection
 						.getFirstElement();
 				XPlaneOptionsProvider.getOptions().getPolygonRules().getRules()
 						.remove(selectedPolygonTagsRule);
@@ -177,6 +179,9 @@ public class XplanePolyRulesPanel extends Composite {
 		// gridDataObjectsObjects.heightHint = 150;
 //		gridDataObjectsObjects.widthHint = 608;
 		compositeRuleDetail.setLayoutData(gridDataObjectsObjects);
+				
+		landuseText = new LanduseText(compositeRuleDetail);		
+		GridDataFactory.fillDefaults().grab(true, false).span(2,1).applyTo(landuseText);
 
 		Label lblNewLabel_3 = new Label(compositeRuleDetail, SWT.NONE);
 		lblNewLabel_3.setText("Min perimeter, m: ");
@@ -244,7 +249,7 @@ public class XplanePolyRulesPanel extends Composite {
 	}
 
 	private void updateRuleControls() {
-		
+		landuseText.setRule(selectedPolygonTagsRule);
 		spinnerMinPerimeter.setEnabled(selectedPolygonTagsRule != null);
 		compositeRuleDetail.setVisible(selectedPolygonTagsRule != null);
 		if (selectedPolygonTagsRule != null) {

@@ -17,6 +17,7 @@ import com.google.common.collect.HashMultimap;
 import com.google.common.collect.Multimap;
 import com.osm2xp.core.exceptions.Osm2xpTechnicalException;
 import com.osm2xp.core.logging.Osm2xpLogger;
+import com.osm2xp.generation.options.GlobalOptionsProvider;
 import com.osm2xp.generation.options.XPlaneOptionsProvider;
 import com.osm2xp.generation.paths.PathsService;
 import com.osm2xp.translators.BuildingType;
@@ -203,7 +204,7 @@ public class FacadeSetManager {
 		}
 	}
 	
-	public Facade getRandomFacade(BuildingType type, int height, boolean simple) {
+	public Facade getRandomFacade(BuildingType type, int height, boolean simple, String landuse) {
 		Collection<Facade> facades = buildingFacades.get(type);
 		if (facades != null && !facades.isEmpty()) {
 			List<Facade> matching = facades.stream()
@@ -211,6 +212,10 @@ public class FacadeSetManager {
 					facade.getMaxHeight() == 0 || (facade.getMinHeight() <= height && facade.getMaxHeight() >= height))
 					.filter(facade -> !simple ? !facade.isSimpleBuildingOnly() : true)
 					.collect(Collectors.toList());
+			List<Facade> tempList = matching.stream().filter(facade -> landuseMatches(facade, landuse)).collect(Collectors.toList());
+			if (!tempList.isEmpty() && tempList.size() < matching.size()) {
+				matching = tempList;
+			}
 			if (matching.size() > 0) {
 				 Random rnd = new Random();
 				 int i = rnd.nextInt(matching.size());
@@ -246,7 +251,7 @@ public class FacadeSetManager {
 	}
 	
 	public Facade getRandomHouseSlopedFacade(BuildingType buildingType, double minVector, double height,
-			Color buildingColor) {
+			Color buildingColor, String landuse) {
 
 		
 		// find facades which are good in terms of vector size for the sloped
@@ -255,9 +260,16 @@ public class FacadeSetManager {
 		if (goodFacades == null || goodFacades.isEmpty()) { //Use all facades if no facades for this type are registered
 			goodFacades = buildingFacades.values();
 		}
-		List<Facade> resList = goodFacades.stream().filter(facade -> facade.isSloped() && (facade.getMaxVectorLength() == 0 ||
+		List<Facade> resList = goodFacades.stream()
+				.filter(facade -> 
+				facade.getMaxHeight() == 0 || (facade.getMinHeight() <= height && facade.getMaxHeight() >= height))
+				.filter(facade -> facade.isSloped() && (facade.getMaxVectorLength() == 0 ||
 				(facade.getMinVectorLength() <= minVector && facade
-						.getMaxVectorLength() >= minVector))).collect(Collectors.toList());
+				.getMaxVectorLength() >= minVector))).collect(Collectors.toList());
+		List<Facade> tempList = resList.stream().filter(facade -> landuseMatches(facade, landuse)).collect(Collectors.toList());
+		if (!tempList.isEmpty()) {
+			resList = tempList;
+		}
 		Collections.shuffle(resList);
 		if (buildingColor == null && resList.size() > 0) {
 			return resList.get(0);
@@ -292,6 +304,13 @@ public class FacadeSetManager {
 		return facadeResult;
 	}
 	
+	protected boolean landuseMatches(Facade facade, String landuse) {
+		if (landuse == null) {
+			return true;
+		}
+		return !GlobalOptionsProvider.getOptions().isAnalyzeAreas() || facade.getAreaTypesDef().matches(landuse);
+	}
+
 	public StatusInfo getFacadeSetStatus() {
 		if (!XPlaneOptionsProvider.getOptions().isGenerateBuildings() && !XPlaneOptionsProvider.getOptions().isGenerateFence()) {
 			return StatusInfo.OK_STATUS;	

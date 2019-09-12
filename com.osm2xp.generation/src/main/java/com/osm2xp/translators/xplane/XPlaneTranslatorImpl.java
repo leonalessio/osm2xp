@@ -24,7 +24,6 @@ import com.osm2xp.model.facades.SpecialFacadeType;
 import com.osm2xp.model.osm.polygon.OsmPolygon;
 import com.osm2xp.model.osm.polygon.OsmPolyline;
 import com.osm2xp.model.xplane.XplaneDsf3DObject;
-import com.osm2xp.model.xplane.XplaneDsfObject;
 import com.osm2xp.stats.CountStats;
 import com.osm2xp.stats.StatsProvider;
 import com.osm2xp.translators.BuildingType;
@@ -135,7 +134,7 @@ public class XPlaneTranslatorImpl implements ITranslator{
 	}
 
 	protected XPOutputFormat createOutputFormat() {
-		return new XPOutputFormat();
+		return new XPOutputFormat(XPlaneOptionsProvider.getOptions().getObjectRenderLevel(), XPlaneOptionsProvider.getOptions().getFacadeRenderLevel());
 	}
 	
 	@Override
@@ -292,6 +291,22 @@ public class XPlaneTranslatorImpl implements ITranslator{
 		if (!StringUtils.stripToEmpty(polygon.getTagValue("shop")).isEmpty()) {
 			return BuildingType.COMMERCIAL;
 		}
+		String landuse = polygon.getTagValue(OsmConstants.LANDUSE_TAG);//landuse tag is being derived from are including this poly, if area analysis is turned on
+		if (!StringUtils.stripToEmpty(landuse).isEmpty()) {
+			type = BuildingType.fromId(landuse);
+			if (type != null) {
+				return type;
+			}
+		}
+		if ("retail".equals(landuse)) {
+			return BuildingType.COMMERCIAL;
+		}
+		if ("allotments".equals(landuse)) {
+			return BuildingType.RESIDENTIAL;
+		}
+		if ("railway".equals(landuse)) {
+			return BuildingType.INDUSTRIAL;
+		}
 		if (polygon.getArea() * 10000000 < ASSERTION_RESIDENTIAL_MAX_AREA
 			&& polygon.getHeight() < XPlaneOptionsProvider.getOptions()
 					.getResidentialMax()) {
@@ -303,7 +318,7 @@ public class XPlaneTranslatorImpl implements ITranslator{
 		// residential house
 		// and height is above max residential height
 		if (OsmUtils.isValueInTags("industrial", polygon.getTags())
-				|| OsmUtils.isValueInTags("Commercial", polygon.getTags())
+				|| OsmUtils.isValueInTags("сommercial", polygon.getTags())
 				|| polygon.getArea() * 10000000 > ASSERTION_RESIDENTIAL_MAX_AREA
 				|| polygon.getHeight() > XPlaneOptionsProvider.getOptions()
 						.getResidentialMax()) {
@@ -408,9 +423,11 @@ public class XPlaneTranslatorImpl implements ITranslator{
 		// if not on single pass, only process if the node is on the current
 		// lat/long tile
 		if (XPlaneOptionsProvider.getOptions().isGenerateObj() && GeomUtils.compareCoordinates(currentTile, node)) {
-			MapArea area = getContainingArea(node.getLon(), node.getLat());
-			if (area != null) {
-				node.getTags().add(new Tag("landuse", area.type));
+			if (!node.getTags().isEmpty()) { //We don't analyze areas for nodes, which doesn't have any other tags - to avoid spending too much time doing useless work
+				MapArea area = getContainingArea(node.getLon(), node.getLat());
+				if (area != null) {
+					node.getTags().add(new Tag(OsmConstants.LANDUSE_TAG, area.type));
+				}
 			}
 			
 			// write a 3D object in the dsf file if this node is in an
@@ -445,10 +462,7 @@ public class XPlaneTranslatorImpl implements ITranslator{
 		if (osmPolyline.getNodes() != null && !osmPolyline.getNodes().isEmpty()) {
 			List<OsmPolyline> polylines = preprocess(osmPolyline);
 			// try to transform those polygons into dsf objects.
-			for (OsmPolyline poly : polylines) {
-				
-				// look for light rules
-				processLightObject(poly);
+			for (OsmPolyline poly : polylines) {	
 				//Try processing by registered handlers first - they ususally have more concrete rules
 				if (!processByHandlers(poly))
 				{	
@@ -495,9 +509,11 @@ public class XPlaneTranslatorImpl implements ITranslator{
 //			}
 //			return polygons;
 		}
-		MapArea area = getContainingArea(osmPolyline.getCenter().x(), osmPolyline.getCenter().y());
-		if (area != null) {
-			osmPolyline.getTags().add(new Tag("landuse", area.type));
+		if (StringUtils.isEmpty(osmPolyline.getTagValue(OsmConstants.LANDUSE_TAG))) {
+			MapArea area = getContainingArea(osmPolyline.getCenter().x(), osmPolyline.getCenter().y());
+			if (area != null) {
+				osmPolyline.getTags().add(new Tag(OsmConstants.LANDUSE_TAG, area.type));
+			}
 		}
 		return Collections.singletonList(osmPolyline);
 	}
@@ -613,21 +629,6 @@ public class XPlaneTranslatorImpl implements ITranslator{
 			}
 		}
 		return false;
-	}
-
-	private void processLightObject(OsmPolyline poly) {
-		if (poly instanceof OsmPolygon && XPlaneOptionsProvider.getOptions().isGenerateLights()) {
-			XplaneDsfObject object = dsfObjectsProvider
-					.getRandomDsfLightObject((OsmPolygon) poly);
-			if (object != null) {
-				object.setPolygon((OsmPolygon) poly);
-//				try {
-//					writeObjectToDsf(object);
-//				} catch (Osm2xpBusinessException e) {
-//					Osm2xpLogger.log(e);
-//				}
-			}
-		}
 	}
 
 	@Override

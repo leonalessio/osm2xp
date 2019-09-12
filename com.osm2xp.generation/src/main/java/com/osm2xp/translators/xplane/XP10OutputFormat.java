@@ -4,6 +4,10 @@ import com.osm2xp.generation.options.XPlaneOptionsProvider;
 
 public class XP10OutputFormat extends XPOutputFormat {
 	
+	public XP10OutputFormat(int objectRenderLevel, int facadeRenderLevel) {
+		super(objectRenderLevel, facadeRenderLevel);
+	}
+
 	@Override
 	protected String getDsfExclusions(String tileCoordinate) {
 		StringBuilder builder = new StringBuilder(super.getDsfExclusions(tileCoordinate));

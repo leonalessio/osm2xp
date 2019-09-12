@@ -42,7 +42,7 @@ public class AreaTypesDef {
 		if (areaType.isEmpty()) {
 			return allowedAreaTypes.isEmpty();
 		}
-		for (String disallowedType : allowedAreaTypes) {
+		for (String disallowedType : disallowedAreaTypes) {
 			if (disallowedType.equals(areaType)) {
 				return false;
 			}

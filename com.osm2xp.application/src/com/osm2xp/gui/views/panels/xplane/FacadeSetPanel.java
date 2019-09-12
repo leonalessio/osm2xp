@@ -50,6 +50,7 @@ public class FacadeSetPanel extends Osm2xpPanel {
 	private Button btnHardBuildings;
 	private ListViewer facadeListViewer;
 	private List<String> facadeSets;
+	private Spinner spinnerRenderLevel;
 
 	public FacadeSetPanel(final Composite parent, final int style) {
 		super(parent, style);
@@ -169,6 +170,17 @@ public class FacadeSetPanel extends Osm2xpPanel {
 			
 		});
 		
+		final Label lblRenderLevel = new Label(optionsGroup, SWT.NONE);
+		lblRenderLevel.setLayoutData(new GridData(SWT.LEFT, SWT.CENTER, false, true, 1,
+				1));
+		lblRenderLevel.setText("Render level for facades :");
+
+		spinnerRenderLevel = new Spinner(optionsGroup, SWT.BORDER);
+		spinnerRenderLevel.setMinimum(1);
+		spinnerRenderLevel.setMaximum(6);
+		spinnerRenderLevel.setLayoutData(new GridData(SWT.LEFT, SWT.CENTER, true, true,
+				1, 1));
+		
 //		String[] items = null;
 //		try {
 //			items = FilesUtils.listFacadesSets().toArray(new String[] {});
@@ -267,6 +279,7 @@ public class FacadeSetPanel extends Osm2xpPanel {
 	protected void bindComponents() {
 		bindComponent(btnLod, XPlaneOptionsProvider.getOptions(), "restrictFacadeLod");
 		bindComponent(spinnerLod, XPlaneOptionsProvider.getOptions(), "facadeLod");
+		bindComponent(spinnerRenderLevel, XPlaneOptionsProvider.getOptions(), "facadeRenderLevel");
 		bindComponent(btnSlopedRoofs, XPlaneOptionsProvider.getOptions(),
 				"generateSlopedRoofs");
 		bindComponent(btnHardBuildings, XPlaneOptionsProvider.getOptions(),

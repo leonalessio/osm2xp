@@ -175,14 +175,7 @@
             name="FlightGear 3D Objects"
             restorable="true"
             icon="images/viewIcons/objects-16.png">
-      </view>
-      <view
-            class="com.osm2xp.gui.views.XplaneLightsView"
-            id="com.osm2xp.viewLightsTab"
-            name="Lights"
-            restorable="true"
-            icon="images/viewIcons/light-16.png">
-      </view>
+      </view>      
       <view
             class="com.osm2xp.gui.views.BrowserView"
             id="com.osm2xp.application.BrowserView"

@@ -4,6 +4,7 @@ import java.io.File;
 import java.text.MessageFormat;
 
 import org.eclipse.jface.layout.GridDataFactory;
+import org.eclipse.jface.layout.GridLayoutFactory;
 import org.eclipse.jface.viewers.IStructuredSelection;
 import org.eclipse.jface.viewers.StructuredSelection;
 import org.eclipse.swt.SWT;
@@ -72,6 +73,7 @@ public class XplaneObjectsRulesPanel extends Composite {
 	private Spinner spinnerAngle;
 	private Spinner spinnerXVectorMinSize;
 	private Spinner spinnerYVectorMinSize;
+	private LanduseText landuseText;
 
 	public XplaneObjectsRulesPanel(final Composite parent, int style) {
 		super(parent, style);
@@ -205,11 +207,17 @@ public class XplaneObjectsRulesPanel extends Composite {
 
 		TabItem tabObjects = new TabItem(tabFolder, SWT.NONE);
 		tabObjects.setText("3D objects");
-
-		grpFiles = new Group(tabFolder, SWT.NONE);
-		tabObjects.setControl(grpFiles);
+		
+		Composite con  = new Composite(tabFolder, SWT.NONE);
+		GridLayoutFactory.swtDefaults().numColumns(1).applyTo(con);
+		GridDataFactory.fillDefaults().grab(true, true).applyTo(con);
+		tabObjects.setControl(con);
+		landuseText = new LanduseText(con);		
+		GridDataFactory.fillDefaults().grab(true, false).applyTo(landuseText);
+		grpFiles = new Group(con, SWT.NONE);
 		grpFiles.setLayout(new GridLayout(1, false));
-
+		GridDataFactory.fillDefaults().grab(true,true).applyTo(grpFiles);
+		
 		ToolBar toolBarObjectFiles = new ToolBar(grpFiles, SWT.FLAT | SWT.RIGHT);
 
 		ToolItem tltmAddObjectFile = new ToolItem(toolBarObjectFiles, SWT.NONE);
@@ -467,8 +475,8 @@ public class XplaneObjectsRulesPanel extends Composite {
 		});
 		spinnerMinArea.setBounds(0, 0, 47, 22);
 
-		Label lblNewLabel_3 = new Label(grpArea, SWT.NONE);
-		lblNewLabel_3.setText("max area : ");
+		Label lblMaxArea = new Label(grpArea, SWT.NONE);
+		lblMaxArea.setText("max area : ");
 
 		spinnerMaxArea = new Spinner(grpArea, SWT.BORDER);
 		spinnerMaxArea.setMaximum(1000);
@@ -483,7 +491,7 @@ public class XplaneObjectsRulesPanel extends Composite {
 	}
 
 	private void updateRuleControls() {
-
+		landuseText.setRule(selectedXplaneObjectTagRule);
 		String selectedTag = selectedXplaneObjectTagRule.getTag().getKey()
 				+ "=" + selectedXplaneObjectTagRule.getTag().getValue();
 		grpFiles.setText(MessageFormat.format(

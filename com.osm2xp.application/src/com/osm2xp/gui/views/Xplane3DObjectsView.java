@@ -8,6 +8,7 @@ import org.eclipse.ui.forms.widgets.Section;
 import org.eclipse.ui.forms.widgets.TableWrapData;
 
 import com.osm2xp.gui.views.panels.xplane.ObjectByPolyPanel;
+import com.osm2xp.gui.views.panels.xplane.ObjectOptionsPanel;
 import com.osm2xp.gui.views.panels.xplane.XplaneObjectsRulesPanel;
 
 /**
@@ -38,6 +39,16 @@ public class Xplane3DObjectsView extends AbstractOptionsView implements IContext
 				sectionObjectsRules, SWT.BORDER);
 		toolkit.adapt(objectsRulesPanel, true, true);
 		sectionObjectsRules.setClient(objectsRulesPanel);
+		
+		Section sectionGlobalObjectOptions = toolkit.createSection(form.getBody(),
+				Section.TWISTIE | Section.EXPANDED | Section.TITLE_BAR);
+		sectionGlobalObjectOptions.setLayoutData(new TableWrapData(
+				TableWrapData.FILL_GRAB, TableWrapData.FILL_GRAB, 1, 1));
+		
+		sectionGlobalObjectOptions.setText("Global object placement options");
+		ObjectOptionsPanel objectOptionsPanel = new ObjectOptionsPanel(sectionGlobalObjectOptions, SWT.BORDER);
+		toolkit.adapt(objectOptionsPanel, true, true);
+		sectionGlobalObjectOptions.setClient(objectOptionsPanel);
 		
 		Section sectionBuildingObjectOptions = toolkit.createSection(form.getBody(),
 				Section.TWISTIE | Section.EXPANDED | Section.TITLE_BAR);

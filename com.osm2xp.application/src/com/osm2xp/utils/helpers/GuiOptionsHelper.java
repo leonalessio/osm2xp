@@ -15,6 +15,7 @@ import org.osgi.service.prefs.BackingStoreException;
 
 import com.osm2xp.core.model.osm.Tag;
 import com.osm2xp.generation.options.GlobalOptionsProvider;
+import com.osm2xp.generation.osm.OsmConstants;
 import com.osm2xp.gui.Activator;
 import com.osm2xp.translators.TranslatorBuilder;
 
@@ -110,9 +111,9 @@ public class GuiOptionsHelper {
 						+ "?", MessageDialog.QUESTION, new String[] {
 						"Buildings", "Forests" }, 1);
 		if (messageDialog.open() == 0) {
-			shapefileTag = new Tag("yes", "building");
+			shapefileTag = new Tag("building", "yes");
 		} else {
-			shapefileTag = new Tag("forest", "landuse");
+			shapefileTag = new Tag(OsmConstants.LANDUSE_TAG, "forest");
 		}
 
 	}

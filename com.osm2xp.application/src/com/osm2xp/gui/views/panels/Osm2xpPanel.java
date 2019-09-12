@@ -69,10 +69,6 @@ public abstract class Osm2xpPanel extends Composite {
 				}));
 	}
 
-	/**
-	 * Layout initialization .
-	 */
-	protected abstract void initLayout();
 
 	/**
 	 * Components initialization .
@@ -85,13 +81,22 @@ public abstract class Osm2xpPanel extends Composite {
 	protected abstract void bindComponents();
 
 	/**
-	 * Components action listeners .
+	 * Components action listeners. Override if necessary
 	 */
-	protected abstract void addComponentsListeners();
+	protected void addComponentsListeners() {
+
+	}
 
 	protected void enableComponents(boolean enable, Control... controls) {
 		for (Control control : controls) {
 			control.setEnabled(enable);
 		}
+	}
+	
+	/**
+	 * Layout initialization. Override if needed
+	 */
+	protected void initLayout() {
+
 	}
 }

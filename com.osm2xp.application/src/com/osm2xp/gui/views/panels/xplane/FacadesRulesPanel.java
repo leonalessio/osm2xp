@@ -72,7 +72,7 @@ public class FacadesRulesPanel extends Osm2xpPanel {
 		new Label(this, SWT.NONE);
 
 		Group groupTags = new Group(this, SWT.NONE);
-		groupTags.setText("facades rules - osm tags ");
+		groupTags.setText("facades rules - OSM tags ");
 		GridData gridData = new GridData(SWT.FILL, SWT.FILL, true, true, 1, 1);
 //		gridData.heightHint = 320;
 //		gridData.widthHint = 329;

@@ -184,7 +184,7 @@ public class XPlaneOptionsProvider {
 	private static ForestsRulesList createNewForestRules() {
 		List<ForestTagRule> forestsRules = new ArrayList<ForestTagRule>();
 		forestsRules.add(
-				new ForestTagRule(new Tag("landuse", "forest"), Lists.newArrayList(new ObjectFile("forests/mixed.for"),
+				new ForestTagRule(new Tag(OsmConstants.LANDUSE_TAG, "forest"), Lists.newArrayList(new ObjectFile("forests/mixed.for"),
 						new ObjectFile("forests/conifer.for"), new ObjectFile("forests/broad_leaf.for")), 255));
 		forestsRules.add(new ForestTagRule(new Tag("natural", "wood"),
 				Lists.newArrayList(new ObjectFile("forests/mixed.for"),

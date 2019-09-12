@@ -23,7 +23,7 @@ import com.osm2xp.generation.options.rules.XplaneObjectsRulesList;
 		"smartExclusions", "smartExclusionSize", "smartExclusionDistance",
 		"excludeBch", "excludeNet", "excludeLin", "excludePol", "excludeStr","exclusionsFromInput",
 		"residentialMin", "residentialMax", "buildingMin", "buildingMax",
-		"minHouseSegment", "maxHouseSegment", "minHouseArea", "generateObj","generateObjBuildings",
+		"minHouseSegment", "maxHouseSegment", "minHouseArea", "objectRenderLevel", "facadeRenderLevel", "generateObj","generateObjBuildings",
 		"generateFor", "generateBuildings","generatePowerlines","generateRailways","generateRoads","generateFence",
 		"generateTanks","generateChimneys","generateCoolingTowers","generateBridges","generateSlopedRoofs", "generatePolys", "generateStreetLights", 
 		"lightsDensity", "packageFacades","hardBuildings", "lightObject", "facadeSets", "restrictFacadeLod", "facadeLod", 
@@ -53,6 +53,14 @@ public class XplaneOptions {
 	protected int minHouseArea;
 	protected int smartExclusionSize;
 	protected int smartExclusionDistance;
+	/**
+	 * Object detail level for generated overlay, 1-6 (sim/require_object prop)
+	 */
+	protected int objectRenderLevel = 1;
+	/**
+	 * Facade detail level for generated overlay, 1-6 (sim/require_facade prop)
+	 */
+	protected int facadeRenderLevel = 3;
 	protected boolean generateObj = true;
 	protected boolean generateObjBuildings = true;
 	protected boolean generateFor = true;
@@ -967,6 +975,22 @@ public class XplaneOptions {
 
 	public void setDeleteSrc(boolean deleteSrc) {
 		this.deleteSrc = deleteSrc;
+	}
+
+	public int getObjectRenderLevel() {
+		return objectRenderLevel;
+	}
+
+	public void setObjectRenderLevel(int objectRenderLevel) {
+		this.objectRenderLevel = objectRenderLevel;
+	}
+
+	public int getFacadeRenderLevel() {
+		return facadeRenderLevel;
+	}
+
+	public void setFacadeRenderLevel(int facadeRenderLevel) {
+		this.facadeRenderLevel = facadeRenderLevel;
 	}
 
 }

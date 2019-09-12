@@ -259,7 +259,7 @@ public class WavefrontTranslatorImpl implements ITranslator {
 		}
 		DsfObjectsProvider dsfObjectsProvider = new DsfObjectsProvider(folderPath);
 		dsfObjectsProvider.setObjectsList(objectsList);
-		XPOutputFormat outputFormat = new XPOutputFormat();
+		XPOutputFormat outputFormat = new XPOutputFormat(XPlaneOptionsProvider.getOptions().getObjectRenderLevel(), XPlaneOptionsProvider.getOptions().getFacadeRenderLevel());
 		String dsfHeaderText = outputFormat.getHeaderString(currentTile, null, dsfObjectsProvider);
 		FilesUtils.writeTextToFile(dsfTextFile, dsfHeaderText, false);
 		for (OsmPolyline way : globalWayList) {
@@ -303,7 +303,7 @@ public class WavefrontTranslatorImpl implements ITranslator {
 				+ ".obj");
 		DsfObjectsProvider dsfObjectsProvider = new DsfObjectsProvider(folderPath);
 		dsfObjectsProvider.setObjectsList(objectsList);
-		XPOutputFormat outputFormat = new XPOutputFormat();
+		XPOutputFormat outputFormat = new XPOutputFormat(XPlaneOptionsProvider.getOptions().getObjectRenderLevel(), XPlaneOptionsProvider.getOptions().getFacadeRenderLevel());
 		String dsfHeaderText = outputFormat.getHeaderString(currentTile, null, dsfObjectsProvider);
 		FilesUtils.writeTextToFile(dsfTextFile, dsfHeaderText, false);
 		List<Point2D> areaNodes = new ArrayList<Point2D>();

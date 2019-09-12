@@ -9,7 +9,10 @@ import javax.xml.bind.annotation.XmlAttribute;
 import javax.xml.bind.annotation.XmlElement;
 import javax.xml.bind.annotation.XmlType;
 
+import org.apache.commons.lang.StringUtils;
+
 import com.osm2xp.core.model.osm.Tag;
+import com.osm2xp.generation.areas.AreaTypesDef;
 import com.osm2xp.generation.options.ObjectFile;
 import com.osm2xp.generation.options.Polygon;
 
@@ -20,8 +23,8 @@ import com.osm2xp.generation.options.Polygon;
  * 
  */
 @XmlAccessorType(XmlAccessType.FIELD)
-@XmlType(name = "PolygonTagRules", propOrder = { "tag", "polygons" })
-public class PolygonTagsRule {
+@XmlType(name = "PolygonTagRules", propOrder = { "tag", "areaTypes", "polygons" })
+public class PolygonTagsRule implements IHasAreaTypes{
 
 	@XmlElement(required = true)
 	protected Tag tag;
@@ -30,6 +33,9 @@ public class PolygonTagsRule {
 	
 	@XmlAttribute
 	protected int minPerimeter = 200;
+	private String areaTypes;
+	
+	private transient AreaTypesDef areaTypesDef;
 
 	/**
 	 * Default no-arg constructor
@@ -107,4 +113,22 @@ public class PolygonTagsRule {
 		this.minPerimeter = minPerimeter;
 	}
 
+	@Override
+	public String getAreaTypes() {
+		return areaTypes;
+	}
+
+	@Override
+	public void setAreaTypes(String areaTypes) {
+		this.areaTypes = areaTypes;
+		areaTypesDef = null;
+	}
+	
+	@Override
+	public AreaTypesDef getAreaTypesDef() {
+		if (areaTypesDef == null) {
+			areaTypesDef = new AreaTypesDef(StringUtils.stripToEmpty(areaTypes));
+		}
+		return areaTypesDef;
+	}
 }

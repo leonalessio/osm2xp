@@ -2,6 +2,7 @@ package com.osm2xp.gui.views.panels.xplane;
 
 import java.io.File;
 
+import org.eclipse.jface.layout.GridDataFactory;
 import org.eclipse.jface.viewers.IStructuredSelection;
 import org.eclipse.swt.SWT;
 import org.eclipse.swt.events.ModifyEvent;
@@ -54,6 +55,7 @@ public class ForestsRulesPanel extends Composite {
 	private ForestTagRule selectedForestTagRule;
 	private Spinner spinnerForestDensity;
 	private Composite compositeRuleDetail;
+	private LanduseText landuseText;
 
 	public ForestsRulesPanel(final Composite parent, int style) {
 		super(parent, style);
@@ -146,7 +148,6 @@ public class ForestsRulesPanel extends Composite {
 			}
 		});
 		new Label(this, SWT.NONE);
-
 		Group groupTags = new Group(this, SWT.NONE);
 		groupTags.setText("Forests rules - osm tags ");
 		GridData gridData = new GridData(SWT.FILL, SWT.FILL, true, true, 1, 1);
@@ -159,6 +160,7 @@ public class ForestsRulesPanel extends Composite {
 		tagsTable.getTable().addListener(SWT.Selection, new Listener() {
 			public void handleEvent(Event event) {
 				selectedForestTagRule = (ForestTagRule) event.item.getData();
+				landuseText.setRule(selectedForestTagRule);
 				String selectedTag = selectedForestTagRule.getTag().getKey()
 						+ "=" + selectedForestTagRule.getTag().getValue();
 				grpForestsFilesFor.setText("Forests files for tag ("
@@ -186,6 +188,9 @@ public class ForestsRulesPanel extends Composite {
 //		gridDataForestsObjects.heightHint = 347;
 //		gridDataForestsObjects.widthHint = 608;
 		compositeRuleDetail.setLayoutData(gridDataForestsObjects);
+		
+		landuseText = new LanduseText(compositeRuleDetail);		
+		GridDataFactory.fillDefaults().grab(true,false).applyTo(landuseText);
 		grpDensity = new Group(compositeRuleDetail, SWT.NONE);
 		grpDensity.setLayout(new GridLayout(2, false));
 		GridData gd_grpDensity = new GridData(SWT.FILL, SWT.BOTTOM, true,
@@ -215,7 +220,7 @@ public class ForestsRulesPanel extends Composite {
 				true, false, 1, 1);
 		gd_grpForestsFilesFor.heightHint = 261;
 		grpForestsFilesFor.setLayoutData(gd_grpForestsFilesFor);
-		grpForestsFilesFor.setText("Forests files for xxx");
+		grpForestsFilesFor.setText("Forests files");
 		grpForestsFilesFor.setLayout(new GridLayout(1, false));
 
 		ToolBar toolBarForestFiles = new ToolBar(grpForestsFilesFor, SWT.FLAT

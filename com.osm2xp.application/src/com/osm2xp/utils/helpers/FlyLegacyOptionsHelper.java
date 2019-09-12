@@ -13,6 +13,7 @@ import com.osm2xp.generation.options.BuildingsExclusionsList;
 import com.osm2xp.generation.options.FlyLegacyOptions;
 import com.osm2xp.generation.options.WatchedTagsList;
 import com.osm2xp.generation.options.XmlHelper;
+import com.osm2xp.generation.osm.OsmConstants;
 
 /**
  * FlyLegacyOptionsHelper.
@@ -66,7 +67,7 @@ public class FlyLegacyOptionsHelper extends OptionsHelper {
 		List<Tag> watchedTags = new ArrayList<Tag>();
 		watchedTags.add(new Tag("amenity", "*"));
 		watchedTags.add(new Tag("building", "*"));
-		watchedTags.add(new Tag("landuse", "*"));
+		watchedTags.add(new Tag(OsmConstants.LANDUSE_TAG, "*"));
 		WatchedTagsList result = new WatchedTagsList(watchedTags);
 		return result;
 	}
