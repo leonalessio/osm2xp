@@ -19,18 +19,18 @@ import com.osm2xp.generation.options.rules.XplaneObjectsRulesList;
  * 
  */
 @XmlAccessorType(XmlAccessType.FIELD)
-@XmlType(name = "", propOrder = { "excludeObj", "excludeFac", "excludeFor",
-		"smartExclusions", "smartExclusionSize", "smartExclusionDistance",
-		"excludeBch", "excludeNet", "excludeLin", "excludePol", "excludeStr","exclusionsFromInput",
-		"residentialMin", "residentialMax", "buildingMin", "buildingMax",
-		"minHouseSegment", "maxHouseSegment", "minHouseArea", "objectRenderLevel", "facadeRenderLevel", "generateObj","generateObjBuildings",
-		"generateFor", "generateBuildings","generatePowerlines","generateRailways","generateRoads","generateFence",
-		"generateTanks","generateChimneys","generateCoolingTowers","generateBridges","generateSlopedRoofs", "generatePolys", "generateStreetLights", 
-		"lightsDensity", "packageFacades","hardBuildings", "lightObject", "facadeSets", "restrictFacadeLod", "facadeLod", 
-		"generateXmlStats", "generatePdfStats", "generateDebugImg", "generateComments", 		
-		"roadBridgeRampLen","railBridgeRampLen","maxPerimeterToSimplify","objSizeTolerance", "buildingsExclusions",
-		"forestsRules", "objectsRules", "lightsRules", "facadesRules", "polygonRules",
-		"streetLightObjects", "airfieldOptions","deleteSrc" })
+@XmlType(name = "", propOrder = { "excludeObj", "excludeFac", "excludeFor", "smartExclusions", "smartExclusionSize",
+		"smartExclusionDistance", "excludeBch", "excludeNet", "excludeLin", "excludePol", "excludeStr",
+		"exclusionsFromInput", "residentialMin", "residentialMax", "buildingMin", "buildingMax", "minHouseSegment",
+		"maxHouseSegment", "minHouseArea", "objectRenderLevel", "facadeRenderLevel", "buildLibrary", "generateObj",
+		"generateObjBuildings", "generateFor", "generateBuildings", "generatePowerlines", "generateRailways",
+		"generateRoads", "generateFence", "generateTanks", "generateChimneys", "generateCoolingTowers",
+		"generateBridges", "generateSlopedRoofs", "generatePolys", "generateStreetLights", "lightsDensity",
+		"packageFacades", "hardBuildings", "lightObject", "facadeSets", "restrictFacadeLod", "facadeLod",
+		"generateXmlStats", "generatePdfStats", "generateDebugImg", "generateComments", "roadBridgeRampLen",
+		"railBridgeRampLen", "maxPerimeterToSimplify", "objSizeTolerance", "buildingsExclusions", "forestsRules",
+		"objectsRules", "lightsRules", "facadesRules", "polygonRules", "streetLightObjects", "airfieldOptions",
+		"deleteSrc" })
 @XmlRootElement(name = "XplaneOptions")
 public class XplaneOptions {
 
@@ -61,6 +61,10 @@ public class XplaneOptions {
 	 * Facade detail level for generated overlay, 1-6 (sim/require_facade prop)
 	 */
 	protected int facadeRenderLevel = 3;
+	/**
+	 * Build separate X-Plane library - <code>true</code> or bundle all the resources into generated scenary - <code>false</code>
+	 */
+	protected boolean buildLibrary = false;
 	protected boolean generateObj = true;
 	protected boolean generateObjBuildings = true;
 	protected boolean generateFor = true;
@@ -991,6 +995,14 @@ public class XplaneOptions {
 
 	public void setFacadeRenderLevel(int facadeRenderLevel) {
 		this.facadeRenderLevel = facadeRenderLevel;
+	}
+
+	public boolean isBuildLibrary() {
+		return buildLibrary;
+	}
+
+	public void setBuildLibrary(boolean buildLibrary) {
+		this.buildLibrary = buildLibrary;
 	}
 
 }

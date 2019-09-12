@@ -75,9 +75,11 @@ public class XPOutputFormat {
 		sb.append("PROPERTY sim/east " + (longitude + 1) + "\n");
 		sb.append("PROPERTY sim/north " + (latitude + 1) + "\n");
 		sb.append("PROPERTY sim/south " + latitude + "\n\n");
-
+		
+		
+		String resourcePathPreffix = dsfObjectsProvider.getResourcePathPreffix();
 		dsfObjectsProvider.getPolygonsList().stream().map(str -> "POLYGON_DEF " + str + "\n")
-				.forEach(str -> sb.append(str));
+				.forEach(str -> sb.append(resourcePathPreffix + str));
 
 		if (dsfObjectsProvider.getObjectsList() != null) {
 			for (String objectPath : dsfObjectsProvider.getObjectsList()) {

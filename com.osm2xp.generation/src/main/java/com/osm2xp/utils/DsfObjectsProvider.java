@@ -62,6 +62,7 @@ public class DsfObjectsProvider {
 	private List<String> drapedPolysList = new ArrayList<String>();
 	private List<String> polygonsList = new ArrayList<String>();
 	private List<FacadeTagRule> facadesRules = XPlaneOptionsProvider.getOptions().getFacadesRules().getRules();
+	private boolean buildLibrary = XPlaneOptionsProvider.getOptions().isBuildLibrary();
 
 	private FacadeSetManager facadeSetManager;
 	private String targetFolderPath;
@@ -539,6 +540,10 @@ public class DsfObjectsProvider {
 
 	public Integer getSpecialObject(String specialObjectFile) {
 		return objectsList.indexOf(SPECIAL_OBJECTS_TARGET_FOLDER_NAME + "/" + specialObjectFile);
+	}
+	
+	public String getResourcePathPreffix() {
+		return buildLibrary?"osm2xp":"";
 	}
 
 }
