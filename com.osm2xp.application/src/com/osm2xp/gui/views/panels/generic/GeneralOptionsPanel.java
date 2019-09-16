@@ -14,7 +14,7 @@ import com.osm2xp.gui.views.panels.Osm2xpPanel;
 import com.osm2xp.utils.ui.UiUtil;
 
 /**
- * GeneralOptionsPanel.
+ * GeneralXPlaneOptionsPanel.
  * 
  * @author Benjamin Blanchet
  * 

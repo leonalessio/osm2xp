@@ -56,7 +56,7 @@
         <minVectorLength>0.0</minVectorLength>
         <maxVectorLength>0.0</maxVectorLength>
         <simpleBuildingOnly>false</simpleBuildingOnly>
-        <minHeight>30</minHeight>
+        <minHeight>20</minHeight>
         <maxHeight>100</maxHeight>
     </facades>
 	<facades>
@@ -70,7 +70,7 @@
         <minVectorLength>0.0</minVectorLength>
         <maxVectorLength>0.0</maxVectorLength>
         <simpleBuildingOnly>false</simpleBuildingOnly>
-        <minHeight>30</minHeight>
+        <minHeight>20</minHeight>
         <maxHeight>100</maxHeight>
     </facades>
 	<facades>
@@ -84,7 +84,35 @@
         <minVectorLength>0.0</minVectorLength>
         <maxVectorLength>0.0</maxVectorLength>
         <simpleBuildingOnly>false</simpleBuildingOnly>
-        <minHeight>30</minHeight>
+        <minHeight>20</minHeight>
+        <maxHeight>100</maxHeight>
+    </facades>
+	<facades>
+        <file>houseText4.fac</file>
+        <roofColor></roofColor>
+        <wallColor></wallColor>
+        <industrial>false</industrial>
+        <commercial>false</commercial>
+        <residential>true</residential>
+        <sloped>false</sloped>
+        <minVectorLength>0.0</minVectorLength>
+        <maxVectorLength>0.0</maxVectorLength>
+        <simpleBuildingOnly>false</simpleBuildingOnly>
+        <minHeight>20</minHeight>
+        <maxHeight>60</maxHeight>
+    </facades>
+	<facades>
+        <file>houseText5.fac</file>
+        <roofColor></roofColor>
+        <wallColor></wallColor>
+        <industrial>false</industrial>
+        <commercial>false</commercial>
+        <residential>true</residential>
+        <sloped>false</sloped>
+        <minVectorLength>0.0</minVectorLength>
+        <maxVectorLength>0.0</maxVectorLength>
+        <simpleBuildingOnly>false</simpleBuildingOnly>
+        <minHeight>20</minHeight>
         <maxHeight>100</maxHeight>
     </facades>
     <facades>

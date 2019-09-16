@@ -399,14 +399,11 @@ public class FacadeSetEditorDialog extends Dialog {
 				currentFacade.setSimpleBuildingOnly(true);
 			}
 		});
-		new Label(buildingParamsComposite, SWT.NONE);
-		new Label(buildingParamsComposite, SWT.NONE);
-		new Label(buildingParamsComposite, SWT.NONE);
-		new Label(buildingParamsComposite, SWT.NONE);
-		new Label(buildingParamsComposite, SWT.NONE);
+		Label sep = new Label(buildingParamsComposite, SWT.SEPARATOR | SWT.HORIZONTAL);
+		GridDataFactory.fillDefaults().grab(true,false).span(2,1).applyTo(sep);
 
 		Label labelMinVector = new Label(buildingParamsComposite, SWT.NONE);
-		labelMinVector.setLayoutData(new GridData(SWT.RIGHT, SWT.CENTER, false,
+		labelMinVector.setLayoutData(new GridData(SWT.LEFT, SWT.CENTER, false,
 				false, 1, 1));
 		labelMinVector.setText("Minimum vector length :");
 
@@ -758,7 +755,7 @@ public class FacadeSetEditorDialog extends Dialog {
 	 */
 	@Override
 	protected Point getInitialSize() {
-		return new Point(900, 700);
+		return new Point(900, 800);
 	}
 	
 	public static boolean editFacadeSet(String path) {

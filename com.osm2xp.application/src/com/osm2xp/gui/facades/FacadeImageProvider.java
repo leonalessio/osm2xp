@@ -72,6 +72,8 @@ public class FacadeImageProvider {
 			return null;
 		}
 
+		Collections.sort(walls, (w1,w2) -> (int)(w2.getMaxLength() - w1.getMaxLength()));
+		
 		List<Double> hCoordsList = new ArrayList<Double>(walls.get(0).getxCoords());
 		List<Double> vCoordsList = new ArrayList<Double>(walls.get(0).getyCoords());
 		Collections.sort(hCoordsList);

@@ -31,7 +31,11 @@ public abstract class XPlaneTranslatorProvider extends AbstractTranslatorProvide
 		if (facadeSetsStr == null) {
 			facadeSetsStr = XPlaneOptionsProvider.getDefaultFacadeSets();
 		}
-		dsfObjectsProvider = new DsfObjectsProvider(folderPath, FacadeSetManager.getManager(facadeSetsStr, new File(folderPath)));		
+		String targetFolderPath = folderPath;
+		if (XPlaneOptionsProvider.getOptions().isBuildLibrary()) {
+			targetFolderPath = new File(new File(targetFolderPath).getParentFile(), "OSM2XPLib").getAbsolutePath();
+		}
+		dsfObjectsProvider = new DsfObjectsProvider(targetFolderPath, FacadeSetManager.getManager(facadeSetsStr, new File(targetFolderPath)));		
 	}
 
 	@Override

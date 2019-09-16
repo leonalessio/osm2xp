@@ -1,8 +1,11 @@
 package com.osm2xp.utils;
 
 import java.awt.Color;
+import java.io.BufferedWriter;
 import java.io.File;
+import java.io.FileWriter;
 import java.io.IOException;
+import java.io.PrintWriter;
 import java.nio.file.FileVisitResult;
 import java.nio.file.Files;
 import java.nio.file.Path;
@@ -40,6 +43,7 @@ import com.osm2xp.model.xplane.XplaneDsf3DObject;
 import com.osm2xp.model.xplane.XplaneDsfLightObject;
 import com.osm2xp.model.xplane.XplaneDsfObject;
 import com.osm2xp.translators.BuildingType;
+import com.osm2xp.translators.xplane.XPLibraryOutputFormat;
 import com.osm2xp.utils.osm.OsmUtils;
 
 /**
@@ -79,6 +83,22 @@ public class DsfObjectsProvider {
 		computePolygonsList();
 		computeObjectsList();
 		copyUserResources();
+		if (XPlaneOptionsProvider.getOptions().isBuildLibrary()) {
+			generateLibraryDescriptorFile();
+		}
+	}
+
+	protected void generateLibraryDescriptorFile() {
+		XPLibraryOutputFormat format = new XPLibraryOutputFormat(getResourcePathPreffix());
+		try (PrintWriter printWriter = new PrintWriter(new BufferedWriter(new FileWriter(new File(targetFolderPath, "library.txt"))))) {
+			printWriter.println(format.getHeaderString());
+			List<String> list = getPolygonsList();
+			for (String entry : list) {
+				printWriter.println(format.getRecordString(entry));
+			}
+		} catch (Exception e) {
+			Osm2xpLogger.error("Error generating library.txt descriptor", e);
+		}
 	}
 
 	/**
@@ -543,7 +563,7 @@ public class DsfObjectsProvider {
 	}
 	
 	public String getResourcePathPreffix() {
-		return buildLibrary?"osm2xp":"";
+		return buildLibrary?"osm2xp/":"";
 	}
 
 }

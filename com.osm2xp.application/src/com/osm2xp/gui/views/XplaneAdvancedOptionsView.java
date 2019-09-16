@@ -8,6 +8,7 @@ import org.eclipse.ui.forms.widgets.Section;
 import org.eclipse.ui.forms.widgets.TableWrapData;
 
 import com.osm2xp.gui.views.panels.xplane.DebugOptionsPanel;
+import com.osm2xp.gui.views.panels.xplane.GeneralXPlaneOptionsPanel;
 import com.osm2xp.gui.views.panels.xplane.GeneratedItemsPanel;
 import com.osm2xp.gui.views.panels.xplane.SceneryExclusionsPanel;
 import com.osm2xp.gui.views.panels.xplane.SceneryOptionsPanel;
@@ -27,6 +28,18 @@ public class XplaneAdvancedOptionsView extends AbstractOptionsView implements
 
 	@Override
 	protected void createFormControls() {
+		/**
+		 * General options
+		 */
+		Section sectionGeneralOptions = toolkit.createSection(form.getBody(),
+				Section.TWISTIE | Section.EXPANDED | Section.TITLE_BAR);
+		sectionGeneralOptions.setLayoutData(new TableWrapData(
+				TableWrapData.FILL_GRAB, TableWrapData.TOP, 1, 1));
+		sectionGeneralOptions.setText("GeneralOptions");
+		GeneralXPlaneOptionsPanel generalOptionsPanel = new GeneralXPlaneOptionsPanel(
+				sectionGeneralOptions, SWT.BORDER);
+		toolkit.adapt(generalOptionsPanel, true, true);
+		sectionGeneralOptions.setClient(generalOptionsPanel);
 		/**
 		 * Generated items
 		 */
