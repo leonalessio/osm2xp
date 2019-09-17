@@ -13,6 +13,7 @@ import com.google.common.collect.Multimap;
 import com.onpositive.classification.core.buildings.OSMBuildingType;
 import com.onpositive.classification.core.buildings.TypeProvider;
 import com.osm2xp.core.logging.Osm2xpLogger;
+import com.osm2xp.generation.options.GlobalOptionsProvider;
 import com.osm2xp.generation.options.XPlaneOptionsProvider;
 import com.osm2xp.generation.paths.PathsService;
 import com.osm2xp.model.osm.polygon.OsmPolygon;
@@ -82,6 +83,9 @@ public class XPPolyTo3DObjectTranslator extends XPWritingTranslator {
 		}
 		double tolerance = XPlaneOptionsProvider.getOptions().getObjSizeTolerance();
 		OSMBuildingType buildingType = TypeProvider.getBuildingType(osmPolyline.getTags());
+		if (buildingType == null && GlobalOptionsProvider.getOptions().isAnalyzeAreas()) {
+			buildingType = getTypeFromLanduse(osmPolyline);
+		}
 		LineSegment2D edge0 = osmPolyline.getPolyline().edge(0);
 		LineSegment2D edge1 = osmPolyline.getPolyline().edge(1);
 		LineSegment2D edge2 = osmPolyline.getPolyline().edge(2);
@@ -117,6 +121,23 @@ public class XPPolyTo3DObjectTranslator extends XPWritingTranslator {
 			}
 		}
 		return false;
+	}
+
+	private OSMBuildingType getTypeFromLanduse(OsmPolyline osmPolyline) {
+		String landuse = osmPolyline.getTagValue("landuse"); 
+		if ("allotments".equals(landuse)) {
+			return OSMBuildingType.HOUSE;
+		}
+		if ("industrial".equals(landuse)) {
+			return OSMBuildingType.INDUSTRIAL;
+		}
+		if ("residental".equals(landuse) || "apartments".equals(landuse)) {
+			return OSMBuildingType.BLOCK;
+		}
+		if ("commercial".equals(landuse)) {
+			return OSMBuildingType.SHOP;
+		}
+		return null;
 	}
 
 	@Override
