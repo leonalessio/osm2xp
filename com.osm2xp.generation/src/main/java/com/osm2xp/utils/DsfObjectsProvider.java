@@ -13,8 +13,10 @@ import java.nio.file.SimpleFileVisitor;
 import java.nio.file.attribute.BasicFileAttributes;
 import java.util.ArrayList;
 import java.util.Collections;
+import java.util.HashSet;
 import java.util.List;
 import java.util.Random;
+import java.util.Set;
 import java.util.stream.Collectors;
 
 import org.apache.commons.lang.StringUtils;
@@ -94,7 +96,15 @@ public class DsfObjectsProvider {
 			printWriter.println(format.getHeaderString());
 			List<String> list = getPolygonsList();
 			for (String entry : list) {
-				printWriter.println(format.getRecordString(entry));
+				if (new File(targetFolderPath, entry).isFile()) { //Is treated as another library link otherwise
+					printWriter.println(format.getRecordString(entry));
+				}
+			}
+			List<String> objectsList = getObjectsList();
+			for (String entry : objectsList) {
+				if (new File(targetFolderPath, entry).isFile()) { //Is treated as another library link otherwise
+					printWriter.println(format.getRecordString(entry));
+				}
 			}
 		} catch (Exception e) {
 			Osm2xpLogger.error("Error generating library.txt descriptor", e);
@@ -242,7 +252,7 @@ public class DsfObjectsProvider {
 
 				}
 			}
-			//TODO actual copying polygons
+			//No separate folder for draped polys right now; They should be copied together with user resources
 			polygonsList.addAll(drapedPolysList);
 			
 		}
@@ -334,7 +344,7 @@ public class DsfObjectsProvider {
 			FilesUtils.copyDirectory(objectsFolder, targetLocation,
 					false);
 			Path parentPath = targetLocation.getParentFile().toPath();
-			List<String> pathsList = new ArrayList<String>();
+			Set<String> pathsList = new HashSet<String>();
 			Files.walkFileTree(targetLocation.toPath(), new SimpleFileVisitor<Path>() {
 				@Override
 				public FileVisitResult visitFile(Path file, BasicFileAttributes attrs) throws IOException {
@@ -346,7 +356,7 @@ public class DsfObjectsProvider {
 					return super.visitFile(file, attrs);
 				}
 			});
-			objectsList.addAll(pathsList);
+			objectsList.addAll(pathsList.stream().sorted().collect(Collectors.toList()));
 		} catch (IOException e) {
 			Osm2xpLogger.log(e);
 		}

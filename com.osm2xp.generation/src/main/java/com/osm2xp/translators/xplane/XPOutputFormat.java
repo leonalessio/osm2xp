@@ -78,12 +78,12 @@ public class XPOutputFormat {
 		
 		
 		String resourcePathPreffix = dsfObjectsProvider.getResourcePathPreffix();
-		dsfObjectsProvider.getPolygonsList().stream().map(str -> "POLYGON_DEF " + str + "\n")
-				.forEach(str -> sb.append(resourcePathPreffix + str));
+		dsfObjectsProvider.getPolygonsList().stream().map(str -> "POLYGON_DEF " + resourcePathPreffix + str + "\n")
+				.forEach(str -> sb.append(str));
 
 		if (dsfObjectsProvider.getObjectsList() != null) {
 			for (String objectPath : dsfObjectsProvider.getObjectsList()) {
-				sb.append("OBJECT_DEF " + objectPath + "\n");
+				sb.append("OBJECT_DEF " + resourcePathPreffix + objectPath + "\n");
 			}
 		}
 
