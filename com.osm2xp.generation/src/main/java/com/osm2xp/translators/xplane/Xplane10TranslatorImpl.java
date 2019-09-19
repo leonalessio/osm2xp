@@ -1,7 +1,8 @@
 package com.osm2xp.translators.xplane;
 
 import com.osm2xp.generation.options.XPlaneOptionsProvider;
-import com.osm2xp.utils.DsfObjectsProvider;
+import com.osm2xp.generation.xplane.resources.DsfObjectsProvider;
+import com.osm2xp.generation.xplane.resources.XPOutputFormat;
 import com.osm2xp.writers.IHeaderedWriter;
 
 import math.geom2d.Point2D;

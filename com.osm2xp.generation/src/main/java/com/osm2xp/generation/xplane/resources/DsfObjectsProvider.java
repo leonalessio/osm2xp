@@ -1,11 +1,8 @@
-package com.osm2xp.utils;
+package com.osm2xp.generation.xplane.resources;
 
 import java.awt.Color;
-import java.io.BufferedWriter;
 import java.io.File;
-import java.io.FileWriter;
 import java.io.IOException;
-import java.io.PrintWriter;
 import java.nio.file.FileVisitResult;
 import java.nio.file.Files;
 import java.nio.file.Path;
@@ -45,7 +42,7 @@ import com.osm2xp.model.xplane.XplaneDsf3DObject;
 import com.osm2xp.model.xplane.XplaneDsfLightObject;
 import com.osm2xp.model.xplane.XplaneDsfObject;
 import com.osm2xp.translators.BuildingType;
-import com.osm2xp.translators.xplane.XPLibraryOutputFormat;
+import com.osm2xp.utils.FilesUtils;
 import com.osm2xp.utils.osm.OsmUtils;
 
 /**
@@ -75,6 +72,7 @@ public class DsfObjectsProvider {
 	
 	private long lastPolyId = -1;
 	private int lastFacade = -1;
+	private ResourceLibraryDescriptor resourceLibraryDescriptor;
 
 	/**
 	 * @param facadeSet
@@ -85,32 +83,11 @@ public class DsfObjectsProvider {
 		computePolygonsList();
 		computeObjectsList();
 		copyUserResources();
-		if (XPlaneOptionsProvider.getOptions().isBuildLibrary()) {
-			generateLibraryDescriptorFile();
-		}
+		resourceLibraryDescriptor = new ResourceLibraryDescriptor(polygonsList, objectsList, new File(targetFolderPath), XPlaneOptionsProvider.getOptions().isBuildLibrary());
+		resourceLibraryDescriptor.processResourceLibrary();
 	}
 
-	protected void generateLibraryDescriptorFile() {
-		XPLibraryOutputFormat format = new XPLibraryOutputFormat(getResourcePathPreffix());
-		try (PrintWriter printWriter = new PrintWriter(new BufferedWriter(new FileWriter(new File(targetFolderPath, "library.txt"))))) {
-			printWriter.println(format.getHeaderString());
-			List<String> list = getPolygonsList();
-			for (String entry : list) {
-				if (new File(targetFolderPath, entry).isFile()) { //Is treated as another library link otherwise
-					printWriter.println(format.getRecordString(entry));
-				}
-			}
-			List<String> objectsList = getObjectsList();
-			for (String entry : objectsList) {
-				if (new File(targetFolderPath, entry).isFile()) { //Is treated as another library link otherwise
-					printWriter.println(format.getRecordString(entry));
-				}
-			}
-		} catch (Exception e) {
-			Osm2xpLogger.error("Error generating library.txt descriptor", e);
-		}
-	}
-
+	
 	/**
 	 * @param folderPath target folder path
 	 */
@@ -216,13 +193,13 @@ public class DsfObjectsProvider {
 	 * @param facadeSet
 	 * @throws Osm2xpBusinessException
 	 */
-	public void computePolygonsList() {
+	protected void computePolygonsList() {
 
 		facadesList.clear();
 		forestsList.clear();
 		drapedPolysList.clear();
-		polygonsList.clear();
 		singlesFacadesList.clear();
+		polygonsList.clear();
 
 		// FORESTS RULES
 		if (XPlaneOptionsProvider.getOptions().isGenerateFor()) {
@@ -281,7 +258,7 @@ public class DsfObjectsProvider {
 	/**
 	 * 
 	 */
-	public void computeObjectsList() {
+	protected void computeObjectsList() {
 		objectsList.clear();
 		// add 3D objects
 //		for (XplaneObjectTagRule object : XPlaneOptionsProvider.getOptions() TODO Not needed, since we register object during copy operation
@@ -482,58 +459,6 @@ public class DsfObjectsProvider {
 		this.objectsList = objectsList;
 	}
 
-	/**
-	 * @return the singlesFacadesList
-	 */
-	public List<String> getSinglesFacadesList() {
-		return singlesFacadesList;
-	}
-
-	/**
-	 * @param singlesFacadesList
-	 *            the singlesFacadesList to set
-	 */
-	public void setSinglesFacadesList(List<String> singlesFacadesList) {
-		this.singlesFacadesList = singlesFacadesList;
-	}
-
-	/**
-	 * @return the facadesList
-	 */
-	public List<String> getFacadesList() {
-		return facadesList;
-	}
-
-	/**
-	 * @param facadesList
-	 *            the facadesList to set
-	 */
-	public void setFacadesList(List<String> facadesList) {
-		this.facadesList = facadesList;
-	}
-
-	/**
-	 * @return the forestsList
-	 */
-	public List<String> getForestsList() {
-		return forestsList;
-	}
-
-	/**
-	 * @param forestsList
-	 *            the forestsList to set
-	 */
-	public void setForestsList(List<String> forestsList) {
-		this.forestsList = forestsList;
-	}
-
-	/**
-	 * @return the polygonsList
-	 */
-	public List<String> getPolygonsList() {
-		return Collections.unmodifiableList(polygonsList);
-	}
-
 	@Deprecated
 	public XplaneDsfObject getRandomDsfLightObject(OsmPolygon osmPolygon) {
 		XplaneDsfObject result = null;
@@ -574,6 +499,11 @@ public class DsfObjectsProvider {
 	
 	public String getResourcePathPreffix() {
 		return buildLibrary?"osm2xp/":"";
+	}
+
+
+	public ResourceLibraryDescriptor getResourceLibraryDescriptor() {
+		return resourceLibraryDescriptor;
 	}
 
 }

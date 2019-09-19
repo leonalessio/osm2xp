@@ -7,9 +7,9 @@ import java.util.Locale;
 
 import com.osm2xp.generation.options.XPlaneOptionsProvider;
 import com.osm2xp.generation.paths.PathsService;
+import com.osm2xp.generation.xplane.resources.DsfObjectsProvider;
 import com.osm2xp.model.osm.polygon.OsmPolygon;
 import com.osm2xp.model.osm.polygon.OsmPolyline;
-import com.osm2xp.utils.DsfObjectsProvider;
 import com.osm2xp.writers.IWriter;
 
 import math.geom2d.Point2D;

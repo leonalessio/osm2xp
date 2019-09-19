@@ -1,6 +1,7 @@
 package com.osm2xp.translators.xplane;
 
 import com.osm2xp.generation.options.XPlaneOptionsProvider;
+import com.osm2xp.generation.xplane.resources.XPOutputFormat;
 
 public class XP10OutputFormat extends XPOutputFormat {
 	

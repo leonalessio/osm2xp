@@ -16,6 +16,7 @@ import com.osm2xp.core.model.osm.Node;
 import com.osm2xp.model.osm.polygon.OsmPolyline;
 import com.osm2xp.utils.geometry.GeomUtils;
 import com.osm2xp.generation.options.XPlaneOptionsProvider;
+import com.osm2xp.generation.xplane.resources.XPOutputFormat;
 import com.osm2xp.writers.IWriter;
 
 import math.geom2d.Point2D;

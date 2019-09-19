@@ -1,8 +1,8 @@
 package com.osm2xp.translators.xplane;
 
 import com.osm2xp.generation.osm.OsmConstants;
+import com.osm2xp.generation.xplane.resources.DsfObjectsProvider;
 import com.osm2xp.model.osm.polygon.OsmPolygon;
-import com.osm2xp.utils.DsfObjectsProvider;
 import com.osm2xp.utils.geometry.GeomUtils;
 import com.osm2xp.generation.options.XPlaneOptionsProvider;
 import com.osm2xp.writers.IWriter;

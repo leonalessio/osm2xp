@@ -239,8 +239,8 @@ public class FacadesRulesPanel extends Osm2xpPanel {
 						.getOptions()
 						.getFacadesRules()
 						.getRules()
-						.add(new FacadeTagRule(new Tag("",
-								""), new ArrayList<>(Collections.singleton(new ObjectFile("the path to an Object file"))), 10, 40));
+						.add(new FacadeTagRule(new Tag("building",
+								""), new ArrayList<>(Collections.singleton(new ObjectFile("facades/1.fac"))), 10, 40));
 
 				tagsTable.getViewer().refresh();
 			}

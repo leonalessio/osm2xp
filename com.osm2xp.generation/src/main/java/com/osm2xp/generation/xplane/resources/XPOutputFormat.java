@@ -1,4 +1,4 @@
-package com.osm2xp.translators.xplane;
+package com.osm2xp.generation.xplane.resources;
 
 import static com.osm2xp.translators.xplane.XPlaneTranslatorImpl.LINE_SEP;
 
@@ -12,7 +12,8 @@ import com.osm2xp.generation.options.XPlaneOptionsProvider;
 import com.osm2xp.model.osm.polygon.OsmMultiPolygon;
 import com.osm2xp.model.osm.polygon.OsmPolygon;
 import com.osm2xp.model.xplane.XplaneDsf3DObject;
-import com.osm2xp.utils.DsfObjectsProvider;
+import com.osm2xp.translators.xplane.XPPathSegment;
+import com.osm2xp.translators.xplane.XPlaneTranslatorImpl;
 import com.osm2xp.utils.geometry.GeomUtils;
 
 import math.geom2d.Box2D;
@@ -41,7 +42,7 @@ public class XPOutputFormat {
 		this.facadeRenderLevel = facadeRenderLevel;
 	}
 
-	public String getHeaderString(Point2D tileCoordinates, Box2D exclusionBox, DsfObjectsProvider dsfObjectsProvider) {
+	public String getHeaderString(Point2D tileCoordinates, Box2D exclusionBox, ResourceLibraryDescriptor resourceLibraryDescriptor) {
 
 		StringBuilder sb = new StringBuilder();
 		int latitude = (int) tileCoordinates.y();
@@ -76,16 +77,14 @@ public class XPOutputFormat {
 		sb.append("PROPERTY sim/north " + (latitude + 1) + "\n");
 		sb.append("PROPERTY sim/south " + latitude + "\n\n");
 		
-		
-		String resourcePathPreffix = dsfObjectsProvider.getResourcePathPreffix();
-		dsfObjectsProvider.getPolygonsList().stream().map(str -> "POLYGON_DEF " + resourcePathPreffix + str + "\n")
+		List<String> preffixedPolyDefinitions = resourceLibraryDescriptor.getPreffixedPolyDefinitions();
+		preffixedPolyDefinitions.stream().map(str -> "POLYGON_DEF " + str + "\n")
 				.forEach(str -> sb.append(str));
 
-		if (dsfObjectsProvider.getObjectsList() != null) {
-			for (String objectPath : dsfObjectsProvider.getObjectsList()) {
-				sb.append("OBJECT_DEF " + resourcePathPreffix + objectPath + "\n");
+		List<String> preffixedObjectDefinitions = resourceLibraryDescriptor.getPreffixedObjectDefinitions();
+			for (String objectPath : preffixedObjectDefinitions) {
+				sb.append("OBJECT_DEF " + objectPath + "\n");
 			}
-		}
 
 		sb.append("NETWORK_DEF lib/g10/roads.net\n");
 

@@ -20,6 +20,8 @@ import com.osm2xp.generation.options.GlobalOptionsProvider;
 import com.osm2xp.generation.options.XPlaneOptionsProvider;
 import com.osm2xp.generation.osm.OsmConstants;
 import com.osm2xp.generation.paths.PathsService;
+import com.osm2xp.generation.xplane.resources.DsfObjectsProvider;
+import com.osm2xp.generation.xplane.resources.XPOutputFormat;
 import com.osm2xp.model.facades.SpecialFacadeType;
 import com.osm2xp.model.osm.polygon.OsmPolygon;
 import com.osm2xp.model.osm.polygon.OsmPolyline;
@@ -30,7 +32,6 @@ import com.osm2xp.translators.BuildingType;
 import com.osm2xp.translators.IPolyHandler;
 import com.osm2xp.translators.ITranslationListener;
 import com.osm2xp.translators.ITranslator;
-import com.osm2xp.utils.DsfObjectsProvider;
 import com.osm2xp.utils.FilesUtils;
 import com.osm2xp.utils.MiscUtils;
 import com.osm2xp.utils.geometry.GeomUtils;
@@ -141,7 +142,7 @@ public class XPlaneTranslatorImpl implements ITranslator{
 	public void init() {
 		// writer initialization
 		writer.init(currentTile);
-		writer.setHeader(outputFormat.getHeaderString(currentTile, null, dsfObjectsProvider));
+		writer.setHeader(outputFormat.getHeaderString(currentTile, null, dsfObjectsProvider.getResourceLibraryDescriptor()));
 	}
 	
 	@Override
@@ -410,9 +411,9 @@ public class XPlaneTranslatorImpl implements ITranslator{
 //			Box2D bboxRect = new Box2D(bbox.getMinX() / COORD_DIV_FACTOR,bbox.getMaxX() / COORD_DIV_FACTOR, bbox.getMinY() / COORD_DIV_FACTOR, bbox.getMaxY() / COORD_DIV_FACTOR);
 			if (currentTile != null) {
 				Box2D tileRect = new Box2D(currentTile, 1,1);
-				writer.setHeader(outputFormat.getHeaderString(currentTile, tileRect.intersection(bbox), dsfObjectsProvider));
+				writer.setHeader(outputFormat.getHeaderString(currentTile, tileRect.intersection(bbox), dsfObjectsProvider.getResourceLibraryDescriptor()));
 			} else {
-				writer.setHeader(outputFormat.getHeaderString(currentTile, bbox, dsfObjectsProvider));
+				writer.setHeader(outputFormat.getHeaderString(currentTile, bbox, dsfObjectsProvider.getResourceLibraryDescriptor()));
 			}
 		}
 	}

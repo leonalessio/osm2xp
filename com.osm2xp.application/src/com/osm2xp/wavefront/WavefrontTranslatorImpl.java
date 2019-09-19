@@ -23,12 +23,12 @@ import com.osm2xp.generation.options.XPlaneOptionsProvider;
 import com.osm2xp.generation.options.XmlHelper;
 import com.osm2xp.generation.options.rules.ObjectTagRule;
 import com.osm2xp.generation.options.rules.ObjectsRulesList;
+import com.osm2xp.generation.xplane.resources.DsfObjectsProvider;
+import com.osm2xp.generation.xplane.resources.DsfUtils;
+import com.osm2xp.generation.xplane.resources.XPOutputFormat;
 import com.osm2xp.model.osm.polygon.OsmPolygon;
 import com.osm2xp.model.osm.polygon.OsmPolyline;
 import com.osm2xp.translators.ITranslator;
-import com.osm2xp.translators.xplane.XPOutputFormat;
-import com.osm2xp.utils.DsfObjectsProvider;
-import com.osm2xp.utils.DsfUtils;
 import com.osm2xp.utils.FilesUtils;
 import com.osm2xp.utils.ProcessExecutor;
 import com.osm2xp.utils.geometry.GeomUtils;
@@ -260,7 +260,7 @@ public class WavefrontTranslatorImpl implements ITranslator {
 		DsfObjectsProvider dsfObjectsProvider = new DsfObjectsProvider(folderPath);
 		dsfObjectsProvider.setObjectsList(objectsList);
 		XPOutputFormat outputFormat = new XPOutputFormat(XPlaneOptionsProvider.getOptions().getObjectRenderLevel(), XPlaneOptionsProvider.getOptions().getFacadeRenderLevel());
-		String dsfHeaderText = outputFormat.getHeaderString(currentTile, null, dsfObjectsProvider);
+		String dsfHeaderText = outputFormat.getHeaderString(currentTile, null, dsfObjectsProvider.getResourceLibraryDescriptor());
 		FilesUtils.writeTextToFile(dsfTextFile, dsfHeaderText, false);
 		for (OsmPolyline way : globalWayList) {
 
@@ -304,7 +304,7 @@ public class WavefrontTranslatorImpl implements ITranslator {
 		DsfObjectsProvider dsfObjectsProvider = new DsfObjectsProvider(folderPath);
 		dsfObjectsProvider.setObjectsList(objectsList);
 		XPOutputFormat outputFormat = new XPOutputFormat(XPlaneOptionsProvider.getOptions().getObjectRenderLevel(), XPlaneOptionsProvider.getOptions().getFacadeRenderLevel());
-		String dsfHeaderText = outputFormat.getHeaderString(currentTile, null, dsfObjectsProvider);
+		String dsfHeaderText = outputFormat.getHeaderString(currentTile, null, dsfObjectsProvider.getResourceLibraryDescriptor());
 		FilesUtils.writeTextToFile(dsfTextFile, dsfHeaderText, false);
 		List<Point2D> areaNodes = new ArrayList<Point2D>();
 		// compute the center of the new large object

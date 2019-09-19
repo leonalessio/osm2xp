@@ -5,9 +5,9 @@ import java.util.Random;
 
 import com.osm2xp.core.exceptions.Osm2xpBusinessException;
 import com.osm2xp.generation.options.XPlaneOptionsProvider;
+import com.osm2xp.generation.xplane.resources.DsfObjectsProvider;
 import com.osm2xp.model.osm.polygon.OsmPolyline;
 import com.osm2xp.model.stats.GenerationStats;
-import com.osm2xp.utils.DsfObjectsProvider;
 import com.osm2xp.utils.geometry.GeomUtils;
 import com.osm2xp.utils.osm.OsmUtils;
 import com.osm2xp.writers.IHeaderedWriter;

@@ -91,7 +91,7 @@ public class XplaneObjectsRulesPanel extends Composite {
 		tltmAdd.addSelectionListener(new SelectionAdapter() {
 			@Override
 			public void widgetSelected(SelectionEvent e) {
-				XplaneObjectTagRule newRule = new XplaneObjectTagRule(new Tag("", ""));
+				XplaneObjectTagRule newRule = new XplaneObjectTagRule(new Tag("object", ""));
 				XPlaneOptionsProvider
 						.getOptions()
 						.getObjectsRules()

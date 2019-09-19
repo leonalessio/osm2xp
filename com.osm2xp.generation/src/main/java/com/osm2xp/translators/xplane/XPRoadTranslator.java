@@ -7,6 +7,7 @@ import com.osm2xp.core.model.osm.IHasTags;
 import com.osm2xp.model.osm.polygon.OsmPolyline;
 import com.osm2xp.generation.options.GlobalOptionsProvider;
 import com.osm2xp.generation.options.XPlaneOptionsProvider;
+import com.osm2xp.generation.xplane.resources.XPOutputFormat;
 import com.osm2xp.writers.IWriter;
 
 public class XPRoadTranslator extends XPPathTranslator {

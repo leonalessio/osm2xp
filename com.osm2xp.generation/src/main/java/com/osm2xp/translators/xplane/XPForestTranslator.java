@@ -4,9 +4,10 @@ import java.util.List;
 
 import com.osm2xp.model.osm.polygon.OsmPolygon;
 import com.osm2xp.model.osm.polygon.OsmPolyline;
-import com.osm2xp.utils.DsfObjectsProvider;
 import com.osm2xp.utils.geometry.GeomUtils;
 import com.osm2xp.generation.options.XPlaneOptionsProvider;
+import com.osm2xp.generation.xplane.resources.DsfObjectsProvider;
+import com.osm2xp.generation.xplane.resources.XPOutputFormat;
 import com.osm2xp.writers.IWriter;
 
 import math.geom2d.polygon.LinearRing2D;

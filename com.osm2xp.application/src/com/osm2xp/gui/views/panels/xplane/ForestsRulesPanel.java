@@ -76,7 +76,7 @@ public class ForestsRulesPanel extends Composite {
 						.getOptions()
 						.getForestsRules()
 						.getRules()
-						.add(new ForestTagRule(new Tag("", ""),
+						.add(new ForestTagRule(new Tag("natural", ""),
 								Lists.newArrayList(new ObjectFile("xplane/forests/1.for")), 255));
 			}
 		});

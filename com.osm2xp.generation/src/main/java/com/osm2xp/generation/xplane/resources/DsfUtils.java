@@ -1,6 +1,5 @@
-package com.osm2xp.utils;
+package com.osm2xp.generation.xplane.resources;
 
-import java.io.BufferedWriter;
 import java.io.File;
 import java.io.FileNotFoundException;
 import java.io.FileWriter;
@@ -9,11 +8,9 @@ import java.io.RandomAccessFile;
 import java.text.DecimalFormat;
 import java.util.GregorianCalendar;
 
-import com.osm2xp.core.exceptions.Osm2xpBusinessException;
-import com.osm2xp.core.exceptions.Osm2xpTechnicalException;
-import com.osm2xp.generation.options.XPlaneOptionsProvider;
 import com.osm2xp.generation.paths.PathsService;
 import com.osm2xp.model.xplane.XplaneDsfObject;
+import com.osm2xp.utils.MiscUtils;
 import com.osm2xp.utils.geometry.GeomUtils;
 import com.osm2xp.writers.impl.OsmWriterImpl;
 
@@ -138,31 +135,6 @@ public class DsfUtils {
 		return dsfFile;
 	}
 
-	/**
-	 * @param sceneFolder
-	 * @param dsfObjectsProvider
-	 * @throws Osm2xpBusinessException
-	 */
-	public static void writeLibraryFile(String sceneFolder,
-			DsfObjectsProvider dsfObjectsProvider) {
-		try (BufferedWriter outputlibrary = new BufferedWriter(new FileWriter(sceneFolder
-				+ File.separatorChar + "library.txt", false))) {
-			outputlibrary.write("I" + "\n");
-			outputlibrary.write("800" + "\n");
-			outputlibrary.write("LIBRARY" + "\n");
-			for (String facade : dsfObjectsProvider.getFacadesList()) {
-				outputlibrary.write("EXPORT \\lib\\osm2xp\\facades\\" + facade
-						+ " .." + File.separator + "osm2xpFacades"
-						+ File.separator
-						+ XPlaneOptionsProvider.getOptions().getFacadeSets()
-						+ File.separator + facade + "\n");
-
-			}
-			outputlibrary.flush();
-		} catch (IOException e) {
-			throw new Osm2xpTechnicalException(e);
-		}
-	}
 
 	/**
 	 * Copy facades files from workspace to scene folder. Also apply lod and

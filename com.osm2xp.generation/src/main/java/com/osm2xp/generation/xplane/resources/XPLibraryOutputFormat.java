@@ -1,4 +1,4 @@
-package com.osm2xp.translators.xplane;
+package com.osm2xp.generation.xplane.resources;
 
 public class XPLibraryOutputFormat {
 	

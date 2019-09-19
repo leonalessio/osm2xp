@@ -4,7 +4,7 @@ import java.io.File;
 import java.io.IOException;
 
 import com.osm2xp.core.logging.Osm2xpLogger;
-import com.osm2xp.utils.DsfUtils;
+import com.osm2xp.generation.xplane.resources.DsfUtils;
 
 public class DsfConversionRunnable implements Runnable{
 
