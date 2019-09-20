@@ -292,26 +292,28 @@ public class XPlaneTranslatorImpl implements ITranslator{
 		if (!StringUtils.stripToEmpty(polygon.getTagValue("shop")).isEmpty()) {
 			return BuildingType.COMMERCIAL;
 		}
-		String landuse = polygon.getTagValue(OsmConstants.LANDUSE_TAG);//landuse tag is being derived from are including this poly, if area analysis is turned on
-		if (!StringUtils.stripToEmpty(landuse).isEmpty()) {
-			type = BuildingType.fromId(landuse);
-			if (type != null) {
-				return type;
+		if (typeStr != null) { //If we have building with no/unknown type - try to guess type from landuse tag of containing area 
+			String landuse = polygon.getTagValue(OsmConstants.LANDUSE_TAG);//landuse tag is being derived from are including this poly, if area analysis is turned on
+			if (!StringUtils.stripToEmpty(landuse).isEmpty()) {
+				type = BuildingType.fromId(landuse);
+				if (type != null) {
+					return type;
+				}
 			}
-		}
-		if ("retail".equals(landuse)) {
-			return BuildingType.COMMERCIAL;
-		}
-		if ("allotments".equals(landuse)) {
-			return BuildingType.RESIDENTIAL;
-		}
-		if ("railway".equals(landuse)) {
-			return BuildingType.INDUSTRIAL;
-		}
-		if (polygon.getArea() * 10000000 < ASSERTION_RESIDENTIAL_MAX_AREA
-			&& polygon.getHeight() < XPlaneOptionsProvider.getOptions()
-					.getResidentialMax()) {
-			return BuildingType.RESIDENTIAL;
+			if ("retail".equals(landuse)) {
+				return BuildingType.COMMERCIAL;
+			}
+			if ("allotments".equals(landuse)) {
+				return BuildingType.RESIDENTIAL;
+			}
+			if ("railway".equals(landuse)) {
+				return BuildingType.INDUSTRIAL;
+			}
+			if (polygon.getArea() * 10000000 < ASSERTION_RESIDENTIAL_MAX_AREA
+				&& polygon.getHeight() < XPlaneOptionsProvider.getOptions()
+						.getResidentialMax()) {
+				return BuildingType.RESIDENTIAL;
+			}
 		}
 		// do we are on a building object?
 		// yes if there is industrial or Commercial tag
@@ -451,9 +453,10 @@ public class XPlaneTranslatorImpl implements ITranslator{
 
 	@Override
 	public void processPolyline(OsmPolyline osmPolyline) throws Osm2xpBusinessException {
+		long id = osmPolyline.getId();
 		// polygon is null or empty don't process it
 		if (roofsColorMap != null) {
-			Color color = roofsColorMap.get(osmPolyline.getId());
+			Color color = roofsColorMap.get(id);
 			if (color != null) {
 				String hexColor = Integer.toHexString(color.getRGB() & 0x00ffffff);
 				Tag roofColorTag = new Tag("building:roof:color", hexColor);
@@ -510,7 +513,7 @@ public class XPlaneTranslatorImpl implements ITranslator{
 //			}
 //			return polygons;
 		}
-		if (StringUtils.isEmpty(osmPolyline.getTagValue(OsmConstants.LANDUSE_TAG))) {
+		if (osmPolyline.getTags().size() > 0 && StringUtils.isEmpty(osmPolyline.getTagValue(OsmConstants.LANDUSE_TAG))) { //We define containing area only for objects having some other tags 
 			MapArea area = getContainingArea(osmPolyline.getCenter().x(), osmPolyline.getCenter().y());
 			if (area != null) {
 				osmPolyline.getTags().add(new Tag(OsmConstants.LANDUSE_TAG, area.type));
@@ -644,7 +647,7 @@ public class XPlaneTranslatorImpl implements ITranslator{
 
 	@Override
 	public boolean mustProcessPolyline(List<Tag> tags) {
-		return (OsmUtils.isBuilding(tags) || OsmUtils.isForest(tags) || OsmUtils
+		return (OsmUtils.isBuilding(tags) || OsmUtils.isManMade(tags) || OsmUtils.isForest(tags) || OsmUtils
 				.isObject(tags) || OsmUtils.isRailway(tags) || OsmUtils.isRoad(tags) || OsmUtils.isPowerline(tags) || OsmUtils.isFence(tags) || OsmUtils.isAeroway(tags));
 	}
 

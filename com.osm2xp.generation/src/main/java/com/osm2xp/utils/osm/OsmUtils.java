@@ -347,6 +347,10 @@ public class OsmUtils {
 		return isStringInTags("barrier", tags);
 	}
 	
+	public static boolean isManMade(List<Tag> tags) {
+		return isKeyInTags("man_made", tags);
+	}
+	
 	public static boolean isAeroway(List<Tag> tags) {
 		return isKeyInTags("aeroway", tags);
 	}
@@ -426,6 +430,9 @@ public class OsmUtils {
 	public static String getReadableType(List<Tag> tags) {
 		if (isBuilding(tags)) {
 			return "building";
+		}
+		if (isManMade(tags)) {
+			return "man_made";
 		}
 		if (isForest(tags) || isOsmForest(tags)) {
 			return "forest";

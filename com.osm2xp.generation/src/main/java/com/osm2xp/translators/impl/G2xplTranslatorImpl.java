@@ -98,7 +98,7 @@ public class G2xplTranslatorImpl implements ITranslator {
 
 	@Override
 	public boolean mustProcessPolyline(List<Tag> tags) {
-		return (OsmUtils.isBuilding(tags));
+		return (OsmUtils.isBuilding(tags) || OsmUtils.isManMade(tags));
 	}
 
 	
