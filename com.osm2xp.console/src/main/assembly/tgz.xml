@@ -20,6 +20,14 @@
 		</fileSet>
     </fileSets>
     <files>
+    	<file>
+            <source>${project.basedir}/../osm2xp_additions/gpl-3.0.txt</source>
+            <outputDirectory>./</outputDirectory>
+        </file>
+    	<file>
+            <source>${project.basedir}/../osm2xp_additions/README.md</source>
+            <outputDirectory>./</outputDirectory>
+        </file>
         <file>
             <source> ${project.basedir}/target/jar/osm2xpc.jar</source>
             <outputDirectory>./</outputDirectory>

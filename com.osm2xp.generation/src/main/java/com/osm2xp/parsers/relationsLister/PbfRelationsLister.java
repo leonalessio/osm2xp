@@ -52,10 +52,7 @@ public class PbfRelationsLister extends BinaryParser implements RelationsLister 
 					lastMemberId = memberId;
 					Integer rolesSid = rel.getRolesSidList().get(i);
 					String type = rel.getTypesList().get(i).toString();
-					String role = "outer";
-					if (rolesSid == 18) {
-						role = "inner";
-					}
+					String role = getStringById(rolesSid);
 					String ref = rel.getMemidsList().get(i).toString();
 					relation.getMember().add(new Member(memberId,type, ref, role));
 				}

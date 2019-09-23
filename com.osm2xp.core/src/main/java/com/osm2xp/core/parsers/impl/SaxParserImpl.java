@@ -113,31 +113,31 @@ public class SaxParserImpl implements ContentHandler, IVisitingParser {
 
 	}
 
-	public void startElement(String nameSpaceURI, String localName, String rawName, Attributes attributs) {
+	public void startElement(String nameSpaceURI, String localName, String rawName, Attributes attributes) {
 		String name = !localName.isEmpty() ? localName : rawName;
 		if (name.equalsIgnoreCase(XML_NODE_WAY) || name.equalsIgnoreCase(XML_NODE_RELATION)
 				|| name.equalsIgnoreCase(XML_NODE_NODE) || name.equalsIgnoreCase(XML_NODE_BOUNDS)) {
 			tagList = new ArrayList<Tag>();
 			ndList = new ArrayList<Nd>();
 			membersList = new ArrayList<>();
-			currentAttributes = new OsmAttributes(attributs);
+			currentAttributes = new OsmAttributes(attributes);
 		} else if (name.equalsIgnoreCase(XML_NODE_TAG)) {
 			Tag tag = new Tag();
-			tag.setKey(attributs.getValue(0));
-			tag.setValue(attributs.getValue(1));
+			tag.setKey(attributes.getValue(0));
+			tag.setValue(attributes.getValue(1));
 			tagList.add(tag);
 		} else if (name.equalsIgnoreCase(XML_NODE_ND)) {
 			Nd nd = new Nd();
-			nd.setRef(Long.parseLong(attributs.getValue(XML_ATTRIBUTE_REF)));
+			nd.setRef(Long.parseLong(attributes.getValue(XML_ATTRIBUTE_REF)));
 			this.ndList.add(nd);
 		} else if (name.equalsIgnoreCase(XML_NODE_MEMBER)) {
 			long id = 0;
-			String ref = attributs.getValue("ref");
+			String ref = attributes.getValue("ref");//TODO Is this correct id to use?
 			if (ref != null) {
 				id = Long.parseLong(ref);
 			}
-			membersList.add(new Member(id, attributs.getValue("type"), //TODO use actual id here
-					ref, attributs.getValue("role")));
+			membersList.add(new Member(id, attributes.getValue("type"), 
+					ref, attributes.getValue("role")));
 		}
 	}
 

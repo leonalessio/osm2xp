@@ -63,7 +63,7 @@ public class XmlRelationsLister implements ContentHandler, RelationsLister {
 	}
 
 	public void startElement(String nameSpaceURI, String localName,
-			String rawName, Attributes attributs) throws SAXException {
+			String rawName, Attributes attributes) throws SAXException {
 
 		if (localName.equalsIgnoreCase("relation")) {
 			this.parsingRelation = true;
@@ -71,12 +71,12 @@ public class XmlRelationsLister implements ContentHandler, RelationsLister {
 		}
 		if (parsingRelation && localName.equalsIgnoreCase("member")) {
 			long id = 0;
-			String ref = attributs.getValue("ref");
+			String ref = attributes.getValue("ref");
 			if (ref != null) {
 				id = Long.parseLong(ref);
 			}
-			Member member = new Member(id, attributs.getValue("type"), //TODO use actual id here
-					ref, attributs.getValue("role"));
+			Member member = new Member(id, attributes.getValue("type"), //TODO use actual id here
+					ref, attributes.getValue("role"));
 			currentRelation.getMember().add(member);
 		}
 	}

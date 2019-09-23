@@ -92,7 +92,7 @@ public class TranslatingBinaryParser extends BinaryParser implements IParser, IV
 	@Override
 	protected void parse(HeaderBlock header) {
 		HeaderBBox bbox = header.getBbox();
-		osmDataVisitor.visit(Box2D.create(bbox.getLeft() / COORD_DIV_FACTOR, bbox.getRight() / COORD_DIV_FACTOR, bbox.getBottom() / COORD_DIV_FACTOR, bbox.getTop() / COORD_DIV_FACTOR));  
+		osmDataVisitor.visit(new Box2D(bbox.getLeft() / COORD_DIV_FACTOR, bbox.getRight() / COORD_DIV_FACTOR, bbox.getBottom() / COORD_DIV_FACTOR, bbox.getTop() / COORD_DIV_FACTOR));  
 	}
 
 	
@@ -157,10 +157,7 @@ public class TranslatingBinaryParser extends BinaryParser implements IParser, IV
 				lastMemberId = memberId;
 				Integer rolesSid = pbfRelation.getRolesSidList().get(i);
 				String type = pbfRelation.getTypesList().get(i).toString();
-				String role = "outer";
-				if (rolesSid == 18) {
-					role = "inner";
-				}
+				String role = getStringById(rolesSid);
 				String ref = pbfRelation.getMemidsList().get(i).toString();
 				innerRelation.getMember().add(new Member(memberId, type, ref, role));
 			}
