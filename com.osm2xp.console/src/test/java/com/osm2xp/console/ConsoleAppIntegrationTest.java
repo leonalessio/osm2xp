@@ -70,7 +70,7 @@ public class ConsoleAppIntegrationTest extends TestCase {
 		assertTrue(lines.contains("PROPERTY sim/planet earth"));
 		assertTrue(lines.contains("PROPERTY sim/overlay 1"));
 		assertTrue(lines.contains("PROPERTY sim/require_object 1/0"));
-		assertTrue(lines.contains("PROPERTY sim/require_facade 6/0"));
+		assertTrue(lines.contains("PROPERTY sim/require_facade 3/0"));
 		assertTrue(lines.contains("PROPERTY sim/exclude_obj 80.327000000/52.017000000/80.348000000/52.034000000"));
 		assertTrue(lines.contains("PROPERTY sim/exclude_for 80.327000000/52.017000000/80.348000000/52.034000000"));
 		assertTrue(lines.contains("PROPERTY sim/west 80"));
