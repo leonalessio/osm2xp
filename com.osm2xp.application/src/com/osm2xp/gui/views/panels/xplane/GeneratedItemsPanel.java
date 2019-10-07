@@ -24,7 +24,6 @@ public class GeneratedItemsPanel extends Osm2xpPanel {
 	private Button btnGenerateObjBuildings;
 	private Button btnGenerateForests;
 	private Button btnGeneratePolys;
-	private Button btnGenerateStreetLights;
 	private Button btnGenerateRoads;
 	private Button btnGenerateRail;
 	private Button btnGeneratePower;
@@ -87,10 +86,6 @@ public class GeneratedItemsPanel extends Osm2xpPanel {
 		btnGenerateCoolingTowers.setToolTipText("Generate Cooling Towers by selecting best-fit model");
 		GridDataFactory.fillDefaults().applyTo(btnGenerateCoolingTowers);
 		
-		btnGenerateStreetLights = new Button(this, SWT.CHECK);
-		btnGenerateStreetLights.setText("Generate street lights");
-		GridDataFactory.fillDefaults().applyTo(btnGenerateStreetLights);
-		
 		btnGenerateBridges = new Button(this, SWT.CHECK);
 		btnGenerateBridges.setText("Generate bridges");
 		btnGenerateBridges.setToolTipText("Generate bridges for roads and railways.");
@@ -111,8 +106,6 @@ public class GeneratedItemsPanel extends Osm2xpPanel {
 				PojoProperties.value("generateFor").observe(XPlaneOptionsProvider.getOptions()));
 		bindingContext.bindValue(WidgetProperties.selection().observe(btnGeneratePolys),		
 				PojoProperties.value("generatePolys").observe(XPlaneOptionsProvider.getOptions()));
-		bindingContext.bindValue(WidgetProperties.selection().observe(btnGenerateStreetLights),		
-				PojoProperties.value("generateStreetLights").observe(XPlaneOptionsProvider.getOptions()));
 //		bindingContext.bindValue(SWTObservables
 //				.observeSelection(btnGenerateBuildings), PojoObservables
 //				.observeValue(XPlaneOptionsProvider.getOptions(),

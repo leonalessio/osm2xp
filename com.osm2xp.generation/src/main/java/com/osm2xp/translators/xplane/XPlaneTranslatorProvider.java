@@ -7,9 +7,9 @@ import java.util.Collections;
 import com.osm2xp.core.parsers.IOSMDataVisitor;
 import com.osm2xp.datastore.IDataSink;
 import com.osm2xp.generation.areas.LanduseAreasAnalyzer;
+import com.osm2xp.generation.options.GlobalOptionsProvider;
 import com.osm2xp.generation.options.XPlaneOptionsProvider;
 import com.osm2xp.generation.xplane.resources.DsfObjectsProvider;
-import com.osm2xp.generation.xplane.resources.DsfUtils;
 import com.osm2xp.model.facades.FacadeSetManager;
 import com.osm2xp.translators.AbstractTranslatorProvider;
 import com.osm2xp.translators.IPreprocessorProvider;
@@ -58,7 +58,10 @@ public abstract class XPlaneTranslatorProvider extends AbstractTranslatorProvide
 	
 	@Override
 	public Collection<IOSMDataVisitor> createPreprocessors(IDataSink dataSink) {
-		return Collections.singletonList(new LanduseAreasAnalyzer(dataSink));
+		if (GlobalOptionsProvider.getOptions().isAnalyzeAreas()) {
+			return Collections.singletonList(new LanduseAreasAnalyzer(dataSink));
+		} 
+		return Collections.emptyList();
 	}
 
 }

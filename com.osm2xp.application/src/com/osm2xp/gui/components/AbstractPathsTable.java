@@ -1,5 +1,7 @@
 package com.osm2xp.gui.components;
 
+import java.util.List;
+
 import org.eclipse.jface.layout.GridDataFactory;
 import org.eclipse.jface.viewers.ArrayContentProvider;
 import org.eclipse.jface.viewers.CellEditor;
@@ -20,6 +22,7 @@ import org.eclipse.swt.widgets.Table;
 import org.eclipse.swt.widgets.TableColumn;
 
 import com.osm2xp.core.exceptions.Osm2xpBusinessException;
+import com.osm2xp.generation.options.ObjectFile;
 
 public abstract class AbstractPathsTable extends Composite {
 
@@ -142,4 +145,9 @@ public abstract class AbstractPathsTable extends Composite {
 	protected abstract String getPath(Object element);
 	
 	protected abstract void setPath(Object element, Object value);
+
+	public void updateInput(List<?> input) {
+		viewer.setInput(input);
+		viewer.refresh();		
+	}
 }

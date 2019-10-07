@@ -398,20 +398,9 @@ public class OsmUtils {
 					&& !tag.getKey().toLowerCase().contains("min")) {
 				if (tag.getKey().toLowerCase().contains("height")
 						&& tag.getValue().length() < 11) {
-					Integer height = MiscUtils.extractNumbers(tag.getValue());
+					Double height = MiscUtils.extractNumber(tag.getValue());
 					if (height != null && height < 800 && height > 2) {
-						return height;
-					}
-				}
-				if (tag.getKey().toLowerCase().contains("level")
-						&& !tag.getValue().contains("-1")
-						&& tag.getValue().length() < 5) {
-					Integer levels = MiscUtils.extractNumbers(tag.getValue());
-					if (levels != null) {
-						int height =  (int) Math.round(levels * GlobalOptionsProvider.getOptions().getLevelHeight());
-						if (height < 800 && height > 2) {
-							return height;
-						}
+						return (int) Math.round(height);
 					}
 				}
 				if ("building:levels".equalsIgnoreCase(tag.getKey())) {
@@ -420,6 +409,17 @@ public class OsmUtils {
 						return (int) Math.round(levels * GlobalOptionsProvider.getOptions().getLevelHeight());
 					} catch (NumberFormatException e) {
 						//Best effort
+					}
+				}
+				if (tag.getKey().toLowerCase().contains("level")
+						&& !tag.getValue().contains("-1")
+						&& tag.getValue().length() < 5) {
+					Double levels = MiscUtils.extractNumber(tag.getValue());
+					if (levels != null) {
+						int height =  (int) Math.round(levels * GlobalOptionsProvider.getOptions().getLevelHeight());
+						if (height < 800 && height > 2) {
+							return height;
+						}
 					}
 				}
 			}

@@ -6,6 +6,22 @@ and this project adheres to [Semantic Versioning](http://semver.org/spec/v2.0.0.
 
 ## [Unreleased]
 
+## [4.2.0]
+
+### Added
+- Landuse areas analysis and landuse rules for facades, objects and other assets
+- X-Plane library generation feature
+- Local geoindex for nearest geoname obtaining (downloaded separately)
+- Configure rendering level for objects and facades from the UI
+- New facades in the default facadeset
+
+### Fixed
+- Multipolygon handling was invalid for PBF files - inner ways was determined incorrectly
+- Small UI fixes
+
+### Changed
+- Discontinued street lights support, since it's poor relative to mods like Enhanced Street Lights
+
 ## [4.1.0]
 
 ### Added

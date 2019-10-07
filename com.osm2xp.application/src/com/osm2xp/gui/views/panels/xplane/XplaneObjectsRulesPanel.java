@@ -2,6 +2,7 @@ package com.osm2xp.gui.views.panels.xplane;
 
 import java.io.File;
 import java.text.MessageFormat;
+import java.util.List;
 
 import org.eclipse.jface.layout.GridDataFactory;
 import org.eclipse.jface.layout.GridLayoutFactory;
@@ -74,6 +75,7 @@ public class XplaneObjectsRulesPanel extends Composite {
 	private Spinner spinnerXVectorMinSize;
 	private Spinner spinnerYVectorMinSize;
 	private LanduseText landuseText;
+	private ToolItem tltmDelete;
 
 	public XplaneObjectsRulesPanel(final Composite parent, int style) {
 		super(parent, style);
@@ -96,16 +98,13 @@ public class XplaneObjectsRulesPanel extends Composite {
 						.getOptions()
 						.getObjectsRules()
 						.getRules()
-//						.add(new XplaneObjectTagRule(new Tag("",
-//								""), Lists.newArrayList(new ObjectFile("xplane/objects")), 0, true, false, false, 0, 0, 0, 0, false, 0, 0, false,
-//								false));
 						.add(newRule);
 				tagsTable.getViewer().refresh();
 				tagsTable.getViewer().setSelection(new StructuredSelection(newRule));
 			}
 		});
 
-		ToolItem tltmDelete = new ToolItem(toolBar, SWT.NONE);
+		tltmDelete = new ToolItem(toolBar, SWT.NONE);
 		tltmDelete.setToolTipText("delete");
 		tltmDelete.setImage(ResourceManager.getPluginImage(Activator.PLUGIN_ID,
 				"images/toolbarsIcons/delete_16.ico"));
@@ -122,6 +121,7 @@ public class XplaneObjectsRulesPanel extends Composite {
 				tagsTable.getViewer().refresh();
 			}
 		});
+		tltmDelete.setEnabled(false);
 
 		ToolItem tltmSeparator = new ToolItem(toolBar, SWT.SEPARATOR);
 		tltmSeparator.setWidth(20);
@@ -243,19 +243,61 @@ public class XplaneObjectsRulesPanel extends Composite {
 		tltmDeleteObjectFile.addSelectionListener(new SelectionAdapter() {
 			@Override
 			public void widgetSelected(SelectionEvent e) {
-
-				IStructuredSelection selection = (IStructuredSelection) objectFilesTable
-						.getViewer().getSelection();
-				ObjectFile selectedFile = (ObjectFile) selection
-						.getFirstElement();
-				selectedXplaneObjectTagRule.getObjectsFiles().remove(
-						selectedFile);
-				objectFilesTable.getViewer().refresh();
+				ObjectFile selectedFile = getSelectedFile();
+				if (selectedFile != null) {
+					selectedXplaneObjectTagRule.getObjectsFiles().remove(selectedFile);
+					objectFilesTable.getViewer().refresh();
+				}
+			}
+		});
+		
+		ToolItem tltmFileUp = new ToolItem(toolBarObjectFiles, SWT.NONE);
+		tltmFileUp.setToolTipText("Up");
+		tltmFileUp.setImage(ResourceManager.getPluginImage(Activator.PLUGIN_ID,
+				"images/toolbarsIcons/up.png"));
+		tltmFileUp.addSelectionListener(new SelectionAdapter() {
+			@Override
+			public void widgetSelected(SelectionEvent e) {
+				List<ObjectFile> rules = selectedXplaneObjectTagRule.getObjectsFiles();
+				ObjectFile selectedFile = getSelectedFile();
+				if (selectedFile != null) {
+					int idx = rules.indexOf(selectedFile);
+					if (idx > 0) {
+						rules.remove(idx);
+						rules.add(idx - 1, selectedFile);
+						objectFilesTable.updateInput(rules);
+					} 
+				}
+			}
+		});
+		ToolItem tltmFileDown = new ToolItem(toolBarObjectFiles, SWT.NONE);
+		tltmFileDown.setToolTipText("Down");
+		tltmFileDown.setImage(ResourceManager.getPluginImage(Activator.PLUGIN_ID,
+				"images/toolbarsIcons/down.png"));
+		tltmFileDown.addSelectionListener(new SelectionAdapter() {
+			@Override
+			public void widgetSelected(SelectionEvent e) {
+				List<ObjectFile> rules = selectedXplaneObjectTagRule.getObjectsFiles();
+				ObjectFile selectedFile = getSelectedFile();
+				if (selectedFile != null) {
+					int idx = rules.indexOf(selectedFile);
+					if (idx >= 0 && idx < rules.size() - 1) {
+						rules.remove(idx);
+						rules.add(idx + 1, selectedFile);
+						objectFilesTable.updateInput(rules);
+					} 
+				}
 			}
 		});
 
 		objectFilesTable = new FilePathsTable(grpFiles, SWT.NONE,
 				"Object file path");
+		objectFilesTable.getViewer().addSelectionChangedListener(e -> {
+			ObjectFile selectedFile = getSelectedFile();
+			tltmDeleteObjectFile.setEnabled(selectedFile != null);
+			tltmFileUp.setEnabled(selectedFile != null);
+			tltmFileDown.setEnabled(selectedFile != null);
+		});
 		new Label(grpFiles, SWT.NONE);
 
 		TabItem tabAngle = new TabItem(tabFolder, SWT.NONE);
@@ -491,6 +533,7 @@ public class XplaneObjectsRulesPanel extends Composite {
 	}
 
 	private void updateRuleControls() {
+		tltmDelete.setEnabled(selectedXplaneObjectTagRule != null);
 		landuseText.setRule(selectedXplaneObjectTagRule);
 		String selectedTag = selectedXplaneObjectTagRule.getTag().getKey()
 				+ "=" + selectedXplaneObjectTagRule.getTag().getValue();
@@ -534,5 +577,19 @@ public class XplaneObjectsRulesPanel extends Composite {
 		}
 		compositeRuleDetail.setVisible(true);
 
+	}
+
+	protected ObjectFile getSelectedFile() {
+		if (selectedXplaneObjectTagRule == null) {
+			return null;
+		}
+		IStructuredSelection selection = (IStructuredSelection) objectFilesTable
+				.getViewer().getSelection();
+		if (selection.isEmpty()) {
+			return null;
+		}
+		ObjectFile selectedFile = (ObjectFile) selection
+				.getFirstElement();
+		return selectedFile;
 	}
 }

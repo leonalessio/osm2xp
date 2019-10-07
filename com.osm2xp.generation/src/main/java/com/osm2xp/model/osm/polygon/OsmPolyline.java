@@ -124,7 +124,7 @@ public class OsmPolyline implements IHasTags{
 		return height;
 	}
 
-	public void setHeight(Integer height) {
+	public void setHeight(int height) {
 		this.height = height;
 	}
 

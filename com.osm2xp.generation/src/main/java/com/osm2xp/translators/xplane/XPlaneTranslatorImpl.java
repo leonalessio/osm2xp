@@ -214,8 +214,8 @@ public class XPlaneTranslatorImpl implements ITranslator{
 	 * 
 	 * @return Integer the height.
 	 */
-	protected Integer computeBuildingHeight(OsmPolygon polygon) {
-		Integer result = null;
+	protected int computeBuildingHeight(OsmPolygon polygon) {
+		int result = 10; //TODO ugly default here (but better than 0)
 		int osmHeight = polygon.getHeight();
 		if (osmHeight > 0) {
 			result = osmHeight;

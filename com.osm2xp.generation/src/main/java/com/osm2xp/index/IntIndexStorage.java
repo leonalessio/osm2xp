@@ -29,6 +29,9 @@ public class IntIndexStorage<T> {
 	}
 	
 	public T get(long id) {
+		if (id < baseId) {
+			return null;
+		}
 		int storeId = (int) ((id - baseId) / Character.MAX_VALUE);
 		char inStoreId = (char) ((id - baseId) % Character.MAX_VALUE);
 		if (storeId >= indexList.size()) {

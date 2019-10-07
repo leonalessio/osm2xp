@@ -5,6 +5,8 @@ import java.util.Date;
 import java.util.Random;
 import java.util.concurrent.TimeUnit;
 
+import org.apache.commons.lang.StringUtils;
+
 import com.osm2xp.core.logging.Osm2xpLogger;
 
 /**
@@ -22,22 +24,20 @@ public class MiscUtils {
 	 * @return String
 	 */
 	private static String getOnlyNumerics(String str) {
-
-		if (str == null) {
+		
+		str = StringUtils.stripToEmpty(str).trim();
+		if (!Character.isDigit(str.charAt(0))) {
 			return null;
 		}
-
-		StringBuffer strBuff = new StringBuffer();
-		char c;
-
-		for (int i = 0; i < str.length(); i++) {
-			c = str.charAt(i);
-
-			if (Character.isDigit(c) || Character.toString(c).equals(".")) {
-				strBuff.append(c);
-			}
+		int i = 1;
+		while (i < str.length() && (Character.isDigit(str.charAt(i)) || str.charAt(i) == '.'))
+			i++;
+		while (str.charAt(i-1) == '.') 
+			i--;
+		if (i > 0) {
+			return str.substring(0, i);
 		}
-		return strBuff.toString();
+		return null;
 	}
 
 	/**
@@ -46,12 +46,12 @@ public class MiscUtils {
 	 * @param value
 	 * @return Integer
 	 */
-	public static Integer extractNumbers(String value) {
-		value = value.replaceAll(",", ".");
+	public static Double extractNumber(String value) {
+		value = value.replace(',', '.');
 		value = getOnlyNumerics(value);
 		try {
 			if (value != null && !value.equals("")) {
-				return (int) Double.parseDouble(value);
+				return Double.parseDouble(value);
 			}
 		} catch (Exception e) {
 			Osm2xpLogger.warning(

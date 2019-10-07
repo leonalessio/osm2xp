@@ -34,13 +34,13 @@ import com.osm2xp.generation.options.rules.XplaneObjectsRulesList;
 @XmlRootElement(name = "XplaneOptions")
 public class XplaneOptions {
 
-	protected boolean excludeObj;
-	protected boolean excludeFac;
-	protected boolean excludeFor;
+	protected boolean excludeObj = true;
+	protected boolean excludeFac = true;
+	protected boolean excludeFor = true;
 	protected boolean excludeBch;
-	protected boolean excludeNet;
-	protected boolean excludeLin;
-	protected boolean excludePol;
+	protected boolean excludeNet = true;
+	protected boolean excludeLin = true;
+	protected boolean excludePol = true;
 	protected boolean excludeStr;
 	protected boolean exclusionsFromInput = true;
 	protected boolean smartExclusions;
