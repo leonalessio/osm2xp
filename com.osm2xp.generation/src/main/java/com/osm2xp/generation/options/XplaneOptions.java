@@ -37,11 +37,11 @@ public class XplaneOptions {
 	protected boolean excludeObj = true;
 	protected boolean excludeFac = true;
 	protected boolean excludeFor = true;
-	protected boolean excludeBch;
+	protected boolean excludeBch = false;
 	protected boolean excludeNet = true;
-	protected boolean excludeLin = true;
+	protected boolean excludeLin = false;
 	protected boolean excludePol = true;
-	protected boolean excludeStr;
+	protected boolean excludeStr = false;
 	protected boolean exclusionsFromInput = true;
 	protected boolean smartExclusions;
 	protected int residentialMin;
