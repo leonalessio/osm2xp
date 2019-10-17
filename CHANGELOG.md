@@ -10,6 +10,7 @@ and this project adheres to [Semantic Versioning](http://semver.org/spec/v2.0.0.
 
 ### Changed
 - Almost all X-Plane exclusions ON by default
+- Built-in forest files: density slightly increased
 
 ### Fixed
 - Invalid tag numeric values parsing, which e.g. led '17;1' become '171' resulting in a 'skyscraper' in scenery

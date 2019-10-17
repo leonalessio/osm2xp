@@ -9,8 +9,8 @@ LOD 15000.000000
 SCALE_X 1024
 SCALE_Y 1024
 
-SPACING 20.00 20.00
-RANDOM 9.00 9.00
+SPACING 12.00 12.00
+RANDOM 6.00 6.00
 
 #	low-left	tex size	center	percent	--height--
 # tree	s	t	w	y	offset	occur	min	max	quads	type	name
