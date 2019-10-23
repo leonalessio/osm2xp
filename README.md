@@ -1,3 +1,5 @@
+https://travis-ci.com/32kda/osm2xp.svg?branch=master
+
 # osm2xp
 This project is based on original OSM2XP by Benjamin Blanchet, code was originally taken from code.google.com/p/osm2xp
 # Original osm2xp 
