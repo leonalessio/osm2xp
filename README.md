@@ -1,4 +1,4 @@
-https://travis-ci.com/32kda/osm2xp.svg?branch=master
+[![Build Status](https://travis-ci.com/32kda/osm2xp.svg?branch=master)](https://travis-ci.com/32kda/osm2xp)
 
 # osm2xp
 This project is based on original OSM2XP by Benjamin Blanchet, code was originally taken from code.google.com/p/osm2xp
