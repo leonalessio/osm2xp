@@ -15,6 +15,7 @@ import math.geom2d.polygon.LinearRing2D;
  * OsmPolygon.
  * 
  * @author Benjamin Blanchet
+ * @author 32kda
  * 
  */
 public class OsmPolygon extends OsmPolyline {

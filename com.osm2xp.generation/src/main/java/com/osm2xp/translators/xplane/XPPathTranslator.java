@@ -180,7 +180,7 @@ public abstract class XPPathTranslator extends XPWritingTranslator {
 						newEndId,
 						GeomUtils.getPointsFromOsmNodes(currentSegment));
 				segment.setBridge(bridge);
-				segment.setComment(getId());
+				segment.setComment(getId() + " , way " + poly.getId());
 				result.add(segment);
 				currentSegment.clear();
 				if (i < nodes.size() - 1) {

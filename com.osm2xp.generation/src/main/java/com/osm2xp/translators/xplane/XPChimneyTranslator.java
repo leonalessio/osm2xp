@@ -50,6 +50,7 @@ public class XPChimneyTranslator extends XPSpecObjectTranslator {
 			commentBuilder.append(osmPolygon.getHeight());
 			commentBuilder.append("m");
 		}
+		commentBuilder.append(",way " + osmPolygon.getId());
 		commentBuilder.append(System.getProperty("line.separator"));
 		return commentBuilder.toString();
 	}

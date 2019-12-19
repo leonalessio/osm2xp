@@ -50,6 +50,7 @@ public class XPCoolingTowerTranslator extends XPSpecObjectTranslator {
 	
 	protected String getComment(OsmPolygon osmPolygon) {
 		StringBuilder commentBuilder = new StringBuilder("#Cooling tower");	
+		commentBuilder.append(", way " + osmPolygon.getId());
 		commentBuilder.append(System.getProperty("line.separator"));
 		return commentBuilder.toString();
 	}

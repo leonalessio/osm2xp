@@ -148,11 +148,23 @@ public class XPOutputFormat {
 	}
 
 	public String getPolygonString(OsmPolygon osmPolygon, String arg1, String arg2) {
+		String result; 
 		if (osmPolygon instanceof OsmMultiPolygon) {
-			return getPolygonString(osmPolygon.getPolygon(), ((OsmMultiPolygon) osmPolygon).getInnerPolys(), arg1,
+			result = getPolygonString(osmPolygon.getPolygon(), ((OsmMultiPolygon) osmPolygon).getInnerPolys(), arg1,
 					arg2);
+		} else {
+			result = getPolygonString(osmPolygon.getPolygon(), arg1, arg2);
 		}
-		return getPolygonString(osmPolygon.getPolygon(), arg1, arg2);
+		if (XPlaneOptionsProvider.getOptions().isGenerateComments()) {
+			StringBuilder builder = new StringBuilder();
+			builder.append("#");
+			builder.append("Way id ");
+			builder.append(osmPolygon.getId());
+			builder.append(LINE_SEP);
+			builder.append(result);
+			return builder.toString();
+		}
+		return result;
 	}
 
 	public String getPathStr(XPPathSegment pathSegment) {
