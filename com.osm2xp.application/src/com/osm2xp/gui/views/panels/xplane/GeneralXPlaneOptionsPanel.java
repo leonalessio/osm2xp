@@ -34,7 +34,7 @@ public class GeneralXPlaneOptionsPanel extends Osm2xpPanel {
 		GridDataFactory.fillDefaults().applyTo(btnBundleAssets);
 		btnGenerateLib = new Button(this, SWT.RADIO);
 		btnGenerateLib.setText("Generate assets library");
-		btnGenerateLib.setToolTipText("Choose this to put all of the asses (objects, facades...) into separate ibrary");
+		btnGenerateLib.setToolTipText("Choose this to put all of the asses (objects, facades...) into separate library");
 		GridDataFactory.fillDefaults().applyTo(btnGenerateLib);
 		
 		btnBundleAssets.setSelection(!XPlaneOptionsProvider.getOptions().isBuildLibrary());

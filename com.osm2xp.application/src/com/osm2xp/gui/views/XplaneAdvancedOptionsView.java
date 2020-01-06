@@ -35,7 +35,7 @@ public class XplaneAdvancedOptionsView extends AbstractOptionsView implements
 				Section.TWISTIE | Section.EXPANDED | Section.TITLE_BAR);
 		sectionGeneralOptions.setLayoutData(new TableWrapData(
 				TableWrapData.FILL_GRAB, TableWrapData.TOP, 1, 1));
-		sectionGeneralOptions.setText("GeneralOptions");
+		sectionGeneralOptions.setText("General Options");
 		GeneralXPlaneOptionsPanel generalOptionsPanel = new GeneralXPlaneOptionsPanel(
 				sectionGeneralOptions, SWT.BORDER);
 		toolkit.adapt(generalOptionsPanel, true, true);

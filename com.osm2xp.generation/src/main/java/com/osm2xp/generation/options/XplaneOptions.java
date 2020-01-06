@@ -19,7 +19,7 @@ import com.osm2xp.generation.options.rules.XplaneObjectsRulesList;
  * 
  */
 @XmlAccessorType(XmlAccessType.FIELD)
-@XmlType(name = "", propOrder = { "excludeObj", "excludeFac", "excludeFor", "smartExclusions", "smartExclusionSize",
+@XmlType(name = "", propOrder = { "autoExclude", "excludeObj", "excludeFac", "excludeFor", "smartExclusions", "smartExclusionSize",
 		"smartExclusionDistance", "excludeBch", "excludeNet", "excludeLin", "excludePol", "excludeStr",
 		"exclusionsFromInput", "residentialMin", "residentialMax", "buildingMin", "buildingMax", "minHouseSegment",
 		"maxHouseSegment", "minHouseArea", "objectRenderLevel", "facadeRenderLevel", "buildLibrary", "generateObj",
@@ -34,6 +34,7 @@ import com.osm2xp.generation.options.rules.XplaneObjectsRulesList;
 @XmlRootElement(name = "XplaneOptions")
 public class XplaneOptions {
 
+	protected boolean autoExclude = true;
 	protected boolean excludeObj = true;
 	protected boolean excludeFac = true;
 	protected boolean excludeFor = true;
@@ -1003,6 +1004,14 @@ public class XplaneOptions {
 
 	public void setBuildLibrary(boolean buildLibrary) {
 		this.buildLibrary = buildLibrary;
+	}
+
+	public boolean isAutoExclude() {
+		return autoExclude;
+	}
+
+	public void setAutoExclude(boolean autoExclude) {
+		this.autoExclude = autoExclude;
 	}
 
 }
