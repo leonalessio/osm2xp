@@ -33,7 +33,7 @@ public class XPOutputFormat {
 	 */
 	private static final int MAX_INNER_POLYS = 254;
 	
-	private static final String EXCLUSIONS_WARNING_MSG = "Generate %s selected, but no exclusion %s turned on. This can result in artifacts in generated scenery.";
+	private static final String EXCLUSIONS_WARNING_MSG = "Generate %s selected, but no exclusion '%s' turned on. This can result in artifacts in generated scenery.";
 
 	private int objectRenderLevel;
 
@@ -209,22 +209,22 @@ public class XPOutputFormat {
 			sb.append("PROPERTY sim/exclude_obj " + tileCoordinate);
 //			} 
 		} else if (exclusionsProvider.objectsGenerated()) {
-			Osm2xpLogger.warning(String.format(EXCLUSIONS_WARNING_MSG, "3D objects", "objects"));
+			Osm2xpLogger.warning(String.format(EXCLUSIONS_WARNING_MSG, "3D objects", "Objects"));
 		}
 		if (exclusionsProvider.isExcludeFac()) {
 			sb.append("PROPERTY sim/exclude_fac " + tileCoordinate);
 		} else if (exclusionsProvider.facadesGenerated()) {
-			Osm2xpLogger.warning(String.format(EXCLUSIONS_WARNING_MSG, "Facades, fence or tanks", "facades"));
+			Osm2xpLogger.warning(String.format(EXCLUSIONS_WARNING_MSG, "Facades, fence or tanks", "Facades"));
 		}
 		if (exclusionsProvider.isExcludeFor()) {
 			sb.append("PROPERTY sim/exclude_for " + tileCoordinate);
 		} else if (exclusionsProvider.forestsGenerated()) {
-			Osm2xpLogger.warning(String.format(EXCLUSIONS_WARNING_MSG, "Forests", "forests"));
+			Osm2xpLogger.warning(String.format(EXCLUSIONS_WARNING_MSG, "Forests", "Forests"));
 		}
 		if (exclusionsProvider.isExcludeNet()) {
 			sb.append("PROPERTY sim/exclude_net " + tileCoordinate);
 		} else if (exclusionsProvider.networkGenerated()) {
-			Osm2xpLogger.warning(String.format(EXCLUSIONS_WARNING_MSG, "Roads, railways or powerlines", "network"));
+			Osm2xpLogger.warning(String.format(EXCLUSIONS_WARNING_MSG, "Roads, railways or powerlines", "Network"));
 		}
 		if (exclusionsProvider.isExcludeLin()) {
 			sb.append("PROPERTY sim/exclude_lin " + tileCoordinate);
@@ -232,10 +232,13 @@ public class XPOutputFormat {
 		if (exclusionsProvider.isExcludePol()) {
 			sb.append("PROPERTY sim/exclude_pol " + tileCoordinate);
 		} else if (exclusionsProvider.polysGenerated()) {
-			Osm2xpLogger.warning(String.format(EXCLUSIONS_WARNING_MSG, "Draped polygons", "polygons"));
+			Osm2xpLogger.warning(String.format(EXCLUSIONS_WARNING_MSG, "Draped polygons", "Polygons"));
 		}
 		if (exclusionsProvider.isExcludeStr()) {
 			sb.append("PROPERTY sim/exclude_str " + tileCoordinate);
+		}
+		if (exclusionsProvider.isExcludeBch()) {
+			sb.append("PROPERTY sim/exclude_bch " + tileCoordinate);
 		}
 
 		return sb.toString();

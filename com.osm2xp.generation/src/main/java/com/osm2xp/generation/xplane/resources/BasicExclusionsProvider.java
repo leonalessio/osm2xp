@@ -69,5 +69,10 @@ public class BasicExclusionsProvider implements IExclusionsProvider {
 	public boolean polysGenerated() {
 		return XPlaneOptionsProvider.getOptions().isGeneratePolys();
 	}
+
+	@Override
+	public boolean isExcludeBch() {
+		return XPlaneOptionsProvider.getOptions().isExcludeBch();
+	}
 	
 }

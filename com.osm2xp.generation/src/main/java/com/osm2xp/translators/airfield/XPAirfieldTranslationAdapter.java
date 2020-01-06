@@ -201,7 +201,7 @@ public class XPAirfieldTranslationAdapter implements ISpecificTranslator {
 			});
 		}
 		boolean writeAsMainAirfield = XPlaneOptionsProvider.getOptions().getAirfieldOptions().isUseSingleAptAsMain() && (airfieldList.size() + runwayList.size() == 1); //If we have only one airport/only one runway - write it as main airfield of scenario
-		XPAirfieldOutput airfieldOutput = new XPAirfieldOutput(workFolder, writeAsMainAirfield);
+		XPAirfieldOutput airfieldOutput = new XPAirfieldOutput(writeAsMainAirfield ? workFolder : workFolder.getParentFile(), writeAsMainAirfield);
 		for (AirfieldData airfieldData : airfieldList) {
 			if (XPlaneOptionsProvider.getOptions().getAirfieldOptions().getIgnoredAirfields().contains(airfieldData.getICAO())) { //We can't check this at earlier stage since we need to ignore associated runways and other stuff as well
 				continue;

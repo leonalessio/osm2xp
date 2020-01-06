@@ -57,7 +57,7 @@ public class XPAirfieldOutput {
 	private int fakeICAOIdx = 0;
 
 	public XPAirfieldOutput(File baseFolder, boolean writeMainAirfield) {
-		this.baseFolder = writeMainAirfield ? baseFolder : new File(baseFolder, "airports");
+		this.baseFolder = baseFolder;
 		this.writeMainAirfield = writeMainAirfield;
 		baseFolder.mkdirs();
 	}

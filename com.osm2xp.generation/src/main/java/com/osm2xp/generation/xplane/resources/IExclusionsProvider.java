@@ -10,6 +10,7 @@ public interface IExclusionsProvider {
 	boolean isExcludeLin();
 	boolean isExcludePol();
 	boolean isExcludeStr();
+	boolean isExcludeBch();
 	
 	boolean objectsGenerated();
 	boolean facadesGenerated();
