@@ -6,6 +6,14 @@ and this project adheres to [Semantic Versioning](http://semver.org/spec/v2.0.0.
 
 ## [Unreleased]
 
+## [4.3.0]
+
+### Added
+- Automatic exlusion management option - e.g. underlying scenery facades will be excluded if user choosed to generate facades
+
+### Changed
+- When generating multiple airfields - their folders named `osm2xp_[icao code]` will be placed in same folder with generated scenery and input osm/pbf file
+
 ## [4.2.1]
 
 ### Changed
