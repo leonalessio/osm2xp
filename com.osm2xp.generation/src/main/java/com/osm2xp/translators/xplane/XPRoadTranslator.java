@@ -7,6 +7,8 @@ import com.osm2xp.core.model.osm.IHasTags;
 import com.osm2xp.model.osm.polygon.OsmPolyline;
 import com.osm2xp.generation.options.GlobalOptionsProvider;
 import com.osm2xp.generation.options.XPlaneOptionsProvider;
+import com.osm2xp.generation.options.XplaneOptions;
+import com.osm2xp.generation.osm.OsmConstants;
 import com.osm2xp.generation.xplane.resources.XPOutputFormat;
 import com.osm2xp.writers.IWriter;
 
@@ -47,30 +49,35 @@ public class XPRoadTranslator extends XPPathTranslator {
 	 */
 	protected int getPathType(IHasTags poly) {
 		String val = poly.getTagValue("lanes"); //Try to get lane count directly first
+		String type = poly.getTagValue(HIGHWAY_TAG).toLowerCase(); //If no lane count - guess from the highway type
+		boolean highway = (ArrayUtils.indexOf(WIDE_ROAD_TYPES, type) >= 0);
+		boolean city = isInCity(poly);
+		XplaneOptions options = XPlaneOptionsProvider.getOptions();
 		if (val != null) {
 			try {
 				int value = Integer.parseInt(val.trim());
-				if (value >= 4) {
-					return 10;
-				} else if (value >=2) {
-					return 40;
+				if (value >= 3) {
+					return city ? options.getCity3LaneHighwayRoadType() : options.getCountry3LaneHighwayRoadType();
+				} else if (value == 2 && highway) {
+					return city ? options.getCity2LaneHighwayRoadType() : options.getCountry2LaneHighwayRoadType();
 				} else {
-					return 50;
+					return city ? options.getCityRoadType() : options.getCountryRoadType();
 				}
-			}catch (NumberFormatException e) {
+			} catch (NumberFormatException e) {
 				// ignore
 			}
 		}
-//		String type = poly.getTagValue(HIGHWAY_TAG).toLowerCase(); //If no lane count - guess from the highway type
-//		if (ArrayUtils.indexOf(WIDE_ROAD_TYPES, type) >= 0) {
-//			return 40;
-//		}
 		if ("yes".equalsIgnoreCase(poly.getTagValue("oneWay")) && ArrayUtils.indexOf(WIDE_ROAD_TYPES, poly.getTagValue(HIGHWAY_TAG)) == -1) {
-			return 50; //One-way road is treated as one-lane, if lane count is unspecified, and we doesn't have "wide" road	
+			return options.getOneLaneRoadType(); //One-way road is treated as one-lane, if lane count is unspecified, and we doesn't have "wide" road	
 		}
-		return 40; //Use 2 lanes road by default
+		return options.getCountryRoadType(); //Use 2 lanes road by default
 	}
 	
+	protected boolean isInCity(IHasTags poly) {
+		String landuse = poly.getTagValue(OsmConstants.LANDUSE_TAG);
+		return "industrial".equalsIgnoreCase(landuse) || "residental".equalsIgnoreCase(landuse) || "commercial".equalsIgnoreCase(landuse);
+	}
+
 	@Override
 	protected int getBridgeRampLength() {
 		return XPlaneOptionsProvider.getOptions().getRoadBridgeRampLen();

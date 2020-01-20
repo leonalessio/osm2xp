@@ -26,9 +26,10 @@ import com.osm2xp.generation.options.rules.XplaneObjectsRulesList;
 		"generateObjBuildings", "generateFor", "generateBuildings", "generatePowerlines", "generateRailways",
 		"generateRoads", "generateFence", "generateTanks", "generateChimneys", "generateCoolingTowers",
 		"generateBridges", "generateSlopedRoofs", "generatePolys", "generateStreetLights", "lightsDensity",
-		"packageFacades", "hardBuildings", "lightObject", "facadeSets", "restrictFacadeLod", "facadeLod",
-		"generateXmlStats", "generatePdfStats", "generateDebugImg", "generateComments", "roadBridgeRampLen",
-		"railBridgeRampLen", "maxPerimeterToSimplify", "objSizeTolerance", "buildingsExclusions", "forestsRules",
+		"city3LaneHighwayRoadType", "country3LaneHighwayRoadType","city2LaneHighwayRoadType","country2LaneHighwayRoadType","cityRoadType",    
+		"countryRoadType", "oneLaneRoadType", "packageFacades", "hardBuildings", "lightObject", "facadeSets", 
+		"restrictFacadeLod", "facadeLod", "generateXmlStats", "generatePdfStats", "generateDebugImg", "generateComments", 
+		"roadBridgeRampLen","railBridgeRampLen", "maxPerimeterToSimplify", "objSizeTolerance", "buildingsExclusions", "forestsRules",
 		"objectsRules", "lightsRules", "facadesRules", "polygonRules", "streetLightObjects", "airfieldOptions",
 		"deleteSrc" })
 @XmlRootElement(name = "XplaneOptions")
@@ -116,6 +117,14 @@ public class XplaneOptions {
 	protected PolygonRulesList polygonRules;
 	@XmlElement(name="AirfieldOptions", required=true) 
 	protected XplaneAirfieldOptions airfieldOptions;
+	
+	protected int city3LaneHighwayRoadType = 100;
+	protected int country3LaneHighwayRoadType = 101;
+	protected int city2LaneHighwayRoadType=110;
+	protected int country2LaneHighwayRoadType=111;
+	protected int cityRoadType=40;
+	protected int countryRoadType=41;
+	protected int oneLaneRoadType=50;
 	/**
 	 * Default no-arg constructor
 	 * 
@@ -1012,6 +1021,62 @@ public class XplaneOptions {
 
 	public void setAutoExclude(boolean autoExclude) {
 		this.autoExclude = autoExclude;
+	}
+
+	public int getCity3LaneHighwayRoadType() {
+		return city3LaneHighwayRoadType;
+	}
+
+	public void setCity3LaneHighwayRoadType(int city3LaneHighwayRoadType) {
+		this.city3LaneHighwayRoadType = city3LaneHighwayRoadType;
+	}
+
+	public int getCity2LaneHighwayRoadType() {
+		return city2LaneHighwayRoadType;
+	}
+
+	public void setCity2LaneHighwayRoadType(int city2LaneHighwayRoadType) {
+		this.city2LaneHighwayRoadType = city2LaneHighwayRoadType;
+	}
+
+	public int getCountry2LaneHighwayRoadType() {
+		return country2LaneHighwayRoadType;
+	}
+
+	public void setCountry2LaneHighwayRoadType(int country2LaneHighwayRoadType) {
+		this.country2LaneHighwayRoadType = country2LaneHighwayRoadType;
+	}
+
+	public int getCityRoadType() {
+		return cityRoadType;
+	}
+
+	public void setCityRoadType(int cityRoadType) {
+		this.cityRoadType = cityRoadType;
+	}
+
+	public int getCountryRoadType() {
+		return countryRoadType;
+	}
+
+	public void setCountryRoadType(int countryRoadType) {
+		this.countryRoadType = countryRoadType;
+	}
+
+	public int getOneLaneRoadType() {
+		return oneLaneRoadType;
+	}
+
+	public void setOneLaneRoadType(int oneLaneRoadType) {
+		this.oneLaneRoadType = oneLaneRoadType;
+	}
+
+	public int getCountry3LaneHighwayRoadType() {
+		return country3LaneHighwayRoadType;
+	}
+
+	public void setCountry3LaneHighwayRoadType(int country3LaneHighwayRoadType) {
+		this.country3LaneHighwayRoadType = country3LaneHighwayRoadType;
 	}
 
 }
