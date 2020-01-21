@@ -102,6 +102,13 @@
             icon="images/viewIcons/objects-16.png">
       </view>
       <view
+            class="com.osm2xp.gui.views.XPlaneNetworkView"
+            id="com.osm2xp.viewNetworkTab"
+            name="Roads/Networks"
+            restorable="true"
+            icon="images/viewIcons/road-16.png">
+      </view>
+      <view
             class="com.osm2xp.gui.views.XPlaneAirfieldsView"
             id="com.osm2xp.viewAirfieldsTab"
             name="Airfields"
@@ -388,6 +395,13 @@
          </view>
          <view
                id="com.osm2xp.viewPolysTab"
+               closeable="false"
+               minimized="false"
+               relationship="stack"
+               relative="com.osm2xp.viewSceneryTab">
+         </view>
+         <view
+               id="com.osm2xp.viewNetworkTab"
                closeable="false"
                minimized="false"
                relationship="stack"

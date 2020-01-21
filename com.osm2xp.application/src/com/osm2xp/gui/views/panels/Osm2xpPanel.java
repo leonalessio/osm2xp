@@ -27,10 +27,10 @@ public abstract class Osm2xpPanel extends BindingPanel {
 	protected abstract void initComponents();
 
 	/**
-	 * Components binding .
+	 * Components binding. Override if necessary
 	 */
-	protected abstract void bindComponents();
-
+	protected void bindComponents() {
+	}
 	/**
 	 * Components action listeners. Override if necessary
 	 */

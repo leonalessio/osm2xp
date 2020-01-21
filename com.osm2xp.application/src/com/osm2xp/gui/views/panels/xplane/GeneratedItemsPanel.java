@@ -138,10 +138,6 @@ public class GeneratedItemsPanel extends Osm2xpPanel {
 				PojoProperties.value("generateBridges").observe(XPlaneOptionsProvider.getOptions()));
 	}
 
-	@Override
-	protected void addComponentsListeners() {
-
-	}
 
 	@Override
 	protected void initLayout() {
