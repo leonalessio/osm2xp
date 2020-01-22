@@ -57,16 +57,15 @@ public class BuildController {
 		}
 		// if choosen output mode will generate file, first check that user is
 		// ok to overwrite file is present.
+		boolean deleteFolder = false;
 		if (GuiOptionsHelper.isOutputFormatAFileGenerator(mode)) {
 			folderPath = currentFile.getParent() + File.separator
 					+ GuiOptionsHelper.getSceneName();
 
-			if (checkDeleteFolder(new File(folderPath))) {
-				startGeneration(currentFile);
-			}
-		} else {
-			startGeneration(currentFile);
-		}
+			deleteFolder = checkDeleteFolder(new File(folderPath));
+		} 
+		startGeneration(currentFile, deleteFolder);
+		
 	}
 
 	public static File getSelectedFile() {
@@ -125,32 +124,25 @@ public class BuildController {
 		if (!currentFolder.exists()) {
 			return true;
 		}
-		if (MessageDialog.openConfirm(Display.getDefault()
+		return MessageDialog.openConfirm(Display.getDefault()
 						.getActiveShell(), "Confirm", currentFolder.getAbsolutePath()
-						+ " already exists, delete?")) {
-			FilesUtils.deleteDirectory(currentFolder);
-			return true;
-		}
-		return false;
+						+ " already exists, delete?");
 	}
 
 	/**
 	 * @param currentFile
+	 * @param deleteFolder 
 	 * @throws Osm2xpBusinessException
 	 */
-	private void startGeneration(File currentFile)
+	private void startGeneration(File currentFile, boolean deleteFolder)
 			throws Osm2xpBusinessException {
 		// delete existing file if exists
-		if (GuiOptionsHelper.isOutputFormatAFileGenerator(mode)
-				&& new File(folderPath).exists()) {
-			FilesUtils.deleteDirectory(new File(folderPath));
-		}
 		StatsProvider.reinit();
 		// switch to build perspective
 		UiUtil.switchPerspective(Perspectives.PERSPECTIVE_BUILD);
 		// get user setted cordinates
 		FacadeSetManager.clearCache();
-		generateWholeFile(currentFile, folderPath);
+		generateWholeFile(currentFile, folderPath, deleteFolder);
 
 //		new ParsingExperimentJob(currentFile).schedule(); //Experimental to check new osmosis API
 	}
@@ -159,45 +151,17 @@ public class BuildController {
 	/**
 	 * @param currentFile
 	 * @param folderPath
+	 * @param deleteFolder 
 	 */
 	private void generateWholeFile(final File currentFile,
-			final String folderPath) {
-		Job tilesJob = new Job("Listing tiles ") {
+			final String folderPath, boolean deleteFolder) {
+		Job tilesJob = new Job("Preparing for generation") {
 			@Override
 			protected IStatus run(IProgressMonitor monitor) {
-//				final TilesLister tilesLister = TilesListerFactory
-//						.getTilesLister(currentFile);
-//				Osm2xpLogger.info("Listing relations in file " + currentFile.getName());
-//				Osm2xpLogger.info("Listing tiles in file " + currentFile.getName());
-//				try {
-//					tilesLister.process();
-//				} catch (Osm2xpBusinessException e) {
-//					Osm2xpLogger.error(
-//							"Error listing tiles :\n" + e.getMessage(), e);
-//				}
-//
-//				// If you want to update the UI
-//				Display.getDefault().asyncExec(new Runnable() {
-//					@Override
-//					public void run() {
-//					}
-//				});
-
-				// get tiles list
-//				List<Point2D> tilesList = new ArrayList<Point2D>(
-//						tilesLister.getTilesList());
-//				Osm2xpLogger.info("listing of tiles complete");
-//				Osm2xpLogger.info(tilesList.size() + " tile(s) found");
-				// init the current project, only if the output mode will
-				// generate files
-//				if (GuiOptionsHelper.isOutputFormatAFileGenerator(mode)) {
-//					try {
-//						Osm2xpProjectHelper.initProject(folderPath, GlobalOptionsProvider.getOptions()
-//								.getCurrentFilePath());
-//					} catch (Osm2xpBusinessException e1) {
-//						Osm2xpLogger.error("Error creating project file", e1);
-//					}
-//				}
+				if (deleteFolder) {
+					Osm2xpLogger.info("Deleting folder " + folderPath);
+					FilesUtils.deleteDirectory(new File(folderPath));
+				}
 				
 				GenerateJob tilesJob = getGenerationJob(currentFile, folderPath);
 				
