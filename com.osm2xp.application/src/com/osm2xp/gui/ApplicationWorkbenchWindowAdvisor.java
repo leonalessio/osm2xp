@@ -3,6 +3,8 @@ package com.osm2xp.gui;
 import java.io.PrintStream;
 
 import org.eclipse.core.runtime.IExtension;
+import org.eclipse.core.runtime.preferences.ConfigurationScope;
+import org.eclipse.core.runtime.preferences.IEclipsePreferences;
 import org.eclipse.swt.graphics.Point;
 import org.eclipse.ui.IPerspectiveDescriptor;
 import org.eclipse.ui.IWorkbenchPage;
@@ -21,6 +23,7 @@ import org.eclipse.ui.console.MessageConsoleStream;
 import org.eclipse.ui.internal.WorkbenchPlugin;
 import org.eclipse.ui.internal.registry.ActionSetRegistry;
 import org.eclipse.ui.internal.registry.IActionSetDescriptor;
+import org.osgi.service.prefs.BackingStoreException;
 
 import com.osm2xp.controllers.BuildController;
 import com.osm2xp.core.constants.CoreConstants;
@@ -41,6 +44,9 @@ import com.osm2xp.utils.helpers.FlyLegacyOptionsHelper;
  */
 @SuppressWarnings("restriction")
 public class ApplicationWorkbenchWindowAdvisor extends WorkbenchWindowAdvisor {
+	
+	private static final String UI_LAYOUT_VERSION_KEY = "UI_LAYOUT_VERSION";
+	private static int UI_LAYOUT_VERSION = 1;
 
 	public ApplicationWorkbenchWindowAdvisor(
 			IWorkbenchWindowConfigurer configurer) {
@@ -80,6 +86,22 @@ public class ApplicationWorkbenchWindowAdvisor extends WorkbenchWindowAdvisor {
 				false);
 		configurer.setShowPerspectiveBar(false);
 		removeUnwantedToolItems();
+	}
+	
+	@Override
+	public void postWindowOpen() {
+		super.postWindowOpen();
+		IEclipsePreferences node = ConfigurationScope.INSTANCE.getNode(Activator.PLUGIN_ID);
+		int version = node.getInt(UI_LAYOUT_VERSION_KEY, 0);
+		if (version < UI_LAYOUT_VERSION) {
+			getWindowConfigurer().getWindow().getActivePage().resetPerspective();
+			node.putInt(UI_LAYOUT_VERSION_KEY,UI_LAYOUT_VERSION);
+			try {
+				node.flush();
+			} catch (BackingStoreException e) {
+				Activator.log(e);
+			}
+		}
 	}
 
 	/**

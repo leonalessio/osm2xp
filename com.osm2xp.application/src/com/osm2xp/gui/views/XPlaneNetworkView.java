@@ -88,7 +88,7 @@ public class XPlaneNetworkView extends AbstractOptionsView {
 			
 			@Override
 			protected void initComponents() {
-				GridLayout gridLayout = new GridLayout(2, false);
+				GridLayout gridLayout = new GridLayout(4, false);
 				gridLayout.verticalSpacing = 15;
 				gridLayout.horizontalSpacing = 15;
 				gridLayout.marginHeight = 15;
@@ -97,37 +97,37 @@ public class XPlaneNetworkView extends AbstractOptionsView {
 				toolkit.createLabel(this,"City, 3+ lanes highway road type").setLayoutData(GridDataFactory.swtDefaults().create());
 				Text city3LaneHighwayRoadType = new Text(this, SWT.BORDER);
 				city3LaneHighwayRoadType.addVerifyListener(onlyDigitsVerifyListener);
-				bindComponent(city3LaneHighwayRoadType, XPlaneOptionsProvider.getOptions(), "city3LaneHighwayRoadType");
+				bindTextToInt(city3LaneHighwayRoadType, XPlaneOptionsProvider.getOptions(), "city3LaneHighwayRoadType");
 				
 				toolkit.createLabel(this,"Country, 3+ lanes highway road type").setLayoutData(GridDataFactory.swtDefaults().create());
 				Text country3LaneHighwayRoadType = new Text(this, SWT.BORDER);
 				country3LaneHighwayRoadType.addVerifyListener(onlyDigitsVerifyListener);
-				bindComponent(country3LaneHighwayRoadType, XPlaneOptionsProvider.getOptions(), "country3LaneHighwayRoadType");
+				bindTextToInt(country3LaneHighwayRoadType, XPlaneOptionsProvider.getOptions(), "country3LaneHighwayRoadType");
 				
 				toolkit.createLabel(this,"City, 2 lanes highway road type").setLayoutData(GridDataFactory.swtDefaults().create());
 				Text city2LaneHighwayRoadType = new Text(this, SWT.BORDER);
 				city2LaneHighwayRoadType.addVerifyListener(onlyDigitsVerifyListener);
-				bindComponent(city2LaneHighwayRoadType, XPlaneOptionsProvider.getOptions(), "city2LaneHighwayRoadType");
+				bindTextToInt(city2LaneHighwayRoadType, XPlaneOptionsProvider.getOptions(), "city2LaneHighwayRoadType");
 				
 				toolkit.createLabel(this,"Country, 2 lanes highway road type").setLayoutData(GridDataFactory.swtDefaults().create());
 				Text country2LaneHighwayRoadType = new Text(this, SWT.BORDER);
 				country2LaneHighwayRoadType.addVerifyListener(onlyDigitsVerifyListener);
-				bindComponent(country2LaneHighwayRoadType, XPlaneOptionsProvider.getOptions(), "country2LaneHighwayRoadType");
+				bindTextToInt(country2LaneHighwayRoadType, XPlaneOptionsProvider.getOptions(), "country2LaneHighwayRoadType");
 				
 				toolkit.createLabel(this,"City, 2 lanes, default road type").setLayoutData(GridDataFactory.swtDefaults().create());
 				Text cityRoadType = new Text(this, SWT.BORDER);
 				cityRoadType.addVerifyListener(onlyDigitsVerifyListener);
-				bindComponent(cityRoadType, XPlaneOptionsProvider.getOptions(), "cityRoadType");
+				bindTextToInt(cityRoadType, XPlaneOptionsProvider.getOptions(), "cityRoadType");
 				
 				toolkit.createLabel(this,"Country, 2 lanes, default road type").setLayoutData(GridDataFactory.swtDefaults().create());
 				Text countryRoadType = new Text(this, SWT.BORDER);
 				countryRoadType.addVerifyListener(onlyDigitsVerifyListener);
-				bindComponent(countryRoadType, XPlaneOptionsProvider.getOptions(), "countryRoadType");
+				bindTextToInt(countryRoadType, XPlaneOptionsProvider.getOptions(), "countryRoadType");
 				
 				toolkit.createLabel(this,"One lane road type").setLayoutData(GridDataFactory.swtDefaults().create());
 				Text oneLaneRoadType = new Text(this, SWT.BORDER);
 				oneLaneRoadType.addVerifyListener(onlyDigitsVerifyListener);
-				bindComponent(oneLaneRoadType, XPlaneOptionsProvider.getOptions(), "oneLaneRoadType");
+				bindTextToInt(oneLaneRoadType, XPlaneOptionsProvider.getOptions(), "oneLaneRoadType");
 			}
 			
 		};
