@@ -27,7 +27,7 @@ import com.osm2xp.generation.options.rules.XplaneObjectsRulesList;
 		"generateRoads", "generateFence", "generateTanks", "generateChimneys", "generateCoolingTowers",
 		"generateBridges", "generateSlopedRoofs", "generatePolys", "generateStreetLights", "lightsDensity",
 		"city3LaneHighwayRoadType", "country3LaneHighwayRoadType","city2LaneHighwayRoadType","country2LaneHighwayRoadType","cityRoadType",    
-		"countryRoadType", "oneLaneRoadType", "packageFacades", "hardBuildings", "lightObject", "facadeSets", 
+		"countryRoadType", "oneLaneRoadType", "railwayType", "powerlineType", "packageFacades", "hardBuildings", "lightObject", "facadeSets", 
 		"restrictFacadeLod", "facadeLod", "generateXmlStats", "generatePdfStats", "generateDebugImg", "generateComments", 
 		"roadBridgeRampLen","railBridgeRampLen", "maxPerimeterToSimplify", "objSizeTolerance", "buildingsExclusions", "forestsRules",
 		"objectsRules", "lightsRules", "facadesRules", "polygonRules", "streetLightObjects", "airfieldOptions",
@@ -125,6 +125,8 @@ public class XplaneOptions {
 	protected int cityRoadType=40;
 	protected int countryRoadType=41;
 	protected int oneLaneRoadType=50;
+	protected int railwayType=151;
+	protected int powerlineType=220;
 	/**
 	 * Default no-arg constructor
 	 * 
@@ -1077,6 +1079,22 @@ public class XplaneOptions {
 
 	public void setCountry3LaneHighwayRoadType(int country3LaneHighwayRoadType) {
 		this.country3LaneHighwayRoadType = country3LaneHighwayRoadType;
+	}
+
+	public int getPowerlineType() {
+		return powerlineType;
+	}
+
+	public void setPowerlineType(int powerlineType) {
+		this.powerlineType = powerlineType;
+	}
+
+	public int getRailwayType() {
+		return railwayType;
+	}
+
+	public void setRailwayType(int railwayType) {
+		this.railwayType = railwayType;
 	}
 
 }

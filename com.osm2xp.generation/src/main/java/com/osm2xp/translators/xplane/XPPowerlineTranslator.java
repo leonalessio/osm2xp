@@ -26,7 +26,7 @@ public class XPPowerlineTranslator extends XPPathTranslator {
 
 	@Override
 	protected int getPathType(IHasTags polygon) {
-		return 220; //TODO using only one type for now
+		return XPlaneOptionsProvider.getOptions().getPowerlineType(); //TODO using only one type for now
 	}
 	
 	@Override

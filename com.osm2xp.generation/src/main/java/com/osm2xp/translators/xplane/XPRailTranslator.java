@@ -26,7 +26,7 @@ public class XPRailTranslator extends XPPathTranslator {
 
 	@Override
 	protected int getPathType(IHasTags polygon) {
-		return 151; //TODO using only one type for now
+		return XPlaneOptionsProvider.getOptions().getRailwayType(); //TODO using only one type for now
 	}
 	
 	@Override

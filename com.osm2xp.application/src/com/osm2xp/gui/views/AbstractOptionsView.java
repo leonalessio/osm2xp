@@ -5,6 +5,8 @@ import org.eclipse.swt.layout.FillLayout;
 import org.eclipse.swt.widgets.Composite;
 import org.eclipse.ui.forms.widgets.FormToolkit;
 import org.eclipse.ui.forms.widgets.ScrolledForm;
+import org.eclipse.ui.forms.widgets.Section;
+import org.eclipse.ui.forms.widgets.TableWrapData;
 import org.eclipse.ui.forms.widgets.TableWrapLayout;
 import org.eclipse.ui.part.ViewPart;
 import org.eclipse.wb.swt.ResourceManager;
@@ -64,6 +66,16 @@ public abstract class AbstractOptionsView extends ViewPart {
 	public void dispose() {
 		toolkit.dispose();
 		super.dispose();
+	}
+
+	protected Section createSection(String title, boolean expanded) {
+		int sectionStyle = expanded ? Section.TWISTIE | Section.EXPANDED | Section.TITLE_BAR : Section.TWISTIE | Section.TITLE_BAR;
+		Section section = toolkit.createSection(form.getBody(),
+				sectionStyle);
+		section.setLayoutData(new TableWrapData(
+				TableWrapData.FILL_GRAB, TableWrapData.TOP, 1, 1));
+		section.setText(title);
+		return section;
 	}
 
 }

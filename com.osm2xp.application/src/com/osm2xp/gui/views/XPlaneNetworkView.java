@@ -13,6 +13,7 @@ import org.eclipse.ui.forms.widgets.Section;
 import org.eclipse.ui.forms.widgets.TableWrapData;
 
 import com.osm2xp.generation.options.XPlaneOptionsProvider;
+import com.osm2xp.gui.views.panels.CheckBoxPanel;
 import com.osm2xp.gui.views.panels.Osm2xpPanel;
 
 public class XPlaneNetworkView extends AbstractOptionsView {
@@ -46,15 +47,11 @@ public class XPlaneNetworkView extends AbstractOptionsView {
 		sectionGeneratedItems.setLayoutData(new TableWrapData(
 				TableWrapData.FILL_GRAB, TableWrapData.TOP, 1, 1));
 		sectionGeneratedItems.setText("Generated items");
-		Osm2xpPanel scGeneratedItemsPanel = new Osm2xpPanel(sectionGeneratedItems, SWT.BORDER) {
+		Osm2xpPanel scGeneratedItemsPanel = new CheckBoxPanel(sectionGeneratedItems) {
 			@SuppressWarnings("unchecked")
 			@Override
 			protected void initComponents() {
-				GridLayout gridLayout = new GridLayout(2, false);
-				gridLayout.verticalSpacing = 15;
-				gridLayout.horizontalSpacing = 15;
-				gridLayout.marginHeight = 15;
-				setLayout(gridLayout);
+				
 				
 				Button btnGenerateRoads = new Button(this, SWT.CHECK);
 				btnGenerateRoads.setText("Generate Roads");
@@ -65,6 +62,11 @@ public class XPlaneNetworkView extends AbstractOptionsView {
 				Button btnGeneratePower = new Button(this, SWT.CHECK);
 				btnGeneratePower.setText("Generate Powerlines");
 				GridDataFactory.fillDefaults().applyTo(btnGeneratePower);
+				
+				Button btnGenerateBridges = new Button(this, SWT.CHECK);
+				btnGenerateBridges.setText("Generate bridges");
+				btnGenerateBridges.setToolTipText("Generate bridges for roads and railways.");
+				GridDataFactory.fillDefaults().applyTo(btnGenerateBridges);
 
 				bindingContext.bindValue(WidgetProperties.selection().observe(btnGenerateRoads),		
 						PojoProperties.value("generateRoads").observe(XPlaneOptionsProvider.getOptions()));
@@ -72,6 +74,8 @@ public class XPlaneNetworkView extends AbstractOptionsView {
 						PojoProperties.value("generateRailways").observe(XPlaneOptionsProvider.getOptions()));
 				bindingContext.bindValue(WidgetProperties.selection().observe(btnGeneratePower),		
 						PojoProperties.value("generatePowerlines").observe(XPlaneOptionsProvider.getOptions()));
+				bindingContext.bindValue(WidgetProperties.selection().observe(btnGenerateBridges),		
+						PojoProperties.value("generateBridges").observe(XPlaneOptionsProvider.getOptions()));
 			}
 			
 		};
@@ -83,7 +87,7 @@ public class XPlaneNetworkView extends AbstractOptionsView {
 				Section.TWISTIE | Section.EXPANDED | Section.TITLE_BAR);
 		sectionRoadProperties.setLayoutData(new TableWrapData(
 				TableWrapData.FILL_GRAB, TableWrapData.TOP, 1, 1));
-		sectionRoadProperties.setText("Roads");
+		sectionRoadProperties.setText("Types for roads/railways/powerlines");
 		Osm2xpPanel scRoadsPanel = new Osm2xpPanel(sectionRoadProperties, SWT.BORDER) {
 			
 			@Override
@@ -128,6 +132,16 @@ public class XPlaneNetworkView extends AbstractOptionsView {
 				Text oneLaneRoadType = new Text(this, SWT.BORDER);
 				oneLaneRoadType.addVerifyListener(onlyDigitsVerifyListener);
 				bindTextToInt(oneLaneRoadType, XPlaneOptionsProvider.getOptions(), "oneLaneRoadType");
+				
+				toolkit.createLabel(this,"Railway type").setLayoutData(GridDataFactory.swtDefaults().create());
+				Text railwayType = new Text(this, SWT.BORDER);
+				railwayType.addVerifyListener(onlyDigitsVerifyListener);
+				bindTextToInt(railwayType, XPlaneOptionsProvider.getOptions(), "railwayType");
+				
+				toolkit.createLabel(this,"Powerline type").setLayoutData(GridDataFactory.swtDefaults().create());
+				Text powerlineType = new Text(this, SWT.BORDER);
+				powerlineType.addVerifyListener(onlyDigitsVerifyListener);
+				bindTextToInt(powerlineType, XPlaneOptionsProvider.getOptions(), "powerlineType");
 			}
 			
 		};
