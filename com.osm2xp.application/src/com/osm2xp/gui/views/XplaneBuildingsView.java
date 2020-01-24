@@ -17,6 +17,7 @@ import com.osm2xp.gui.views.panels.xplane.BuildingsHeightPanel;
 import com.osm2xp.gui.views.panels.xplane.FacadeSetPanel;
 import com.osm2xp.gui.views.panels.xplane.FacadesExclusionsPanel;
 import com.osm2xp.gui.views.panels.xplane.FacadesRulesPanel;
+import com.osm2xp.gui.views.panels.xplane.ObjectByPolyPanel;
 
 /**
  * XplaneBuildingsView.
@@ -113,6 +114,11 @@ public class XplaneBuildingsView extends AbstractOptionsView implements IContext
 				sectionFacadeRules, SWT.BORDER);
 		toolkit.adapt(facadesRulesPanel, true, true);
 		sectionFacadeRules.setClient(facadesRulesPanel);
+		
+		Section sectionBuildingObjectOptions = createSection("Object by polygon selection options",true);
+		ObjectByPolyPanel panel = new ObjectByPolyPanel(sectionBuildingObjectOptions, SWT.BORDER);
+		toolkit.adapt(panel, true, true);
+		sectionBuildingObjectOptions.setClient(panel);
 	}
 
 	@Override

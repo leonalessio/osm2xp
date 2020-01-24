@@ -1,12 +1,19 @@
 package com.osm2xp.gui.views;
 
+import org.eclipse.core.databinding.beans.PojoProperties;
 import org.eclipse.help.HelpSystem;
 import org.eclipse.help.IContext;
 import org.eclipse.help.IContextProvider;
+import org.eclipse.jface.databinding.swt.WidgetProperties;
+import org.eclipse.jface.layout.GridDataFactory;
 import org.eclipse.swt.SWT;
+import org.eclipse.swt.widgets.Button;
 import org.eclipse.ui.forms.widgets.Section;
 import org.eclipse.ui.forms.widgets.TableWrapData;
 
+import com.osm2xp.generation.options.XPlaneOptionsProvider;
+import com.osm2xp.gui.views.panels.CheckBoxPanel;
+import com.osm2xp.gui.views.panels.Osm2xpPanel;
 import com.osm2xp.gui.views.panels.xplane.ForestsRulesPanel;
 
 /**
@@ -24,6 +31,21 @@ public class XplaneForestsView extends AbstractOptionsView implements IContextPr
 	
 	@Override
 	protected void createFormControls() {
+		
+		Section sectionGeneratedItems = createSection("Generated items", true);
+		Osm2xpPanel scGeneratedItemsPanel = new CheckBoxPanel(sectionGeneratedItems) {
+			@SuppressWarnings("unchecked")
+			@Override
+			protected void initComponents() {
+				Button btnGenerateForests = new Button(this, SWT.CHECK);
+				btnGenerateForests.setText("Generate Forests");
+				GridDataFactory.fillDefaults().applyTo(btnGenerateForests);
+				bindingContext.bindValue(WidgetProperties.selection().observe(btnGenerateForests),
+						PojoProperties.value("generateFor").observe(XPlaneOptionsProvider.getOptions()));
+			}
+		};
+		toolkit.adapt(scGeneratedItemsPanel, true, true);
+		sectionGeneratedItems.setClient(scGeneratedItemsPanel);
 		/**
 		 * Forests Rules
 		 */

@@ -9,7 +9,6 @@ import org.eclipse.ui.forms.widgets.TableWrapData;
 
 import com.osm2xp.gui.views.panels.xplane.DebugOptionsPanel;
 import com.osm2xp.gui.views.panels.xplane.GeneralXPlaneOptionsPanel;
-import com.osm2xp.gui.views.panels.xplane.GeneratedItemsPanel;
 import com.osm2xp.gui.views.panels.xplane.SceneryExclusionsPanel;
 import com.osm2xp.gui.views.panels.xplane.SceneryOptionsPanel;
 
@@ -40,18 +39,6 @@ public class XplaneAdvancedOptionsView extends AbstractOptionsView implements
 				sectionGeneralOptions, SWT.BORDER);
 		toolkit.adapt(generalOptionsPanel, true, true);
 		sectionGeneralOptions.setClient(generalOptionsPanel);
-		/**
-		 * Generated items
-		 */
-		Section sectionGeneratedItems = toolkit.createSection(form.getBody(),
-				Section.TWISTIE | Section.EXPANDED | Section.TITLE_BAR);
-		sectionGeneratedItems.setLayoutData(new TableWrapData(
-				TableWrapData.FILL_GRAB, TableWrapData.TOP, 1, 1));
-		sectionGeneratedItems.setText("Generated items");
-		GeneratedItemsPanel scGeneratedItemsPanel = new GeneratedItemsPanel(
-				sectionGeneratedItems, SWT.BORDER);
-		toolkit.adapt(scGeneratedItemsPanel, true, true);
-		sectionGeneratedItems.setClient(scGeneratedItemsPanel);
 
 		/**
 		 * Scenery exclusions
