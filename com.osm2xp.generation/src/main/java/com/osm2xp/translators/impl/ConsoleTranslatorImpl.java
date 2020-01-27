@@ -46,12 +46,13 @@ public class ConsoleTranslatorImpl implements ITranslator {
 	 */
 	public ConsoleTranslatorImpl(Point2D currentTile) {
 		this.currentTile = currentTile;
-
+		init();
 	}
 
 	@Override
 	public void processNode(Node node) throws Osm2xpBusinessException {
-		if (GeomUtils.compareCoordinates(currentTile, node)) {
+		boolean shouldSave = currentTile != null ? GeomUtils.compareCoordinates(currentTile, node) : true;
+		if (shouldSave) {
 
 			List<Tag> tagsOfInterest = OsmUtils.removeCommonTags(node.getTags());
 
@@ -85,8 +86,12 @@ public class ConsoleTranslatorImpl implements ITranslator {
 
 	@Override
 	public void init() {
-		Osm2xpLogger.info("Starting console debug output for tile lat "
-				+ currentTile.y() + " long " + currentTile.x());
+		if (currentTile != null) {
+			Osm2xpLogger.info("Starting console debug output for tile lat "
+					+ currentTile.y() + " long " + currentTile.x());
+		} else {
+			Osm2xpLogger.info("Starting console debug output");
+		}
 	}
 
 	private boolean processBuilding(OsmPolyline polygon, LinearRing2D poly) {
@@ -145,8 +150,8 @@ public class ConsoleTranslatorImpl implements ITranslator {
 	}
 
 	@Override
-	public boolean mustStoreNode(Node node) {
-		return GeomUtils.compareCoordinates(currentTile, node);
+	public boolean mustStoreNode(Node node) {		
+		return currentTile != null ? GeomUtils.compareCoordinates(currentTile, node) : true;
 	}
 
 	@Override

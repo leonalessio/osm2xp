@@ -122,7 +122,7 @@ public class BuildController {
 	
 	public static boolean checkDeleteFolder(File currentFolder) {
 		if (!currentFolder.exists()) {
-			return true;
+			return false;
 		}
 		return MessageDialog.openConfirm(Display.getDefault()
 						.getActiveShell(), "Confirm", currentFolder.getAbsolutePath()

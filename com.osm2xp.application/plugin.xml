@@ -28,11 +28,11 @@
             id="com.osm2xp.buildPerspective"
             name="Build">
       </perspective>
-      <perspective
+      <!--<perspective
             class="com.osm2xp.gui.perspectives.GenerationPerspective"
             id="com.osm2xp.fsxConfigurationPerspective"
             name="Fsx scenery configuration">
-      </perspective>
+      </perspective>-->
       <perspective
             class="com.osm2xp.gui.perspectives.GenerationPerspective"
             id="com.osm2xp.wavefrontConfigurationPerspective"
@@ -43,11 +43,11 @@
             id="com.osm2xp.startupPerspective"
             name="startup perspective">
       </perspective>
-      <perspective
+      <!--<perspective
             class="com.osm2xp.gui.perspectives.GenerationPerspective"
             id="com.osm2xp.flyLegacyConfigurationPerspective"
             name="Fly Legacy configuration">
-      </perspective>
+      </perspective>-->
       <perspective
             class="com.osm2xp.gui.perspectives.GenerationPerspective"
             id="com.osm2xp.osmConfigurationPerspective"
@@ -58,11 +58,11 @@
             id="com.osm2xp.consoleConfigurationPerspective"
             name="console configuration">
       </perspective>
-      <perspective
+      <!--<perspective
             class="com.osm2xp.gui.perspectives.GenerationPerspective"
             id="com.osm2xp.flightGearConfigurationPerspective"
             name="Flight Gear configuration">
-      </perspective>
+      </perspective>-->
    </extension>
    <extension
          point="org.eclipse.ui.views">
@@ -680,7 +680,7 @@
                style="push"
                tooltip="X-Plane 10/11 mode">
          </command>
-         <command
+         <!--<command
                commandId="osm2xp.command.fsxMode"
                icon="images/toolbarsIcons/fsxLogo.jpg"
                label=" "
@@ -693,7 +693,7 @@
                label=" "
                style="push"
                tooltip="Fly!Legacy mode">
-         </command>
+         </command>-->
          <command
                commandId="osm2xp.command.osmMode"
                icon="images/toolbarsIcons/osmLogo.jpg"
@@ -708,13 +708,13 @@
                style="push"
                tooltip="Console mode">
          </command>
-         <command
+         <!--<command
                commandId="osm2xp.command.flightGearMode"
                icon="images/toolbarsIcons/flightGear.png"
                label=" "
                style="push"
                tooltip="FlightGear mode">
-         </command>
+         </command>-->
       </menuContribution>
    </extension>
    <extension
@@ -788,7 +788,7 @@
             id="osm2xp.command.dropDownModes"
             name="modes">
       </command>
-      <command
+      <!--<command
             defaultHandler="com.osm2xp.gui.handlers.modes.CommandFsxMode"
             id="osm2xp.command.fsxMode"
             name="fsxMode">
@@ -797,7 +797,7 @@
             defaultHandler="com.osm2xp.gui.handlers.modes.CommandFlyLegacyMode"
             id="osm2xp.command.flyMode"
             name="flyMode">
-      </command>
+      </command>-->
       <command
             defaultHandler="com.osm2xp.gui.handlers.modes.CommandOsmMode"
             id="osm2xp.command.osmMode"
@@ -808,11 +808,11 @@
             id="osm2xp.command.consoleMode"
             name="consoleMode">
       </command>
-      <command
+     <!-- <command
             defaultHandler="com.osm2xp.gui.handlers.modes.CommandFlightGearMode"
             id="osm2xp.command.flightGearMode"
             name="flightGearMode">
-      </command>
+      </command> -->
       <command
             defaultHandler="com.osm2xp.gui.handlers.CommandShowConsole"
             id="osm2xp.command.showConsole"

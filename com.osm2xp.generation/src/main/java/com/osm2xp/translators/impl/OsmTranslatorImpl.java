@@ -53,7 +53,7 @@ public class OsmTranslatorImpl implements ITranslator {
 	public OsmTranslatorImpl(IWriter writer, Point2D currentTile) {
 		this.writer = writer;
 		this.currentTile = currentTile;
-
+		init();
 	}
 
 	/**
@@ -84,8 +84,12 @@ public class OsmTranslatorImpl implements ITranslator {
 
 	@Override
 	public void init() {
-		Osm2xpLogger.info("Starting OpenStreetMap xml generation of tile "
-				+ (int) currentTile.y() + "/" + (int) currentTile.x());
+		if (currentTile != null) {
+			Osm2xpLogger.info("Starting OpenStreetMap xml generation of tile "
+					+ (int) currentTile.y() + "/" + (int) currentTile.x());
+		} else {
+			Osm2xpLogger.info("Starting OpenStreetMap xml generation");
+		}
 		writer.init(currentTile);
 	}
 
@@ -158,7 +162,7 @@ public class OsmTranslatorImpl implements ITranslator {
 
 	@Override
 	public boolean mustStoreNode(Node node) {
-		return GeomUtils.compareCoordinates(currentTile, node);
+		return currentTile != null ? GeomUtils.compareCoordinates(currentTile, node) : true;
 	}
 
 	@Override

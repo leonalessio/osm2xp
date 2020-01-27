@@ -20,7 +20,7 @@ public class ConsoleTranslatorFactory implements ITileTranslatorFactory {
 	
 	@Override
 	public boolean isFileWriting() {
-		return true;
+		return false;
 	}
 
 }

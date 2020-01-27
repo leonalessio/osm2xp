@@ -30,8 +30,8 @@ public class OsmWriterImpl implements IWriter {
 	public void init(Point2D coordinates) {
 		try {
 			new File(sceneFolder).mkdirs();
-			String fileName = sceneFolder + File.separator + coordinates.y()
-					+ "_" + coordinates.x() + ".osm";
+			String fileName = coordinates != null ? sceneFolder + File.separator + coordinates.y()
+					+ "_" + coordinates.x() + ".osm" : sceneFolder + File.separator + "output.osm";
 			output = new BufferedWriter(new OutputStreamWriter(
 					new FileOutputStream(fileName), "UTF-8"));
 			writerHeader();
