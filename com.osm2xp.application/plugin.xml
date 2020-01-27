@@ -413,14 +413,7 @@
                minimized="false"
                relationship="stack"
                relative="com.osm2xp.viewSceneryTab">
-         </view>
-         <view
-               id="com.osm2xp.viewLightsTab"
-               closeable="false"
-               minimized="false"
-               relationship="stack"
-               relative="com.osm2xp.viewSceneryTab">
-         </view>
+         </view>         
          <view
                closeable="true"
                id="org.eclipse.help.ui.HelpView"

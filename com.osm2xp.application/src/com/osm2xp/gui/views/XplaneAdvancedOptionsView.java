@@ -30,11 +30,7 @@ public class XplaneAdvancedOptionsView extends AbstractOptionsView implements
 		/**
 		 * General options
 		 */
-		Section sectionGeneralOptions = toolkit.createSection(form.getBody(),
-				Section.TWISTIE | Section.EXPANDED | Section.TITLE_BAR);
-		sectionGeneralOptions.setLayoutData(new TableWrapData(
-				TableWrapData.FILL_GRAB, TableWrapData.TOP, 1, 1));
-		sectionGeneralOptions.setText("General Options");
+		Section sectionGeneralOptions = createSection("General Options", true);
 		GeneralXPlaneOptionsPanel generalOptionsPanel = new GeneralXPlaneOptionsPanel(
 				sectionGeneralOptions, SWT.BORDER);
 		toolkit.adapt(generalOptionsPanel, true, true);
@@ -43,11 +39,7 @@ public class XplaneAdvancedOptionsView extends AbstractOptionsView implements
 		/**
 		 * Scenery exclusions
 		 */
-		Section sectionExclusions = toolkit.createSection(form.getBody(),
-				Section.TWISTIE | Section.TITLE_BAR);
-		sectionExclusions.setLayoutData(new TableWrapData(
-				TableWrapData.FILL_GRAB, TableWrapData.TOP, 1, 1));
-		sectionExclusions.setText("Scenery exclusions");
+		Section sectionExclusions = createSection("Scenery exclusions", true);
 		SceneryExclusionsPanel sceneryExclusionsPanel = new SceneryExclusionsPanel(
 				sectionExclusions, SWT.BORDER);
 		toolkit.adapt(sceneryExclusionsPanel, true, true);
@@ -56,11 +48,7 @@ public class XplaneAdvancedOptionsView extends AbstractOptionsView implements
 		/**
 		 * Scenery options
 		 */
-		Section sectionSceneryOptions = toolkit.createSection(form.getBody(),
-				Section.TWISTIE | Section.TITLE_BAR);
-		sectionSceneryOptions.setLayoutData(new TableWrapData(
-				TableWrapData.FILL_GRAB, TableWrapData.TOP, 1, 1));
-		sectionSceneryOptions.setText("Scenery options");
+		Section sectionSceneryOptions = createSection("Scenery options", false);
 		SceneryOptionsPanel sceneryOptionsPanel = new SceneryOptionsPanel(
 				sectionSceneryOptions, SWT.BORDER);
 		toolkit.adapt(sceneryOptionsPanel, true, true);
@@ -69,11 +57,7 @@ public class XplaneAdvancedOptionsView extends AbstractOptionsView implements
 		 * Debug options
 		 */
 
-		Section statsOptionsSection = toolkit.createSection(form.getBody(),
-				Section.TWISTIE | Section.TITLE_BAR);
-		statsOptionsSection.setLayoutData(new TableWrapData(
-				TableWrapData.FILL_GRAB, TableWrapData.TOP, 1, 1));
-		statsOptionsSection.setText("Debug options (for experienced users!)");
+		Section statsOptionsSection = createSection("Debug options (for experienced users!)", false);
 		DebugOptionsPanel statsOptionsPanel = new DebugOptionsPanel(
 				statsOptionsSection, SWT.BORDER);
 
