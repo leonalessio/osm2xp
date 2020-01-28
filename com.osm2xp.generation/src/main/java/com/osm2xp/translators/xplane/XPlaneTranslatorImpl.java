@@ -425,12 +425,10 @@ public class XPlaneTranslatorImpl implements ITranslator{
 		// process the node if we're on a single pass mode.
 		// if not on single pass, only process if the node is on the current
 		// lat/long tile
-		if (XPlaneOptionsProvider.getOptions().isGenerateObj() && GeomUtils.compareCoordinates(currentTile, node)) {
-			if (!node.getTags().isEmpty()) { //We don't analyze areas for nodes, which doesn't have any other tags - to avoid spending too much time doing useless work
-				MapArea area = getContainingArea(node.getLon(), node.getLat());
-				if (area != null) {
-					node.getTags().add(new Tag(OsmConstants.LANDUSE_TAG, area.type));
-				}
+		if (XPlaneOptionsProvider.getOptions().isGenerateObj() && GeomUtils.compareCoordinates(currentTile, node) && !node.getTags().isEmpty()) { //We don't analyze nodes, which doesn't have any tags - to avoid spending too much time doing useless work
+			MapArea area = getContainingArea(node.getLon(), node.getLat());
+			if (area != null) {
+				node.getTags().add(new Tag(OsmConstants.LANDUSE_TAG, area.type));
 			}
 			
 			// write a 3D object in the dsf file if this node is in an

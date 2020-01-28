@@ -93,32 +93,6 @@ public class BuildController {
 		}
 		return currentFile;
 	}
-
-	/**
-	 * @throws Osm2xpBusinessException
-	 */
-//	public void restartImportedProject() throws Osm2xpBusinessException {
-//
-//		// switch to build perspective
-//		UiUtil.switchPerspective(Perspectives.PERSPECTIVE_BUILD);
-//		GlobalOptionsProvider.getOptions().setCurrentFilePath(
-//				Osm2xpProjectHelper.getOsm2XpProject().getFile());
-//		File currentFile = new File(Osm2xpProjectHelper.getOsm2XpProject()
-//				.getFile());
-//		this.folderPath = Osm2xpProjectHelper.getProjectFile().getParent();
-//
-//		for (Coordinates coordinates : Osm2xpProjectHelper.getOsm2XpProject()
-//				.getCoordinatesList().getCoordinates()) {
-//			Point2D tuile = new Point2D(coordinates.getLongitude(),
-//					coordinates.getLatitude());
-//			try {
-//				generateSingleTile(currentFile, tuile, folderPath);
-//			} catch (Osm2xpBusinessException e) {
-//				Osm2xpLogger.error("Error generating tile", e);
-//			}
-//		}
-//
-//	}
 	
 	public static boolean checkDeleteFolder(File currentFolder) {
 		if (!currentFolder.exists()) {

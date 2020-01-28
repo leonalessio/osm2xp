@@ -12,7 +12,7 @@ public class OSMTranslatorFactory implements ITileTranslatorFactory {
 
 	@Override
 	public ITranslator getTranslator(File currentFile, Point2D currentTile, String folderPath) {
-		IWriter writer = new OsmWriterImpl(folderPath);
+		IWriter writer = new OsmWriterImpl(folderPath, currentTile);
 		return new OsmTranslatorImpl(writer, currentTile);
 	}
 

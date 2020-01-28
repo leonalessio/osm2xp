@@ -6,13 +6,9 @@ import java.io.FileWriter;
 import java.io.IOException;
 import java.io.RandomAccessFile;
 import java.text.DecimalFormat;
-import java.util.GregorianCalendar;
 
 import com.osm2xp.generation.paths.PathsService;
-import com.osm2xp.model.xplane.XplaneDsfObject;
 import com.osm2xp.utils.MiscUtils;
-import com.osm2xp.utils.geometry.GeomUtils;
-import com.osm2xp.writers.impl.OsmWriterImpl;
 
 import math.geom2d.Point2D;
 
@@ -25,42 +21,6 @@ import math.geom2d.Point2D;
 public class DsfUtils {
 
 	private static final String DEFAULT_FACADE_LOD = "LOD 0.000000 25000.000000";
-
-	public static void xplaneDsfObjectToOsm(XplaneDsfObject dsfObject) {
-		OsmWriterImpl writer = new OsmWriterImpl("c:\\debug\\"
-				+ new GregorianCalendar().getTimeInMillis() + "\\");
-		writer.init(GeomUtils.cleanCoordinatePoint(dsfObject.getOsmPolygon()
-				.getPolygon().firstPoint()));
-		int cpt = 1;
-		for (Point2D point : dsfObject.getOsmPolygon().getPolygon()
-				.vertices()) {
-
-			writer.write("<node id=\"" + cpt++ + "\" lat=\"" + point.y()
-					+ "\" lon=\"" + point.x() + "\" version=\"1\" />\n");
-		}
-
-		writer.write("<way id=\"" + cpt++
-				+ "\" visible=\"true\" version=\"2\" >\n");
-		writer.write("<tag k=\"building\" v=\"yes\"/>\n");
-
-		cpt = 1;
-		for (Point2D point : dsfObject.getOsmPolygon().getPolygon()
-				.vertices()) {
-
-			writer.write("<nd ref=\"" + cpt++ + "\"/>\n");
-		}
-		writer.write("</way>\n");
-
-		// write origin
-		Point2D origin = null;// GeomUtils.getRotationPoint(dsfObject.getOsmPolygon().getPolygon(),50,0);
-
-//		writer.write("<node id=\"" + cpt++ + "\" lat=\"" + origin.y() //TODO
-//				+ "\" lon=\"" + origin.x() + "\" version=\"1\" >\n");
-//		writer.write("<tag k=\"man_made\" v=\"water_tower\"/>\n");
-//		writer.write("</node>\n");
-
-		writer.complete();
-	}
 
 	/**
 	 * get the right path to the dsfTool executable

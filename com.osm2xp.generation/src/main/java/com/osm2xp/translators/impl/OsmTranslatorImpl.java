@@ -1,6 +1,5 @@
 package com.osm2xp.translators.impl;
 
-import java.util.ArrayList;
 import java.util.List;
 
 import com.osm2xp.core.exceptions.Osm2xpBusinessException;
@@ -56,32 +55,6 @@ public class OsmTranslatorImpl implements ITranslator {
 		init();
 	}
 
-	/**
-	 * write a node in the osm file.
-	 * 
-	 * @param node
-	 *            osm node.
-	 */
-	private void writeNode(Node node) {
-
-		if (node.getTags().isEmpty()) {
-			writer.write("<node id=\"" + node.getId() + "\" lat=\""
-					+ node.getLat() + "\" lon=\"" + node.getLon()
-					+ "\" version=\"1\" />\n");
-		} else {
-			writer.write("<node id=\"" + node.getId() + "\" lat=\""
-					+ node.getLat() + "\" lon=\"" + node.getLon()
-					+ "\" version=\"1\" >\n");
-			for (Tag tag : node.getTags()) {
-				String normalizedTag = OsmUtils.getNormalizedTagText(tag);
-				if (normalizedTag != null) {
-					writer.write(normalizedTag);
-				}
-			}
-			writer.write("</node>\n");
-		}
-	}
-
 	@Override
 	public void init() {
 		if (currentTile != null) {
@@ -109,28 +82,14 @@ public class OsmTranslatorImpl implements ITranslator {
 				&& !((OsmPolygon) osmPolyline).isSimplePolygon()) {
 			poly = GeomUtils.simplifyPolygon((LinearRing2D) poly);
 		}
-		List<Node> nodeList = new ArrayList<Node>();
-		for (Point2D point : poly.vertices()) {
-			Node node = new Node(null, point.y(), point.x(), nodeIndex);
-			writeNode(node);
-			nodeList.add(node);
-			nodeIndex++;
-		}
-		writer.write("<way id=\"" + osmPolyline.getId()
-				+ "\" visible=\"true\" version=\"2\" >\n");
-
-		for (Node node : nodeList) {
-			writer.write("<nd ref=\"" + node.getId() + "\"/>\n");
-		}
-
-		for (Tag tag : osmPolyline.getTags()) {
-			String normalizedTag = OsmUtils.getNormalizedTagText(tag);
-			if (normalizedTag != null) {
-				writer.write(normalizedTag);
-			}
-
-		}
-		writer.write("</way>\n");
+//		List<Node> nodeList = new ArrayList<Node>();
+//		for (Point2D point : poly.vertices()) {
+//			Node node = new Node(null, point.y(), point.x(), nodeIndex);
+//			writeNode(node);
+//			nodeList.add(node);
+//			nodeIndex++;
+//		}
+		writer.write(osmPolyline);
 
 	}
 
@@ -143,6 +102,7 @@ public class OsmTranslatorImpl implements ITranslator {
 
 	@Override
 	public void processNode(Node node) throws Osm2xpBusinessException {
+		writer.write(node);
 	}
 
 	@Override
@@ -172,7 +132,7 @@ public class OsmTranslatorImpl implements ITranslator {
 
 	@Override
 	public boolean mustProcessPolyline(List<Tag> tags) {
-		return false;
+		return true;
 	}
 	
 	@Override

@@ -3,10 +3,12 @@ package com.osm2xp.gui.handlers.modes;
 import org.eclipse.core.commands.AbstractHandler;
 import org.eclipse.core.commands.ExecutionEvent;
 import org.eclipse.core.commands.ExecutionException;
-import org.eclipse.core.runtime.Platform;
+import org.eclipse.core.commands.common.NotDefinedException;
+import org.eclipse.ui.IWorkbenchWindow;
+import org.eclipse.ui.PlatformUI;
 
 import com.osm2xp.controllers.BuildController;
-import com.osm2xp.gui.views.panels.generic.OutPutFormatPanel;
+import com.osm2xp.core.logging.Osm2xpLogger;
 import com.osm2xp.utils.ui.UiUtil;
 
 public class ModeCommand extends AbstractHandler {
@@ -31,6 +33,14 @@ public class ModeCommand extends AbstractHandler {
 		UiUtil.switchPerspective(perspectiveId);
 		BuildController.setGenerationMode(modeId);		
 		UiUtil.showCurrentModeInfo(false);
+		IWorkbenchWindow activeWorkbenchWindow = PlatformUI.getWorkbench().getActiveWorkbenchWindow();
+		if (activeWorkbenchWindow != null) {
+			try {
+				activeWorkbenchWindow.getShell().setText("OSM2XP - " + event.getCommand().getName());
+			} catch (NotDefinedException e) {
+				Osm2xpLogger.error(e);
+			}
+		}
 		return null;
 	}
 	

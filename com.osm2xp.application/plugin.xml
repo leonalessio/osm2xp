@@ -680,6 +680,13 @@
                style="push"
                tooltip="X-Plane 10/11 mode">
          </command>
+         <command
+               commandId="osm2xp.command.xplane9Mode"
+               icon="images/toolbarsIcons/xplane9logo.jpg"
+               label=" X-Plane 9 mode"
+               style="push"
+               tooltip="X-Plane 9 mode">
+         </command>
          <!--<command
                commandId="osm2xp.command.fsxMode"
                icon="images/toolbarsIcons/fsxLogo.jpg"
@@ -761,12 +768,12 @@
       <command
             defaultHandler="com.osm2xp.gui.handlers.CommandBuildScene"
             id="osm2xp.command.buildScene"
-            name="buildScene">
+            name="Build Scene">
       </command>     
       <command
             defaultHandler="com.osm2xp.gui.handlers.CommandFacadeSetEditor"
             id="osm2xp.command.facadeSetEditor"
-            name="facadeSetEditor">
+            name="Facade Set Editor">
       </command>
       <command
             defaultHandler="com.osm2xp.gui.handlers.CommandDropDownTools"
@@ -781,7 +788,12 @@
       <command
             defaultHandler="com.osm2xp.gui.handlers.modes.CommandXplane10Mode"
             id="osm2xp.command.xplane10Mode"
-            name="xplane10Mode">
+            name="X-Plane 10/11 mode">
+      </command>
+      <command
+            defaultHandler="com.osm2xp.gui.handlers.modes.CommandXplane9Mode"
+            id="osm2xp.command.xplane9Mode"
+            name="X-Plane 9 mode">
       </command>
       <command
             defaultHandler="com.osm2xp.gui.handlers.modes.CommandDropDownModes"
@@ -801,12 +813,12 @@
       <command
             defaultHandler="com.osm2xp.gui.handlers.modes.CommandOsmMode"
             id="osm2xp.command.osmMode"
-            name="osmMode">
+            name="OSM mode">
       </command>
       <command
             defaultHandler="com.osm2xp.gui.handlers.modes.CommandConsoleMode"
             id="osm2xp.command.consoleMode"
-            name="consoleMode">
+            name="Console mode">
       </command>
      <!-- <command
             defaultHandler="com.osm2xp.gui.handlers.modes.CommandFlightGearMode"
@@ -816,17 +828,17 @@
       <command
             defaultHandler="com.osm2xp.gui.handlers.CommandShowConsole"
             id="osm2xp.command.showConsole"
-            name="showConsole">
+            name="Show Console">
       </command>
       <command
             defaultHandler="com.osm2xp.gui.handlers.CommandGoBack"
             id="osm2xp.command.goBack"
-            name="goBack">
+            name="Go Back">
       </command>
       <command
             defaultHandler="com.osm2xp.gui.handlers.CommandSelectFile"
             id="osm2xp.command.selectFile"
-            name="selectFile">
+            name="Select File">
       </command>
    </extension>
    <extension

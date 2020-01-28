@@ -75,8 +75,8 @@ public class ConsoleTranslatorImpl implements ITranslator {
 			throws Osm2xpBusinessException {
 		LinearCurve2D poly = new LinearRing2D();
 		poly = GeomUtils.getPolylineFromOsmNodes(polyline.getNodes());
-		if (!processBuilding(polyline, (LinearRing2D) poly)) {
-			processForest(polyline,  (LinearRing2D) poly);
+		if (!processBuilding(polyline, poly)) {
+			processForest(polyline, poly);
 		}
 	}
 
@@ -94,7 +94,7 @@ public class ConsoleTranslatorImpl implements ITranslator {
 		}
 	}
 
-	private boolean processBuilding(OsmPolyline polygon, LinearRing2D poly) {
+	private boolean processBuilding(OsmPolyline polygon, LinearCurve2D poly) {
 		Boolean result = false;
 		if (OsmUtils.isBuilding(polygon.getTags())
 				&& !OsmUtils.isExcluded(polygon.getTags(), polygon.getId())
@@ -107,8 +107,10 @@ public class ConsoleTranslatorImpl implements ITranslator {
 			stringBuilder.append("building id " + polygon.getId() + "\n");
 			stringBuilder.append("smallest vector " + minVector
 					+ ", largest vector " + maxVector + "\n");
-			stringBuilder.append("area " + (poly.area() * 100000 * 100000)
-					+ "\n");
+			if (poly instanceof LinearRing2D) {
+				stringBuilder.append("area " + (((LinearRing2D) poly).area() * 100000 * 100000)
+						+ "\n");
+			}
 
 			stringBuilder.append("polygon is made of  "
 					+ (poly.vertexNumber() - 1) + " points\n");
@@ -134,13 +136,15 @@ public class ConsoleTranslatorImpl implements ITranslator {
 	 * @param poly
 	 * @return
 	 */
-	private boolean processForest(OsmPolyline osmPolygon, LinearRing2D poly) {
+	private boolean processForest(OsmPolyline osmPolygon, LinearCurve2D poly) {
 
 		if (OsmUtils.isOsmForest(osmPolygon.getTags())) {
 			StringBuilder stringBuilder = new StringBuilder();
 			stringBuilder.append("forest id " + osmPolygon.getId() + "\n");
-			stringBuilder.append("area "
-					+ ((poly.area() * 100000) * 100000) + "\n");
+			if (poly instanceof LinearRing2D) {
+				stringBuilder.append("area "
+						+ ((((LinearRing2D) poly).area() * 100000) * 100000) + "\n");
+			}
 			stringBuilder.append("polygon is made of  "
 					+ (poly.vertexNumber() - 1) + " points\n");
 			Osm2xpLogger.info(stringBuilder.toString());
@@ -163,7 +167,7 @@ public class ConsoleTranslatorImpl implements ITranslator {
 
 	@Override
 	public boolean mustProcessPolyline(List<Tag> tags) {
-		return false;
+		return true;
 	}
 
 	@Override
