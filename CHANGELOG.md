@@ -6,6 +6,22 @@ and this project adheres to [Semantic Versioning](http://semver.org/spec/v2.0.0.
 
 ## [Unreleased]
 
+## [4.4.0]
+
+### Added
+- Roads, Railways and power lines type constants are now configurable from UI and xml settings. Changed default highway road types to ones having light posts
+
+### Changed
+- UI fix - items generation is switched on and off on corresponding tabs instead of "Advanced" tab
+
+### Fixed
+- Existing folder deletion is now done in the background, not freezing the UI
+- Console mode is working again
+- OSM mode is working partially - bounding boxes and relations aren't supported yet
+
+### Removed
+- FlightGear, FSX and Fly! modes are removed from the UI, since they are broken currently and wouldn't be revived in nearest future
+
 ## [4.3.0]
 
 ### Added

@@ -161,9 +161,9 @@ public class ApplicationWorkbenchWindowAdvisor extends WorkbenchWindowAdvisor {
 		try {
 			GlobalOptionsProvider.saveOptions();
 			XPlaneOptionsProvider.saveOptions();
-			FsxOptionsProvider.saveOptions();
-			FlyLegacyOptionsHelper.saveOptions();
-			FlightGearOptionsProvider.saveOptions();
+//			FsxOptionsProvider.saveOptions();
+//			FlyLegacyOptionsHelper.saveOptions();
+//			FlightGearOptionsProvider.saveOptions();
 		} catch (Osm2xpBusinessException e) {
 			Osm2xpLogger.error(e.getMessage());
 		}
