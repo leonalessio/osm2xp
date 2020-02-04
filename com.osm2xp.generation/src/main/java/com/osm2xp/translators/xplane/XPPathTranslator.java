@@ -4,8 +4,10 @@ import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Collection;
 import java.util.Collections;
+import java.util.HashMap;
 import java.util.HashSet;
 import java.util.List;
+import java.util.Map;
 import java.util.Set;
 
 import org.apache.commons.lang.ArrayUtils;
@@ -27,7 +29,7 @@ public abstract class XPPathTranslator extends XPWritingTranslator {
 	private Set<Long> pathCrossingIds = new HashSet<Long>();
 	private List<OsmPolyline> pathPolys = new ArrayList<>();
 	
-	private Set<Integer> bridgeNodeIds = new HashSet<Integer>();
+	private Map<Integer,Integer> bridgeNodeLayers = new HashMap<>();
 	private XPOutputFormat outputFormat;
 	private IDRenumbererService idProvider;
 	
@@ -54,15 +56,11 @@ public abstract class XPPathTranslator extends XPWritingTranslator {
 			segmentList.addAll(getSegmentsFor(poly));
 		}
 		List <XPPathSegment> resultSegmentList = segmentList;
-		if (!bridgeNodeIds.isEmpty()) {
+		if (!bridgeNodeLayers.isEmpty()) {
 			resultSegmentList = new ArrayList<>(segmentList.size());
 			for (XPPathSegment pathSegment : segmentList) {
-				if (bridgeNodeIds.contains(Integer.valueOf((int) pathSegment.getStartId()))) {
-					pathSegment.setStartHeight(1);
-				}
-				if (bridgeNodeIds.contains(Integer.valueOf((int) pathSegment.getEndId()))) {
-					pathSegment.setEndHeight(1);
-				}
+				pathSegment.setStartHeight(getLayer(Integer.valueOf((int) pathSegment.getStartId())));
+				pathSegment.setEndHeight(getLayer(Integer.valueOf((int) pathSegment.getEndId())));
 				if (!pathSegment.isBridge() && 
 					(pathSegment.getStartHeight() > 0 || pathSegment.getEndHeight() > 0)) {
 					resultSegmentList.addAll(splitIfNecessary(pathSegment)); 
@@ -77,6 +75,14 @@ public abstract class XPPathTranslator extends XPWritingTranslator {
 		
 	}
 	
+	protected int getLayer(Integer nodeId) {
+		Integer layer = bridgeNodeLayers.get(nodeId);
+		if (layer == null) {
+			return 0;
+		}
+		return layer;
+	}
+
 	private Collection<? extends XPPathSegment> splitIfNecessary(XPPathSegment pathSegment) {
 		int minLength = getBridgeRampLength();
 		if (minLength > 0) {
@@ -172,15 +178,16 @@ public abstract class XPPathTranslator extends XPWritingTranslator {
 				int newStartId = idProvider.getNewId(currentSegment.get(0).getId());
 				int newEndId = idProvider.getNewId(node.getId());
 				if (bridge) {
-					bridgeNodeIds.add(newStartId);
-					bridgeNodeIds.add(newEndId);
+					int layer = Math.max(1, getLayerFromTags(poly)); //We suport bridge layers starting from 1
+					bridgeNodeLayers.put(newStartId, layer);
+					bridgeNodeLayers.put(newEndId, layer);
 				}
 				XPPathSegment segment = new XPPathSegment(getPathType(poly), 
 						newStartId, 
 						newEndId,
 						GeomUtils.getPointsFromOsmNodes(currentSegment));
-				segment.setBridge(bridge);
 				segment.setComment(getId() + " , way " + poly.getId());
+				segment.setBridge(bridge);
 				result.add(segment);
 				currentSegment.clear();
 				if (i < nodes.size() - 1) {
@@ -189,6 +196,18 @@ public abstract class XPPathTranslator extends XPWritingTranslator {
 			}
 		}		
 		return result;
+	}
+
+	protected int getLayerFromTags(OsmPolyline poly) {
+		String tagValue = poly.getTagValue("layer");
+		if (tagValue != null) {			
+			try {
+				return Math.max(0, Integer.parseInt(tagValue.trim()));
+			} catch (NumberFormatException e) {
+				//Best effort
+			}
+		}
+		return 0;
 	}
 
 	protected boolean isBridge(IHasTags poly) {

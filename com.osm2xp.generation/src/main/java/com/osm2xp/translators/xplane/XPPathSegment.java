@@ -62,10 +62,10 @@ public class XPPathSegment {
 
 	public void setBridge(boolean bridge) {
 		this.bridge = bridge;
-		if (bridge) {
-			setStartHeight(1);
-			setEndHeight(1);
-		}
+//		if (bridge) {
+//			setStartHeight(1);
+//			setEndHeight(1);
+//		}
 	}
 
 	public boolean isBridge() {
