@@ -5,4 +5,16 @@ before_script:
 
 script: 
  - mvn clean compile install
+ 
+before_deploy:
+ - cd ..
+ 
+deploy:
+ provider: releases
+ api_key: "03a63a5233a1e31d6c4cbe769b8070a47ab5bdbc"
+ file_glob: true
+ file: 
+  - builds/bin/*.zip
+  - builds/bin/*.tgz
+ skip_cleanup: true
 
