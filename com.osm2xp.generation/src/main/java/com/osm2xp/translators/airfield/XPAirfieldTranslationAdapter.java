@@ -22,6 +22,7 @@ import com.osm2xp.stats.StatsProvider;
 import com.osm2xp.translators.ISpecificTranslator;
 import com.osm2xp.generation.options.XPlaneOptionsProvider;
 import com.osm2xp.generation.paths.PathsService;
+import com.osm2xp.utils.FilesUtils;
 import com.osm2xp.utils.osm.OsmUtils;
 
 import org.apache.commons.lang.StringUtils;
@@ -201,7 +202,7 @@ public class XPAirfieldTranslationAdapter implements ISpecificTranslator {
 			});
 		}
 		boolean writeAsMainAirfield = XPlaneOptionsProvider.getOptions().getAirfieldOptions().isUseSingleAptAsMain() && (airfieldList.size() + runwayList.size() == 1); //If we have only one airport/only one runway - write it as main airfield of scenario
-		XPAirfieldOutput airfieldOutput = new XPAirfieldOutput(writeAsMainAirfield ? workFolder : workFolder.getParentFile(), writeAsMainAirfield);
+		XPAirfieldOutput airfieldOutput = new XPAirfieldOutput(writeAsMainAirfield ? workFolder : getMultiAirfieldsFolder(), writeAsMainAirfield);
 		for (AirfieldData airfieldData : airfieldList) {
 			if (XPlaneOptionsProvider.getOptions().getAirfieldOptions().getIgnoredAirfields().contains(airfieldData.getICAO())) { //We can't check this at earlier stage since we need to ignore associated runways and other stuff as well
 				continue;
@@ -222,6 +223,14 @@ public class XPAirfieldTranslationAdapter implements ISpecificTranslator {
 		
 		StatsProvider.getCommonStats().setCount("Airfields", airfieldList.size());
 		StatsProvider.getCommonStats().setCount("Separate Runways", runwayList.size());
+	}
+
+	protected File getMultiAirfieldsFolder() {
+		File airfieldsFolder = new File(workFolder.getParentFile(), workFolder.getName() + "_airfields");
+		if (airfieldsFolder.exists()) {
+			FilesUtils.deleteDirectory(airfieldsFolder);
+		}
+		return airfieldsFolder;
 	}
 
 	protected void bindAirways(List<AirfieldData> airfieldList) {
