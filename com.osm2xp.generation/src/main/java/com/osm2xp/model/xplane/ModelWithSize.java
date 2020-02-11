@@ -5,6 +5,7 @@ public class ModelWithSize {
 	private String path;
 	private double xSize;
 	private double ySize;
+	private double height = 0;
 	
 	public ModelWithSize(String path, double xSize, double ySize) {
 		super();
@@ -40,6 +41,14 @@ public class ModelWithSize {
 	@Override
 	public String toString() {
 		return path + ": " + xSize + "x" + ySize;
+	}
+
+	public double getHeight() {
+		return height;
+	}
+
+	public void setHeight(double height) {
+		this.height = height;
 	}
 	
 }

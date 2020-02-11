@@ -22,6 +22,7 @@ import com.osm2xp.model.osm.polygon.OsmPolygon;
 import com.osm2xp.model.osm.polygon.OsmPolyline;
 import com.osm2xp.model.xplane.ModelWithSize;
 import com.osm2xp.utils.geometry.GeomUtils;
+import com.osm2xp.utils.osm.OsmUtils;
 import com.osm2xp.writers.IWriter;
 
 import math.geom2d.Point2D;
@@ -35,6 +36,18 @@ import math.geom2d.line.LineSegment2D;
  *
  */
 public class XPPolyTo3DObjectTranslator extends XPWritingTranslator {
+	
+	private class ModelMatch {
+		public final boolean directAngle;
+		public final ModelWithSize matchedModel;
+		
+		public ModelMatch(ModelWithSize matchedModel, boolean directAngle) {
+			super();
+			this.directAngle = directAngle;
+			this.matchedModel = matchedModel;
+		}
+		
+	}
 
 	private Multimap<OSMBuildingType, ModelWithSize> modelsByType = ArrayListMultimap.create();
 	private DsfObjectsProvider dsfObjectsProvider;
@@ -98,25 +111,22 @@ public class XPPolyTo3DObjectTranslator extends XPWritingTranslator {
 			}
 			double len1 = GeomUtils.computeAvgDistance(edge0,edge2);
 			double len2 = GeomUtils.computeAvgDistance(edge1,edge3);
-			double dist = Double.MAX_VALUE;
-			ModelWithSize matched = null;
-			boolean directAngle = true;
-			for (ModelWithSize model : models) {
-				double dist1 = GeomUtils.fitWithDistance(model.geXSize(), model.getYSize(),tolerance,len1,len2);
-				double dist2 = GeomUtils.fitWithDistance(model.geXSize(), model.getYSize(),tolerance,len2,len1);
-				if (dist1 < dist || dist2 < dist) {
-					directAngle = dist1 < dist2;
-					dist = Math.min(dist1, dist2);
-					matched = model;
-				} 
-			}
-			if (matched != null) {
+			
+			int height = OsmUtils.getHeightFromTags(osmPolyline.getTags());
+			ModelMatch match = null;
+			if (height > 0) {
+				Collection<ModelWithSize> modelsByHeight = chooseByHeight(height, 0.3, models);
+				match = selectMatchedModel(len1, len2, tolerance, modelsByHeight);
+			} else {
+				match = selectMatchedModel(len1, len2, tolerance, models);
+			}			
+			if (match != null) {
 				Point2D center = GeomUtils.getPolylineCenter(osmPolyline.getPolyline());
-				double angle = directAngle? GeomUtils.getTrueBearing(edge1.firstPoint(), edge1.lastPoint()) : 
+				double angle = match.directAngle? GeomUtils.getTrueBearing(edge1.firstPoint(), edge1.lastPoint()) : 
 											GeomUtils.getTrueBearing(edge0.firstPoint(), edge0.lastPoint());
 				double d = Math.random();
 				angle = d < 0.5 ? angle : (angle + 180) % 360;
-				String objectString = outputFormat.getObjectString(dsfObjectsProvider.getObjectIndex(matched.getPath()),center.x(), center.y(), angle);
+				String objectString = outputFormat.getObjectString(dsfObjectsProvider.getObjectIndex(match.matchedModel.getPath()),center.x(), center.y(), angle);
 				writer.write(objectString);
 				return true;
 			}
@@ -124,6 +134,46 @@ public class XPPolyTo3DObjectTranslator extends XPWritingTranslator {
 		return false;
 	}
 
+	private Collection<ModelWithSize> chooseByHeight(int height, double heightTolerance, Collection<ModelWithSize> models) {
+		double allowedDifference = 2 * GlobalOptionsProvider.getOptions().getLevelHeight(); //TODO we ignore difference 2 levels or less, make this configurable
+		List<ModelWithSize> matchedModels = new ArrayList<ModelWithSize>();
+		double lowerBound = height - height * heightTolerance;
+		double upperBound = height + height * heightTolerance;
+		for (ModelWithSize curModel : models) {
+			if (curModel.getHeight() == 0) {
+				continue;
+			}
+			if ((Math.abs(height - curModel.getHeight()) < allowedDifference) ||
+				(curModel.getHeight() >= lowerBound && curModel.getHeight() <= upperBound )) {
+				matchedModels.add(curModel);
+			}
+		}
+		return matchedModels;
+	}
+
+	private ModelMatch selectMatchedModel(double len1, double len2, double tolerance, Collection<ModelWithSize> models) {
+		double dist = Double.MAX_VALUE;
+		List<ModelMatch> matchedList = new ArrayList<ModelMatch>();
+		for (ModelWithSize model : models) {
+			double dist1 = GeomUtils.fitWithDistance(model.geXSize(), model.getYSize(),tolerance,len1,len2);
+			double dist2 = GeomUtils.fitWithDistance(model.geXSize(), model.getYSize(),tolerance,len2,len1);
+			boolean directAngle = dist1 < dist2;
+			if (dist1 < dist || dist2 < dist) {
+				dist = Math.min(dist1, dist2);
+				matchedList.clear();
+				matchedList.add(new ModelMatch(model, directAngle));
+			} else if (dist1 == dist || dist2 == dist) {
+				matchedList.add(new ModelMatch(model, directAngle));
+			}
+			
+		}
+		if (!matchedList.isEmpty()) {
+			int idx = (int) (Math.random() * matchedList.size());
+			return matchedList.get(idx);
+		}
+		return null;
+	}
+	
 	private OSMBuildingType getTypeFromLanduse(OsmPolyline osmPolyline) {
 		String landuse = osmPolyline.getTagValue("landuse"); 
 		if ("allotments".equals(landuse)) {
