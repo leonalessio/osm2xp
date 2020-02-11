@@ -6,6 +6,7 @@ import java.util.Arrays;
 import java.util.Collection;
 import java.util.Collections;
 import java.util.List;
+import java.util.Random;
 import java.util.stream.Collectors;
 
 import com.google.common.collect.ArrayListMultimap;
@@ -52,6 +53,7 @@ public class XPPolyTo3DObjectTranslator extends XPWritingTranslator {
 	private Multimap<OSMBuildingType, ModelWithSize> modelsByType = ArrayListMultimap.create();
 	private DsfObjectsProvider dsfObjectsProvider;
 	private XPOutputFormat outputFormat;
+	private Random rand = new Random();
 	
 	public XPPolyTo3DObjectTranslator(IWriter writer, DsfObjectsProvider dsfObjectsProvider, XPOutputFormat outputFormat) {
 		super(writer);
@@ -162,14 +164,12 @@ public class XPPolyTo3DObjectTranslator extends XPWritingTranslator {
 				dist = Math.min(dist1, dist2);
 				matchedList.clear();
 				matchedList.add(new ModelMatch(model, directAngle));
-			} else if (dist1 == dist || dist2 == dist) {
+			} else if (dist < Double.MAX_VALUE && (dist1 == dist || dist2 == dist)) {
 				matchedList.add(new ModelMatch(model, directAngle));
 			}
-			
 		}
 		if (!matchedList.isEmpty()) {
-			int idx = (int) (Math.random() * matchedList.size());
-			return matchedList.get(idx);
+			return matchedList.get(rand.nextInt(matchedList.size()));
 		}
 		return null;
 	}
