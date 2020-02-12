@@ -13,7 +13,8 @@ Since initial task is generating X-Plane 10 scenery, most fixes I've done and al
 ## Already done
 
 ### Generation of
-* Roads, with trying to select best matching road type, if lane count data is present in OSM
+* Buildings using facades or matching 3D objects
+* Roads, trying to select best matching road type, if lane count data is present in OSM. Road types are configurable from the UI
 * Railways
 * Power lines
 * Barriers, two types are supported - fence and wall
@@ -77,6 +78,4 @@ You can help with coding, if you know Java/Eclipse, with creating better default
 
 ## Nearest plans
 
-* Landuse zones analysis
-* More options in the GUI
-* Better default facade set
+* Select 3D model for building by length, width and height (if specified)
