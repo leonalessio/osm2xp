@@ -221,7 +221,20 @@ public class XPPolyTo3DObjectTranslator extends XPWritingTranslator {
 					try {
 						double x = Double.parseDouble(parts[0]);
 						double y = Double.parseDouble(parts[1]);
-						return new ModelWithSize(preffixPath + "/" + fileName, x ,y);
+						ModelWithSize result = new ModelWithSize(preffixPath + "/" + fileName, x ,y);
+						if (idx < n && fileName.charAt(idx) == 'h') {
+							idx++;
+							StringBuilder builder = new StringBuilder();
+							while(idx < n && (Character.isDigit(fileName.charAt(idx)) || fileName.charAt(idx) == '.')) { //Skip possible tail until we see a number;
+								builder.append(fileName.charAt(idx));
+								idx++;
+							}
+							String heightVal = builder.toString();
+							if (heightVal.length() > 0) {
+								result.setHeight(Double.parseDouble(heightVal));
+							}							
+						}
+						return result;
 					} catch (NumberFormatException e) {
 						Osm2xpLogger.error(e);
 					}
