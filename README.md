@@ -1,6 +1,6 @@
 [![Build Status](https://travis-ci.com/32kda/osm2xp.svg?branch=master)](https://travis-ci.com/32kda/osm2xp)
 
-# OSM2XP - Generate X-Plane 10/11 scenery using OSM Data
+# OSM2XP - Generate X-Plane 11, X-Plane 10 and X-Plane 9 scenery using OSM Data
 This project is based on original OSM2XP by Benjamin Blanchet, code was originally taken from code.google.com/p/osm2xp
 # Original osm2xp 
 Supports generating *buildings* using facade set from OSM data loaded from pbf file, as well as generating
