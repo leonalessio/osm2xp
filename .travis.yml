@@ -1,20 +1,23 @@
 language: java
 
 before_script:
- - cd releng
+  - cd releng
 
 script: 
- - mvn clean compile install
+  - mvn clean compile install
  
 before_deploy:
- - cd ..
+  - cd ..
  
 deploy:
- provider: releases
- api_key: $GITHUB_API_TOKEN
- file_glob: true
- file: 
-  - builds/bin/*.zip
-  - builds/bin/*.tgz
- skip_cleanup: true
+  provider: releases
+  api_key: "$GITHUB_API_TOKEN"
+  file_glob: true
+  file: 
+    - builds/bin/*.zip
+    - builds/bin/*.tgz
+  skip_cleanup: true
+  branches:
+    only:
+      - master
 
