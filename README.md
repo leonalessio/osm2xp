@@ -1,6 +1,6 @@
 [![Build Status](https://travis-ci.com/32kda/osm2xp.svg?branch=master)](https://travis-ci.com/32kda/osm2xp)
 
-# OSM2XP - Generate X-Plane 10/11 scenery using OSM Data
+# OSM2XP - Generate X-Plane 11, X-Plane 10 and X-Plane 9 scenery using OSM Data
 This project is based on original OSM2XP by Benjamin Blanchet, code was originally taken from code.google.com/p/osm2xp
 # Original osm2xp 
 Supports generating *buildings* using facade set from OSM data loaded from pbf file, as well as generating
@@ -13,7 +13,8 @@ Since initial task is generating X-Plane 10 scenery, most fixes I've done and al
 ## Already done
 
 ### Generation of
-* Roads, with trying to select best matching road type, if lane count data is present in OSM
+* Buildings using facades or matching 3D objects
+* Roads, trying to select best matching road type, if lane count data is present in OSM. Road types are configurable from the UI
 * Railways
 * Power lines
 * Barriers, two types are supported - fence and wall
@@ -77,6 +78,4 @@ You can help with coding, if you know Java/Eclipse, with creating better default
 
 ## Nearest plans
 
-* Landuse zones analysis
-* More options in the GUI
-* Better default facade set
+* Select 3D model for building by length, width and height (if specified)
