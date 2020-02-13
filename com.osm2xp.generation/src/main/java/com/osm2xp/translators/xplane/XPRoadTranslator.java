@@ -14,7 +14,8 @@ import com.osm2xp.writers.IWriter;
 
 public class XPRoadTranslator extends XPPathTranslator {
 	
-	private static final String[] WIDE_ROAD_TYPES = {"motorway", "trunk", "primary", "secondary"}; 
+//	private static final String[] WIDE_ROAD_TYPES = {"motorway", "trunk", "primary", "secondary"}; 
+	private static final String[] WIDE_ROAD_TYPES = {"motorway", "trunk"}; 
 	private static final String HIGHWAY_TAG = "highway";
 	private String[] allowedHighwayTypes = GlobalOptionsProvider.getOptions().getAllowedHighwayTypesArray();
 	private String[] allowedHighwayLinkTypes = GlobalOptionsProvider.getOptions().getAllowedHighwayLinkTypesArray();
@@ -41,11 +42,7 @@ public class XPRoadTranslator extends XPPathTranslator {
 
 	/**
 	 * Return X-Plane type constant for given road. Written in "hard" way to make some match between OSM tags and X-Plane type constants
-	 * TODO Should be made configurable in future
 	 * From https://forums.x-plane.org/index.php?/files/file/19074-roads-tutorial/ :
-	 * 4 lanes - type 10
-	 * 2 lanes - type 40
-	 * 1 lane - type 50
 	 */
 	protected int getPathType(IHasTags poly) {
 		String val = poly.getTagValue("lanes"); //Try to get lane count directly first
