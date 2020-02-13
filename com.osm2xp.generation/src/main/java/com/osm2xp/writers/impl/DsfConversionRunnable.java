@@ -31,12 +31,12 @@ public class DsfConversionRunnable implements Runnable{
 					textFile.getPath(), dsfFile.getPath() });
 			int result = process.waitFor();
 			if (result != 0) {
-				Osm2xpLogger.error("Error on .dsf conversion - coverter returned invalid response code: " + result + ". Possibly source DSF file is invalid.");
+				Osm2xpLogger.error("Error on .dsf conversion - coverter returned invalid response code: " + result + ". Possibly source DSF file " + textFile + " is invalid.");
 			} else if (deleteSourceFile) {
 				textFile.delete();
 			}
 		} catch (IOException e) {
-			Osm2xpLogger.error("Error on .dsf conversion.", e);
+			Osm2xpLogger.error("Error on .dsf conversion for file " + textFile, e);
 		} catch (InterruptedException e) {
 			Osm2xpLogger.error("Error on .dsf conversion - thread interrupted.", e);
 		}
