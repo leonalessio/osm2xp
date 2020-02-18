@@ -5,6 +5,9 @@ import com.osm2xp.core.model.osm.Node;
 import com.osm2xp.index.IIdIndex;
 import com.osm2xp.index.IntIndexStorage;
 import com.osm2xp.index.PointCoordsIndex;
+import com.osm2xp.index.PointUnpackedCoordsIndex;
+
+import math.geom2d.Box2D;
 
 /**
  * Memory-critical data sink implementation for processing large files. 
@@ -19,11 +22,21 @@ public class MemoryCriticalProcessorImpl extends AbstractDataProcessor {
 
 		@Override
 		protected IIdIndex<double[]> createIndex() {
-			return new PointCoordsIndex();
+			return createPointIndex();
 		}
 	};
+	/**
+	 * Try to use coordinate packing storage to lower memory consumption.  
+	 */
+	private boolean packedMode = true; 
 	private IntIndexStorage<Object> wayStorage = new IntIndexStorage<Object>();	
 	private IDListFactory idListFactory = new IDListFactory();
+	
+	public void processBoundingBox(Box2D boundingBox) {
+		if (boundingBox.getMinX() < -179 && boundingBox.getMaxX() > 179) { //We are near meridian 180
+			packedMode = false;
+		}
+	}
 
 	@Override
 	public void storeNode(final Node node) throws DataSinkException {
@@ -63,6 +76,14 @@ public class MemoryCriticalProcessorImpl extends AbstractDataProcessor {
 	@Override
 	public long[] getWayPoints(long wayId) {
 		return idListFactory.getIdsList(wayStorage.get(wayId));
+	}
+
+	protected IIdIndex<double[]> createPointIndex() {
+		if (packedMode) {
+			return new PointCoordsIndex();
+		} else {
+			return new PointUnpackedCoordsIndex();
+		}
 	}
 
 }

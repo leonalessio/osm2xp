@@ -7,6 +7,8 @@ import com.osm2xp.core.exceptions.DataSinkException;
 import com.osm2xp.core.model.osm.Node;
 import com.osm2xp.datastore.IDataSink;
 
+import math.geom2d.Box2D;
+
 public abstract class AbstractDataProcessor implements IDataSink {
 
 	private boolean readOnly = false;
@@ -21,6 +23,11 @@ public abstract class AbstractDataProcessor implements IDataSink {
 			} 
 		}
 		return nodes.size() > 0 ? nodes : null;
+	}
+	
+	@Override
+	public void processBoundingBox(Box2D boundingBox) {
+		// Data Sink doesn't care by default; Override if necessary		
 	}
 	
 	@Override

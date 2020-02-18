@@ -133,6 +133,7 @@ public class MultiTileDataConverter extends AbstractOSMDataConverter {
 
 	@Override
 	public void visit(Box2D boundingBox) {
+		super.visit(boundingBox);
 		this.boundingBox = boundingBox;
 		for (ISpecificTranslator tileTranslationAdapter : translationAdapters) {
 			tileTranslationAdapter.processBoundingBox(boundingBox);

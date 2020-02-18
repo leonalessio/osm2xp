@@ -28,6 +28,8 @@ import com.osm2xp.utils.geometry.NodeCoordinate;
 import com.osm2xp.utils.geometry.Osm2XPGeometryFactory;
 import com.osm2xp.utils.osm.OsmUtils;
 
+import math.geom2d.Box2D;
+
 public abstract class AbstractOSMDataConverter implements IOSMDataVisitor {
 
 	protected IDataSink dataSink;
@@ -37,6 +39,11 @@ public abstract class AbstractOSMDataConverter implements IOSMDataVisitor {
 	public AbstractOSMDataConverter(IDataSink processor) {
 		super();
 		this.dataSink = processor;
+	}
+	
+	@Override
+	public void visit(Box2D box) {
+		dataSink.processBoundingBox(box);
 	}
 
 	@Override

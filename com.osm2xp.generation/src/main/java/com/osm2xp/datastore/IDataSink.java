@@ -6,6 +6,8 @@ import com.osm2xp.core.exceptions.DataSinkException;
 import com.osm2xp.core.model.osm.Node;
 import com.osm2xp.core.model.osm.Way;
 
+import math.geom2d.Box2D;
+
 /**
  * Data sink interface. Store open street map nodes.
  * 
@@ -13,6 +15,12 @@ import com.osm2xp.core.model.osm.Way;
  * 
  */
 public interface IDataSink {
+	
+	/**
+	 * Process input bounding box
+	 * @param boundingBox Input bounding box
+	 */
+	void processBoundingBox(Box2D boundingBox);
 
 	/**
 	 * Store a node in the storage implementation.

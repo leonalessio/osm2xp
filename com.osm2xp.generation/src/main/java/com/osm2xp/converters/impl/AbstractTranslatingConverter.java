@@ -20,6 +20,7 @@ public abstract class AbstractTranslatingConverter extends AbstractOSMDataConver
 
 	@Override
 	public void visit(Box2D box) {
+		super.visit(box);
 		translator.processBoundingBox(box);
 	}
 

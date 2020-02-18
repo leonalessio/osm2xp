@@ -27,12 +27,6 @@ public class LanduseAreasAnalyzer extends AbstractOSMDataConverter {
 	}
 
 	@Override
-	public void visit(Box2D box) {
-		// Do nothing
-		
-	}
-
-	@Override
 	protected boolean mustStoreNode(Node node) {
 		return true;
 	}
