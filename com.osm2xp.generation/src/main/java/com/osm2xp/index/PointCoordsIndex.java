@@ -29,14 +29,7 @@ public class PointCoordsIndex extends AbstractPointCoordsIndex{
       
     
     protected long baseId = 0;
-
-    /**
-     * The size of the ArrayList (the number of elements it contains).
-     *
-     * @serial
-     */
-    private int size;
-    
+ 
     public PointCoordsIndex(int initialCapacity) {
     	super(initialCapacity);
     	latArray = new int[initialCapacity];
@@ -81,11 +74,8 @@ public class PointCoordsIndex extends AbstractPointCoordsIndex{
     		baseLon = lon;
     	}
     	double packedVal = (lon - baseLon) * PACK_FACTOR;
-		if (Math.abs(lon - baseLon) > MAX_PACKED_VALUE) {
-			if (lon * baseLon < 0) { //Should be around meridian180
-			} else {
-				System.out.println("PointIndex.lonToInt() - diff value too large");
-			}
+		if (Math.abs(lon - baseLon) > MAX_PACKED_VALUE) {			
+			System.out.println("PointIndex.lonToInt() - diff value too large");
     	}
 		return (int) Math.round(packedVal);
 	}
