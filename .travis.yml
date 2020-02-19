@@ -17,7 +17,5 @@ deploy:
     - builds/bin/*.zip
     - builds/bin/*.tgz
   skip_cleanup: true
-  branches:
-    only:
-      - master
+  all_branches: true
 
