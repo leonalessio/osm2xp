@@ -19,5 +19,5 @@ deploy:
     - builds/bin/*.tgz
   skip_cleanup: true
   on:
-    all_branches: true
+    tags: true
 
