@@ -17,6 +17,7 @@ deploy:
   file: 
     - builds/bin/*.zip
     - builds/bin/*.tgz
+    - builds/bin/*.tar.gz
   skip_cleanup: true
   on:
     tags: true
