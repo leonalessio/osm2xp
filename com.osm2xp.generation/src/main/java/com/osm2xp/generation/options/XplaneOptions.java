@@ -29,8 +29,8 @@ import com.osm2xp.generation.options.rules.XplaneObjectsRulesList;
 		"city3LaneHighwayRoadType", "country3LaneHighwayRoadType","city2LaneHighwayRoadType","country2LaneHighwayRoadType","cityRoadType",    
 		"countryRoadType", "oneLaneRoadType", "railwayType", "powerlineType", "packageFacades", "hardBuildings", "lightObject", "facadeSets", 
 		"restrictFacadeLod", "facadeLod", "generateXmlStats", "generatePdfStats", "generateDebugImg", "generateComments", 
-		"roadBridgeRampLen","railBridgeRampLen", "maxPerimeterToSimplify", "objSizeTolerance", "buildingsExclusions", "forestsRules",
-		"objectsRules", "lightsRules", "facadesRules", "polygonRules", "streetLightObjects", "airfieldOptions",
+		"roadBridgeRampLen","railBridgeRampLen", "maxPerimeterToSimplify", "objSizeTolerance", "objHeightTolerance", "objHeightAllowedDifference",
+		"buildingsExclusions", "forestsRules", "objectsRules", "lightsRules", "facadesRules", "polygonRules", "streetLightObjects", "airfieldOptions",
 		"deleteSrc" })
 @XmlRootElement(name = "XplaneOptions")
 public class XplaneOptions {
@@ -101,6 +101,8 @@ public class XplaneOptions {
 	protected int railBridgeRampLen = 200;
 	protected int maxPerimeterToSimplify = 50;
 	protected double objSizeTolerance = 0.1;
+	protected double objHeightTolerance = 0.3;
+	protected int objHeightAllowedDifference = 6;
 	@XmlElement(name = "BuildingsExclusions", required = true)
 	protected BuildingsExclusionsList buildingsExclusions;
 	@XmlElement(name = "ForestsRules", required = true)
@@ -1095,6 +1097,22 @@ public class XplaneOptions {
 
 	public void setRailwayType(int railwayType) {
 		this.railwayType = railwayType;
+	}
+
+	public double getObjHeightTolerance() {
+		return objHeightTolerance;
+	}
+
+	public void setObjHeightTolerance(double objHeightTolerance) {
+		this.objHeightTolerance = objHeightTolerance;
+	}
+
+	public int getObjHeightAllowedDifference() {
+		return objHeightAllowedDifference;
+	}
+
+	public void setObjHeightAllowedDifference(int objHeightAllowedDifference) {
+		this.objHeightAllowedDifference = objHeightAllowedDifference;
 	}
 
 }

@@ -16,6 +16,7 @@ import com.onpositive.classification.core.buildings.TypeProvider;
 import com.osm2xp.core.logging.Osm2xpLogger;
 import com.osm2xp.generation.options.GlobalOptionsProvider;
 import com.osm2xp.generation.options.XPlaneOptionsProvider;
+import com.osm2xp.generation.options.XplaneOptions;
 import com.osm2xp.generation.paths.PathsService;
 import com.osm2xp.generation.xplane.resources.DsfObjectsProvider;
 import com.osm2xp.generation.xplane.resources.XPOutputFormat;
@@ -83,7 +84,8 @@ public class XPPolyTo3DObjectTranslator extends XPWritingTranslator {
 
 	@Override
 	public boolean handlePoly(OsmPolyline osmPolyline) {
-		if (!XPlaneOptionsProvider.getOptions().isGenerateObjBuildings()) {
+		XplaneOptions xpOptions = XPlaneOptionsProvider.getOptions();
+		if (!xpOptions.isGenerateObjBuildings()) {
 			return false;
 		}
 		if (!(osmPolyline instanceof OsmPolygon)) {
@@ -91,13 +93,13 @@ public class XPPolyTo3DObjectTranslator extends XPWritingTranslator {
 		}
 		if (!((OsmPolygon) osmPolyline).isSimplePolygon()) {
 			double length = GeomUtils.computeEdgesLength(osmPolyline.getPolyline());
-			if (length <= XPlaneOptionsProvider.getOptions().getMaxPerimeterToSimplify()) { //If house is small enough, we don't care about complex shape and just simplify it to try finding suitable model
+			if (length <= xpOptions.getMaxPerimeterToSimplify()) { //If house is small enough, we don't care about complex shape and just simplify it to try finding suitable model
 				osmPolyline = ((OsmPolygon) osmPolyline).toSimplifiedPoly();
 			} else {
 				return false;
 			}
 		}
-		double tolerance = XPlaneOptionsProvider.getOptions().getObjSizeTolerance();
+		double tolerance = xpOptions.getObjSizeTolerance();
 		OSMBuildingType buildingType = TypeProvider.getBuildingType(osmPolyline.getTags());
 		if (buildingType == null && GlobalOptionsProvider.getOptions().isAnalyzeAreas()) {
 			buildingType = getTypeFromLanduse(osmPolyline);
@@ -117,7 +119,7 @@ public class XPPolyTo3DObjectTranslator extends XPWritingTranslator {
 			int height = OsmUtils.getHeightFromTags(osmPolyline.getTags());
 			ModelMatch match = null;
 			if (height > 0) {
-				Collection<ModelWithSize> modelsByHeight = chooseByHeight(height, 0.3, models);
+				Collection<ModelWithSize> modelsByHeight = chooseByHeight(height, xpOptions.getObjHeightTolerance(), xpOptions.getObjHeightAllowedDifference(), models);
 				match = selectMatchedModel(len1, len2, tolerance, modelsByHeight);
 			} else {
 				match = selectMatchedModel(len1, len2, tolerance, models);
@@ -136,8 +138,7 @@ public class XPPolyTo3DObjectTranslator extends XPWritingTranslator {
 		return false;
 	}
 
-	private Collection<ModelWithSize> chooseByHeight(int height, double heightTolerance, Collection<ModelWithSize> models) {
-		double allowedDifference = 2 * GlobalOptionsProvider.getOptions().getLevelHeight(); //TODO we ignore difference 2 levels or less, make this configurable
+	private Collection<ModelWithSize> chooseByHeight(int height, double heightTolerance, double allowedHeightDifference, Collection<ModelWithSize> models) {
 		List<ModelWithSize> matchedModels = new ArrayList<ModelWithSize>();
 		double lowerBound = height - height * heightTolerance;
 		double upperBound = height + height * heightTolerance;
@@ -145,7 +146,7 @@ public class XPPolyTo3DObjectTranslator extends XPWritingTranslator {
 			if (curModel.getHeight() == 0) {
 				continue;
 			}
-			if ((Math.abs(height - curModel.getHeight()) < allowedDifference) ||
+			if ((Math.abs(height - curModel.getHeight()) < allowedHeightDifference) ||
 				(curModel.getHeight() >= lowerBound && curModel.getHeight() <= upperBound )) {
 				matchedModels.add(curModel);
 			}

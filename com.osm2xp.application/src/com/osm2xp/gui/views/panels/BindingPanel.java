@@ -44,13 +44,13 @@ public class BindingPanel extends Composite {
 		int factor = (int) Math.pow(10, digits);
 		bindingContext.bindValue(WidgetProperties.selection().observe(spinner),
 				PojoProperties.value(property).observe(bean),
-				UpdateValueStrategy.create(new Converter(int.class, double.class) {
+				UpdateValueStrategy.create(new Converter<Object, Object>(int.class, double.class) {
 
 					@Override
 					public Object convert(Object fromObject) {
 						return (Integer) fromObject * 1.0 / factor;
 					}
-				}), UpdateValueStrategy.create(new Converter(double.class, int.class) {
+				}), UpdateValueStrategy.create(new Converter<Object, Object>(double.class, int.class) {
 
 					@Override
 					public Object convert(Object fromObject) {
@@ -63,13 +63,13 @@ public class BindingPanel extends Composite {
 	protected void bindTextToInt(Text widget, Object bean, String property) {
 		bindingContext.bindValue(WidgetProperties.text(SWT.Modify).observe(widget),
 				PojoProperties.value(property).observe(bean),
-				UpdateValueStrategy.create(new Converter(String.class, int.class) {
+				UpdateValueStrategy.create(new Converter<Object, Object>(String.class, int.class) {
 					
 					@Override
 					public Object convert(Object fromObject) {
 						return Integer.parseInt(fromObject.toString());
 					}
-				}), UpdateValueStrategy.create(new Converter(int.class, String.class) {
+				}), UpdateValueStrategy.create(new Converter<Object, Object>(int.class, String.class) {
 					
 					@Override
 					public Object convert(Object fromObject) {
