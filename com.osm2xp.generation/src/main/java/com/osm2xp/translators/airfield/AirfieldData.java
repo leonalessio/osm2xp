@@ -7,6 +7,7 @@ import java.util.List;
 
 import org.apache.commons.lang.StringUtils;
 
+import com.ibm.icu.text.Transliterator;
 import com.osm2xp.core.model.osm.IHasTags;
 import com.osm2xp.model.osm.polygon.OsmPolygon;
 import com.osm2xp.model.osm.polygon.OsmPolyline;
@@ -27,6 +28,8 @@ public abstract class AirfieldData extends AerowayData {
 	private List<TaxiLane> taxiLanes = new ArrayList<>();
 	private List<HelipadData> helipads = new ArrayList<>();
 	private String icao;
+	private String iata;
+	private Transliterator transliterator = Transliterator.getInstance("Any-Latin; NFD; [^\\p{Alnum}] Remove");
 	
 	public AirfieldData(IHasTags osmEntity) {
 		super(osmEntity);
@@ -35,11 +38,18 @@ public abstract class AirfieldData extends AerowayData {
 			icao = name.toUpperCase().trim();
 		}
 		if (icao != null) {
-			icao = icao.toUpperCase();
+			String fixed = fixICAO(icao);
+			if (fixed != null) {
+				icao = fixed.toUpperCase();
+			}
 		}
 		id = toId(icao);
 		if (StringUtils.isEmpty(id)) {
-			id = toId(osmEntity.getTagValue("iata"));
+			String iata = osmEntity.getTagValue("iata");
+			if (iata != null) {
+				id = toId(iata);
+				this.iata = iata;
+			}
 		}
 		if (StringUtils.isEmpty(id)) {
 			id = toId(name);
@@ -47,6 +57,17 @@ public abstract class AirfieldData extends AerowayData {
 		
 	}
 	
+	protected String fixICAO(String icaoCode) {
+		if (OsmUtils.isValidICAO(icaoCode)) {
+			return icaoCode;
+		}
+		icaoCode = transliterator.transliterate(icaoCode);
+		if (OsmUtils.isValidICAO(icaoCode)) {
+			return icaoCode;
+		}
+		return null;		
+	}
+
 	public abstract boolean containsPolyline(OsmPolyline polyline);
 	
 	public void addRunway(OsmPolyline runway) {
@@ -214,5 +235,9 @@ public abstract class AirfieldData extends AerowayData {
 			addApronArea(area);
 		}
 		addHelipad(data);
+	}
+
+	public String getIATA() {
+		return iata;
 	}
 }

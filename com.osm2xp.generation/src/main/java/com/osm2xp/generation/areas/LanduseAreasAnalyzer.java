@@ -17,7 +17,7 @@ import com.osm2xp.datastore.IDataSink;
 import com.osm2xp.generation.osm.OsmConstants;
 import com.osm2xp.utils.osm.OsmUtils;
 
-import math.geom2d.Box2D;
+import static com.osm2xp.generation.osm.OsmConstants.*;
 
 public class LanduseAreasAnalyzer extends AbstractOSMDataConverter {
 	
@@ -38,16 +38,18 @@ public class LanduseAreasAnalyzer extends AbstractOSMDataConverter {
 
 	@Override
 	protected void translateWay(Way way, List<Long> ids) throws Osm2xpBusinessException {
-		List<Tag> tags = way.getTags();
-		String landuse = OsmUtils.getTagValue(OsmConstants.LANDUSE_TAG, tags);
-		if (!StringUtils.stripToEmpty(landuse).trim().isEmpty()) {
-			Polygon poly = getPolygon(ids);
-			if (poly != null) {
-				List<Geometry> fixed = fix(Collections.singletonList(poly));
-				for (Geometry geometry : fixed) {
-					if (geometry instanceof Polygon) {
-						MapArea area = new MapArea(landuse, (Polygon) geometry);
-						AreaProvider.getInstance().addArea(area);
+		List<Tag> tags = way.getTags();		
+		for (String tagName : SUPPORTED_AREA_TYPES) {
+			String value = OsmUtils.getTagValue(tagName, tags);
+			if (!StringUtils.stripToEmpty(value).trim().isEmpty()) {
+				Polygon poly = getPolygon(ids);
+				if (poly != null) {
+					List<Geometry> fixed = fix(Collections.singletonList(poly));
+					for (Geometry geometry : fixed) {
+						if (geometry instanceof Polygon) {
+							MapArea area = new MapArea(tagName, value, (Polygon) geometry);
+							AreaProvider.getInstance().addArea(area);
+						}
 					}
 				}
 			}
@@ -57,17 +59,19 @@ public class LanduseAreasAnalyzer extends AbstractOSMDataConverter {
 	@Override
 	protected void translatePolys(long id, List<Tag> tagsModel, List<Polygon> cleanedPolys)
 			throws Osm2xpBusinessException {
-		String landuse = OsmUtils.getTagValue(OsmConstants.LANDUSE_TAG, tagsModel);
-		if (!StringUtils.stripToEmpty(landuse).trim().isEmpty()) {
+		for (String tagName : SUPPORTED_AREA_TYPES) {
+			String value = OsmUtils.getTagValue(tagName, tagsModel);
+			if (!StringUtils.stripToEmpty(value).trim().isEmpty()) {
 			for (Polygon polygon : cleanedPolys) {
 				List<Geometry> fixed = fix(Collections.singletonList(polygon));
 				for (Geometry geometry : fixed) {
 					if (geometry instanceof Polygon) {
-						MapArea area = new MapArea(landuse, (Polygon) geometry);
+						MapArea area = new MapArea(tagName, value, (Polygon) geometry);
 						AreaProvider.getInstance().addArea(area);
 					}
 				}
 			}
+		}
 		}
 	}
 	

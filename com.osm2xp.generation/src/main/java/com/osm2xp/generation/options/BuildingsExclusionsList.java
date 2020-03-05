@@ -57,7 +57,7 @@ public class BuildingsExclusionsList {
 	 * 
 	 * 
 	 * <p>
-	 * Objects of the following type(s) are allowed in the list {@link Tag }
+	 * Objects of the following value(s) are allowed in the list {@link Tag }
 	 * 
 	 * 
 	 */

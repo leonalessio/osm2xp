@@ -66,4 +66,5 @@ Bundle-ClassPath: .,
  staticlib/listenablefuture-9999.0-empty-to-avoid-conflict-with-guava.jar,
  staticlib/lz4-1.3.0.jar,
  staticlib/mapdb-3.0.7.jar,
- lib/jdom.jar
+ lib/jdom.jar,
+ lib/icu4j.jar

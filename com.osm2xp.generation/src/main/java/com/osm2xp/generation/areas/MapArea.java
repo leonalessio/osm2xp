@@ -4,18 +4,20 @@ import org.locationtech.jts.geom.Polygon;
 
 public class MapArea {
 	
-	public final String type;
+	public final String tag;
+	public final String value;
 	public final Polygon polygon;
 	
-	public MapArea(String type, Polygon polygon) {
+	public MapArea(String tag, String value, Polygon polygon) {
 		super();
-		this.type = type;
+		this.tag = tag;
+		this.value = value;
 		this.polygon = polygon;
 	}
 
 	@Override
 	public String toString() {
-		return "Area Type:" + type + ", bounds " + polygon.getEnvelopeInternal();
+		return "Area:" + tag + " = " + value + ", bounds " + polygon.getEnvelopeInternal();
 	}
 	
 }

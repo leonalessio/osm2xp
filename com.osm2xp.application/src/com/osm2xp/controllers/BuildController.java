@@ -62,7 +62,13 @@ public class BuildController {
 			folderPath = currentFile.getParent() + File.separator
 					+ GuiOptionsHelper.getSceneName();
 
-			deleteFolder = checkDeleteFolder(new File(folderPath));
+			File folder = new File(folderPath);
+			if (folder.exists()) {				
+				deleteFolder = checkDeleteFolder(folder);
+				if (!deleteFolder) {
+					return;
+				}
+			}
 		} 
 		startGeneration(currentFile, deleteFolder);
 		

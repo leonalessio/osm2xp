@@ -2,6 +2,7 @@ package com.osm2xp.translators.xplane;
 
 import java.awt.Color;
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.Collections;
 import java.util.Date;
 import java.util.List;
@@ -428,7 +429,7 @@ public class XPlaneTranslatorImpl implements ITranslator{
 		if (XPlaneOptionsProvider.getOptions().isGenerateObj() && GeomUtils.compareCoordinates(currentTile, node) && !node.getTags().isEmpty()) { //We don't analyze nodes, which doesn't have any tags - to avoid spending too much time doing useless work
 			MapArea area = getContainingArea(node.getLon(), node.getLat());
 			if (area != null) {
-				node.getTags().add(new Tag(OsmConstants.LANDUSE_TAG, area.type));
+				node.getTags().add(new Tag(area.tag, area.value));
 			}
 			
 			// write a 3D object in the dsf file if this node is in an
@@ -511,10 +512,12 @@ public class XPlaneTranslatorImpl implements ITranslator{
 //			}
 //			return polygons;
 		}
-		if (osmPolyline.getTags().size() > 0 && StringUtils.isEmpty(osmPolyline.getTagValue(OsmConstants.LANDUSE_TAG))) { //We define containing area only for objects having some other tags 
+		boolean isArea = Arrays.stream(OsmConstants.SUPPORTED_AREA_TYPES).anyMatch(tag -> !StringUtils.isEmpty(osmPolyline.getTagValue(tag)));
+		
+		if (osmPolyline.getTags().size() > 0 && !isArea) { //We define containing area only for objects having some other tags 
 			MapArea area = getContainingArea(osmPolyline.getCenter().x(), osmPolyline.getCenter().y());
 			if (area != null) {
-				osmPolyline.getTags().add(new Tag(OsmConstants.LANDUSE_TAG, area.type));
+				osmPolyline.getTags().add(new Tag(area.tag, area.value));
 			}
 		}
 		return Collections.singletonList(osmPolyline);
