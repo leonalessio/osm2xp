@@ -6,6 +6,18 @@ and this project adheres to [Semantic Versioning](http://semver.org/spec/v2.0.0.
 
 ## [Unreleased]
 
+## [4.5.0]
+
+### Added
+- Ability to specify an object height for the object auto-selection in format like 10x12h6
+- Better console logging, like total generation time
+
+### Fixed
+- Problem with the meridian 180
+
+### Changed
+- Generated airfields placed into the separate folder `scenery_name_airfields`
+
 ## [4.4.0]
 
 ### Added
