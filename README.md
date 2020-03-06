@@ -37,6 +37,7 @@ You need at least Java 8 JRE or JDK to be installed
 
 Download program archive from [SourceForge](https://sourceforge.net/projects/osm2xp/ "SourceForge") and unpack to any folder. It's better to use path without spaces. Launch program using osm2xp/osm2xp.exe executable.
 Initially program was available for Windows only, starting from 3.5/4.x Linux version is also provided (see .tgz archives on website). 
+Alpha releases with latest fixes can be downloaded from [here](https://github.com/32kda/osm2xp/releases)
 
 ## Usage
 
