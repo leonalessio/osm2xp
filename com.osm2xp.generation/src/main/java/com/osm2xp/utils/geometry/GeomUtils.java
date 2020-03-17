@@ -38,6 +38,7 @@ import com.osm2xp.model.geom.Lod13Location;
 import math.geom2d.Angle2D;
 import math.geom2d.Box2D;
 import math.geom2d.Point2D;
+import math.geom2d.curve.Curve2D;
 import math.geom2d.line.Line2D;
 import math.geom2d.line.LineSegment2D;
 import math.geom2d.polygon.LinearCurve2D;
@@ -69,6 +70,7 @@ public class GeomUtils {
         };
 	
 	public static final double E = 0.000001;
+	public static final double LATITUDE_TO_M = 111000;
 
 	/**
 	 * Check if the object fits the polygon.
@@ -168,6 +170,28 @@ public class GeomUtils {
 				.toArray(new Coordinate[coords.size()]);
 		GeometryFactory geometryFactory = new GeometryFactory();
 		return geometryFactory.createLineString(points);
+	}
+	
+	public static LinearCurve2D linearCurve2DToLocal(Curve2D line, Point2D centerpoint) {
+		List<Point2D> coords = new ArrayList<>();
+		double factor = Math.cos(Math.toRadians(centerpoint.y()));
+		for (Point2D point : line.vertices()) {
+			double x = (point.x() - centerpoint.x()) * factor;
+			double y = point.y() - centerpoint.y();
+			coords.add(new Point2D(x,y));
+		}
+		return new Polyline2D(coords);
+	}
+	
+	public static LinearCurve2D localToLinearCurve2D(Curve2D line, Point2D centerpoint) {
+		List<Point2D> coords = new ArrayList<>();
+		double factor = Math.cos(Math.toRadians(centerpoint.y()));
+		for (Point2D point : line.vertices()) {
+			double x = (point.x() - centerpoint.x()) / factor;
+			double y = point.y() - centerpoint.y();
+			coords.add(new Point2D(x,y));
+		}
+		return new Polyline2D(coords);
 	}
 	
 	public static Line2D line2DToLocal(Line2D line, Point2D centerpoint) {

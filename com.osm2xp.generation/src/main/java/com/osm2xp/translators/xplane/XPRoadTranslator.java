@@ -4,13 +4,16 @@ import org.apache.commons.lang.ArrayUtils;
 import org.apache.commons.lang.StringUtils;
 
 import com.osm2xp.core.model.osm.IHasTags;
-import com.osm2xp.model.osm.polygon.OsmPolyline;
 import com.osm2xp.generation.options.GlobalOptionsProvider;
 import com.osm2xp.generation.options.XPlaneOptionsProvider;
 import com.osm2xp.generation.options.XplaneOptions;
 import com.osm2xp.generation.osm.OsmConstants;
 import com.osm2xp.generation.xplane.resources.XPOutputFormat;
+import com.osm2xp.model.osm.polygon.OsmPolyline;
+import com.osm2xp.utils.geometry.GeomUtils;
 import com.osm2xp.writers.IWriter;
+
+import math.geom2d.polygon.LinearCurve2D;
 
 public class XPRoadTranslator extends XPPathTranslator {
 	
@@ -78,6 +81,15 @@ public class XPRoadTranslator extends XPPathTranslator {
 	@Override
 	protected int getBridgeRampLength() {
 		return XPlaneOptionsProvider.getOptions().getRoadBridgeRampLen();
+	}
+	
+	protected LinearCurve2D[] getLightStrings(LinearCurve2D baseLine, double distance) {
+		LinearCurve2D localCurve = GeomUtils.linearCurve2DToLocal(baseLine, baseLine.vertex(0));
+		LinearCurve2D[] result = new LinearCurve2D[2];
+		double coordsDist = distance / GeomUtils.LATITUDE_TO_M;
+		result[0] = GeomUtils.localToLinearCurve2D(localCurve.parallel(coordsDist), baseLine.vertex(0));
+		result[1] = GeomUtils.localToLinearCurve2D(localCurve.parallel(-coordsDist), baseLine.vertex(0));
+		return result;
 	}
 	
 	@Override
