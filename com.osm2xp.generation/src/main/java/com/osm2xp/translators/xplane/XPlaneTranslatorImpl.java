@@ -114,7 +114,7 @@ public class XPlaneTranslatorImpl implements ITranslator{
 		IDRenumbererService idProvider = new IDRenumbererService();
 		
 		polyHandlers.add(new XPBarrierTranslator(writer, dsfObjectsProvider, outputFormat));
-		polyHandlers.add(new XPRoadTranslator(writer, idProvider, outputFormat));
+		polyHandlers.add(new XPRoadTranslator(writer, dsfObjectsProvider, idProvider, outputFormat));
 		polyHandlers.add(new XPRailTranslator(writer, idProvider, outputFormat));
 		polyHandlers.add(new XPPowerlineTranslator(writer, idProvider, outputFormat));
 		polyHandlers.add(new XPCoolingTowerTranslator(writer, dsfObjectsProvider));

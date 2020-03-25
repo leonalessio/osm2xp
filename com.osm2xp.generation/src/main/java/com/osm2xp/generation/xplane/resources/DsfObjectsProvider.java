@@ -24,6 +24,7 @@ import com.osm2xp.core.model.osm.Tag;
 import com.osm2xp.generation.options.ObjectFile;
 import com.osm2xp.generation.options.Polygon;
 import com.osm2xp.generation.options.XPlaneOptionsProvider;
+import com.osm2xp.generation.options.XplaneOptions;
 import com.osm2xp.generation.options.rules.FacadeTagRule;
 import com.osm2xp.generation.options.rules.ForestTagRule;
 import com.osm2xp.generation.options.rules.PolygonTagsRule;
@@ -202,9 +203,10 @@ public class DsfObjectsProvider {
 		polygonsList.clear();
 
 		// FORESTS RULES
-		if (XPlaneOptionsProvider.getOptions().isGenerateFor()) {
+		XplaneOptions options = XPlaneOptionsProvider.getOptions();
+		if (options.isGenerateFor()) {
 			
-			for (ForestTagRule forest : XPlaneOptionsProvider.getOptions()
+			for (ForestTagRule forest : options
 					.getForestsRules().getRules()) {
 				for (ObjectFile file : forest.getObjectsFiles()) {
 					if (!StringUtils.isEmpty(file.getPath()) && !forestsList.contains(file.getPath())) {
@@ -218,9 +220,9 @@ public class DsfObjectsProvider {
 			
 		}
 		// DRAPED POLYGONS RULES
-		if (XPlaneOptionsProvider.getOptions().isGeneratePolys()) {
+		if (options.isGeneratePolys()) {
 
-			for (PolygonTagsRule forest : XPlaneOptionsProvider.getOptions()
+			for (PolygonTagsRule forest : options
 					.getPolygonRules().getRules()) {
 				for (Polygon poly : forest.getPolygons()) {
 					if (!StringUtils.isEmpty(poly.getPath()) && !drapedPolysList.contains(poly.getPath())) {
@@ -234,9 +236,9 @@ public class DsfObjectsProvider {
 			
 		}
 		// FACADES RULES
-		if (!XPlaneOptionsProvider.getOptions().getFacadesRules().getRules()
+		if (!options.getFacadesRules().getRules()
 				.isEmpty()) {
-			for (FacadeTagRule facadeTagRule : XPlaneOptionsProvider.getOptions()
+			for (FacadeTagRule facadeTagRule : options
 					.getFacadesRules().getRules()) {
 				for (ObjectFile file : facadeTagRule.getObjectsFiles()) {
 					if (!StringUtils.isEmpty(file.getPath()) && !singlesFacadesList.contains(file.getPath())) {
@@ -248,9 +250,18 @@ public class DsfObjectsProvider {
 		}
 
 		// BASIC BUILDINGS FACADES
-		if (XPlaneOptionsProvider.getOptions().isGenerateBuildings()) {
+		if (options.isGenerateBuildings()) {
 			facadesList.addAll(facadeSetManager.getAllFacadeStrings());
 			polygonsList.addAll(facadesList.stream().map(str -> FACADES_DIR_PREFFIX + str).collect(Collectors.toList()));
+		}
+		
+		//Light Object String
+		if (options.isGenerateLights()) {
+			if (!StringUtils.stripToEmpty(options.getLightObjectString()).isEmpty()) {
+				polygonsList.add(options.getLightObjectString());
+			} else {
+				Osm2xpLogger.error("Gnerate street lights selected, but not lights .str obect specified!");
+			}
 		}
 
 	}

@@ -27,9 +27,9 @@ import com.osm2xp.generation.options.rules.XplaneObjectsRulesList;
 		"generateRoads", "generateFence", "generateTanks", "generateChimneys", "generateCoolingTowers",
 		"generateBridges", "generateSlopedRoofs", "generatePolys", "generateStreetLights", "lightsDensity",
 		"city3LaneHighwayRoadType", "country3LaneHighwayRoadType","city2LaneHighwayRoadType","country2LaneHighwayRoadType","cityRoadType",    
-		"countryRoadType", "oneLaneRoadType", "railwayType", "powerlineType", "packageFacades", "hardBuildings", "lightObject", "facadeSets", 
-		"restrictFacadeLod", "facadeLod", "generateXmlStats", "generatePdfStats", "generateDebugImg", "generateComments", 
-		"roadBridgeRampLen","railBridgeRampLen", "maxPerimeterToSimplify", "objSizeTolerance", "objHeightTolerance", "objHeightAllowedDifference",
+		"countryRoadType", "oneLaneRoadType", "railwayType", "powerlineType", "packageFacades", "hardBuildings", "lightObject", "lightObjectString", "facadeSets", 
+		"restrictFacadeLod", "facadeLod", "generateXmlStats", "generatePdfStats", "generateDebugImg", "generateComments", "generateHighwayLights", "roadLaneWidth",
+		"roadBridgeRampLen","railBridgeRampLen", "streetLightsInterval", "maxPerimeterToSimplify", "objSizeTolerance", "objHeightTolerance", "objHeightAllowedDifference",
 		"buildingsExclusions", "forestsRules", "objectsRules", "lightsRules", "facadesRules", "polygonRules", "streetLightObjects", "airfieldOptions",
 		"deleteSrc" })
 @XmlRootElement(name = "XplaneOptions")
@@ -80,14 +80,15 @@ public class XplaneOptions {
 	protected boolean generateCoolingTowers= true;
 	protected boolean generateBridges = true;
 	protected boolean generatePolys = true;
-	protected boolean generateStreetLights;
+	protected boolean generateStreetLights = true;
 	protected boolean generateSlopedRoofs;
 	protected boolean deleteSrc = true;
 	protected int lightsDensity;
 	protected boolean packageFacades;
 	protected boolean hardBuildings;
-	@XmlElement(required = true)
+	@XmlElement
 	protected String lightObject;
+	protected String lightObjectString;
 	protected String facadeSets;
 	protected boolean restrictFacadeLod = false;
 	protected int facadeLod;
@@ -97,8 +98,11 @@ public class XplaneOptions {
 	protected boolean generatePdfStats;
 	protected boolean generateDebugImg = false;
 	protected boolean generateComments = false;
+	protected boolean generateHighwayLights = true;
+	protected double roadLaneWidth = 3.75;
 	protected int roadBridgeRampLen = 100;
 	protected int railBridgeRampLen = 200;
+	protected int streetLightsInterval = 50;
 	protected int maxPerimeterToSimplify = 50;
 	protected double objSizeTolerance = 0.1;
 	protected double objHeightTolerance = 0.3;
@@ -1113,6 +1117,38 @@ public class XplaneOptions {
 
 	public void setObjHeightAllowedDifference(int objHeightAllowedDifference) {
 		this.objHeightAllowedDifference = objHeightAllowedDifference;
+	}
+
+	public boolean isGenerateHighwayLights() {
+		return generateHighwayLights;
+	}
+
+	public void setGenerateHighwayLights(boolean generateHighwayLights) {
+		this.generateHighwayLights = generateHighwayLights;
+	}
+
+	public double getRoadLaneWidth() {
+		return roadLaneWidth;
+	}
+
+	public void setRoadLaneWidth(double roadLaneWidth) {
+		this.roadLaneWidth = roadLaneWidth;
+	}
+
+	public String getLightObjectString() {
+		return lightObjectString;
+	}
+
+	public void setLightObjectString(String lightObjectString) {
+		this.lightObjectString = lightObjectString;
+	}
+
+	public int getStreetLightsInterval() {
+		return streetLightsInterval;
+	}
+
+	public void setStreetLightsInterval(int streetLightsInterval) {
+		this.streetLightsInterval = streetLightsInterval;
 	}
 
 }

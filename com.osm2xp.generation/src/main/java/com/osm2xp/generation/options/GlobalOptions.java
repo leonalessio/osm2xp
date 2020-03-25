@@ -35,6 +35,7 @@ public class GlobalOptions {
 	protected String allowedHighwayTypes = "motorway;trunk;primary;secondary;tertiary;unclassified;residential";
 	protected String allowedHighwayLinkTypes = "motorway_link;trunk_link;primary_link;secondary_link;tertiary_link";
 	protected String allowedHighwaySurfaceTypes = "paved;asphalt;concrete";
+	protected String disallowedHighwayTags = "ice_road;winter_road";
 
 	/**
 	 * Default no-arg constructor
@@ -222,6 +223,18 @@ public class GlobalOptions {
 
 	public void setGenerateLibrary(boolean generateLibrary) {
 		this.generateLibrary = generateLibrary;
+	}
+
+	public String getDisallowedHighwayTags() {
+		return disallowedHighwayTags;
+	}
+	
+	public String[] getDisallowedHighwayTagsArray() {
+		return StringUtils.stripToEmpty(disallowedHighwayTags).split(";");
+	}
+
+	public void setDisallowedHighwayTags(String disallowedHighwayTags) {
+		this.disallowedHighwayTags = disallowedHighwayTags;
 	}
 
 }
