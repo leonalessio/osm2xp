@@ -63,7 +63,7 @@ public class XPRoadTranslator extends XPPathTranslator {
 						   lanesCount >= 3;
 		if (hasLight) {
 			boolean doubleSided = (highway && lanesCount >= 2) || lanesCount >= 3;
-			lightTranslator.writeLightStrings(poly.getPolyline(), lanesCount * options.getRoadLaneWidth(), doubleSided);
+			lightTranslator.writeLightStrings(poly.getPolyline(), lanesCount * options.getRoadLaneWidth() / 2 * 1.1, doubleSided); //TODO 1.1 is manually selected coef
 		}
 	}
 

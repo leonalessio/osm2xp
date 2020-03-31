@@ -187,8 +187,8 @@ public class GeomUtils {
 		List<Point2D> coords = new ArrayList<>();
 		double factor = Math.cos(Math.toRadians(centerpoint.y()));
 		for (Point2D point : line.vertices()) {
-			double x = (point.x() - centerpoint.x()) / factor;
-			double y = point.y() - centerpoint.y();
+			double x = point.x() / factor + centerpoint.x();
+			double y = point.y() + centerpoint.y();
 			coords.add(new Point2D(x,y));
 		}
 		return new Polyline2D(coords);
