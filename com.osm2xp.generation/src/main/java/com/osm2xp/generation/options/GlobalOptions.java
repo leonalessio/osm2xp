@@ -17,7 +17,7 @@ import org.apache.commons.lang.StringUtils;
 @XmlAccessorType(XmlAccessType.FIELD)
 @XmlType(name = "", propOrder = { "databaseMode", "appendHour", "appendTile","analyzeAreas", "generateLibrary",
 		"simplifyShapes", "currentFilePath", "levelHeight", 
-		"allowedHighwayTypes","allowedHighwayLinkTypes", "allowedHighwaySurfaceTypes"})
+		"allowedHighwayTypes","allowedHighwayLinkTypes", "allowedHighwaySurfaceTypes", "disallowedHighwayTags"})
 @XmlRootElement(name = "GlobalOptions")
 public class GlobalOptions {
 

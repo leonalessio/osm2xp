@@ -103,8 +103,8 @@ public abstract class AbstractOSMDataConverter implements IOSMDataVisitor {
 
 	@Override
 	public void visit(Relation relation) {
-		List<Tag> tagsModel = relation.getTags();
-		if ("multipolygon".equals(relation.getTagValue("value")) && mustProcessPolyline(tagsModel)) {
+ 		List<Tag> tagsModel = relation.getTags();
+		if ("multipolygon".equals(relation.getTagValue("type")) && mustProcessPolyline(tagsModel)) {
 			try {
 				List<List<Long>> outer = new ArrayList<>();
 				List<List<Long>> inner = new ArrayList<>();

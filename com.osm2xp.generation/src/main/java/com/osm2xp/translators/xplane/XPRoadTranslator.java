@@ -62,7 +62,7 @@ public class XPRoadTranslator extends XPPathTranslator {
 						   !lit.isEmpty() && !"no".equals(lit) ||
 						   lanesCount >= 3;
 		if (hasLight) {
-			boolean doubleSided = highway || lanesCount >= 3;
+			boolean doubleSided = (highway && lanesCount >= 2) || lanesCount >= 3;
 			lightTranslator.writeLightStrings(poly.getPolyline(), lanesCount * options.getRoadLaneWidth(), doubleSided);
 		}
 	}

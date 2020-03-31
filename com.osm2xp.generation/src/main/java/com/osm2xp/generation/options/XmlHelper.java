@@ -42,7 +42,7 @@ public class XmlHelper {
 					.getClass().getSimpleName()), (Class<T>) bean.getClass(), bean);
 			marshaller.marshal(jaxbElement, file);
 		} catch (JAXBException e) {
-			throw new Osm2xpBusinessException(e.getMessage());
+			throw new Osm2xpBusinessException(e.getMessage(),e);
 		}
 	}
 

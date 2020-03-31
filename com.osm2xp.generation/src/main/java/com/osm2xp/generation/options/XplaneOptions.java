@@ -27,7 +27,7 @@ import com.osm2xp.generation.options.rules.XplaneObjectsRulesList;
 		"generateRoads", "generateFence", "generateTanks", "generateChimneys", "generateCoolingTowers",
 		"generateBridges", "generateSlopedRoofs", "generatePolys", "generateStreetLights", "lightsDensity",
 		"city3LaneHighwayRoadType", "country3LaneHighwayRoadType","city2LaneHighwayRoadType","country2LaneHighwayRoadType","cityRoadType",    
-		"countryRoadType", "oneLaneRoadType", "railwayType", "powerlineType", "packageFacades", "hardBuildings", "lightObject", "lightObjectString", "facadeSets", 
+		"countryRoadType", "oneLaneRoadType","railwayType", "powerlineType", "packageFacades", "hardBuildings", "lightObject", "lightObjectString", "facadeSets", 
 		"restrictFacadeLod", "facadeLod", "generateXmlStats", "generatePdfStats", "generateDebugImg", "generateComments", "generateHighwayLights", "roadLaneWidth",
 		"roadBridgeRampLen","railBridgeRampLen", "streetLightsInterval", "maxPerimeterToSimplify", "objSizeTolerance", "objHeightTolerance", "objHeightAllowedDifference",
 		"buildingsExclusions", "forestsRules", "objectsRules", "lightsRules", "facadesRules", "polygonRules", "streetLightObjects", "airfieldOptions",
@@ -88,7 +88,7 @@ public class XplaneOptions {
 	protected boolean hardBuildings;
 	@XmlElement
 	protected String lightObject;
-	protected String lightObjectString;
+	protected String lightObjectString = "objects/Column_1.str";
 	protected String facadeSets;
 	protected boolean restrictFacadeLod = false;
 	protected int facadeLod;
@@ -124,10 +124,10 @@ public class XplaneOptions {
 	@XmlElement(name="AirfieldOptions", required=true) 
 	protected XplaneAirfieldOptions airfieldOptions;
 	
-	protected int city3LaneHighwayRoadType = 100;
-	protected int country3LaneHighwayRoadType = 101;
-	protected int city2LaneHighwayRoadType=110;
-	protected int country2LaneHighwayRoadType=111;
+	protected int city3LaneHighwayRoadType = 14;
+	protected int country3LaneHighwayRoadType = 10;
+	protected int city2LaneHighwayRoadType=40;
+	protected int country2LaneHighwayRoadType=41;
 	protected int cityRoadType=40;
 	protected int countryRoadType=41;
 	protected int oneLaneRoadType=50;
