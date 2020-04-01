@@ -29,12 +29,9 @@ import com.osm2xp.controllers.BuildController;
 import com.osm2xp.core.constants.CoreConstants;
 import com.osm2xp.core.exceptions.Osm2xpBusinessException;
 import com.osm2xp.core.logging.Osm2xpLogger;
-import com.osm2xp.generation.options.FlightGearOptionsProvider;
-import com.osm2xp.generation.options.FsxOptionsProvider;
 import com.osm2xp.generation.options.GlobalOptionsProvider;
 import com.osm2xp.generation.options.XPlaneOptionsProvider;
 import com.osm2xp.gui.perspectives.IGenerationModeProvider;
-import com.osm2xp.utils.helpers.FlyLegacyOptionsHelper;
 
 /**
  * ApplicationWorkbenchWindowAdvisor
@@ -46,7 +43,7 @@ import com.osm2xp.utils.helpers.FlyLegacyOptionsHelper;
 public class ApplicationWorkbenchWindowAdvisor extends WorkbenchWindowAdvisor {
 	
 	private static final String UI_LAYOUT_VERSION_KEY = "UI_LAYOUT_VERSION";
-	private static int UI_LAYOUT_VERSION = 1;
+	private static int UI_LAYOUT_VERSION = 2;
 
 	public ApplicationWorkbenchWindowAdvisor(
 			IWorkbenchWindowConfigurer configurer) {

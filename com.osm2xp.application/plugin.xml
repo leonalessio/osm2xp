@@ -125,7 +125,7 @@
       <view
             class="com.osm2xp.gui.views.LastFilesView"
             id="com.osm2xp.viewLastFiles"
-            name="last files"
+            name="Last files"
             restorable="true"
             icon="images/viewIcons/recents-16.gif">
       </view>
@@ -135,6 +135,13 @@
             name="Advanced Options"
             restorable="true"
             icon="images/viewIcons/settings-16.png">
+      </view>
+      <view
+            class="com.osm2xp.gui.views.XPlaneLightsView"
+            id="com.osm2xp.viewLightsTab"
+            name="Street Lights"
+            restorable="true"
+            icon="images/viewIcons/light-16.png">
       </view>
       <view
             class="com.osm2xp.gui.views.WavefrontAdvancedOptionsView"
@@ -409,6 +416,13 @@
          </view>
          <view
                id="com.osm2xp.viewAirfieldsTab"
+               closeable="false"
+               minimized="false"
+               relationship="stack"
+               relative="com.osm2xp.viewSceneryTab">
+         </view>         
+         <view
+               id="com.osm2xp.viewLightsTab"
                closeable="false"
                minimized="false"
                relationship="stack"

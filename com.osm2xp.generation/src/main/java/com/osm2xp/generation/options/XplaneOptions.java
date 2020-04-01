@@ -28,7 +28,7 @@ import com.osm2xp.generation.options.rules.XplaneObjectsRulesList;
 		"generateBridges", "generateSlopedRoofs", "generatePolys", "generateStreetLights", "lightsDensity",
 		"city3LaneHighwayRoadType", "country3LaneHighwayRoadType","city2LaneHighwayRoadType","country2LaneHighwayRoadType","cityRoadType",    
 		"countryRoadType", "oneLaneRoadType","railwayType", "powerlineType", "packageFacades", "hardBuildings", "lightObject", "lightObjectString", "facadeSets", 
-		"restrictFacadeLod", "facadeLod", "generateXmlStats", "generatePdfStats", "generateDebugImg", "generateComments", "generateHighwayLights", "roadLaneWidth",
+		"restrictFacadeLod", "facadeLod", "generateXmlStats", "generatePdfStats", "generateDebugImg", "generateComments", "generateHighwayLights", 
 		"roadBridgeRampLen","railBridgeRampLen", "streetLightsInterval", "maxPerimeterToSimplify", "objSizeTolerance", "objHeightTolerance", "objHeightAllowedDifference",
 		"buildingsExclusions", "forestsRules", "objectsRules", "lightsRules", "facadesRules", "polygonRules", "streetLightObjects", "airfieldOptions",
 		"deleteSrc" })
@@ -88,7 +88,7 @@ public class XplaneOptions {
 	protected boolean hardBuildings;
 	@XmlElement
 	protected String lightObject;
-	protected String lightObjectString = "objects/Column_1.str";
+	protected String lightObjectString = "objects/column_sng.str";
 	protected String facadeSets;
 	protected boolean restrictFacadeLod = false;
 	protected int facadeLod;
@@ -99,7 +99,6 @@ public class XplaneOptions {
 	protected boolean generateDebugImg = false;
 	protected boolean generateComments = false;
 	protected boolean generateHighwayLights = true;
-	protected double roadLaneWidth = 3.75;
 	protected int roadBridgeRampLen = 100;
 	protected int railBridgeRampLen = 200;
 	protected int streetLightsInterval = 50;
@@ -127,9 +126,9 @@ public class XplaneOptions {
 	protected int city3LaneHighwayRoadType = 14;
 	protected int country3LaneHighwayRoadType = 10;
 	protected int city2LaneHighwayRoadType=40;
-	protected int country2LaneHighwayRoadType=41;
+	protected int country2LaneHighwayRoadType=40;
 	protected int cityRoadType=40;
-	protected int countryRoadType=41;
+	protected int countryRoadType=40;
 	protected int oneLaneRoadType=50;
 	protected int railwayType=151;
 	protected int powerlineType=220;
@@ -1125,14 +1124,6 @@ public class XplaneOptions {
 
 	public void setGenerateHighwayLights(boolean generateHighwayLights) {
 		this.generateHighwayLights = generateHighwayLights;
-	}
-
-	public double getRoadLaneWidth() {
-		return roadLaneWidth;
-	}
-
-	public void setRoadLaneWidth(double roadLaneWidth) {
-		this.roadLaneWidth = roadLaneWidth;
 	}
 
 	public String getLightObjectString() {

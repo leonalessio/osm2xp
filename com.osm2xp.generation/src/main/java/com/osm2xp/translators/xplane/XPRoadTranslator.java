@@ -11,10 +11,7 @@ import com.osm2xp.generation.osm.OsmConstants;
 import com.osm2xp.generation.xplane.resources.DsfObjectsProvider;
 import com.osm2xp.generation.xplane.resources.XPOutputFormat;
 import com.osm2xp.model.osm.polygon.OsmPolyline;
-import com.osm2xp.utils.geometry.GeomUtils;
 import com.osm2xp.writers.IWriter;
-
-import math.geom2d.polygon.LinearCurve2D;
 
 public class XPRoadTranslator extends XPPathTranslator {
 	
@@ -63,7 +60,7 @@ public class XPRoadTranslator extends XPPathTranslator {
 						   lanesCount >= 3;
 		if (hasLight) {
 			boolean doubleSided = (highway && lanesCount >= 2) || lanesCount >= 3;
-			lightTranslator.writeLightStrings(poly.getPolyline(), lanesCount * options.getRoadLaneWidth() / 2 * 1.1, doubleSided); //TODO 1.1 is manually selected coef
+			lightTranslator.writeLightStrings(poly.getPolyline(), lanesCount * GlobalOptionsProvider.getOptions().getRoadLaneWidth() / 2 * 1.1, doubleSided); //TODO 1.1 is manually selected coef
 		}
 	}
 

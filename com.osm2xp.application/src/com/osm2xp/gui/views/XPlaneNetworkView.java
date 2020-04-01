@@ -4,34 +4,16 @@ import org.eclipse.core.databinding.beans.PojoProperties;
 import org.eclipse.jface.databinding.swt.WidgetProperties;
 import org.eclipse.jface.layout.GridDataFactory;
 import org.eclipse.swt.SWT;
-import org.eclipse.swt.events.VerifyEvent;
-import org.eclipse.swt.events.VerifyListener;
 import org.eclipse.swt.layout.GridLayout;
 import org.eclipse.swt.widgets.Button;
 import org.eclipse.swt.widgets.Text;
 import org.eclipse.ui.forms.widgets.Section;
-import org.eclipse.ui.forms.widgets.TableWrapData;
 
 import com.osm2xp.generation.options.XPlaneOptionsProvider;
 import com.osm2xp.gui.views.panels.CheckBoxPanel;
 import com.osm2xp.gui.views.panels.Osm2xpPanel;
 
 public class XPlaneNetworkView extends AbstractOptionsView {
-	
-	protected VerifyListener onlyDigitsVerifyListener = new VerifyListener() {
-		@Override
-		public void verifyText(VerifyEvent e) {
-			String string = e.text;
-			char[] chars = new char[string.length()];
-			string.getChars(0, chars.length, chars, 0);
-			for (int i = 0; i < chars.length; i++) {
-				if (!('0' <= chars[i] && chars[i] <= '9')) {
-					e.doit = false;
-					return;
-				}
-			}
-		}
-	};
 	
 	public XPlaneNetworkView() {
 		super("Roads/Network", "images/toolbarsIcons/road_32.png");
@@ -42,11 +24,7 @@ public class XPlaneNetworkView extends AbstractOptionsView {
 		/**
 		 * Generated items
 		 */
-		Section sectionGeneratedItems = toolkit.createSection(form.getBody(),
-				Section.TWISTIE | Section.EXPANDED | Section.TITLE_BAR);
-		sectionGeneratedItems.setLayoutData(new TableWrapData(
-				TableWrapData.FILL_GRAB, TableWrapData.TOP, 1, 1));
-		sectionGeneratedItems.setText("Generated items");
+		Section sectionGeneratedItems = createSection("Generated items", true);
 		Osm2xpPanel scGeneratedItemsPanel = new CheckBoxPanel(sectionGeneratedItems) {
 			@SuppressWarnings("unchecked")
 			@Override
@@ -83,11 +61,7 @@ public class XPlaneNetworkView extends AbstractOptionsView {
 		toolkit.adapt(scGeneratedItemsPanel, true, true);
 		sectionGeneratedItems.setClient(scGeneratedItemsPanel);
 		
-		Section sectionRoadProperties = toolkit.createSection(form.getBody(),
-				Section.TWISTIE | Section.EXPANDED | Section.TITLE_BAR);
-		sectionRoadProperties.setLayoutData(new TableWrapData(
-				TableWrapData.FILL_GRAB, TableWrapData.TOP, 1, 1));
-		sectionRoadProperties.setText("Types for roads/railways/powerlines");
+		Section sectionRoadProperties = createSection("Types for roads/railways/powerlines", true);
 		Osm2xpPanel scRoadsPanel = new Osm2xpPanel(sectionRoadProperties, SWT.BORDER) {
 			
 			@Override

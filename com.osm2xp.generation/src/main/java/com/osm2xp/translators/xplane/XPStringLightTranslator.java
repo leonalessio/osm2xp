@@ -38,14 +38,17 @@ public class XPStringLightTranslator implements IXPLightTranslator{
 		}
 	}
 	
+	@SuppressWarnings("restriction")
 	protected List<LinearCurve2D> getLightStrings(LinearCurve2D baseLine, double distance, boolean doubleSided) {
 		//TODO cut ends here to avoid lights on crossings
 		List<LinearCurve2D> resList = new ArrayList<>();
 		LinearCurve2D localCurve = GeomUtils.linearCurve2DToLocal(baseLine, baseLine.vertex(0));
 		double coordsDist = distance / GeomUtils.LATITUDE_TO_M;
-		resList.add(GeomUtils.localToLinearCurve2D(localCurve.parallel(coordsDist), baseLine.vertex(0)));
+		resList.add(GeomUtils.localToLinearCurve2D(localCurve.parallel(-coordsDist), baseLine.vertex(0)));
 		if (doubleSided) {
-			resList.add(GeomUtils.localToLinearCurve2D(localCurve.parallel(-coordsDist), baseLine.vertex(0)));
+			LinearCurve2D curve = GeomUtils.localToLinearCurve2D(localCurve.parallel(coordsDist), baseLine.vertex(0));
+			curve = (LinearCurve2D) curve.reverse(); //We need this to make the lampposts directed towards the road center
+			resList.add(curve);
 		}
 		return resList;
 	}

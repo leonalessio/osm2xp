@@ -17,7 +17,7 @@ import org.apache.commons.lang.StringUtils;
 @XmlAccessorType(XmlAccessType.FIELD)
 @XmlType(name = "", propOrder = { "databaseMode", "appendHour", "appendTile","analyzeAreas", "generateLibrary",
 		"simplifyShapes", "currentFilePath", "levelHeight", 
-		"allowedHighwayTypes","allowedHighwayLinkTypes", "allowedHighwaySurfaceTypes", "disallowedHighwayTags"})
+		"allowedHighwayTypes","allowedHighwayLinkTypes", "allowedHighwaySurfaceTypes", "disallowedHighwayTags", "roadLaneWidth"})
 @XmlRootElement(name = "GlobalOptions")
 public class GlobalOptions {
 
@@ -31,6 +31,7 @@ public class GlobalOptions {
 	protected String currentFilePath;
 	@XmlElement(required = true)
 	protected double levelHeight = 3;
+	protected double roadLaneWidth = 4;
 //	protected boolean singlePass;
 	protected String allowedHighwayTypes = "motorway;trunk;primary;secondary;tertiary;unclassified;residential";
 	protected String allowedHighwayLinkTypes = "motorway_link;trunk_link;primary_link;secondary_link;tertiary_link";
@@ -235,6 +236,14 @@ public class GlobalOptions {
 
 	public void setDisallowedHighwayTags(String disallowedHighwayTags) {
 		this.disallowedHighwayTags = disallowedHighwayTags;
+	}
+
+	public double getRoadLaneWidth() {
+		return roadLaneWidth;
+	}
+
+	public void setRoadLaneWidth(double roadLaneWidth) {
+		this.roadLaneWidth = roadLaneWidth;
 	}
 
 }
