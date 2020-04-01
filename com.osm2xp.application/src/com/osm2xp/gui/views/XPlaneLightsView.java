@@ -85,6 +85,7 @@ public class XPlaneLightsView extends AbstractOptionsView implements IContextPro
 				
 				toolkit.createLabel(this,"Light Object path").setLayoutData(GridDataFactory.swtDefaults().create());
 				Text objectPathText = new Text(this, SWT.BORDER);
+				GridDataFactory.fillDefaults().grab(true,false).applyTo(objectPathText);
 				bindComponent(objectPathText, XPlaneOptionsProvider.getOptions(), "lightObjectString");
 				
 				Button btnGenerateHighwayLights = new Button(this, SWT.CHECK);
@@ -102,7 +103,8 @@ public class XPlaneLightsView extends AbstractOptionsView implements IContextPro
 				
 				toolkit.createLabel(this,"Road lane width, m").setLayoutData(GridDataFactory.swtDefaults().create());
 				Spinner roadLaneWidth = new Spinner(this, SWT.BORDER);
-				bindSpinnerToDouble(roadLaneWidth, GlobalOptionsProvider.getOptions(), "roadLaneWidth",0);
+				roadLaneWidth.setDigits(1);
+				bindSpinnerToDouble(roadLaneWidth, GlobalOptionsProvider.getOptions(), "roadLaneWidth",1);
 			}
 		};
 		
