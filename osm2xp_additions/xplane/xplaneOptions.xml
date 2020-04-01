@@ -44,7 +44,7 @@
     <generateComments>false</generateComments>
     <roadBridgeRampLen>100</roadBridgeRampLen>
     <railBridgeRampLen>200</railBridgeRampLen>
-    <lightObjectString>objects/Column_1.str</lightObjectString>
+    <lightObjectString>objects/column_sng.str</lightObjectString>
     <BuildingsExclusions>
         <exclusions value="hangar" key="aeroway"/>
         <exclusions value="terminal" key="aeroway"/>
