@@ -85,7 +85,7 @@ public class XPlaneLightsView extends AbstractOptionsView implements IContextPro
 				gridLayout.marginHeight = 15;
 				setLayout(gridLayout);
 				
-				toolkit.createLabel(this,"Light Object path").setLayoutData(GridDataFactory.swtDefaults().create());
+				toolkit.createLabel(this,"Light Object String (.str) path").setLayoutData(GridDataFactory.swtDefaults().create());
 				Text objectPathText = new Text(this, SWT.BORDER);
 				GridDataFactory.fillDefaults().grab(true,false).applyTo(objectPathText);
 				bindComponent(objectPathText, options, "lightObjectString");

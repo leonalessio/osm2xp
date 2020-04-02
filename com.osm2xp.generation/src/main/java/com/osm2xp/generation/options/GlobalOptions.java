@@ -31,7 +31,7 @@ public class GlobalOptions {
 	protected String currentFilePath;
 	@XmlElement(required = true)
 	protected double levelHeight = 3;
-	protected double roadLaneWidth = 4;
+	protected double roadLaneWidth = 5;
 //	protected boolean singlePass;
 	protected String allowedHighwayTypes = "motorway;trunk;primary;secondary;tertiary;unclassified;residential";
 	protected String allowedHighwayLinkTypes = "motorway_link;trunk_link;primary_link;secondary_link;tertiary_link";
