@@ -55,9 +55,7 @@ Faced a problem? Please look at [basic troubleshooting information](https://gith
 
 ## Samples of generated scenarios
 
-![Screenshot 1](https://32kda.github.io/osm2xp/screenshots/CH750_4.png "Screenshot 1")
-
-![Screenshot 2](https://32kda.github.io/osm2xp/screenshots/CH750_2.png "Screenshot 2")
+![Example 1](https://user-images.githubusercontent.com/820526/78249591-c996f580-7518-11ea-870a-4ff5e5bb7831.png)
 
 ## License
 OSM2XP is licensed under [GPL 3.0](https://www.gnu.org/licenses/gpl-3.0.txt)
