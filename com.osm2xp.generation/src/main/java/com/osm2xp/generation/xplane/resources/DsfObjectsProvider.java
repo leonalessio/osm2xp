@@ -256,7 +256,7 @@ public class DsfObjectsProvider {
 		}
 		
 		//Light Object String
-		if (options.isGenerateLights()) {
+		if (options.isGenerateStreetLights()) {
 			if (!StringUtils.stripToEmpty(options.getLightObjectString()).isEmpty()) {
 				polygonsList.add(options.getLightObjectString());
 			} else {

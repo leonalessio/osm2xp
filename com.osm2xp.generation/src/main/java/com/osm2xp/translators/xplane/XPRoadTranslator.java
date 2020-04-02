@@ -40,7 +40,7 @@ public class XPRoadTranslator extends XPPathTranslator {
 			String surface = poly.getTagValue("surface"); //Generate if surface type is either missing or among allowed values
 			if (StringUtils.stripToEmpty(surface).trim().isEmpty() || ArrayUtils.contains(allowedHighwaySurfaceTypes, surface)) {
 				addSegmentsFrom(poly);
-				if (options.isGenerateLights()) {
+				if (options.isGenerateStreetLights()) {
 					processLights(poly);
 				}
 				return true;
