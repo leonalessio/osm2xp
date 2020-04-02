@@ -17,6 +17,7 @@ import org.eclipse.ui.forms.widgets.Section;
 
 import com.osm2xp.generation.options.GlobalOptionsProvider;
 import com.osm2xp.generation.options.XPlaneOptionsProvider;
+import com.osm2xp.generation.options.XplaneOptions;
 import com.osm2xp.gui.views.panels.CheckBoxPanel;
 import com.osm2xp.gui.views.panels.Osm2xpPanel;
 import com.osm2xp.utils.ui.UiUtil;
@@ -42,6 +43,7 @@ public class XPlaneLightsView extends AbstractOptionsView implements IContextPro
 		 */
 		
 		Section sectionGeneratedItems = createSection("Generated items", true);
+		XplaneOptions options = XPlaneOptionsProvider.getOptions();
 		Osm2xpPanel scGeneratedItemsPanel = new CheckBoxPanel(sectionGeneratedItems) {
 
 			@SuppressWarnings("unchecked")
@@ -51,7 +53,7 @@ public class XPlaneLightsView extends AbstractOptionsView implements IContextPro
 				btnGenerateLights.setText("Generate Street Lights (using objects/object strings)");
 				GridDataFactory.fillDefaults().applyTo(btnGenerateLights);
 				bindingContext.bindValue(WidgetProperties.selection().observe(btnGenerateLights),
-						PojoProperties.value("generateStreetLights").observe(XPlaneOptionsProvider.getOptions()));
+						PojoProperties.value("generateStreetLights").observe(options));
 				
 				toolkit.createLabel(this, "Choose this option if you want to generate separate lights for no-light roads.");
 			}
@@ -86,7 +88,7 @@ public class XPlaneLightsView extends AbstractOptionsView implements IContextPro
 				toolkit.createLabel(this,"Light Object path").setLayoutData(GridDataFactory.swtDefaults().create());
 				Text objectPathText = new Text(this, SWT.BORDER);
 				GridDataFactory.fillDefaults().grab(true,false).applyTo(objectPathText);
-				bindComponent(objectPathText, XPlaneOptionsProvider.getOptions(), "lightObjectString");
+				bindComponent(objectPathText, options, "lightObjectString");
 				
 				Button btnGenerateHighwayLights = new Button(this, SWT.CHECK);
 				btnGenerateHighwayLights.setText("Generate higway lights");
@@ -94,12 +96,12 @@ public class XPlaneLightsView extends AbstractOptionsView implements IContextPro
 				GridDataFactory.fillDefaults().span(2,1).applyTo(btnGenerateHighwayLights);
 
 				bindingContext.bindValue(WidgetProperties.selection().observe(btnGenerateHighwayLights),		
-						PojoProperties.value("generateHighwayLights").observe(XPlaneOptionsProvider.getOptions()));
+						PojoProperties.value("generateHighwayLights").observe(options));
 				
 				toolkit.createLabel(this,"Street Lights interval, m").setLayoutData(GridDataFactory.swtDefaults().create());
 				Text lightsInterval = new Text(this, SWT.BORDER);
 				lightsInterval.addVerifyListener(onlyDigitsVerifyListener);
-				bindTextToInt(lightsInterval, XPlaneOptionsProvider.getOptions(), "streetLightsInterval");
+				bindTextToInt(lightsInterval, options, "streetLightsInterval");
 				
 				toolkit.createLabel(this,"Road lane width, m").setLayoutData(GridDataFactory.swtDefaults().create());
 				Spinner roadLaneWidth = new Spinner(this, SWT.BORDER);
@@ -111,7 +113,7 @@ public class XPlaneLightsView extends AbstractOptionsView implements IContextPro
 		toolkit.adapt(lightsPanel, true, true);
 		sectionLights.setClient(lightsPanel);
 		
-		UiUtil.setEnabledRecursive(sectionLights, XPlaneOptionsProvider.getOptions().isGenerateLights());
+		UiUtil.setEnabledRecursive(sectionLights, options.isGenerateStreetLights());
 		btnGenerateLights.addSelectionListener(new SelectionAdapter() {
 			
 			@Override
@@ -120,6 +122,7 @@ public class XPlaneLightsView extends AbstractOptionsView implements IContextPro
 			}
 			
 		});
+		btnGenerateLights.setSelection(options.isGenerateStreetLights());
 	}
 
 	@Override
