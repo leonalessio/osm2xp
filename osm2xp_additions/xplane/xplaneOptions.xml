@@ -32,7 +32,7 @@
     <generateBridges>true</generateBridges>
     <generateSlopedRoofs>true</generateSlopedRoofs>
     <generatePolys>true</generatePolys>
-    <generateStreetLights>false</generateStreetLights>
+    <generateStreetLights>true</generateStreetLights>
     <lightsDensity>0</lightsDensity>
     <packageFacades>true</packageFacades>
     <hardBuildings>false</hardBuildings>

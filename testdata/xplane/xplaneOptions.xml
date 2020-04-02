@@ -30,7 +30,7 @@
     <generateCoolingTowers>true</generateCoolingTowers>
     <generateBridges>true</generateBridges>
     <generateSlopedRoofs>true</generateSlopedRoofs>
-    <generateStreetLights>false</generateStreetLights>
+    <generateStreetLights>true</generateStreetLights>
     <lightsDensity>0</lightsDensity>
     <packageFacades>true</packageFacades>
     <hardBuildings>false</hardBuildings>
