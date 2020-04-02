@@ -6,6 +6,15 @@ and this project adheres to [Semantic Versioning](http://semver.org/spec/v2.0.0.
 
 ## [Unreleased]
 
+## [4.6.0]
+
+### Added
+- Street lights generation for some roads using Object Strings feature
+
+### Fixed
+- Serious brekdown which led to the multipolygon mlfunction
+- UI fixes
+
 ## [4.5.0]
 
 ### Added
