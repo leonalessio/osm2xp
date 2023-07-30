@@ -1,0 +1,15 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<?NLS TYPE="org.eclipse.help.toc"?>
+
+<toc label="Reference" link_to="toc.xml#reference"> 
+	<topic label="Scenery panel reference"  href="html/reference/sceneryPanel.html"> 
+	</topic>
+ <topic href="html/reference/buildingsPanel.html" label="Buildings panel reference">
+ </topic>
+ <topic href="html/reference/forestsPanel.html" label="Forests panel reference">
+ </topic>
+ <topic href="html/reference/objectsPanel.html" label="Objects panel reference">
+ </topic>
+ <topic href="html/reference/advancedPanel.html" label="Advanced panel reference">
+ </topic>
+</toc>

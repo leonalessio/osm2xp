@@ -1,0 +1,8 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<?NLS TYPE="org.eclipse.help.toc"?>
+
+<toc label="Tutorials" link_to="toc.xml#tutorials">
+   <topic href="html/tutorials/objectsRulesTutorial.html" label="Objects rules tutorial">
+   </topic> 
+	
+</toc>

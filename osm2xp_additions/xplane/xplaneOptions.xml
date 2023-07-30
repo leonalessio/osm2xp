@@ -1,0 +1,331 @@
+<?xml version="1.0" encoding="UTF-8" standalone="yes"?>
+<XplaneOptions>
+    <excludeObj>true</excludeObj>
+    <excludeFac>false</excludeFac>
+    <excludeFor>true</excludeFor>
+    <smartExclusions>false</smartExclusions>
+    <smartExclusionSize>100</smartExclusionSize>
+    <smartExclusionDistance>25</smartExclusionDistance>
+    <excludeBch>false</excludeBch>
+    <excludeNet>false</excludeNet>
+    <excludeLin>false</excludeLin>
+    <excludePol>false</excludePol>
+    <excludeStr>false</excludeStr>
+    <exclusionsFromInput>true</exclusionsFromInput>
+    <residentialMin>3</residentialMin>
+    <residentialMax>15</residentialMax>
+    <buildingMin>6</buildingMin>
+    <buildingMax>30</buildingMax>
+    <minHouseSegment>2</minHouseSegment>
+    <maxHouseSegment>200</maxHouseSegment>
+    <minHouseArea>20</minHouseArea>
+    <generateObj>true</generateObj>
+    <generateFor>true</generateFor>
+    <generateBuildings>true</generateBuildings>
+    <generatePowerlines>true</generatePowerlines>
+    <generateRailways>true</generateRailways>
+    <generateRoads>true</generateRoads>
+    <generateFence>true</generateFence>
+    <generateTanks>true</generateTanks>
+    <generateChimneys>true</generateChimneys>
+    <generateCoolingTowers>true</generateCoolingTowers>
+    <generateBridges>true</generateBridges>
+    <generateSlopedRoofs>true</generateSlopedRoofs>
+    <generatePolys>true</generatePolys>
+    <generateStreetLights>true</generateStreetLights>
+    <lightsDensity>0</lightsDensity>
+    <packageFacades>true</packageFacades>
+    <hardBuildings>false</hardBuildings>
+    <restrictFacadeLod>false</restrictFacadeLod>
+    <facadeLod>25000</facadeLod>
+    <generateXmlStats>false</generateXmlStats>
+    <generatePdfStats>true</generatePdfStats>
+    <generateDebugImg>false</generateDebugImg>
+    <generateComments>false</generateComments>
+    <roadBridgeRampLen>100</roadBridgeRampLen>
+    <railBridgeRampLen>200</railBridgeRampLen>
+    <lightObjectString>objects/column_sng.str</lightObjectString>
+    <BuildingsExclusions>
+        <exclusions value="hangar" key="aeroway"/>
+        <exclusions value="terminal" key="aeroway"/>
+        <exclusions value="chimney" key="man_made"/>
+        <exclusions value="tower" key="man_made"/>
+        <exclusions value="cooling_tower" key="man_made"/>
+    </BuildingsExclusions>
+    <ForestsRules>
+        <rules>
+            <tag value="forest" key="landuse"/>
+            <objectsFiles>
+                <path>forests/mixed.for</path>
+            </objectsFiles>
+            <objectsFiles>
+                <path>forests/conifer.for</path>
+            </objectsFiles>
+            <objectsFiles>
+                <path>forests/broad_leaf.for</path>
+            </objectsFiles>
+            <forestDensity>255</forestDensity>
+        </rules>
+        <rules>
+            <tag value="wood" key="natural"/>
+            <objectsFiles>
+                <path>forests/mixed.for</path>
+            </objectsFiles>
+            <objectsFiles>
+                <path>forests/conifer.for</path>
+            </objectsFiles>
+            <objectsFiles>
+                <path>forests/broad_leaf.for</path>
+            </objectsFiles>
+            <forestDensity>255</forestDensity>
+        </rules>
+        <rules>
+            <tag value="garden" key="leisure"/>
+            <objectsFiles>
+                <path>forests/heathland.for</path>
+            </objectsFiles>
+            <objectsFiles>
+                <path>forests/sclerophyllous.for</path>
+            </objectsFiles>
+            <objectsFiles>
+                <path>forests/conifer.for</path>
+            </objectsFiles>
+            <forestDensity>255</forestDensity>
+        </rules>
+        <rules>
+            <tag value="park" key="leisure"/>
+            <objectsFiles>
+                <path>forests/heathland.for</path>
+            </objectsFiles>
+            <objectsFiles>
+                <path>forests/sclerophyllous.for</path>
+            </objectsFiles>
+            <objectsFiles>
+                <path>forests/conifer.for</path>
+            </objectsFiles>
+            <forestDensity>255</forestDensity>
+        </rules>
+    </ForestsRules>
+    <ObjectsRules>
+        <rules>
+            <tag value="wind" key="power_source"/>
+            <objectsFiles>
+                <path>objects/wind_turbine.obj</path>
+            </objectsFiles>
+            <angle>0</angle>
+            <randomAngle>true</randomAngle>
+            <polygonAngle>false</polygonAngle>
+            <sizeCheck>false</sizeCheck>
+            <xVectorMinLength>0</xVectorMinLength>
+            <xVectorMaxLength>0</xVectorMaxLength>
+            <yVectorMinLength>0</yVectorMinLength>
+            <yVectorMaxLength>0</yVectorMaxLength>
+            <areaCheck>false</areaCheck>
+            <minArea>0</minArea>
+            <maxArea>0</maxArea>
+            <simplePolygonOnly>false</simplePolygonOnly>
+            <usePolygonAngle>false</usePolygonAngle>
+            <rotationPointX>50</rotationPointX>
+            <rotationPointY>50</rotationPointY>
+        </rules>
+        <rules>
+            <tag value="lighthouse" key="man_made"/>
+            <objectsFiles>
+                <path>objects/capemay.obj</path>
+            </objectsFiles>
+            <angle>0</angle>
+            <randomAngle>true</randomAngle>
+            <polygonAngle>false</polygonAngle>
+            <sizeCheck>false</sizeCheck>
+            <xVectorMinLength>0</xVectorMinLength>
+            <xVectorMaxLength>0</xVectorMaxLength>
+            <yVectorMinLength>0</yVectorMinLength>
+            <yVectorMaxLength>0</yVectorMaxLength>
+            <areaCheck>false</areaCheck>
+            <minArea>0</minArea>
+            <maxArea>0</maxArea>
+            <simplePolygonOnly>false</simplePolygonOnly>
+            <usePolygonAngle>false</usePolygonAngle>
+            <rotationPointX>50</rotationPointX>
+            <rotationPointY>50</rotationPointY>
+        </rules>
+        <rules>
+            <tag value="water_tower" key="man_made"/>
+            <objectsFiles>
+                <path>objects/watertower-3.obj</path>
+            </objectsFiles>
+            <angle>0</angle>
+            <randomAngle>true</randomAngle>
+            <polygonAngle>false</polygonAngle>
+            <sizeCheck>false</sizeCheck>
+            <xVectorMinLength>0</xVectorMinLength>
+            <xVectorMaxLength>0</xVectorMaxLength>
+            <yVectorMinLength>0</yVectorMinLength>
+            <yVectorMaxLength>0</yVectorMaxLength>
+            <areaCheck>false</areaCheck>
+            <minArea>0</minArea>
+            <maxArea>0</maxArea>
+            <simplePolygonOnly>false</simplePolygonOnly>
+            <usePolygonAngle>false</usePolygonAngle>
+            <rotationPointX>50</rotationPointX>
+            <rotationPointY>50</rotationPointY>
+        </rules>
+        <rules>
+            <tag value="tower" key="man_made"/>
+            <objectsFiles>
+                <path>objects/watertower-3.obj</path>
+            </objectsFiles>            
+            <angle>0</angle>
+            <randomAngle>true</randomAngle>
+            <polygonAngle>false</polygonAngle>
+            <sizeCheck>false</sizeCheck>
+            <xVectorMinLength>0</xVectorMinLength>
+            <xVectorMaxLength>0</xVectorMaxLength>
+            <yVectorMinLength>0</yVectorMinLength>
+            <yVectorMaxLength>0</yVectorMaxLength>
+            <areaCheck>false</areaCheck>
+            <minArea>0</minArea>
+            <maxArea>0</maxArea>
+            <simplePolygonOnly>false</simplePolygonOnly>
+            <usePolygonAngle>false</usePolygonAngle>
+            <rotationPointX>50</rotationPointX>
+            <rotationPointY>50</rotationPointY>
+        </rules>
+        <rules>
+            <tag value="crane" key="man_made"/>
+            <objectsFiles>
+                <path>objects/crane.obj</path>
+            </objectsFiles>
+            <angle>0</angle>
+            <randomAngle>true</randomAngle>
+            <polygonAngle>false</polygonAngle>
+            <sizeCheck>false</sizeCheck>
+            <xVectorMinLength>0</xVectorMinLength>
+            <xVectorMaxLength>0</xVectorMaxLength>
+            <yVectorMinLength>0</yVectorMinLength>
+            <yVectorMaxLength>0</yVectorMaxLength>
+            <areaCheck>false</areaCheck>
+            <minArea>0</minArea>
+            <maxArea>0</maxArea>
+            <simplePolygonOnly>false</simplePolygonOnly>
+            <usePolygonAngle>false</usePolygonAngle>
+            <rotationPointX>50</rotationPointX>
+            <rotationPointY>50</rotationPointY>
+        </rules>
+		<rules>
+            <tag value="communication" key="tower:type"/>
+            <objectsFiles>
+                <path>objects/GSM-tow-50m.obj</path>
+            </objectsFiles>
+			<objectsFiles>
+                <path>objects/GSM-tow-20m.obj</path>
+            </objectsFiles>
+            <angle>0</angle>
+            <randomAngle>true</randomAngle>
+            <polygonAngle>false</polygonAngle>
+            <sizeCheck>false</sizeCheck>
+            <xVectorMinLength>0</xVectorMinLength>
+            <xVectorMaxLength>0</xVectorMaxLength>
+            <yVectorMinLength>0</yVectorMinLength>
+            <yVectorMaxLength>0</yVectorMaxLength>
+            <areaCheck>false</areaCheck>
+            <minArea>0</minArea>
+            <maxArea>0</maxArea>
+            <simplePolygonOnly>false</simplePolygonOnly>
+            <usePolygonAngle>false</usePolygonAngle>
+            <rotationPointX>5</rotationPointX>
+            <rotationPointY>5</rotationPointY>
+        </rules>		
+		<rules>
+            <tag value="communications_tower" key="man_made"/>
+            <objectsFiles>
+                <path>objects/R_Tower_SAT_107m.obj</path>
+            </objectsFiles>
+			<objectsFiles>
+                <path>objects/R_Tower_GRN_65m.obj</path>
+            </objectsFiles>
+			<objectsFiles>
+                <path>objects/R_Tower_50m.obj</path>
+            </objectsFiles>
+            <angle>0</angle>
+            <randomAngle>true</randomAngle>
+            <polygonAngle>false</polygonAngle>
+            <sizeCheck>false</sizeCheck>
+            <xVectorMinLength>0</xVectorMinLength>
+            <xVectorMaxLength>0</xVectorMaxLength>
+            <yVectorMinLength>0</yVectorMinLength>
+            <yVectorMaxLength>0</yVectorMaxLength>
+            <areaCheck>false</areaCheck>
+            <minArea>0</minArea>
+            <maxArea>0</maxArea>
+            <simplePolygonOnly>false</simplePolygonOnly>
+            <usePolygonAngle>false</usePolygonAngle>
+            <rotationPointX>5</rotationPointX>
+            <rotationPointY>5</rotationPointY>
+        </rules>
+		<rules>
+            <tag value="mast" key="man_made"/>
+            <objectsFiles>
+                <path>objects/mast1.obj</path>
+            </objectsFiles>
+			<objectsFiles>
+                <path>objects/mast2.obj</path>
+            </objectsFiles>
+            <angle>0</angle>
+            <randomAngle>true</randomAngle>
+            <polygonAngle>false</polygonAngle>
+            <sizeCheck>false</sizeCheck>
+            <xVectorMinLength>0</xVectorMinLength>
+            <xVectorMaxLength>0</xVectorMaxLength>
+            <yVectorMinLength>0</yVectorMinLength>
+            <yVectorMaxLength>0</yVectorMaxLength>
+            <areaCheck>false</areaCheck>
+            <minArea>0</minArea>
+            <maxArea>0</maxArea>
+            <simplePolygonOnly>false</simplePolygonOnly>
+            <usePolygonAngle>false</usePolygonAngle>
+            <rotationPointX>5</rotationPointX>
+            <rotationPointY>5</rotationPointY>
+        </rules>
+    </ObjectsRules>
+    <LightsRules/>
+    <FacadesRules/>
+    <Polygons minPerimeter="200">
+        <rules>
+            <tag value="parking" key="amenity"/>
+            <polygon path="lib/airport/pavement/asphalt_1L.pol"/>
+            <polygon path="lib/airport/pavement/asphalt_1D.pol"/>
+            <polygon path="lib/airport/pavement/asphalt_2L.pol"/>
+            <polygon path="lib/airport/pavement/asphalt_2D.pol"/>
+            <polygon path="lib/airport/pavement/asphalt_3L.pol"/>
+            <polygon path="lib/airport/pavement/asphalt_3D.pol"/>
+            <polygon path="lib/airport/pavement/concrete_3L.pol"/>
+            <polygon path="lib/airport/pavement/concrete_3D.pol"/>
+            <polygon path="lib/airport/pavement/concrete_4L.pol"/>
+            <polygon path="lib/airport/pavement/concrete_4D.pol"/>
+        </rules>
+    </Polygons>
+    <StreetLightObjects>
+        <objects>
+            <path>opensceneryx/objects/furniture/lights/street/3.obj</path>
+        </objects>
+        <objects>
+            <path>opensceneryx/objects/furniture/lights/street/2.obj</path>
+        </objects>
+    </StreetLightObjects>
+    <AirfieldOptions>
+        <generateAirfields>true</generateAirfields>
+        <useSingleAptAsMain>true</useSingleAptAsMain>
+        <generateApron>true</generateApron>
+        <generateMarks>true</generateMarks>
+        <flatten>true</flatten>
+        <preferEnglish>true</preferEnglish>
+        <tryGetElev>true</tryGetElev>
+        <tryGetName>true</tryGetName>
+        <defaultHardRunwayWidth>60</defaultHardRunwayWidth>
+        <defaultGrassRunwayWidth>40</defaultGrassRunwayWidth>
+        <defaultHardTaxiwayWidth>20</defaultHardTaxiwayWidth>
+        <defaultGrassTaxiwayWidth>10</defaultGrassTaxiwayWidth>
+        <defaultHelipadSize>10</defaultHelipadSize>
+    </AirfieldOptions>
+</XplaneOptions>

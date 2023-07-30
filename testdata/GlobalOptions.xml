@@ -1,0 +1,11 @@
+<?xml version="1.0" encoding="UTF-8" standalone="yes"?>
+<GlobalOptions>
+    <databaseMode>false</databaseMode>
+    <appendHour>false</appendHour>
+    <appendTile>false</appendTile>
+    <simplifyShapes>false</simplifyShapes>
+    <levelHeight>3.0</levelHeight>
+    <allowedHighwayTypes>motorway;trunk;primary;secondary;tertiary;unclassified;residential</allowedHighwayTypes>
+    <allowedHighwayLinkTypes>motorway_link;trunk_link;primary_link;secondary_link;tertiary_link</allowedHighwayLinkTypes>
+    <allowedHighwaySurfaceTypes>paved;asphalt;concrete</allowedHighwaySurfaceTypes>
+</GlobalOptions>

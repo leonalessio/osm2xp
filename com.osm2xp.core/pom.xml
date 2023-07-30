@@ -1,0 +1,196 @@
+<project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+	xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
+	<modelVersion>4.0.0</modelVersion>
+
+	<artifactId>com.osm2xp.core</artifactId>
+	<version>1.0.0-SNAPSHOT</version>
+	<!-- <packaging>jar</packaging> -->
+	<packaging>eclipse-plugin</packaging>
+
+	<name>core</name>
+	<url>http://maven.apache.org</url>
+
+	<parent>
+		<groupId>com.osm2xp</groupId>
+		<artifactId>com.osm2xp.core.parent</artifactId>
+		<version>4.6.2-SNAPSHOT</version>
+		<relativePath>../releng-core</relativePath>
+	</parent>
+
+<!-- 	<dependencies> -->
+<!-- 		<dependency> -->
+<!-- 			<groupId>org.openstreetmap.osmosis</groupId> -->
+<!-- 			<artifactId>osmosis-pbf</artifactId> -->
+<!-- 			<version>0.46</version> -->
+<!-- 		</dependency> -->
+<!-- 		<dependency> -->
+<!-- 			<groupId>math.geom2d</groupId> -->
+<!-- 			<artifactId>javaGeom</artifactId> -->
+<!-- 			<version>0.11.1</version> -->
+<!-- 		</dependency> -->
+<!-- 		<dependency> -->
+<!-- 			<groupId>org.openstreetmap.osmosis</groupId> -->
+<!-- 			<artifactId>osmosis-osm-binary</artifactId> -->
+<!-- 			<version>0.43.1</version> -->
+<!-- 		</dependency> -->
+<!-- 		<dependency> -->
+<!-- 			<groupId>org.openstreetmap.osmosis</groupId> -->
+<!-- 			<artifactId>osmosis-core</artifactId> -->
+<!-- 			<version>0.47</version> -->
+<!-- 		</dependency> -->
+<!-- 		<dependency> -->
+<!-- 			<groupId>org.openstreetmap.osmosis</groupId> -->
+<!-- 			<artifactId>osmosis-xml</artifactId> -->
+<!-- 			<version>0.47</version> -->
+<!-- 		</dependency> -->
+<!-- 		<dependency> -->
+<!-- 			<groupId>com.google.protobuf</groupId> -->
+<!-- 			<artifactId>protobuf-java</artifactId> -->
+<!-- 			<version>2.4.1</version> -->
+<!-- 		</dependency> -->
+<!-- 		<dependency> -->
+<!-- 		    <groupId>net.sf.trove4j</groupId> -->
+<!-- 		    <artifactId>trove4j</artifactId> -->
+<!-- 		    <version>3.0.3</version> -->
+<!-- 		</dependency> -->
+<!-- 		<dependency> -->
+<!-- 			<groupId>commons-lang</groupId> -->
+<!-- 			<artifactId>commons-lang</artifactId> -->
+<!-- 			<version>2.6</version> -->
+<!-- 		</dependency> -->
+<!-- 		<dependency> -->
+<!-- 			<groupId>com.bbn.openmap</groupId> -->
+<!-- 			<artifactId>openmap</artifactId> -->
+<!-- 			<version>5.0.3</version> -->
+<!-- 		</dependency> -->
+ 		<!-- https://mvnrepository.com/artifact/javax.xml.bind/jaxb-api --> 
+<!-- 		<dependency> -->
+<!-- 			<groupId>javax.xml.bind</groupId> -->
+<!-- 			<artifactId>jaxb-api</artifactId> -->
+<!-- 			<version>2.3.1</version> -->
+<!-- 		</dependency> -->
+<!-- 		 https://mvnrepository.com/artifact/javax.activation/activation  -->
+<!-- 		<dependency> -->
+<!-- 			<groupId>javax.activation</groupId> -->
+<!-- 			<artifactId>activation</artifactId> -->
+<!-- 			<version>1.1</version> -->
+<!-- 		</dependency> -->
+
+<!-- 		 https://mvnrepository.com/artifact/org.glassfish.jaxb/jaxb-runtime  -->
+<!-- 		<dependency> -->
+<!-- 			<groupId>org.glassfish.jaxb</groupId> -->
+<!-- 			<artifactId>jaxb-runtime</artifactId> -->
+<!-- 			<version>2.3.0-b170127.1453</version> -->
+<!-- 		</dependency> -->
+<!-- 	</dependencies> -->
+
+	<build>
+		<plugins>
+			<plugin>
+				<groupId>org.apache.maven.plugins</groupId>
+				<artifactId>maven-dependency-plugin</artifactId>
+				<version>2.10</version>
+				<executions>
+					<execution>
+						<id>copy-libraries</id>
+						<phase>validate</phase>
+						<goals>
+							<goal>copy</goal>
+						</goals>
+						<configuration>
+							<artifactItems>
+								<artifactItem>
+									<groupId>org.openstreetmap.osmosis</groupId>
+									<artifactId>osmosis-pbf</artifactId>
+									<version>0.46</version>
+								</artifactItem>
+								<dependency>
+									<groupId>math.geom2d</groupId>
+									<artifactId>javaGeom</artifactId>
+									<version>0.11.1</version>
+								</dependency>
+								<dependency>
+									<groupId>org.openstreetmap.osmosis</groupId>
+									<artifactId>osmosis-osm-binary</artifactId>
+									<version>0.43.1</version>
+								</dependency>
+								<dependency>
+									<groupId>org.openstreetmap.osmosis</groupId>
+									<artifactId>osmosis-core</artifactId>
+									<version>0.47</version>
+								</dependency>
+								<dependency>
+									<groupId>org.openstreetmap.osmosis</groupId>
+									<artifactId>osmosis-xml</artifactId>
+									<version>0.47</version>
+								</dependency>
+								<dependency>
+									<groupId>com.google.protobuf</groupId>
+									<artifactId>protobuf-java</artifactId>
+									<version>2.4.1</version>
+								</dependency>								
+								<dependency>
+									<groupId>commons-lang</groupId>
+									<artifactId>commons-lang</artifactId>
+									<version>2.6</version>
+								</dependency>
+								<dependency>
+								    <groupId>com.bbn</groupId>
+								    <artifactId>openmap</artifactId>
+								    <version>5.1.15</version>
+								</dependency>
+								<dependency>
+								    <groupId>com.sun.xml.bind</groupId>
+								    <artifactId>jaxb-impl</artifactId>
+								    <version>2.2.11</version>
+								</dependency>
+								
+								<dependency>
+								    <groupId>com.sun.xml.bind</groupId>
+								    <artifactId>jaxb-core</artifactId>
+								    <version>2.2.11</version>
+								</dependency>
+								<!-- https://mvnrepository.com/artifact/javax.xml.bind/jaxb-api -->
+								<dependency>
+									<groupId>javax.xml.bind</groupId>
+									<artifactId>jaxb-api</artifactId>
+									<version>2.3.1</version>
+								</dependency>
+								<!-- https://mvnrepository.com/artifact/javax.activation/activation -->
+								<dependency>
+									<groupId>javax.activation</groupId>
+									<artifactId>activation</artifactId>
+									<version>1.1</version>
+								</dependency>
+
+								<!-- https://mvnrepository.com/artifact/org.glassfish.jaxb/jaxb-runtime -->
+<!-- 								<dependency> -->
+<!-- 									<groupId>org.glassfish.jaxb</groupId> -->
+<!-- 									<artifactId>jaxb-runtime</artifactId> -->
+<!-- 									<version>2.3.0-b170127.1453</version> -->
+<!-- 								</dependency> -->
+							</artifactItems>
+							<outputDirectory>lib</outputDirectory>
+							<stripVersion>true</stripVersion>
+							<overWriteReleases>true</overWriteReleases>
+							<overWriteSnapshots>true</overWriteSnapshots>
+						</configuration>
+					</execution>
+				</executions>
+			</plugin>
+			<plugin>
+				<groupId>org.apache.maven.plugins</groupId>
+				<artifactId>maven-jar-plugin</artifactId>
+				<configuration>
+					<archive>
+						<manifest>
+							<addClasspath>true</addClasspath>
+							<classpathPrefix>lib/</classpathPrefix>
+						</manifest>
+					</archive>
+				</configuration>
+			</plugin>						
+		</plugins>
+	</build>
+	
+</project>

@@ -1,0 +1,108 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+	<meta charset="utf-8">
+	
+	<title>Osm2xp Fly!Legacy mode</title>
+	
+	<link rel="stylesheet" href="../css/global.css">
+	
+	<script src="https://ajax.googleapis.com/ajax/libs/jquery/1.5.1/jquery.min.js"></script>
+	<script src="../js/slides.min.jquery.js"></script>
+	<script>
+		$(function(){
+			$('#slides').slides({
+				preload: true,
+				preloadImage: 'img/loading.gif',
+				play: 5000,
+				pause: 2500,
+				hoverPause: true,
+				animationStart: function(current){
+					$('.caption').animate({
+						bottom:-35
+					},100);
+					if (window.console && console.log) {
+						// example return of current slide number
+						console.log('animationStart on slide: ', current);
+					};
+				},
+				animationComplete: function(current){
+					$('.caption').animate({
+						bottom:0
+					},200);
+					if (window.console && console.log) {
+						// example return of current slide number
+						console.log('animationComplete on slide: ', current);
+					};
+				},
+				slidesLoaded: function() {
+					$('.caption').animate({
+						bottom:0
+					},200);
+				}
+			});
+		});
+	</script>
+</head>
+
+
+
+<div id="description">
+	<h1> Fly Legacy mode</h1></p>
+	<b>Author</b> : Benjamin Blanchet and Jean Sabatier</p>
+	<b>Fly Legacy Website</b> : <a href="http://fly.simvol.org">http://fly.simvol.org</a></p>	
+	<b>Osm2xp Website</b> : <a href="http://osm2xp.com">http://osm2xp.com</a></p>
+	<b>Email</b> : <a href="mailto:osm2xp@gmail.com">osm2xp@gmail.com</a></p>
+</div>
+
+<div id="translatorText">
+	Fly! Legacy is a 100% free flight simulator, without limitation, open source and developed by pilots concerned by realism.</p>
+	Osm2XP generates .ofe files, that are used by the simulator to generate buildings.</p>
+</div>
+
+
+<body>
+	<div id="container">
+		<div id="content">
+			<div id="slides">
+				<div class="slides_container">
+					<div class="slide">
+						<img src="../img/flyLegacy/1.jpg" width="640" height="410" alt="FlyLegacyImg">
+					</div>
+					<div class="slide">
+						<img src="../img/flyLegacy/2.jpg" width="640" height="410" alt="FlyLegacyImg">
+					</div>
+					<div class="slide">
+						<img src="../img/flyLegacy/3.jpg" width="640" height="410" alt="FlyLegacyImg">
+					</div>
+					<div class="slide">
+						<img src="../img/flyLegacy/4.jpg" width="640" height="410" alt="FlyLegacyImg">
+					</div>
+					<div class="slide">
+						<img src="../img/flyLegacy/5.jpg" width="640" height="410" alt="FlyLegacyImg">
+					</div>
+					<div class="slide">
+						<img src="../img/flyLegacy/6.jpg" width="640" height="410" alt="FlyLegacyImg">
+					</div>
+					<div class="slide">
+						<img src="../img/flyLegacy/7.jpg" width="640" height="410" alt="FlyLegacyImg">
+					</div>
+					<div class="slide">
+						<img src="../img/flyLegacy/8.jpg" width="640" height="410" alt="FlyLegacyImg">
+					</div>
+					<div class="slide">
+						<img src="../img/flyLegacy/9.jpg" width="640" height="410" alt="FlyLegacyImg">
+					</div>
+				</div>
+				<a href="#" class="prev"><img src="../img/slides/arrow-prev.png" width="24" height="43" alt="Arrow Prev"></a>
+				<a href="#" class="next"><img src="../img/slides/arrow-next.png" width="24" height="43" alt="Arrow Next"></a>
+			</div>
+			<img src="../img/slides/example-frame.png" width="739" height="341" alt="Frame" id="frame">
+		</div>
+		<div id="footer">
+			<p>Fly!Legacy pictures</p>
+			<p><a href="http://www.flickr.com/photos/flysimvol/show/">Flickr</a></p>
+		</div>
+	</div>
+</body>
+</html>

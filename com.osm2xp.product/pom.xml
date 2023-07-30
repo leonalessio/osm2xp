@@ -1,0 +1,178 @@
+<project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+	xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
+	<modelVersion>4.0.0</modelVersion>
+
+	<artifactId>com.osm2xp.product</artifactId>
+	<name>OSM2XP Application</name>
+
+	<parent>
+		<groupId>com.osm2xp</groupId>
+		<artifactId>com.osm2xp.parent</artifactId>
+		<version>4.6.2</version>
+		<relativePath>../releng-app/pom.xml</relativePath>
+	</parent>
+
+	<packaging>eclipse-repository</packaging>
+
+	<build>
+		<plugins>
+			<plugin>
+				<groupId>org.eclipse.tycho</groupId>
+				<artifactId>tycho-p2-director-plugin</artifactId>
+				<version>${tycho-version}</version>
+				<executions>
+					<execution>
+						<!-- install the product using the p2 director -->
+						<id>materialize-products</id>
+						<goals>
+							<goal>materialize-products</goal>
+						</goals>
+					</execution>
+				</executions>
+			</plugin>
+
+			<plugin>
+				<artifactId>maven-resources-plugin</artifactId>
+				<version>3.1.0</version>
+				<executions>
+					<execution>
+						<id>copy-resources-win</id>
+						<phase>package</phase>
+						<goals>
+							<goal>copy-resources</goal>
+						</goals>
+						<configuration>
+							<outputDirectory>./target/products/${project.artifactId}/win32/win32/x86_64/</outputDirectory>
+							<resources>
+								<resource>
+									<directory>../osm2xp_additions/</directory>
+									<filtering>true</filtering>
+									<excludes>
+										<exclude>utils/**</exclude>
+									</excludes>
+								</resource>
+							</resources>
+						</configuration>
+					</execution>
+					<execution>
+						<id>copy-resources-lin</id>
+						<phase>package</phase>
+						<goals>
+							<goal>copy-resources</goal>
+						</goals>
+						<configuration>
+							<outputDirectory>./target/products/${project.artifactId}/linux/gtk/x86_64/</outputDirectory>
+							<resources>
+								<resource>
+									<directory>../osm2xp_additions/</directory>
+									<filtering>true</filtering>
+									<excludes>
+										<exclude>utils/**</exclude>
+									</excludes>
+								</resource>
+							</resources>
+						</configuration>
+					</execution>
+					<execution>
+						<id>copy-tools-win</id>
+						<phase>package</phase>
+						<goals>
+							<goal>copy-resources</goal>
+						</goals>
+						<configuration>
+							<outputDirectory>./target/products/${project.artifactId}/win32/win32/x86_64/xplane/utils</outputDirectory>
+							<resources>
+								<resource>
+									<directory>../osm2xp_additions/utils</directory>
+									<filtering>false</filtering>
+									<includes>
+						                <include>**/*.exe</include>
+						            </includes>
+								</resource>
+							</resources>
+						</configuration>
+					</execution>
+					<execution>
+						<id>copy-tools-lin</id>
+						<phase>package</phase>
+						<goals>
+							<goal>copy-resources</goal>
+						</goals>
+						<configuration>
+							<outputDirectory>./target/products/${project.artifactId}/linux/gtk/x86_64/xplane/utils</outputDirectory>
+							<resources>
+								<resource>
+									<directory>../osm2xp_additions/utils</directory>
+									<filtering>false</filtering>
+									<excludes>
+										<exclude>**/*.exe</exclude>
+									</excludes>
+								</resource>
+							</resources>
+						</configuration>
+					</execution>
+				</executions>
+			</plugin>
+
+			<plugin>
+				<artifactId>maven-antrun-plugin</artifactId>
+				<executions>
+				 	<execution>
+                    	<id>createResDir</id> <!-- Create empty dir for user's resources -->
+                    	<phase>process-resources</phase>
+                    	<configuration>
+                       		 <tasks>
+                           		<mkdir dir="./target/products/${project.artifactId}/win32/win32/x86_64/xplane/resources"/>
+                           		<mkdir dir="./target/products/${project.artifactId}/linux/gtk/x86_64/xplane/resources"/>
+                       		 </tasks>
+                   		 </configuration>
+                   		 <goals>
+                        	<goal>run</goal>
+                    	</goals>
+                	</execution>
+					<execution>
+						<phase>install</phase>
+						<configuration>
+							<target>
+<!-- 								<fail -->
+<!-- 									message="Cannot Release!!! Release folder already exists !!! Potential overwrite to ${build.folder.fullpath} !!!"> -->
+<!-- 									<condition> -->
+<!-- 										<and> -->
+<!-- 											<equals arg1="${build.deploy.release}" arg2="true" /> -->
+<!-- 											<available file="${build.folder.fullpath}" type="dir" /> -->
+<!-- 										</and> -->
+<!-- 									</condition> -->
+<!-- 								</fail> -->
+
+								<!-- ANT Script Start -->
+								<delete file="${build.file.win32.fullpath}" />
+								<delete file="${build.file.linux.fullpath}" />
+
+								<zip destfile="${build.file.win32.fullpath}"
+									basedir="./target/products/${project.artifactId}/win32/win32/x86_64" />
+								<tar longfile="gnu" destfile="${build.file.linux.fullpath}"
+									compression="gzip">
+									<tarfileset
+										dir="./target/products/${project.artifactId}/linux/gtk/x86_64"
+										filemode="755" username="root" group="root">
+										<include name="OSM2XP" />
+									</tarfileset>
+									<tarfileset
+										dir="./target/products/${project.artifactId}/linux/gtk/x86_64"
+										username="root" group="root">
+										<include name="**" />
+										<exclude name="OSM2XP" />
+									</tarfileset>
+								</tar>
+								<!-- ANT Script Stop -->
+							</target>
+						</configuration>
+						<goals>
+							<goal>run</goal>
+						</goals>
+					</execution>
+				</executions>
+			</plugin>
+		</plugins>
+	</build>
+</project> 

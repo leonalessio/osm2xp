@@ -1,0 +1,70 @@
+<contexts>
+	<context id="sceneryHelpContext">
+		<description>The scenery view is the the main window of osm2xp.
+			You can set generated items, exclusions, and various options in this window.	
+			Please read the topics listed under <b>"see also"</b> for more informations:
+		</description>
+		<topic href="html/reference/sceneryPanel.html" label="Osm2xp reference : Scenery panel reference" />
+		<topic href="html/gettingstarted/gettingOsmData.html" label="Osm2xp tutorial : Getting osm data" />
+		<topic href="html/gettingstarted/installingOsm2xpScene.html"
+			label="Osm2xp tutorial : Installing an osm2xp scene" />
+		<topic href="http://wiki.x-plane.com/About_Overlays#DSF_Exclusion_Zones"
+			label="X-plane Wiki: DSF Exclusion Zones" />
+		<topic href="http://wiki.openstreetmap.org/wiki/OSM_XML" label="OpenStreetMap Wiki: OSM xml files" />
+		<topic href="http://wiki.openstreetmap.org/wiki/Pbf" label="OpenStreetMap Wiki: PBF files" />
+	</context>
+
+	<context id="buildingsHelpContext">
+		<description>
+			The buildings panel is used to set some options for the generated
+			buildings, like their texture (set), height, lod, etc...
+			Please read the topics listed under <b>"see also"</b> for more informations:
+		</description>
+		<topic href="html/reference/buildingsPanel.html" label="Osm2xp reference : Buildings panel reference" />
+		<topic href="http://wiki.x-plane.com/FAC_File_Specification"
+			label="X-plane Wiki: Facade file format specification" />
+		<topic href="http://wiki.openstreetmap.org/wiki/Map_Features"
+			label="OpenStreetMap Wiki: List of openStreetMap common tags" />
+	</context>
+
+	<context id="forestsHelpContext">
+		<description>
+			The forests panel is used to associate osm tags et xplane forests files.
+			Please read the topics listed under <b>"see also"</b> for more informations:
+		</description>
+		<topic href="html/reference/forestsPanel.html" label="Osm2xp reference : Forests panel reference" />
+		<topic href="http://wiki.x-plane.com/FOR_File_Specification"
+			label="X-plane Wiki: Forest file format specification" />
+		<topic href="http://wiki.openstreetmap.org/wiki/Vegetation"
+			label="OpenStreetMap Wiki: Vegetation" />
+		<topic href="http://wiki.openstreetmap.org/wiki/Key:wood" label="OpenStreetMap Wiki: Wood utilisation" />
+		<topic href="http://www.opensceneryx.com/forests/index.html"
+			label="OpenSceneryX: forests" />
+	</context>
+	
+	<context id="objectsHelpContext">
+		<description>
+			The objects panel is used to associate osm tags et xplane 3D objects files.
+			Please read the topics listed under <b>"see also"</b> for more informations:
+		</description>
+	<topic href="html/reference/objectsPanel.html" label="Osm2xp reference : Objects panel reference" />
+	<topic href="http://wiki.x-plane.com/OBJ_Overview" label="X-plane Wiki: Object file format specification" />
+	<topic href="http://wiki.openstreetmap.org/wiki/Map_Features"
+		label="OpenStreetMap Wiki: List of openStreetMap common tags" />
+	<topic href="http://www.opensceneryx.com/objects/index.html"
+		label="OpenSceneryX: objects" />
+	</context>
+	
+	
+	<context id="advancedHelpContext">
+		<description>
+			The advanced panel lets you set a few misc options.
+			Please read the topics listed under <b>"see also"</b> for more informations:
+		</description>
+	<topic href="html/reference/advancedPanel.html" label="Osm2xp reference : Advanced panel reference" />
+	<topic href="http://scenery.x-plane.com/library.php?doc=dsfspec.php" label="X-plane Wiki: DSF file format specification" />
+	
+
+	</context>
+
+</contexts>

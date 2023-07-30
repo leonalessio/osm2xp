@@ -1,0 +1,11 @@
+Manifest-Version: 1.0
+Bundle-ManifestVersion: 2
+Bundle-Name: Core
+Bundle-SymbolicName: com.osm2xp.classification.core
+Bundle-Version: 4.6.2.qualifier
+Bundle-RequiredExecutionEnvironment: JavaSE-1.8
+Bundle-ClassPath: .
+Automatic-Module-Name: com.onpositive.classification.core
+Export-Package: com.onpositive.classification.core.buildings,
+ com.onpositive.classification.core.util
+Require-Bundle: com.osm2xp.core;bundle-version="1.0.0"
